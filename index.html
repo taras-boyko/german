@@ -18,8 +18,8 @@
       </a>
       <div class="sidebar-label">Study</div>
       <nav class="nav">
-        <button class="nav-item active" data-view="practice"><span class="nav-icon">◈</span> Practice <span class="nav-count">12</span></button>
-        <button class="nav-item" data-view="library"><span class="nav-icon">▤</span> Card library</button>
+        <button class="nav-item" data-view="practice"><span class="nav-icon">◈</span> Practice <span class="nav-count">12</span></button>
+        <button class="nav-item active" data-view="library"><span class="nav-icon">▤</span> Card library</button>
         <button class="nav-item" data-view="progress"><span class="nav-icon">◒</span> Progress</button>
       </nav>
       <div class="sidebar-label decks-label">Decks</div>
@@ -35,31 +35,45 @@
       <header class="topbar">
         <div>
           <p class="eyebrow">GERMAN · A1</p>
-          <h1 id="page-title">Practice W-Fragen</h1>
+          <h1 id="page-title">Card library</h1>
         </div>
         <div class="top-actions">
-          <div class="streak"><span>♨</span><strong id="streak">4</strong><small>day streak</small></div>
+          <div class="streak"><span>♨</span><strong id="streak">0</strong><small>day streak</small></div>
         </div>
       </header>
 
-      <section id="practice-view" class="view">
-        <div class="welcome-row">
-          <div><h2>Good afternoon, Taras <span>✦</span></h2><p>Let’s make a little progress today.</p></div>
-          <div class="session-progress"><span>Today’s session</span><strong><span id="completed-count">0</span> / 12 cards</strong><div class="progress-track"><i id="session-progress"></i></div></div>
-        </div>
-
+      <section id="practice-view" class="view hidden">
         <div class="study-grid">
           <section class="card-stage">
-            <div class="stage-heading"><span class="pill"><i class="dot dot-purple"></i> <span id="deck-label">All W-Fragen</span></span><span class="card-number" id="card-number">01 <em>/ 12</em></span></div>
+            <div class="stage-heading">
+              <span class="pill"><i class="dot dot-purple"></i> <span id="deck-label">All W-Fragen</span></span>
+              <div class="session-progress"><span>Today’s session</span><strong><span id="completed-count">0</span> / <span id="deck-size">12</span> cards</strong><div class="progress-track"><i id="session-progress"></i></div></div>
+              <div class="stage-tools"><select class="direction-select" id="direction-select" aria-label="Test direction"><option value="uk-de">Ukrainian → German</option><option value="de-uk">German → Ukrainian</option></select><button class="mode-toggle" id="mode-toggle" type="button">✓ Test</button><span class="card-number" id="card-number">01 <em>/ 12</em></span></div>
+            </div>
             <article class="flashcard" id="flashcard" tabindex="0" aria-label="Flashcard. Click to reveal answer.">
               <div class="card-top"><span id="category-label">QUESTION WORD</span><span class="bookmark" id="bookmark" role="button" aria-label="Bookmark card">♡</span></div>
               <div class="card-body">
                 <div class="w-badge" id="w-badge">W</div>
                 <h3 id="question-word">Warum?</h3>
                 <p class="translation" id="translation">Why?</p>
-                <div class="answer" id="answer"><span class="answer-label">Example sentence</span><strong id="example">Warum fährst du heute mit dem Bus?</strong><small id="example-translation">Why are you taking the bus today?</small></div>
+                <div class="original-question" id="original-question" hidden>
+                  <span class="answer-label">Original question</span>
+                  <strong id="original-question-text"></strong>
+                </div>
+                <div class="answer" id="answer"><span class="answer-label">Example sentence</span><strong id="example">Warum fährst du heute mit dem Bus?</strong><small id="example-translation">Чому ти сьогодні їдеш автобусом?</small></div>
+                <div class="verification-panel" id="verification-panel">
+                  <span class="answer-label" id="verification-label">Write the German question</span>
+                  <input id="verification-input" type="text" autocomplete="off" placeholder="Type the W-question...">
+                  <button class="check-button" id="check-button" type="button">Check answer</button>
+                  <p class="verification-feedback" id="verification-feedback" role="status"></p>
+                  <div class="correction-display" id="correction-display" hidden aria-label="Answer corrections">
+                    <span class="answer-label">Your answer · corrections</span>
+                    <div class="correction-text" id="correction-text"></div>
+                    <div class="correction-legend"><span class="legend-wrong">Crossed out</span><span class="legend-right">Corrected</span></div>
+                  </div>
+                </div>
               </div>
-              <div class="flip-hint"><span>↻</span> Click to reveal answer <kbd>Space</kbd></div>
+              <div class="flip-hint" id="flip-hint"><span>↻</span> Click to reveal answer <kbd>Space</kbd></div>
             </article>
             <div class="rating" id="rating">
               <p>How well did you know this?</p>
@@ -77,14 +91,14 @@
             <div class="section-title"><h3>Quick overview</h3></div>
             <div class="stats-card">
               <div class="stat"><span class="stat-icon purple">◉</span><div><strong id="remaining">12</strong><small>Cards left</small></div></div>
-              <div class="stat"><span class="stat-icon orange">♨</span><div><strong>4</strong><small>Day streak</small></div></div>
-              <div class="stat"><span class="stat-icon green">◔</span><div><strong>86%</strong><small>Recall rate</small></div></div>
+              <div class="stat"><span class="stat-icon orange">♨</span><div><strong id="overview-streak">0</strong><small>Day streak</small></div></div>
+              <div class="stat"><span class="stat-icon green">◔</span><div><strong id="recall-rate">0%</strong><small>Recall rate</small></div></div>
             </div>
             <div class="section-title"><h3>Your activity</h3><button>View all <span>↗</span></button></div>
             <div class="activity-card">
-              <div class="chart-labels"><span>Cards reviewed</span><strong>34 <small>this week</small></strong></div>
+              <div class="chart-labels"><span>Cards reviewed</span><strong id="weekly-reviewed">0 <small>this week</small></strong></div>
               <div class="chart" aria-label="Weekly activity chart">
-                <div class="bar" style="height:35%"><i>Mon</i></div><div class="bar" style="height:55%"><i>Tue</i></div><div class="bar" style="height:42%"><i>Wed</i></div><div class="bar today" style="height:82%"><i>Thu</i></div><div class="bar" style="height:60%"><i>Fri</i></div><div class="bar" style="height:25%"><i>Sat</i></div><div class="bar" style="height:15%"><i>Sun</i></div>
+                <div class="bar" data-day="0"><i>Mon</i></div><div class="bar" data-day="1"><i>Tue</i></div><div class="bar" data-day="2"><i>Wed</i></div><div class="bar" data-day="3"><i>Thu</i></div><div class="bar" data-day="4"><i>Fri</i></div><div class="bar" data-day="5"><i>Sat</i></div><div class="bar" data-day="6"><i>Sun</i></div>
               </div>
             </div>
             <div class="tip-card"><span>✦</span><div><strong>Study tip</strong><p>W-questions always come first in a question, followed by the verb.</p></div></div>
@@ -92,9 +106,51 @@
         </div>
       </section>
 
-      <section id="library-view" class="view hidden"><div class="empty-view"><span class="big-icon">▤</span><h2>Card library</h2><p>Browse all your W-Fragen cards and their example sentences.</p><button class="primary-button" id="start-library">Start reviewing</button></div></section>
+      <section id="library-view" class="view">
+        <div class="library-header"><div><p class="eyebrow">YOUR STUDY LIBRARY</p><h2>Learning sections</h2><p>Choose a section to practice one topic at a time.</p></div><span class="library-total">3 active sections</span></div>
+        <div class="section-grid">
+          <article class="library-section featured">
+            <div class="section-card-top"><span class="section-icon purple">W?</span><span class="available-badge">Available</span></div>
+            <h3>W-Fragen</h3><p>German question words for asking who, what, where, when, and why.</p>
+            <div class="section-meta"><span>12 cards</span><span>A1 level</span></div>
+            <button class="primary-button" id="start-library">Study W-Fragen <span>→</span></button>
+          </article>
+          <article class="library-section">
+            <div class="section-card-top"><span class="section-icon orange">V</span><span class="soon-badge">Coming soon</span></div>
+            <h3>Verb conjugation</h3><p>Build confidence with weak verbs in the German present tense.</p>
+            <div class="section-meta"><span>New section</span><span>A1 level</span></div>
+            <button class="secondary-button" disabled>Not available yet</button>
+          </article>
+          <article class="library-section">
+            <div class="section-card-top"><span class="section-icon blue">S</span><span class="soon-badge">Coming soon</span></div>
+            <h3>Word order</h3><p>Practice German sentence structure in statements and questions.</p>
+            <div class="section-meta"><span>New section</span><span>A1 level</span></div>
+            <button class="secondary-button" disabled>Not available yet</button>
+          </article>
+          <article class="library-section featured">
+            <div class="section-card-top"><span class="section-icon green">ich</span><span class="available-badge">Available</span></div>
+            <h3>Personal pronouns</h3><p>Learn personal pronouns and how to use them in German sentences.</p>
+            <div class="section-meta"><span>8 cards</span><span>A1 level</span></div>
+            <button class="primary-button" id="start-pronouns">Study personal pronouns <span>→</span></button>
+          </article>
+          <article class="library-section featured">
+            <div class="section-card-top"><span class="section-icon blue">sein</span><span class="available-badge">Available</span></div>
+            <h3>Verb sein</h3><p>Learn the forms of sein and use them in simple German sentences.</p>
+            <div class="section-meta"><span>6 cards</span><span>A1 level</span></div>
+            <button class="primary-button" id="start-sein">Study sein <span>→</span></button>
+          </article>
+        </div>
+      </section>
       <section id="progress-view" class="view hidden"><div class="empty-view"><span class="big-icon">◒</span><h2>Your progress</h2><p>You’re building a strong foundation. Keep your 4-day streak going!</p><div class="progress-summary"><strong>86%</strong><span>average recall</span></div></div></section>
     </main>
+  </div>
+  <div class="celebration" id="celebration" hidden role="status" aria-live="polite">
+    <div class="celebration-card">
+      <span class="celebration-icon">✦</span>
+      <strong>Sequence complete!</strong>
+      <span>Great work — every card is done.</span>
+    </div>
+    <div class="confetti" id="confetti" aria-hidden="true"></div>
   </div>
   <script src="script.js"></script>
 </body>
