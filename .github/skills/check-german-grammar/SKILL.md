@@ -1,5 +1,6 @@
 ---
-description: Check German grammar and return color-coded HTML corrections
+name: check-german-grammar
+description: Check German grammar and return color-coded HTML corrections. Use when the user asks to check, correct, or proofread German text.
 ---
 
 Check the German grammar in the text provided by the user.
