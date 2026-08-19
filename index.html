@@ -8,6 +8,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="lesson-journey.css">
 </head>
 <body>
   <div class="app-shell">
@@ -45,32 +46,48 @@
       <section id="practice-view" class="view hidden">
         <div class="study-grid">
           <section class="card-stage">
-            <div class="stage-heading">
-              <span class="pill"><i class="dot dot-purple"></i> <span id="deck-label">All W-Fragen</span></span>
-              <div class="session-progress"><span>Today’s session</span><strong><span id="completed-count">0</span> / <span id="deck-size">12</span> cards</strong><div class="progress-track"><i id="session-progress"></i></div></div>
-              <div class="stage-tools"><select class="direction-select" id="direction-select" aria-label="Test direction"><option value="uk-de">Ukrainian → German</option><option value="de-uk">German → Ukrainian</option></select><button class="mode-toggle" id="mode-toggle" type="button">✓ Test</button><span class="card-number" id="card-number">01 <em>/ 12</em></span></div>
-            </div>
+            <section class="lesson-journey" aria-label="Lesson progress">
+              <div class="journey-top">
+                <nav class="journey-crumbs" aria-label="Your place in this lesson">
+                  <span class="crumb crumb-deck"><i class="dot dot-purple"></i><span id="deck-label">All W-Fragen</span></span>
+                  <span class="crumb-sep" aria-hidden="true">›</span>
+                  <span class="crumb crumb-chapter" id="lesson-chapter-label"></span>
+                  <span class="crumb-sep" aria-hidden="true">›</span>
+                  <span class="crumb crumb-phase" id="lesson-phase-label"></span>
+                </nav>
+                <p class="journey-tally" id="lesson-step-count"></p>
+              </div>
+              <div class="journey-now">
+                <h2 id="lesson-path-title"></h2>
+                <p id="stage-objective"></p>
+              </div>
+              <ol class="journey-rail" id="lesson-steps" aria-label="Lesson chapters"></ol>
+              <div class="journey-card-progress">
+                <span id="session-progress-label">Card 1 of 12</span>
+                <div class="progress-track" role="progressbar" aria-labelledby="session-progress-label" aria-valuemin="0" aria-valuemax="12" aria-valuenow="0"><i id="session-progress"></i></div>
+              </div>
+            </section>
             <section class="deck-guide" id="deck-guide" hidden aria-labelledby="deck-guide-title">
               <details id="deck-guide-disclosure">
                 <summary class="guide-summary">
                   <span class="guide-icon" aria-hidden="true">✦</span>
                   <span class="guide-heading">
-                    <span class="eyebrow" id="deck-guide-kicker">GRAMMAR GUIDE</span>
+                    <span class="eyebrow" id="deck-guide-kicker">ГРАМАТИЧНИЙ ДОВІДНИК</span>
                     <span class="guide-title" id="deck-guide-title" role="heading" aria-level="2"></span>
                   </span>
-                  <span class="guide-summary-action"><span id="deck-guide-toggle-label">View rules</span><span class="guide-chevron" aria-hidden="true">⌄</span></span>
+                  <span class="guide-summary-action"><span id="deck-guide-toggle-label">Показати правила</span><span class="guide-chevron" aria-hidden="true">⌄</span></span>
                 </summary>
                 <div class="guide-content">
                   <p class="guide-intro" id="deck-guide-intro"></p>
                   <div class="guide-rules-heading">
-                    <span>Key rules</span>
+                    <span>Основні правила</span>
                     <span class="guide-rule-count" id="deck-guide-count"></span>
                   </div>
-                  <ul id="deck-guide-rules" aria-label="Key grammar rules"></ul>
+                  <ul id="deck-guide-rules" aria-label="Основні граматичні правила"></ul>
                 </div>
               </details>
             </section>
-            <article class="flashcard" id="flashcard" tabindex="0" aria-label="Flashcard. Click to reveal answer.">
+            <article class="flashcard" id="flashcard" tabindex="0" aria-label="Flashcard">
               <div class="card-top"><span id="category-label">QUESTION WORD</span><span class="bookmark" id="bookmark" role="button" aria-label="Bookmark card">♡</span></div>
               <div class="card-body">
                 <div class="w-badge" id="w-badge">W</div>
@@ -93,18 +110,12 @@
                   <p class="verification-feedback" id="verification-feedback" role="status"></p>
                 </div>
               </div>
-              <div class="flip-hint" id="flip-hint"><span>↻</span> Click to reveal answer <kbd>Space</kbd></div>
+              <div class="flip-hint" id="flip-hint"><span>→</span> Example sentence shown below</div>
             </article>
-            <div class="rating" id="rating">
-              <p>How well did you know this?</p>
-              <div class="rating-buttons">
-                <button data-rating="again"><span>↺</span><strong>Again</strong><small>1 min</small></button>
-                <button data-rating="hard"><span>↗</span><strong>Hard</strong><small>6 days</small></button>
-                <button data-rating="good"><span>✓</span><strong>Good</strong><small>10 days</small></button>
-                <button data-rating="easy"><span>⚡</span><strong>Easy</strong><small>20 days</small></button>
-              </div>
+            <div class="study-actions" id="study-actions">
+              <button class="continue-button" id="continue-button" type="button">Next card <span>→</span></button>
             </div>
-            <div class="keyboard-hint"><kbd>←</kbd><span>Previous</span><kbd>→</kbd><span>Next</span><kbd>Space</kbd><span>Flip card</span></div>
+            <div class="keyboard-hint"><kbd>←</kbd><span>Previous</span><kbd>→</kbd><span>Continue</span><kbd>Space</kbd><span>Next card</span></div>
           </section>
 
           <aside class="insights">
@@ -112,7 +123,7 @@
             <div class="stats-card">
               <div class="stat"><span class="stat-icon purple">◉</span><div><strong id="remaining">12</strong><small>Cards left</small></div></div>
               <div class="stat"><span class="stat-icon orange">♨</span><div><strong id="overview-streak">0</strong><small>Day streak</small></div></div>
-              <div class="stat"><span class="stat-icon green">◔</span><div><strong id="recall-rate">0%</strong><small>Recall rate</small></div></div>
+              <div class="stat"><span class="stat-icon green">◔</span><div><strong id="accuracy-rate">0%</strong><small>Accuracy</small></div></div>
             </div>
             <div class="section-title"><h3>Your activity</h3><button>View all <span>↗</span></button></div>
             <div class="activity-card">
@@ -127,37 +138,37 @@
       </section>
 
       <section id="library-view" class="view">
-        <div class="library-header"><div><p class="eyebrow">YOUR STUDY LIBRARY</p><h2>Learning sections</h2><p>Choose a section to practice one topic at a time.</p></div><span class="library-total">8 active sections</span></div>
+        <div class="library-header"><div><p class="eyebrow">YOUR STUDY LIBRARY</p><h2>Learning sections</h2><p>Each section is divided into short learn and practice steps.</p></div><span class="library-total">9 active sections</span></div>
         <div class="section-grid">
           <article class="library-section featured">
             <div class="section-card-top"><span class="section-icon purple">W?</span><span class="available-badge">Available</span></div>
-            <h3>W-Fragen</h3><p>German question words for asking who, what, where, when, and why.</p>
-            <div class="section-meta"><span>12 cards</span><span>A1 level</span></div>
-            <button class="primary-button" id="start-library">Study W-Fragen <span>→</span></button>
+            <h3>W-Fragen</h3><p>Choose the right question word first, then practice it from its meaning.</p>
+            <div class="section-meta"><span>6 short steps</span><span>A1 level</span></div>
+            <button class="primary-button" id="start-library">Learn W-Fragen <span>→</span></button>
           </article>
           <article class="library-section featured">
             <div class="section-card-top"><span class="section-icon orange">V</span><span class="available-badge">Available</span></div>
-            <h3>Verb conjugation</h3><p>Learn weak-verb endings plus the <i>-t/-d</i> and sibilant spelling rules.</p>
-            <div class="section-meta"><span>18 cards</span><span>A1 level</span></div>
-            <button class="primary-button" id="start-conjugation">Study verb conjugation <span>→</span></button>
+            <h3>Verb conjugation</h3><p>Learn endings in small patterns, then write the matching pronoun-form pair.</p>
+            <div class="section-meta"><span>6 short steps</span><span>A1 level</span></div>
+            <button class="primary-button" id="start-conjugation">Learn conjugation <span>→</span></button>
           </article>
           <article class="library-section featured">
             <div class="section-card-top"><span class="section-icon blue">ä</span><span class="available-badge">Available</span></div>
-            <h3>Strong verbs</h3><p>Master the present-tense vowel changes in <i>sprechen</i>, <i>fahren</i>, <i>treffen</i>, and <i>lesen</i>.</p>
-            <div class="section-meta"><span>36 cards</span><span>A1 level</span></div>
-            <button class="primary-button" id="start-strong-verbs">Study strong verbs <span>→</span></button>
+            <h3>Strong verbs</h3><p>Meet one verb family at a time, then complete its changed forms in context.</p>
+            <div class="section-meta"><span>8 short steps</span><span>A1 level</span></div>
+            <button class="primary-button" id="start-strong-verbs">Learn strong verbs <span>→</span></button>
           </article>
           <article class="library-section featured">
             <div class="section-card-top"><span class="section-icon green">P</span><span class="available-badge">Available</span></div>
-            <h3>Present-tense practice</h3><p>Practice only the present-tense forms, using sentences as context rather than as full translation tasks.</p>
-            <div class="section-meta"><span>60 cards</span><span>A1 level</span></div>
+            <h3>Present-tense practice</h3><p>Complete one verb form at a time, then use the same skill in translation prompts.</p>
+            <div class="section-meta"><span>7 short steps</span><span>A1 level</span></div>
             <button class="primary-button" id="start-present-practice">Practice Präsens <span>→</span></button>
           </article>
           <article class="library-section featured">
             <div class="section-card-top"><span class="section-icon blue">k</span><span class="available-badge">Available</span></div>
-            <h3>Modalverb können</h3><p>Learn to express ability, place the infinitive correctly, and practise the worksheet exercises.</p>
-            <div class="section-meta"><span id="koennen-card-count">96 cards</span><span>A1 level</span></div>
-            <button class="primary-button" id="start-koennen">Study können <span>→</span></button>
+            <h3>Können &amp; haben</h3><p>Learn each verb family first, then practice its forms and sentence patterns in context.</p>
+            <div class="section-meta"><span id="koennen-card-count">8 focused steps</span><span>A1 level</span></div>
+            <button class="primary-button" id="start-koennen">Learn können &amp; haben <span>→</span></button>
           </article>
           <article class="library-section">
             <div class="section-card-top"><span class="section-icon blue">S</span><span class="soon-badge">Coming soon</span></div>
@@ -167,32 +178,38 @@
           </article>
           <article class="library-section featured">
             <div class="section-card-top"><span class="section-icon green">ich</span><span class="available-badge">Available</span></div>
-            <h3>Personal pronouns</h3><p>Learn personal pronouns and how to use them in German sentences.</p>
-            <div class="section-meta"><span>8 cards</span><span>A1 level</span></div>
-            <button class="primary-button" id="start-pronouns">Study personal pronouns <span>→</span></button>
+            <h3>Personal pronouns</h3><p>Start with singular forms, then add plural and formal <i>Sie</i> before practicing them.</p>
+            <div class="section-meta"><span>4 short steps</span><span>A1 level</span></div>
+            <button class="primary-button" id="start-pronouns">Learn pronouns <span>→</span></button>
           </article>
           <article class="library-section featured">
             <div class="section-card-top"><span class="section-icon orange">mein</span><span class="available-badge">Available</span></div>
-            <h3>Possessive pronouns</h3><p>Learn how to say my, your, his, her, our, and their in simple German sentences.</p>
-            <div class="section-meta"><span>12 cards</span><span>A1 level</span></div>
-            <button class="primary-button" id="start-possessives">Study possessive pronouns <span>→</span></button>
+            <h3>Possessive pronouns</h3><p>First connect each owner to its stem, then focus on endings in sentence context.</p>
+            <div class="section-meta"><span>4 short steps</span><span>A1 level</span></div>
+            <button class="primary-button" id="start-possessives">Learn possessives <span>→</span></button>
           </article>
           <article class="library-section featured">
             <div class="section-card-top"><span class="section-icon blue">sein</span><span class="available-badge">Available</span></div>
-            <h3>Verb sein</h3><p>Learn the forms of sein and use them in simple German sentences.</p>
-            <div class="section-meta"><span>6 cards</span><span>A1 level</span></div>
-            <button class="primary-button" id="start-sein">Study sein <span>→</span></button>
+            <h3>Verb sein</h3><p>Learn the irregular forms in two manageable groups, then practice the full pair.</p>
+            <div class="section-meta"><span>4 short steps</span><span>A1 level</span></div>
+            <button class="primary-button" id="start-sein">Learn sein <span>→</span></button>
+          </article>
+          <article class="library-section featured">
+            <div class="section-card-top"><span class="section-icon orange">oft</span><span class="available-badge">Available</span></div>
+            <h3>Frequency adverbs</h3><p>Describe how often something happens, from <i>immer</i> to <i>nie</i>.</p>
+            <div class="section-meta"><span>2 short steps</span><span>A1 level</span></div>
+            <button class="primary-button" id="start-frequency">Learn frequency adverbs <span>→</span></button>
           </article>
         </div>
       </section>
-      <section id="progress-view" class="view hidden"><div class="empty-view"><span class="big-icon">◒</span><h2>Your progress</h2><p>You’re building a strong foundation. Keep your 4-day streak going!</p><div class="progress-summary"><strong>86%</strong><span>average recall</span></div></div></section>
+      <section id="progress-view" class="view hidden"><div class="empty-view"><span class="big-icon">◒</span><h2>Your progress</h2><p>You’re building a strong foundation. Keep your 4-day streak going!</p><div class="progress-summary"><strong>86%</strong><span>average accuracy</span></div></div></section>
     </main>
   </div>
   <div class="celebration" id="celebration" hidden role="status" aria-live="polite">
     <div class="celebration-card">
       <span class="celebration-icon">✦</span>
-      <strong>Sequence complete!</strong>
-      <span>Great work — every card is done.</span>
+      <strong id="celebration-title">Sequence complete!</strong>
+      <span id="celebration-message">Great work — every card is done.</span>
     </div>
     <div class="confetti" id="confetti" aria-hidden="true"></div>
   </div>
