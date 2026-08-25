@@ -1,6 +1,6 @@
 scripts:
   - name: Preview German lessons
-    command: python3 -m http.server 4173 --bind 127.0.0.1
+    command: python3 server.py --port 4173 --bind 127.0.0.1
 
 server_ready_pattern: '(?i)port\s+(\d+)'
 auto_open_in_browser: true

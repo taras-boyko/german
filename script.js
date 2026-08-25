@@ -7,10 +7,8 @@ const cards=[
   {word:"Wie?",translation:"Як?",category:"QUESTION WORD",filter:"basics",example:"Wie geht es dir?",exampleTranslation:"Як у тебе справи?"},
   {word:"Wo?",translation:"Де?",category:"PLACE & DIRECTION",filter:"place",example:"Wo liegt das Buch?",exampleTranslation:"Де лежить книга?"},
   {word:"Woher?",translation:"Звідки?",category:"PLACE & DIRECTION",filter:"place",example:"Woher kommst du?",exampleTranslation:"Звідки ти?"},
-  {word:"Warum?",translation:"Чому?",category:"TIME & REASON",filter:"time",example:"Warum lernst du Deutsch?",exampleTranslation:"Чому ти вивчаєш німецьку?"},
   {word:"Welche?",translation:"Котрий / яка / яке?",category:"QUESTION WORD",filter:"basics",example:"Welche Sprache sprichst du?",exampleTranslation:"Якою мовою ти розмовляєш?"},
   {word:"Wie viele?",translation:"Скільки?",category:"QUESTION WORD",filter:"basics",example:"Wie viele Katzen habt ihr?",exampleTranslation:"Скільки у вас котів?"},
-  {word:"Wie heißt du?",translation:"Як тебе звати?",category:"QUESTION WORD",filter:"basics",example:"Wie heißt du?",exampleTranslation:"Як тебе звати?"}
 ];
 const pronounCards=[
   {word:"ich",translation:"я",category:"PERSONAL PRONOUN",example:"Ich lerne Deutsch.",exampleTranslation:"Я вивчаю німецьку."},
@@ -139,8 +137,6 @@ const presentPracticeCards=[
   clozeCard("Wir fahren morgen nach Frankreich.","Ми завтра їдемо до Франції.","Wir ___ morgen nach Frankreich. (fahren)"),
   clozeCard("Er geht immer noch in die Schule.","Він все ще ходить до школи.","Er ___ immer noch in die Schule. (gehen)"),
   clozeCard("Ich heiße Tanja.","Мене звати Таня.","Ich ___ Tanja. (heißen)"),
-  clozeCard("Ich habe einen Mann.","У мене є чоловік.","Ich ___ einen Mann. (haben)"),
-  clozeCard("Wir haben Kinder.","У нас є діти.","Wir ___ Kinder. (haben)"),
   clozeCard("Eva ist drei Jahre alt.","Єві три роки.","Eva ___ drei Jahre alt. (sein)"),
   clozeCard("Meine Mutter ist Köchin.","Моя мама кухарка.","Meine Mutter ___ Köchin. (sein)"),
   clozeCard("Wir wohnen zusammen.","Ми живемо разом.","Wir ___ zusammen. (wohnen)"),
@@ -175,7 +171,6 @@ const presentPracticeCards=[
   translationCard("Ich trinke Wasser.","Я п'ю воду."),
   translationCard("Ich sehe gut.","Я добре бачу."),
   translationCard("Ich möchte eine Pizza.","Я б хотів піцу."),
-  translationCard("Wann bekommen wir Geld?","Коли ми отримаємо гроші?"),
   translationCard("Was machst du heute Abend?","Що ти робиш сьогодні ввечері?"),
   translationCard("Ich suche meine Brille.","Я шукаю свої окуляри."),
   translationCard("Sie tanzt, und er singt.","Вона танцює, а він співає."),
@@ -201,8 +196,6 @@ const presentPracticeTargets={
   "Wir fahren morgen nach Frankreich.":["fahren","їдемо"],
   "Er geht immer noch in die Schule.":["geht","ходить"],
   "Ich heiße Tanja.":["heiße","звати"],
-  "Ich habe einen Mann.":["habe","маю"],
-  "Wir haben Kinder.":["haben","маємо"],
   "Eva ist drei Jahre alt.":["ist","є"],
   "Meine Mutter ist Köchin.":["ist","є"],
   "Wir wohnen zusammen.":["wohnen","живемо"],
@@ -237,7 +230,6 @@ const presentPracticeTargets={
   "Ich trinke Wasser.":["trinke","п'ю"],
   "Ich sehe gut.":["sehe","бачу"],
   "Ich möchte eine Pizza.":["möchte","хочу"],
-  "Wann bekommen wir Geld?":["bekommen","отримуємо"],
   "Ich suche meine Brille.":["suche","шукаю"],
   "Sie tanzt, und er singt.":["tanzt / singt","танцює / співає"],
   "Ich schreibe auf Deutsch.":["schreibe","пишу"],
@@ -251,7 +243,7 @@ presentPracticeCards.forEach(card=>{
   card.answerTranslation=target[1];
 });
 const modalClozeCard=(word,translation,prompt,answer,answerTranslation)=>({word,translation,category:"KÖNNEN · LÜCKENTEXT",prompt,example:prompt,exampleTranslation:"Доповни речення правильною формою können.",answer,answerTranslation});
-const modalSentenceCard=(word,translation,prompt,category="KÖNNEN · SATZBILDUNG")=>({word,translation,category,example:prompt,exampleTranslation:"Напиши повну відповідь німецькою.",answer:word,answerTranslation:translation,practiceType:"sentence"});
+const modalSentenceCard=(word,translation,prompt,category="KÖNNEN · SATZBILDUNG")=>({word,translation,category,prompt,exampleTranslation:"Напиши повну відповідь німецькою.",answer:word,answerTranslation:translation,practiceType:"sentence"});
 const koennenFormCards=[
   {word:"ich kann",translation:"я можу / вмію",category:"MODALVERB · KÖNNEN",example:"Ich kann sehr gut malen.",exampleTranslation:"Я можу дуже добре малювати."},
   {word:"du kannst",translation:"ти можеш / вмієш",category:"MODALVERB · KÖNNEN",example:"Du kannst im Sommer schwimmen.",exampleTranslation:"Ти можеш плавати влітку."},
@@ -371,6 +363,40 @@ const habenPracticeCards=[
   habenClozeCard("Ihr habt viele Fragen.","У вас багато запитань.","Ihr ___ viele Fragen. (haben)","habt","маєте"),
   habenClozeCard("Sie haben ein großes Haus.","У них є великий будинок.","Sie ___ ein großes Haus. (haben)","haben","мають")
 ];
+const bekommenFormCards=[
+  {word:"ich bekomme",translation:"я отримую",category:"VERB · BEKOMMEN",example:"Ich bekomme eine E-Mail.",exampleTranslation:"Я отримую електронний лист."},
+  {word:"du bekommst",translation:"ти отримуєш",category:"VERB · BEKOMMEN",example:"Du bekommst heute Besuch.",exampleTranslation:"Ти сьогодні приймаєш гостей."},
+  {word:"er / sie / es bekommt",translation:"він / вона / воно отримує",category:"VERB · BEKOMMEN",example:"Sie bekommt ein Geschenk.",exampleTranslation:"Вона отримує подарунок."},
+  {word:"wir bekommen",translation:"ми отримуємо",category:"VERB · BEKOMMEN",example:"Wir bekommen morgen Geld.",exampleTranslation:"Ми отримаємо гроші завтра."},
+  {word:"ihr bekommt",translation:"ви отримуєте",category:"VERB · BEKOMMEN",example:"Ihr bekommt die Tickets.",exampleTranslation:"Ви отримуєте квитки."},
+  {word:"sie / Sie bekommen",translation:"вони / Ви отримують / отримуєте",category:"VERB · BEKOMMEN",example:"Sie bekommen eine Antwort.",exampleTranslation:"Вони отримують відповідь."}
+];
+const bekommenClozeCard=(word,translation,prompt,answer,answerTranslation)=>({word,translation,category:"BEKOMMEN · LÜCKENTEXT",prompt,exampleTranslation:"Доповни речення правильною формою дієслова bekommen.",answer,answerTranslation,practiceType:"cloze"});
+const bekommenPracticeCards=[
+  bekommenClozeCard("Ich bekomme eine E-Mail.","Я отримую електронний лист.","Ich ___ eine E-Mail. (bekommen)","bekomme","отримую"),
+  bekommenClozeCard("Du bekommst heute Besuch.","Ти сьогодні приймаєш гостей.","Du ___ heute Besuch. (bekommen)","bekommst","отримуєш"),
+  bekommenClozeCard("Meine Schwester bekommt ein Geschenk.","Моя сестра отримує подарунок.","Meine Schwester ___ ein Geschenk. (bekommen)","bekommt","отримує"),
+  bekommenClozeCard("Wir bekommen morgen Geld.","Ми отримаємо гроші завтра.","Wir ___ morgen Geld. (bekommen)","bekommen","отримуємо"),
+  bekommenClozeCard("Ihr bekommt die Tickets.","Ви отримуєте квитки.","Ihr ___ die Tickets. (bekommen)","bekommt","отримуєте"),
+  bekommenClozeCard("Sie bekommen eine Antwort.","Вони отримують відповідь.","Sie ___ eine Antwort. (bekommen)","bekommen","отримують")
+];
+const brauchenFormCards=[
+  {word:"ich brauche",translation:"я потребую",category:"VERB · BRAUCHEN",example:"Ich brauche Hilfe.",exampleTranslation:"Мені потрібна допомога."},
+  {word:"du brauchst",translation:"ти потребуєш",category:"VERB · BRAUCHEN",example:"Du brauchst eine Pause.",exampleTranslation:"Тобі потрібна перерва."},
+  {word:"er / sie / es braucht",translation:"він / вона / воно потребує",category:"VERB · BRAUCHEN",example:"Er braucht eine neue Brille.",exampleTranslation:"Йому потрібні нові окуляри."},
+  {word:"wir brauchen",translation:"ми потребуємо",category:"VERB · BRAUCHEN",example:"Wir brauchen mehr Zeit.",exampleTranslation:"Нам потрібно більше часу."},
+  {word:"ihr braucht",translation:"ви потребуєте",category:"VERB · BRAUCHEN",example:"Ihr braucht eure Bücher.",exampleTranslation:"Вам потрібні ваші книжки."},
+  {word:"sie / Sie brauchen",translation:"вони / Ви потребують / потребуєте",category:"VERB · BRAUCHEN",example:"Sie brauchen einen Termin.",exampleTranslation:"Їм потрібна зустріч."}
+];
+const brauchenClozeCard=(word,translation,prompt,answer,answerTranslation)=>({word,translation,category:"BRAUCHEN · LÜCKENTEXT",prompt,exampleTranslation:"Доповни речення правильною формою дієслова brauchen.",answer,answerTranslation,practiceType:"cloze"});
+const brauchenPracticeCards=[
+  brauchenClozeCard("Ich brauche Hilfe.","Мені потрібна допомога.","Ich ___ Hilfe. (brauchen)","brauche","потребую"),
+  brauchenClozeCard("Du brauchst eine Pause.","Тобі потрібна перерва.","Du ___ eine Pause. (brauchen)","brauchst","потребуєш"),
+  brauchenClozeCard("Er braucht eine neue Brille.","Йому потрібні нові окуляри.","Er ___ eine neue Brille. (brauchen)","braucht","потребує"),
+  brauchenClozeCard("Wir brauchen mehr Zeit.","Нам потрібно більше часу.","Wir ___ mehr Zeit. (brauchen)","brauchen","потребуємо"),
+  brauchenClozeCard("Ihr braucht eure Bücher.","Вам потрібні ваші книжки.","Ihr ___ eure Bücher. (brauchen)","braucht","потребуєте"),
+  brauchenClozeCard("Sie brauchen einen Termin.","Їм потрібна зустріч.","Sie ___ einen Termin. (brauchen)","brauchen","потребують")
+];
 const frequencyCards=[
   {word:"immer",translation:"завжди",category:"FREQUENCY ADVERB",example:"Ich trinke immer Kaffee.",exampleTranslation:"Я завжди п'ю каву."},
   {word:"fast immer",translation:"майже завжди",category:"FREQUENCY ADVERB",example:"Sie kommt fast immer pünktlich.",exampleTranslation:"Вона майже завжди приходить вчасно."},
@@ -381,8 +407,82 @@ const frequencyCards=[
   {word:"fast nie",translation:"майже ніколи",category:"FREQUENCY ADVERB",example:"Du kommst fast nie zu spät.",exampleTranslation:"Ти майже ніколи не запізнюєшся."},
   {word:"nie",translation:"ніколи",category:"FREQUENCY ADVERB",example:"Wir essen nie Fleisch.",exampleTranslation:"Ми ніколи не їмо м'яса."}
 ];
-const koennenCards=[...koennenFormCards,...koennenWordOrderCards,...koennenPracticeCards,...habenFormCards,...habenPracticeCards];
-const lessonStep=(id,title,objective,cards,mode="learn",chapter="",phase="")=>({id,title,objective,cards,mode,chapter:chapter||title,phase:phase||(mode==="input"?"Practice":"Learn")});
+const timeExpressionCards=[
+  {word:"um",translation:"о (годині)",category:"PRÄPOSITION · ZEIT",example:"Der Deutschkurs beginnt um acht Uhr.",exampleTranslation:"Курс німецької починається о восьмій годині."},
+  {word:"am (= an dem)",translation:"у / в (день, дата)",category:"PRÄPOSITION · TAG & DATUM",example:"Am Dienstag habe ich frei.",exampleTranslation:"У вівторок я вільний / вільна."},
+  {word:"am (= an dem)",translation:"у / в (частина дня, крім Nacht)",category:"PRÄPOSITION · TAGESZEIT",example:"Am Abend lese ich ein Buch.",exampleTranslation:"Увечері я читаю книжку."},
+  {word:"im (= in dem)",translation:"у / в (місяць, пора року)",category:"PRÄPOSITION · MONAT & JAHRESZEIT",example:"Im Mai fahren wir nach Österreich.",exampleTranslation:"У травні ми їдемо до Австрії."},
+  {word:"in",translation:"через (проміжок часу в майбутньому)",category:"PRÄPOSITION · ZEITRAUM",example:"In zwei Wochen beginnen die Ferien.",exampleTranslation:"Через два тижні починаються канікули."},
+  {word:"nachts",translation:"уночі / ночами (загалом, регулярно)",category:"ZEITADVERB · NACHT",example:"Das Baby wacht nachts oft auf.",exampleTranslation:"Немовля часто прокидається вночі."},
+  {word:"in der Nacht",translation:"уночі (конкретна ніч)",category:"PRÄPOSITION · NACHT",example:"In der Nacht hat es geschneit.",exampleTranslation:"Уночі випав сніг."},
+  {word:"heute Nacht / letzte Nacht",translation:"цієї ночі / минулої ночі (без прийменника)",category:"ZEITAUSDRUCK · NACHT",example:"Letzte Nacht habe ich schlecht geschlafen.",exampleTranslation:"Минулої ночі я погано спав / спала."}
+];
+const spokenTimeCards=[
+  {word:"fünf nach zehn",translation:"10:05",category:"UHRZEIT · GESPROCHEN",example:"Es ist fünf nach zehn.",exampleTranslation:"Зараз 10:05."},
+  {word:"zehn vor sechs",translation:"5:50",category:"UHRZEIT · GESPROCHEN",example:"Es ist zehn vor sechs.",exampleTranslation:"Зараз 5:50."},
+  {word:"Viertel nach drei",translation:"3:15",category:"UHRZEIT · GESPROCHEN",example:"Es ist Viertel nach drei.",exampleTranslation:"Зараз 3:15."},
+  {word:"halb vier",translation:"3:30",category:"UHRZEIT · GESPROCHEN",example:"Es ist halb vier.",exampleTranslation:"Зараз 3:30 — половина до четвертої."},
+  {word:"Viertel vor sieben",translation:"6:45",category:"UHRZEIT · GESPROCHEN",example:"Es ist Viertel vor sieben.",exampleTranslation:"Зараз 6:45."}
+];
+const timeExpressionClozeCard=(word,translation,prompt,answer,answerTranslation)=>({word,translation,category:"ZEIT · LÜCKENTEXT",prompt,exampleTranslation:"Доповни речення правильною формою часу.",answer,answerTranslation,practiceType:"cloze"});
+const timeExpressionPracticeCards=[
+  timeExpressionClozeCard("Der Kurs beginnt um neun Uhr.","Курс починається о дев'ятій годині.","Der Kurs beginnt ___ neun Uhr.","um","о (годині)"),
+  timeExpressionClozeCard("Am Freitag arbeite ich nicht.","У п'ятницю я не працюю.","___ Freitag arbeite ich nicht.","am","у / в (день)"),
+  timeExpressionClozeCard("Am Morgen trinke ich Kaffee.","Уранці я п'ю каву.","___ Morgen trinke ich Kaffee.","am","у / в (частина дня)"),
+  timeExpressionClozeCard("Wir haben im September Ferien.","У вересні в нас канікули.","Wir haben ___ September Ferien.","im","у / в (місяць)"),
+  timeExpressionClozeCard("Im Sommer schwimmen wir oft.","Улітку ми часто плаваємо.","___ Sommer schwimmen wir oft.","im","у / в (пора року)"),
+  timeExpressionClozeCard("In zwei Stunden kommt der Bus.","Автобус приїде через дві години.","___ zwei Stunden kommt der Bus.","in","через (проміжок часу)"),
+  timeExpressionClozeCard("Ich wache nachts oft auf.","Я часто прокидаюся вночі.","Ich wache ___ oft auf.","nachts","уночі / ночами (регулярно)"),
+  timeExpressionClozeCard("In der Nacht hat es geschneit.","Уночі випав сніг.","___ Nacht hat es geschneit.","in der","уночі (конкретна ніч)"),
+  timeExpressionClozeCard("Letzte Nacht habe ich schlecht geschlafen.","Минулої ночі я погано спав / спала.","___ Nacht habe ich schlecht geschlafen.","letzte","минулої (без прийменника)")
+];
+const spokenTimePracticeCard=(spokenTime,digitalTime)=>({word:spokenTime,translation:digitalTime,category:"UHRZEIT · GESPROCHEN",prompt:`Es ist ${digitalTime} Uhr.`,exampleTranslation:"Напиши час розмовною німецькою.",answer:spokenTime,answerTranslation:digitalTime,practiceType:"cloze"});
+const spokenTimePracticeCards=[
+  spokenTimePracticeCard("fünf nach zehn","10:05"),
+  spokenTimePracticeCard("zehn vor sechs","5:50"),
+  spokenTimePracticeCard("Viertel nach drei","3:15"),
+  spokenTimePracticeCard("halb vier","3:30"),
+  spokenTimePracticeCard("Viertel vor sieben","6:45")
+];
+const wordOrderSentenceCard=(word,translation,prompt,category="WORTFOLGE · SATZBILDUNG")=>({word,translation,category,prompt,example:prompt,exampleTranslation:"Розстав слова в правильному порядку та напиши повне німецьке речення.",answer:word,answerTranslation:translation,practiceType:"sentence"});
+const wordOrderStatementCards=[
+  {word:"Der Mann ist da.",translation:"Чоловік тут.",category:"WORTFOLGE · AUSSAGESATZ",example:"Subjekt + Verb + weitere Informationen",exampleTranslation:"У прямому розповідному реченні підмет стоїть першим, а відмінюване дієслово - другим."},
+  {word:"Das Arbeitszimmer ist groß.",translation:"Кабінет великий.",category:"WORTFOLGE · AUSSAGESATZ",example:"Subjekt + Verb + Ergänzung",exampleTranslation:"Навіть із прикметником відмінюване дієслово залишається на другому місці."},
+  {word:"Ich fahre heute mit dem Bus nach Hause.",translation:"Я сьогодні їду автобусом додому.",category:"WORTFOLGE · AUSSAGESATZ",example:"Subjekt + Verb + Temporal + Modal + Lokal",exampleTranslation:"Після дієслова інформація часто йде в порядку час - спосіб - місце."}
+];
+const wordOrderInversionCards=[
+  {word:"Heute fahre ich mit dem Bus nach Hause.",translation:"Сьогодні я їду автобусом додому.",category:"WORTFOLGE · INVERSION",example:"Temporal + Verb + Subjekt + Modal + Lokal",exampleTranslation:"Якщо час стоїть першим, дієслово все одно посідає другу позицію, а підмет іде після нього."},
+  {word:"Am Abend ist mein Bruder frei.",translation:"Увечері мій брат вільний.",category:"WORTFOLGE · INVERSION",example:"Temporal + Verb + Subjekt + Ergänzung",exampleTranslation:"Початкове слово або фраза змінює місце підмета, але не місце дієслова."},
+  {word:"Jetzt haben wir ein neues Auto.",translation:"Тепер у нас є нова машина.",category:"WORTFOLGE · INVERSION",example:"Temporal + Verb + Subjekt + Objekt",exampleTranslation:"У стверджувальному реченні відмінюване дієслово завжди на другому місці."}
+];
+const wordOrderQuestionCards=[
+  {word:"Fährst du heute mit dem Bus nach Hause?",translation:"Ти сьогодні їдеш автобусом додому?",category:"WORTFOLGE · JA/NEIN-FRAGE",example:"Verb + Subjekt + weitere Informationen",exampleTranslation:"У питанні без питального слова відмінюване дієслово стоїть на першому місці."},
+  {word:"Warum fährst du heute mit dem Bus nach Hause?",translation:"Чому ти сьогодні їдеш автобусом додому?",category:"WORTFOLGE · W-FRAGE",example:"Fragewort + Verb + Subjekt + weitere Informationen",exampleTranslation:"У W-Frage питальне слово стоїть першим, а відмінюване дієслово - другим."},
+  {word:"Wo ist dein Handy?",translation:"Де твій телефон?",category:"WORTFOLGE · W-FRAGE",example:"Fragewort + Verb + Subjekt",exampleTranslation:"Після питального слова одразу ставте відмінюване дієслово."}
+];
+const wordOrderStatementPracticeCards=[
+  wordOrderSentenceCard("Der Mann ist da.","Чоловік тут.","da / der Mann / sein."),
+  wordOrderSentenceCard("Das Arbeitszimmer ist groß.","Кабінет великий.","sein / groß / das Arbeitszimmer."),
+  wordOrderSentenceCard("Ich fahre heute mit dem Bus nach Hause.","Я сьогодні їду автобусом додому.","heute / ich / mit dem Bus / nach Hause / fahren."),
+  wordOrderSentenceCard("Meine Schwester ist schon Studentin.","Моя сестра вже студентка.","schon / meine Schwester / Studentin / sein.")
+];
+const wordOrderInversionPracticeCards=[
+  wordOrderSentenceCard("Heute fahre ich mit dem Bus nach Hause.","Сьогодні я їду автобусом додому.","ich / heute / mit dem Bus / nach Hause / fahren."),
+  wordOrderSentenceCard("Am Abend ist mein Bruder frei.","Увечері мій брат вільний.","frei / mein Bruder / sein / am Abend."),
+  wordOrderSentenceCard("Morgen ist die Mutter zu Hause.","Завтра мама вдома.","die Mutter / morgen / zu Hause / sein."),
+  wordOrderSentenceCard("Jetzt haben wir ein neues Auto.","Тепер у нас є нова машина.","ein neues Auto / jetzt / wir / haben.")
+];
+const wordOrderQuestionPracticeCards=[
+  wordOrderSentenceCard("Fährst du heute mit dem Bus nach Hause?","Ти сьогодні їдеш автобусом додому?","du / heute / mit dem Bus / nach Hause / fahren?","WORTFOLGE · FRAGEBILDUNG"),
+  wordOrderSentenceCard("Ist der Mann da?","Чоловік тут?","da / der Mann / sein?","WORTFOLGE · FRAGEBILDUNG"),
+  wordOrderSentenceCard("Warum fährst du heute mit dem Bus nach Hause?","Чому ти сьогодні їдеш автобусом додому?","warum / du / heute / mit dem Bus / nach Hause / fahren?","WORTFOLGE · W-FRAGE"),
+  wordOrderSentenceCard("Wo ist dein Handy?","Де твій телефон?","dein Handy / wo / sein?","WORTFOLGE · W-FRAGE"),
+  wordOrderSentenceCard("Wann ist er zu Hause?","Коли він удома?","er / zu Hause / wann / sein?","WORTFOLGE · W-FRAGE"),
+  wordOrderSentenceCard("Wie geht es dir?","Як у тебе справи?","es / dir / wie / gehen?","WORTFOLGE · W-FRAGE")
+];
+const koennenCards=[...koennenFormCards,...koennenWordOrderCards,...koennenPracticeCards];
+const habenCards=[...habenFormCards,...habenPracticeCards,...bekommenFormCards,...bekommenPracticeCards,...brauchenFormCards,...brauchenPracticeCards];
+const lessonStep=(id,title,objective,cards,mode="learn",chapter="",phase="",progressId=id)=>({id,title,objective,cards,mode,chapter:chapter||title,phase:phase||(mode==="input"?"Practice":"Learn"),progressId});
 const learnThenPractice=(id,title,objective,cards,chapter=title)=>[
   lessonStep(`${id}-learn`,`Learn ${title}`,objective,cards,"learn",chapter,"Learn"),
   lessonStep(`${id}-recall`,`Practice ${title}`,`Write the German answer from the Ukrainian meaning. ${objective}`,cards,"input",chapter,"Practice")
@@ -394,21 +494,20 @@ const splitIntoSteps=(id,title,objective,cards,size,mode="input",chapter=title)=
   return steps;
 },[]);
 const wQuestionStages=[
-  ...learnThenPractice("w-basics","the basic question words","Match who, what, how, which, and how many to the information you need.",cards.filter(card=>card.filter==="basics"),"Basics"),
-  ...learnThenPractice("w-place","place and direction","Keep wo, wohin, and woher distinct before practicing them.",cards.filter(card=>card.filter==="place"),"Place & direction"),
-  ...learnThenPractice("w-time","time and reason","Choose when or why, then practice the German question word.",cards.filter(card=>card.filter==="time"),"Time & reason")
+  lessonStep("w-questions-learn","Learn W-Fragen","Read every W-Frage and its example before testing your recall across the full set.",cards,"learn","W-Fragen","Learn","w-questions:learn"),
+  lessonStep("w-questions-practice","Practice W-Fragen","Retrieve every W-Frage in one mixed series. Repeat the full set to strengthen recall across question types.",cards,"input","W-Fragen","Practice","w-questions:practice")
 ];
 const pronounStages=[
-  ...learnThenPractice("pronouns-singular","singular pronouns","Connect ich, du, er, sie, and es with the person being discussed.",pronounCards.slice(0,5),"Singular"),
-  ...learnThenPractice("pronouns-plural","plural and formal pronouns","Separate wir, ihr, sie, and formal Sie by who is being addressed.",pronounCards.slice(5),"Plural & formal")
+  lessonStep("pronouns-learn","Learn personal pronouns","Read every singular, plural, and formal pronoun as a complete set before testing your recall.",pronounCards,"learn","Personal pronouns","Learn","pronouns:learn"),
+  lessonStep("pronouns-practice","Practice personal pronouns","Retrieve every singular, plural, and formal pronoun in one mixed practice sequence.",pronounCards,"input","Personal pronouns","Practice","pronouns:practice")
 ];
 const possessiveStages=[
   ...learnThenPractice("possessives-stems","ownership stems","Identify the owner before choosing mein, dein, sein, ihr, unser, euer, Ihr, or ihr.",possessivePronounCards.slice(0,8),"Stems"),
   ...learnThenPractice("possessives-endings","possessive endings","Notice how the ending changes with the noun in each example.",possessivePronounCards.slice(8),"Endings")
 ];
 const seinStages=[
-  ...learnThenPractice("sein-singular","singular forms of sein","Learn ich bin, du bist, and er/sie/es ist as complete pairs.",seinCards.slice(0,3),"Singular"),
-  ...learnThenPractice("sein-plural","plural and formal forms of sein","Learn wir sind, ihr seid, and sie/Sie sind as complete pairs.",seinCards.slice(3),"Plural & formal")
+  lessonStep("sein-learn","Learn Verb sein","Read all six present-tense forms as complete pronoun-form pairs before testing your recall.",seinCards,"learn","Verb sein","Learn","sein:learn"),
+  lessonStep("sein-practice","Practice Verb sein","Retrieve all six present-tense forms in one mixed series. Repeat the full set to strengthen recall.",seinCards,"input","Verb sein","Practice","sein:practice")
 ];
 const conjugationStages=[
   ...learnThenPractice("conjugation-regular","regular endings","Follow the regular ending pattern from ich to sie/Sie.",conjugationCards.slice(0,6),"Regular endings"),
@@ -436,12 +535,32 @@ const koennenStages=[
   lessonStep("koennen-order-learn","Learn modal verb word order","Compare statements and both question patterns before building full sentences.",koennenWordOrderCards,"learn","Word order","Learn"),
   lessonStep("koennen-order-practice","Practice modal verb sentences","Reorder the given German chunks into a complete sentence. Put können in position two and the infinitive at the end.",koennenWordOrderPracticeCards,"input","Word order","Practice"),
   lessonStep("koennen-context-learn","See können in context","Read complete statements, questions, and short dialogues before completing the modal verb yourself.",studyCardsFromPractice(koennenContextCards),"learn","Können in context","Learn"),
-  lessonStep("koennen-context-practice","Practice können in context","Enter only the missing form of können in longer sentences and dialogues.",koennenContextCards,"input","Können in context","Practice"),
+  lessonStep("koennen-context-practice","Practice können in context","Enter only the missing form of können in longer sentences and dialogues.",koennenContextCards,"input","Können in context","Practice")
+];
+const habenStages=[
   lessonStep("haben-learn","Learn haben","Read the six forms of haben and connect them to possession or having something.",habenFormCards,"learn","haben","Learn"),
-  lessonStep("haben-practice","Practice haben","Enter only the missing conjugated form of haben in each sentence.",habenPracticeCards,"input","haben","Practice")
+  lessonStep("haben-practice","Practice haben","Enter only the missing conjugated form of haben in each sentence.",habenPracticeCards,"input","haben","Practice"),
+  lessonStep("bekommen-learn","Learn bekommen","Read the six forms of bekommen and connect them to receiving something.",bekommenFormCards,"learn","bekommen","Learn"),
+  lessonStep("bekommen-practice","Practice bekommen","Enter only the missing conjugated form of bekommen in each sentence.",bekommenPracticeCards,"input","bekommen","Practice"),
+  lessonStep("brauchen-learn","Learn brauchen","Read the six forms of brauchen and connect them to needing something.",brauchenFormCards,"learn","brauchen","Learn"),
+  lessonStep("brauchen-practice","Practice brauchen","Enter only the missing conjugated form of brauchen in each sentence.",brauchenPracticeCards,"input","brauchen","Practice")
 ];
 const frequencyStages=[
   ...learnThenPractice("frequency-scale","the frequency scale","Work through immer to nie in descending frequency, then practice every adverb in the same sequence.",frequencyCards,"Frequency scale")
+];
+const timeExpressionStages=[
+  lessonStep("time-expressions-learn","Learn time expressions","Connect um, am, im, in, and the Nacht forms with their time patterns before practising in context.",timeExpressionCards,"learn","Time expressions","Learn"),
+  lessonStep("time-expressions-practice","Practice time expressions","Enter the missing time expression for a clock time, date, month, season, future interval, or night.",timeExpressionPracticeCards,"input","Time expressions","Practice"),
+  lessonStep("spoken-time-learn","Learn spoken times","Read the everyday patterns with nach, vor, Viertel, and halb before practising each clock time.",spokenTimeCards,"learn","Spoken times","Learn"),
+  lessonStep("spoken-time-practice","Practice spoken times","Write the everyday German expression for each digital clock time.",spokenTimePracticeCards,"input","Spoken times","Practice")
+];
+const wordOrderStages=[
+  lessonStep("word-order-statements-learn","Learn direct statements","See how the subject comes first and the conjugated verb stays in second position.",wordOrderStatementCards,"learn","Direct statements","Learn"),
+  lessonStep("word-order-statements-practice","Practice direct statements","Reorder the German chunks into direct statements with the verb in second position.",wordOrderStatementPracticeCards,"input","Direct statements","Practice"),
+  lessonStep("word-order-inversion-learn","Learn inversion","Start with time or another phrase, then place the conjugated verb second and the subject after it.",wordOrderInversionCards,"learn","Inversion","Learn"),
+  lessonStep("word-order-inversion-practice","Practice inversion","Reorder the German chunks into statements that begin with a time expression.",wordOrderInversionPracticeCards,"input","Inversion","Practice"),
+  lessonStep("word-order-questions-learn","Learn question patterns","Compare yes/no questions with W-questions and find the position of the conjugated verb.",wordOrderQuestionCards,"learn","Questions","Learn"),
+  lessonStep("word-order-questions-practice","Practice question patterns","Build yes/no and W-questions from the German chunks.",wordOrderQuestionPracticeCards,"input","Questions","Practice")
 ];
 const deckDefinitions={
   "w-questions":{title:"W-Fragen",label:"W-Fragen",badge:"W",tip:"W-questions always come first in a question, followed by the verb.",guide:{title:"W-Fragen: запитання",intro:"Оберіть питальне слово відповідно до потрібної інформації, а потім побудуйте речення навколо відмінюваного дієслова.",rules:["Питальне слово стоїть на першому місці, а відмінюване дієслово — на другому: Wo wohnst du?","Підмет зазвичай стоїть після дієслова: Wann kommt ihr? Решта інформації йде далі.","Використовуйте wo для місця, wohin для руху до місця, а woher — для місця, звідки хтось прибуває.","На W-Fragen не можна відповісти лише ja або nein: вони потребують конкретної інформації."]},cards,stages:wQuestionStages},
@@ -450,11 +569,14 @@ const deckDefinitions={
   sein:{title:"Verb sein",label:"Verb sein",badge:"sein",tip:"The verb sein is irregular, so learn each form as a complete pair with its pronoun.",guide:{title:"Sein у теперішньому часі",intro:"Sein означає «бути» й відмінюється неправильно, тому його форми потрібно вивчати окремо.",rules:["ich bin, du bist, er/sie/es ist, wir sind, ihr seid, sie/Sie sind.","Уживайте sein для ідентифікації, опису, місцеперебування та багатьох простих представлень: Ich bin müde.","Форма має відповідати підмету: Anna ist hier, але Anna und Paul sind hier.","Пам’ятайте про велику літеру S у Sie sind під час ввічливого звертання."]},cards:seinCards,stages:seinStages},
   conjugation:{title:"Verb conjugation",label:"Verb conjugation",badge:"V",tip:"Weak verbs take regular endings: -e, -st, -t, -en, -t, -en. After a stem ending in -t or -d, add an extra e.",guide:{title:"Слабкі дієслова в Präsens",intro:"Візьміть основу дієслова й доберіть закінчення, що відповідає підмету.",rules:[{title:"Використовуйте регулярні закінчення",detail:"Більшість слабких дієслів відмінюються за однаковою схемою від ich до sie/Sie.",formula:"ich -e · du -st · er/sie/es -t · wir -en · ihr -t · sie/Sie -en"},{title:"Додавайте додаткове -e",detail:"Якщо основа закінчується на -t, -d або приголосний + -m/-n, додайте e перед закінченням.",formula:"du arbeitest · er arbeitet · ihr arbeitet"},{title:"Не додавайте зайве -s",detail:"В основах на -s, -ß або -z форма du має закінчення -t замість -st.",formula:"du heißt · du tanzt · du übersetzt"}]},cards:conjugationCards,stages:conjugationStages},
   "strong-verbs":{title:"Strong verbs",label:"Strong verbs",badge:"ä",tip:"With these strong verbs, the stem vowel changes only in du and er/sie/es.",guide:{title:"Сильні дієслова в Präsens",intro:"Спочатку повторіть повну парадигму кожного дієслова, а потім утворюйте всі форми за картками з пропусками.",rules:[{title:"Зміна e на i",detail:"Sprechen, treffen і lesen змінюють e на i у другій та третій особі однини.",formula:"du sprichst · er trifft · sie liest"},{title:"Зміна a на ä",detail:"Fahren змінює a на ä у другій та третій особі однини.",formula:"du fährst · er fährt"},{title:"Зберігайте основу в множині",detail:"Зміна голосного не відбувається з wir, ihr або sie/Sie.",formula:"wir sprechen · ihr fahrt · sie lesen"},{title:"Уживайте звичайні закінчення Präsens",detail:"Змінюється лише голосний в основі; закінчення залишаються -e, -st, -t, -en, -t, -en.",formula:"ich lese · du liest · er liest · wir lesen"}]},cards:strongVerbCards,stages:strongVerbStages},
-  "present-practice":{title:"Present-tense practice",label:"Präsens practice",badge:"P",tip:"Use this mixed review after the weak-verb lesson. It also includes irregular and strong verbs from the worksheet.",guide:{title:"Відпрацювання форм Präsens",intro:"Використовуйте речення як контекст, але вводьте лише відмінювану форму або форми, які вивчаєте.",rules:["Картки з пропусками закріплюють потрібну відмінювану форму в реченні, зокрема в запитаннях і довших контекстах.","Перекладні картки просять ввести лише форму дієслова, яку вивчають, а не все німецьке речення.","Вправа поєднує слабкі, сильні та неправильні дієслова: sein, haben, gehen, fahren, sehen і möchten."]},cards:presentPracticeCards,stages:presentPracticeStages},
-  koennen:{title:"Können & haben",label:"Können & haben",badge:"k",tip:"Conjugate können in second position and put the second verb in the infinitive at the end.",guide:{title:"Können & haben: уміння та можливість",intro:"Уживайте können, щоб сказати, що хтось щось уміє або може зробити. Форма залежить від підмета, а друге дієслово залишається в інфінітиві.",rules:["Форми: ich kann, du kannst, er/sie/es kann, wir können, ihr könnt, sie/Sie können.","У розповідному реченні können стоїть на другому місці; спочатку може стояти обставина часу: Heute kann ich ... fahren.","У загальному запитанні können стоїть на першому місці. У W-Frage питальне слово стоїть першим, а können — другим.","Коли können вживається з іншим дієсловом, це дієслово переходить у кінець речення в інфінітиві: Ich kann gut Gitarre spielen.","У додатковій секції повторіть форми haben: ich habe, du hast, er/sie/es hat, wir haben, ihr habt, sie/Sie haben."]},cards:koennenCards,stages:koennenStages},
-  frequency:{title:"Frequency adverbs",label:"Frequency adverbs",badge:"oft",tip:"Frequency adverbs such as oft and nie normally stay in the middle of the sentence after the conjugated verb.",guide:{title:"Прислівники частоти",intro:"Прислівники частоти показують, як часто щось відбувається. Вони не змінюють форму й зазвичай стоять у середині речення.",rules:[{title:"Вивчайте шкалу частоти",detail:"Від найбільшої до найменшої частоти: immer, fast immer, meistens, oft, manchmal, selten, fast nie, nie.",formula:"immer → oft → manchmal → selten → nie"},{title:"Ставте прислівник після відмінюваного дієслова",detail:"У простому реченні прислівник частоти зазвичай стоїть після дієслова.",formula:"Ich lerne oft Deutsch."},{title:"Зберігайте дієслово на другому місці",detail:"Якщо речення починається з часу, підмет і прислівник ідуть після відмінюваного дієслова.",formula:"Am Sonntag lese ich manchmal ein Buch."},{title:"Використовуйте nie без nicht",detail:"Nie уже означає заперечення «ніколи», тому в таких реченнях nicht не потрібне.",formula:"Wir essen nie Fleisch."}]},cards:frequencyCards,stages:frequencyStages}
+  "present-practice":{title:"Present-tense practice",label:"Präsens practice",badge:"P",tip:"Use this mixed review after the weak-verb lesson. It also includes irregular and strong verbs from the worksheet.",guide:{title:"Відпрацювання форм Präsens",intro:"Використовуйте речення як контекст, але вводьте лише відмінювану форму або форми, які вивчаєте.",rules:["Картки з пропусками закріплюють потрібну відмінювану форму в реченні, зокрема в запитаннях і довших контекстах.","Перекладні картки просять ввести лише форму дієслова, яку вивчають, а не все німецьке речення.","Вправа поєднує слабкі, сильні та неправильні дієслова: sein, gehen, fahren, sehen і möchten."]},cards:presentPracticeCards,stages:presentPracticeStages},
+  koennen:{title:"Können",label:"Können",badge:"k",tip:"Conjugate können in second position and put the second verb in the infinitive at the end.",guide:{title:"Können: уміння та можливість",intro:"Уживайте können, щоб сказати, що хтось щось уміє або може зробити. Форма залежить від підмета, а друге дієслово залишається в інфінітиві.",rules:["Форми: ich kann, du kannst, er/sie/es kann, wir können, ihr könnt, sie/Sie können.","У розповідному реченні können стоїть на другому місці; спочатку може стояти обставина часу: Heute kann ich ... fahren.","У загальному запитанні können стоїть на першому місці. У W-Frage питальне слово стоїть першим, а können — другим.","Коли können вживається з іншим дієсловом, це дієслово переходить у кінець речення в інфінітиві: Ich kann gut Gitarre spielen."]},cards:koennenCards,stages:koennenStages},
+  haben:{title:"Haben, bekommen & brauchen",label:"Haben, bekommen & brauchen",badge:"hab",tip:"Use haben for what you have, bekommen for what you receive, and brauchen for what you need.",guide:{title:"Haben, bekommen & brauchen",intro:"Ці три дієслова допомагають говорити про речі, людей, потреби та отримання в повсякденних ситуаціях A1.",rules:["haben означає «мати»: Ich habe einen Hund.","bekommen означає «отримувати»: Wir bekommen morgen Geld.","brauchen означає «потребувати»: Er braucht eine neue Brille.","Форми bekommen і brauchen відмінюються регулярно; haben має особливі форми du hast, er/sie/es hat та ihr habt."]},cards:habenCards,stages:habenStages},
+  frequency:{title:"Frequency adverbs",label:"Frequency adverbs",badge:"oft",tip:"Frequency adverbs such as oft and nie normally stay in the middle of the sentence after the conjugated verb.",guide:{title:"Прислівники частоти",intro:"Прислівники частоти показують, як часто щось відбувається. Вони не змінюють форму й зазвичай стоять у середині речення.",rules:[{title:"Вивчайте шкалу частоти",detail:"Від найбільшої до найменшої частоти: immer, fast immer, meistens, oft, manchmal, selten, fast nie, nie.",formula:"immer → oft → manchmal → selten → nie"},{title:"Ставте прислівник після відмінюваного дієслова",detail:"У простому реченні прислівник частоти зазвичай стоїть після дієслова.",formula:"Ich lerne oft Deutsch."},{title:"Зберігайте дієслово на другому місці",detail:"Якщо речення починається з часу, підмет і прислівник ідуть після відмінюваного дієслова.",formula:"Am Sonntag lese ich manchmal ein Buch."},{title:"Використовуйте nie без nicht",detail:"Nie уже означає заперечення «ніколи», тому в таких реченнях nicht не потрібне.",formula:"Wir essen nie Fleisch."}]},cards:frequencyCards,stages:frequencyStages},
+  "time-expressions":{title:"Time expressions",label:"Time expressions",badge:"Zeit",tip:"Use um for clock times, am for days and daytime periods, im for months and seasons, and nachts for habitual night actions.",guide:{title:"Час: um, am, im, in та Nacht",intro:"Ці короткі слова показують, коли щось відбувається. Обирайте форму за типом часу: година, день, місяць, проміжок часу або ніч.",rules:[{title:"Уживайте um з точною годиною",detail:"Um відповідає на запитання «о котрій годині?»",formula:"um acht Uhr"},{title:"Уживайте am з днями, датами й частинами дня",detail:"Am — це скорочення an dem. Воно вживається з днями тижня, датами та Morgen, Vormittag, Mittag, Nachmittag, Abend.",formula:"am Montag · am ersten Mai · am Abend"},{title:"Уживайте im з місяцями та порами року",detail:"Im — це скорочення in dem.",formula:"im Mai · im Sommer"},{title:"Уживайте in для майбутнього проміжку часу",detail:"In показує, через який час щось станеться.",formula:"in zwei Wochen · in einer Stunde"},{title:"Запам’ятайте особливі форми з Nacht",detail:"Не кажемо am Nacht. Nachts означає «уночі» загалом або регулярно; in der Nacht — під час конкретної ночі. З heute, gestern, letzte не потрібен прийменник.",formula:"nachts · in der Nacht · letzte Nacht"},{title:"Використовуйте nach і vor для розмовного часу",detail:"Nach означає хвилини після поточної години, vor — хвилини до наступної. Halb vier означає 3:30, тобто половина до четвертої.",formula:"fünf nach zehn · zehn vor sechs · halb vier"}]},cards:[...timeExpressionCards,...spokenTimeCards],stages:timeExpressionStages},
+  "word-order":{title:"Word order",label:"Word order",badge:"S",tip:"In German statements, the conjugated verb stays in second position; in yes/no questions, it moves to the first position.",guide:{title:"Порядок слів у реченні",intro:"Німецький порядок слів суворіший, ніж український. Спочатку визначте тип речення, а потім знайдіть місце для відмінюваного дієслова.",rules:[{title:"Будуйте пряме розповідне речення",detail:"Підмет стоїть першим, а відмінюване дієслово - другим.",formula:"Ich fahre heute mit dem Bus nach Hause."},{title:"Використовуйте інверсію після обставини",detail:"Якщо час, місце чи інша фраза стоїть першою, дієслово лишається другим, а підмет переходить після нього.",formula:"Heute fahre ich mit dem Bus nach Hause."},{title:"Ставте дієслово першим у питанні ja/nein",detail:"У питанні без питального слова відмінюване дієслово відкриває речення.",formula:"Fährst du heute mit dem Bus nach Hause?"},{title:"Починайте W-Frage з питального слова",detail:"Питальне слово стоїть першим, відмінюване дієслово - другим, а підмет - після нього.",formula:"Warum fährst du heute mit dem Bus nach Hause?"}]},cards:[...wordOrderStatementCards,...wordOrderInversionCards,...wordOrderQuestionCards],stages:wordOrderStages}
 };
-let activeDeckId="w-questions",activeStageIndex=0,deck=[...wQuestionStages[0].cards],index=0,flipped=false,completed=0,roundCorrect=0,roundCorrectCards={},roundHadIncorrect=false,roundFinished=false,practiceInputStarted=false,verificationMode=false,verified=false,answerRevealed=false,celebrating=false,studyMode="learn",direction="uk-de",practiceAttempt=0;
+let activeDeckId="w-questions",activeStageIndex=0,deck=[...wQuestionStages[0].cards],index=0,flipped=false,completed=0,roundCorrect=0,roundCorrectCards={},roundHadIncorrect=false,roundFinished=false,practiceInputStarted=false,verificationMode=false,verified=false,answerRevealed=false,celebrating=false,studyMode="learn",direction="uk-de";
 const $=id=>document.getElementById(id);
 function updatePageTitle(view){
   $("page-title").textContent=view==="practice"?`Practice ${deckDefinitions[activeDeckId].title}`:view==="library"?"Card library":"Your progress";
@@ -466,27 +588,64 @@ if(saved&&typeof saved==="object"&&saved.days&&typeof saved.days==="object")acti
 const lessonStorageKey="german-progressive-lesson-path-v1";
 const savedLessonProgress=JSON.parse(localStorage.getItem(lessonStorageKey)||"null");
 let lessonProgress=savedLessonProgress&&typeof savedLessonProgress==="object"&&savedLessonProgress.completedStages&&typeof savedLessonProgress.completedStages==="object"?savedLessonProgress:{completedStages:{}};
-const dailyPracticeStorageKey="german-daily-practice-v1";
+const dailyPracticeStorageKey="german-daily-practice-v2";
 const today=dateKey(new Date());
 const savedDailyPractice=JSON.parse(localStorage.getItem(dailyPracticeStorageKey)||"null");
-let dailyPractice=savedDailyPractice&&typeof savedDailyPractice==="object"&&savedDailyPractice.date===today&&savedDailyPractice.correct&&typeof savedDailyPractice.correct==="object"?savedDailyPractice:{date:today,correct:{}};
+let dailyPractice=savedDailyPractice&&typeof savedDailyPractice==="object"&&savedDailyPractice.date===today&&savedDailyPractice.correct&&typeof savedDailyPractice.correct==="object"?{...savedDailyPractice,portions:savedDailyPractice.portions&&typeof savedDailyPractice.portions==="object"?savedDailyPractice.portions:{}}:{date:today,correct:{},portions:{}};
+const lessonActivityStorageKey="german-lesson-activity-v1";
+const savedLessonActivity=JSON.parse(localStorage.getItem(lessonActivityStorageKey)||"null");
+let lessonActivity=savedLessonActivity&&typeof savedLessonActivity==="object"&&savedLessonActivity.lessons&&typeof savedLessonActivity.lessons==="object"?savedLessonActivity:{lessons:{}};
+const lessonHistoryEndpoint="/api/lesson-history";
+function migrateHabenLessonProgress(){
+  let progressChanged=false,dailyPracticeChanged=false;
+  const oldCompleted=lessonProgress.completedStages.koennen;
+  if(Array.isArray(oldCompleted)&&oldCompleted.includes("haben-learn")){
+    const habenCompleted=lessonProgress.completedStages.haben||[];
+    lessonProgress.completedStages.haben=[...new Set([...habenCompleted,"haben-learn"])];
+    lessonProgress.completedStages.koennen=oldCompleted.filter(stageId=>stageId!=="haben-learn");
+    progressChanged=true;
+  }
+  const oldPracticeKey="koennen:haben-practice",newPracticeKey="haben:haben-practice";
+  if(dailyPractice.correct[oldPracticeKey]){
+    dailyPractice.correct[newPracticeKey]={...dailyPractice.correct[oldPracticeKey],...dailyPractice.correct[newPracticeKey]};
+    delete dailyPractice.correct[oldPracticeKey];
+    dailyPracticeChanged=true;
+  }
+  if(progressChanged)localStorage.setItem(lessonStorageKey,JSON.stringify(lessonProgress));
+  if(dailyPracticeChanged)localStorage.setItem(dailyPracticeStorageKey,JSON.stringify(dailyPractice));
+}
+migrateHabenLessonProgress();
+const legacyStageCompletions={
+  "w-questions":{"w-questions:learn":["w-basics-learn","w-place-learn","w-time-learn"]},
+  pronouns:{"pronouns:learn":["pronouns-singular-learn","pronouns-plural-learn"]},
+  sein:{"sein:learn":["sein-singular-learn","sein-plural-learn"]}
+};
 function activeStage(){return deckDefinitions[activeDeckId].stages[activeStageIndex]}
 function completedStages(deckId){return lessonProgress.completedStages[deckId]||[]}
+function stageProgressId(stage){return stage.progressId||stage.id}
 function ensureCurrentPracticeDay(){
   const currentDate=dateKey(new Date());
-  if(dailyPractice.date===currentDate)return;
-  dailyPractice={date:currentDate,correct:{}};
+  if(dailyPractice.date===currentDate)return false;
+  dailyPractice={date:currentDate,correct:{},portions:{}};
   localStorage.setItem(dailyPracticeStorageKey,JSON.stringify(dailyPractice));
+  return true;
 }
-function practiceProgressKey(deckId,stageId){return `${deckId}:${stageId}`}
+function practiceProgressKey(deckId,stage){return `${deckId}:${stageProgressId(stage)}`}
+function practiceCardKey(card){return `${card.word}\u0000${card.answer||""}\u0000${card.prompt||""}`}
+function hasCompletedLegacyStage(deckId,stage,done){
+  const legacyIds=legacyStageCompletions[deckId]?.[stageProgressId(stage)];
+  return Boolean(legacyIds?.length)&&legacyIds.every(stageId=>done.includes(stageId));
+}
 function isStageComplete(deckId,stageId){
   const stage=deckDefinitions[deckId].stages.find(candidate=>candidate.id===stageId);
   if(stage&&stage.mode==="input"){
     ensureCurrentPracticeDay();
-    const correctCards=dailyPractice.correct[practiceProgressKey(deckId,stageId)]||{};
-    return stage.cards.length>0&&stage.cards.every((_,cardIndex)=>correctCards[cardIndex]===true);
+    const correctCards=dailyPractice.correct[practiceProgressKey(deckId,stage)]||{};
+    const practiceCards=practiceCardsForStage(deckId,stage);
+    return practiceCards.length>0&&practiceCards.every(card=>correctCards[practiceCardKey(card)]===true);
   }
-  return completedStages(deckId).includes(stageId);
+  const done=completedStages(deckId);
+  return Boolean(stage)&&(done.includes(stageProgressId(stage))||done.includes(stage.id)||hasCompletedLegacyStage(deckId,stage,done));
 }
 function isStageAvailable(deckId,stageIndex){
   return true;
@@ -495,7 +654,7 @@ function markStageComplete(){
   const stage=activeStage(),done=completedStages(activeDeckId);
   if(stage.mode==="input")return;
   if(done.includes(stage.id))return;
-  lessonProgress.completedStages[activeDeckId]=[...done,stage.id];
+  lessonProgress.completedStages[activeDeckId]=[...done,stageProgressId(stage)];
   localStorage.setItem(lessonStorageKey,JSON.stringify(lessonProgress));
 }
 function dateKey(date){return `${date.getFullYear()}-${String(date.getMonth()+1).padStart(2,"0")}-${String(date.getDate()).padStart(2,"0")}`}
@@ -503,13 +662,12 @@ function recordReview(wasCorrect){
   const today=dateKey(new Date());
   activity.attempts+=1;
   if(wasCorrect)activity.correct+=1;
+  recordLessonReview(wasCorrect);
   if(wasCorrect&&activeStage().mode==="input"){
     ensureCurrentPracticeDay();
-    const key=practiceProgressKey(activeDeckId,activeStage().id);
-    const cardIndex=activeStage().cards.indexOf(deck[index]);
-    if(cardIndex<0)throw new Error("Practice card is not part of the active stage.");
+    const key=practiceProgressKey(activeDeckId,activeStage());
     if(!dailyPractice.correct[key])dailyPractice.correct[key]={};
-    dailyPractice.correct[key][cardIndex]=true;
+    dailyPractice.correct[key][practiceCardKey(deck[index])]=true;
     localStorage.setItem(dailyPracticeStorageKey,JSON.stringify(dailyPractice));
   }
   activity.days[today]=(Number(activity.days[today])||0)+1;
@@ -524,12 +682,148 @@ function updateStats(){
   for(let offset=0;offset<activity.attempts+1;offset+=1){const date=new Date(today);date.setDate(today.getDate()-offset);if((Number(activity.days[dateKey(date)])||0)===0)break;streak+=1}
   $("streak").textContent=streak;$("overview-streak").textContent=streak;$("accuracy-rate").textContent=`${activity.attempts?Math.round(activity.correct/activity.attempts*100):0}%`;$("weekly-reviewed").innerHTML=`${weeklyTotal} <small>this week</small>`;
   document.querySelectorAll(".bar[data-day]").forEach((bar,index)=>{bar.style.height=`${Math.max(8,counts[index]/maxCount*82)}%`;bar.classList.toggle("today",dateKey(new Date(today.getFullYear(),today.getMonth(),today.getDate()-6+index))===todayKey)});
+  renderProgressDashboard(streak,weeklyTotal);
 }
-function createUniqueShuffleSeed(){
-  const entropy=new Uint32Array(2);
-  globalThis.crypto.getRandomValues(entropy);
-  practiceAttempt+=1;
-  return `${practiceAttempt}:${entropy[0].toString(36)}:${entropy[1].toString(36)}`;
+function recordLessonReview(wasCorrect){
+  const lesson=lessonActivity.lessons[activeDeckId]||{attempts:0,correct:0,lastPracticed:""};
+  lesson.attempts+=1;
+  if(wasCorrect)lesson.correct+=1;
+  lesson.lastPracticed=new Date().toISOString();
+  lessonActivity.lessons[activeDeckId]=lesson;
+  localStorage.setItem(lessonActivityStorageKey,JSON.stringify(lessonActivity));
+}
+function isValidLessonActivity(value){
+  return value&&typeof value==="object"&&value.lessons&&typeof value.lessons==="object";
+}
+function isValidActivity(value){
+  return value&&typeof value==="object"&&Number.isFinite(value.attempts)&&Number.isFinite(value.correct)&&value.days&&typeof value.days==="object";
+}
+function newerLessonActivity(first,second){
+  if(!first)return second;
+  if(!second)return first;
+  if(first.attempts!==second.attempts)return first.attempts>second.attempts?first:second;
+  return new Date(first.lastPracticed).getTime()>=new Date(second.lastPracticed).getTime()?first:second;
+}
+function mergeLessonActivity(localHistory,diskHistory){
+  const lessons={};
+  Object.keys(deckDefinitions).forEach(lessonId=>{
+    const localLesson=localHistory.lessons[lessonId],diskLesson=diskHistory.lessons[lessonId];
+    const latest=newerLessonActivity(localLesson,diskLesson);
+    if(latest)lessons[lessonId]=latest;
+  });
+  return {lessons};
+}
+function mergeActivity(localActivity,diskActivity){
+  const latest=diskActivity.attempts>localActivity.attempts?diskActivity:localActivity;
+  const days={...localActivity.days};
+  Object.entries(diskActivity.days).forEach(([date,count])=>{days[date]=Math.max(Number(days[date])||0,Number(count)||0)});
+  return {attempts:latest.attempts,correct:latest.correct,days};
+}
+function mergeCompletedStages(localProgress,diskProgress){
+  const completedStages={...localProgress.completedStages};
+  Object.entries(diskProgress).forEach(([deckId,stages])=>{
+    if(!Array.isArray(stages))return;
+    completedStages[deckId]=[...new Set([...(completedStages[deckId]||[]),...stages.filter(stageId=>typeof stageId==="string")])];
+  });
+  return {completedStages};
+}
+function lessonHistorySnapshot(){
+  return {version:2,lessons:lessonActivity.lessons,activity,completedStages:lessonProgress.completedStages};
+}
+async function restoreLessonHistory(){
+  try{
+    const response=await fetch(lessonHistoryEndpoint);
+    if(!response.ok)throw new Error(`History request failed with ${response.status}.`);
+    const diskHistory=await response.json();
+    if(!isValidLessonActivity(diskHistory))throw new Error("History response has an invalid format.");
+    lessonActivity=mergeLessonActivity(lessonActivity,diskHistory);
+    if(isValidActivity(diskHistory.activity))activity=mergeActivity(activity,diskHistory.activity);
+    if(diskHistory.completedStages&&typeof diskHistory.completedStages==="object")lessonProgress=mergeCompletedStages(lessonProgress,diskHistory.completedStages);
+    migrateHabenLessonProgress();
+    localStorage.setItem(lessonActivityStorageKey,JSON.stringify(lessonActivity));
+    localStorage.setItem(activityStorageKey,JSON.stringify(activity));
+    localStorage.setItem(lessonStorageKey,JSON.stringify(lessonProgress));
+    updateStats();
+  }catch(error){
+    console.error("Could not restore lesson history from disk.",error);
+  }
+}
+function persistLessonHistory(){
+  fetch(lessonHistoryEndpoint,{
+    method:"PUT",
+    headers:{"Content-Type":"application/json"},
+    body:JSON.stringify(lessonHistorySnapshot())
+  }).then(response=>{
+    if(!response.ok)throw new Error(`History save failed with ${response.status}.`);
+  }).catch(error=>console.error("Could not save lesson history to disk.",error));
+}
+function lessonAccuracy(lesson){
+  return lesson&&lesson.attempts?Math.round(lesson.correct/lesson.attempts*100):null;
+}
+function relativePracticeTime(timestamp){
+  if(!timestamp)return "Not practiced yet";
+  const elapsed=Math.max(0,Date.now()-new Date(timestamp).getTime()),minutes=Math.floor(elapsed/60000);
+  if(minutes<1)return "Just now";
+  if(minutes<60)return `${minutes}m ago`;
+  const hours=Math.floor(minutes/60);
+  if(hours<24)return `${hours}h ago`;
+  const days=Math.floor(hours/24);
+  return `${days}d ago`;
+}
+function startLessonReview(deckId){
+  selectDeck(deckId);
+  document.querySelector('[data-view="practice"]').click();
+}
+function renderProgressDashboard(streak,weeklyTotal){
+  const overallAccuracy=activity.attempts?Math.round(activity.correct/activity.attempts*100):0;
+  $("progress-accuracy").textContent=`${overallAccuracy}%`;
+  $("progress-streak").textContent=streak;
+  $("progress-reviewed").textContent=weeklyTotal;
+  const lessons=Object.entries(deckDefinitions).map(([id,definition])=>({id,definition,activity:lessonActivity.lessons[id],accuracy:lessonAccuracy(lessonActivity.lessons[id])}));
+  const practiced=lessons.filter(lesson=>lesson.activity&&lesson.activity.attempts);
+  const lessonsNeedingReview=practiced.filter(lesson=>lesson.accuracy<100);
+  const unpracticed=lessons.filter(lesson=>!lesson.activity?.attempts);
+  $("lesson-history-note").textContent=practiced.length?"Based on your test answers":"Tracking begins with your first test answer";
+  const sortByPriority=(first,second)=>first.accuracy-second.accuracy||new Date(first.activity.lastPracticed)-new Date(second.activity.lastPracticed);
+  const recommended=[...lessonsNeedingReview].sort(sortByPriority)[0]||unpracticed[0]||[...practiced].sort(sortByPriority)[0];
+  const shouldReview=Boolean(recommended.activity?.attempts);
+  const focusButton=$("review-focus-button"),focusMessage=$("review-focus-message");
+  focusButton.textContent=shouldReview?`Review ${recommended.definition.title} →`:`Start ${recommended.definition.title} →`;
+  focusMessage.textContent=lessonsNeedingReview.length?`${recommended.definition.title} has your lowest recorded accuracy (${recommended.accuracy}%). A short retrieval test is the best next step.`:unpracticed.length?`Your tested lessons are all at 100% accuracy. Start ${recommended.definition.title} to build your next retrieval practice.`:`All recorded lessons are at 100% accuracy. Revisit ${recommended.definition.title} to keep your recall strong.`;
+  focusButton.onclick=()=>startLessonReview(recommended.id);
+  const list=$("lesson-progress-list");
+  const lessonsByRecency=[...lessons].sort((first,second)=>{
+    const firstPracticedAt=Date.parse(first.activity?.lastPracticed||"")||0;
+    const secondPracticedAt=Date.parse(second.activity?.lastPracticed||"")||0;
+    return secondPracticedAt-firstPracticedAt;
+  });
+  list.replaceChildren(...lessonsByRecency.map(lesson=>{
+    const item=document.createElement("article");
+    item.className="lesson-progress-card";
+    const heading=document.createElement("div");
+    const title=document.createElement("h4");
+    title.textContent=lesson.definition.title;
+    const lastPractice=document.createElement("span");
+    lastPractice.className="lesson-last-practice";
+    lastPractice.textContent=`Last test: ${relativePracticeTime(lesson.activity?.lastPracticed)}`;
+    heading.append(title,lastPractice);
+    const details=document.createElement("div");
+    details.className="lesson-progress-details";
+    const accuracy=document.createElement("strong");
+    accuracy.textContent=lesson.accuracy===null?"—":`${lesson.accuracy}%`;
+    const accuracyLabel=document.createElement("span");
+    accuracyLabel.textContent=lesson.accuracy===null?"accuracy":"accuracy";
+    const attempts=document.createElement("span");
+    attempts.textContent=lesson.activity?.attempts?`${lesson.activity.attempts} test answer${lesson.activity.attempts===1?"":"s"}`:"No test answers yet";
+    details.append(accuracy,accuracyLabel,attempts);
+    const review=document.createElement("button");
+    review.type="button";
+    review.className="lesson-review-button";
+    review.textContent=lesson.activity?.attempts?"Review lesson →":"Start lesson →";
+    review.addEventListener("click",()=>startLessonReview(lesson.id));
+    item.append(heading,details,review);
+    return item;
+  }));
 }
 function seededRandom(seed){
   let state=2166136261;
@@ -542,16 +836,53 @@ function seededRandom(seed){
     return((value^value>>>14)>>>0)/4294967296;
   };
 }
-function shuffledPracticeCards(cards){
-  const shuffled=[...cards],random=seededRandom(createUniqueShuffleSeed());
+function escapedRegExp(value){return value.replace(/[.*+?^${}()|[\]\\]/g,"\\$&")}
+function sentenceRecallCard(card){
+  const sentence=card.answer?card.word:card.example,translation=card.answer?card.translation:card.exampleTranslation;
+  if(!sentence||!translation)return null;
+  return {word:sentence,translation,category:`${card.category} · SENTENCE`,example:sentence,exampleTranslation:translation,practiceType:"sentence"};
+}
+function contextClozeCard(card){
+  const sentence=card.answer?card.word:card.example,answer=card.answer||card.word,answerTranslation=card.answer?card.answerTranslation:card.translation;
+  const matchableAnswer=answer.replace(/[?!.,]+$/,"");
+  if(!sentence||!answerTranslation||!matchableAnswer)return null;
+  const expression=new RegExp(escapedRegExp(matchableAnswer),"i");
+  if(!expression.test(sentence))return null;
+  return {word:sentence,translation:card.answer?card.translation:card.exampleTranslation,category:`${card.category} · CONTEXT`,prompt:sentence.replace(expression,"___"),exampleTranslation:"Complete the German sentence.",answer,answerTranslation};
+}
+function practicePool(cards){
+  const variants=cards.flatMap(card=>[card,sentenceRecallCard(card),contextClozeCard(card)].filter(Boolean)),unique=new Map();
+  variants.forEach(card=>unique.set(practiceCardKey(card),card));
+  return [...unique.values()];
+}
+function sampledPracticeCards(cards,size,seed){
+  const shuffled=[...cards],random=seededRandom(seed);
   for(let cardIndex=shuffled.length-1;cardIndex>0;cardIndex-=1){
     const swapIndex=Math.floor(random()*(cardIndex+1));
     [shuffled[cardIndex],shuffled[swapIndex]]=[shuffled[swapIndex],shuffled[cardIndex]];
   }
-  return shuffled;
+  return shuffled.slice(0,Math.min(size,shuffled.length));
+}
+function practicePortionKey(deckId,stage){return practiceProgressKey(deckId,stage)}
+function practiceCardsForStage(deckId,stage){
+  if(stage.mode!=="input")return [...stage.cards];
+  ensureCurrentPracticeDay();
+  const key=practicePortionKey(deckId,stage),portion=Number(dailyPractice.portions[key])||0;
+  return sampledPracticeCards(practicePool(stage.cards),stage.cards.length,`${dailyPractice.date}:${key}:${portion}`);
+}
+function startNewPracticePortion(){
+  const stage=activeStage();
+  if(stage.mode!=="input")return;
+  ensureCurrentPracticeDay();
+  const key=practicePortionKey(activeDeckId,stage);
+  dailyPractice.portions[key]=(Number(dailyPractice.portions[key])||0)+1;
+  delete dailyPractice.correct[key];
+  localStorage.setItem(dailyPracticeStorageKey,JSON.stringify(dailyPractice));
+  startStageAttempt();
+  render("verification-input");
 }
 function startStageAttempt(){
-  deck=activeStage().mode==="input"?shuffledPracticeCards(activeStage().cards):[...activeStage().cards];
+  deck=practiceCardsForStage(activeDeckId,activeStage());
   resetStageSession();
 }
 function resetStageSession(){
@@ -610,6 +941,12 @@ function render(focusTarget=""){
   $("study-tip").textContent=activeDeck.tip;
   $("example").textContent=answerSentence;
   $("example-translation").textContent=answerTranslation;
+  const dynamicPractice=activeStage().mode==="input";
+  $("practice-portion").hidden=!dynamicPractice;
+  if(dynamicPractice){
+    const key=practicePortionKey(activeDeckId,activeStage()),portion=(Number(dailyPractice.portions[key])||0)+1,poolSize=practicePool(activeStage().cards).length;
+    $("practice-portion-note").textContent=`Today's ${deck.length}-card set · ${poolSize} examples available${portion>1?` · portion ${portion}`:""}`;
+  }
   $("remaining").textContent=Math.max(deck.length-completed,0);
   $("session-progress-label").textContent=`Card ${index+1} of ${deck.length}`;
   const progress=Math.min(completed/deck.length*100,100),progressTrack=$("session-progress").parentElement;
@@ -766,6 +1103,7 @@ function next(){
     completed=deck.length;
     roundFinished=true;
     markStageComplete();
+    persistLessonHistory();
     render(verificationMode?"verification-input":"flashcard");
     if(!verificationMode||roundCorrect===deck.length&&!roundHadIncorrect)showCelebration();
     return;
@@ -834,6 +1172,11 @@ function handleTestEnter(){
 }
 function checkAnswer(){
   if(verified||answerRevealed){next();return}
+  if(ensureCurrentPracticeDay()){
+    startStageAttempt();
+    render("verification-input");
+    return;
+  }
   const card=deck[index%deck.length],focusedPractice=Boolean(card.answer),value=$("verification-input").value,expected=focusedPractice?(direction==="uk-de"?card.answer:card.answerTranslation):(direction==="uk-de"?card.word:card.translation);
   if(!normalizeAnswer(value)){
     $("verification-feedback").textContent="Type an answer first.";
@@ -865,7 +1208,7 @@ $("verification-input").addEventListener("input",e=>{if(verificationMode&&!pract
 document.addEventListener("keydown",e=>{if(e.target.id==="verification-input"){if(e.key==="Enter"){e.preventDefault();handleTestEnter()}return}if(e.key==="Enter"&&verificationMode){e.preventDefault();handleTestEnter();return}if(e.key===" "&&!verificationMode){e.preventDefault();next()}if(e.key==="ArrowRight")next();if(e.key==="ArrowLeft")previous()});
 document.querySelector("#check-button").addEventListener("click",handleTestEnter);
 document.querySelector("#continue-button").addEventListener("click",next);
-document.querySelectorAll(".deck-item").forEach(item=>item.addEventListener("click",()=>{const filter=item.dataset.filter,stageId=filter==="all"?"":`w-${filter}-learn`;selectDeck("w-questions",stageId);document.querySelectorAll(".deck-item").forEach(x=>x.classList.remove("active"));item.classList.add("active")}));
+$("new-practice-portion").addEventListener("click",startNewPracticePortion);
 document.querySelectorAll(".nav-item").forEach(item=>item.addEventListener("click",()=>{const view=item.dataset.view;document.querySelectorAll(".nav-item").forEach(x=>x.classList.remove("active"));item.classList.add("active");document.querySelectorAll(".view").forEach(x=>x.classList.add("hidden"));$(`${view}-view`).classList.remove("hidden");updatePageTitle(view)}));
 document.querySelector("#start-library").addEventListener("click",()=>{selectDeck("w-questions");document.querySelector('[data-view="practice"]').click()});
 document.querySelector("#start-pronouns").addEventListener("click",()=>{selectDeck("pronouns");document.querySelector('[data-view="practice"]').click()});
@@ -875,5 +1218,8 @@ document.querySelector("#start-conjugation").addEventListener("click",()=>{selec
 document.querySelector("#start-strong-verbs").addEventListener("click",()=>{selectDeck("strong-verbs");document.querySelector('[data-view="practice"]').click()});
 document.querySelector("#start-present-practice").addEventListener("click",()=>{selectDeck("present-practice");document.querySelector('[data-view="practice"]').click()});
 document.querySelector("#start-koennen").addEventListener("click",()=>{selectDeck("koennen");document.querySelector('[data-view="practice"]').click()});
+document.querySelector("#start-haben").addEventListener("click",()=>{selectDeck("haben");document.querySelector('[data-view="practice"]').click()});
 document.querySelector("#start-frequency").addEventListener("click",()=>{selectDeck("frequency");document.querySelector('[data-view="practice"]').click()});
-render();updateStats();
+document.querySelector("#start-time-expressions").addEventListener("click",()=>{selectDeck("time-expressions");document.querySelector('[data-view="practice"]').click()});
+document.querySelector("#start-word-order").addEventListener("click",()=>{selectDeck("word-order");document.querySelector('[data-view="practice"]').click()});
+render();updateStats();restoreLessonHistory();

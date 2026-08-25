@@ -1,0 +1,110 @@
+<!doctype html>
+<html lang="uk">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>German grammar correction</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 2rem;
+      background: #f8fafc;
+      color: #1e293b;
+      font: 1rem/1.5 system-ui, sans-serif;
+    }
+    .grammar-result {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+      max-width: 60rem;
+      margin: 0 auto;
+    }
+    .correction-row {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+      gap: 1.5rem;
+      padding: 1rem;
+      border: 1px solid #e2e8f0;
+      border-radius: 0.75rem;
+      background: white;
+    }
+    .wrong {
+      color: #dc2626;
+      text-decoration: line-through;
+    }
+    .right {
+      color: #15803d;
+      font-weight: 700;
+    }
+    .translation {
+      margin: 0;
+      color: #64748b;
+    }
+    @media (max-width: 40rem) {
+      body {
+        padding: 1rem;
+      }
+      .correction-row {
+        grid-template-columns: 1fr;
+        gap: 0.5rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <section class="grammar-result">
+    <div class="correction-row">
+      <span class="correction-text">Ich kann oft morgens Zeitung lesen. Ich lese morgens oft Zeitung.</span>
+      <p class="translation">Я часто можу читати газету вранці. Вранці я часто читаю газету.</p>
+    </div>
+    <div class="correction-row">
+      <span class="correction-text">Er kann manchmal mit der Schwester Deutsch sprechen. Er spricht manchmal mit der Schwester Deutsch.</span>
+      <p class="translation">Він іноді може розмовляти німецькою з сестрою. Він іноді розмовляє німецькою з сестрою.</p>
+    </div>
+    <div class="correction-row">
+      <span class="correction-text">Wir können oft am Wochenende in die Stadt fahren. Wir fahren am Wochenende oft in die Stadt.</span>
+      <p class="translation">Ми часто можемо їздити до міста на вихідних. На вихідних ми часто їздимо до міста.</p>
+    </div>
+    <div class="correction-row">
+      <span class="correction-text">Er kann selten lange Bücher lesen. Er liest selten lange Bücher.</span>
+      <p class="translation">Він рідко може читати довгі книжки. Він рідко читає довгі книжки.</p>
+    </div>
+    <div class="correction-row">
+      <span class="correction-text">Ich kann manchmal eure Freunde im Park treffen. Ich treffe eure Freunde manchmal im Park.</span>
+      <p class="translation">Я іноді можу зустріти ваших друзів у парку. Я іноді зустрічаю ваших друзів у парку.</p>
+    </div>
+    <div class="correction-row">
+      <span class="correction-text">Sie <del class="wrong">kann</del><ins class="right">können</ins> oft mit dem Zug nach Berlin fahren. Sie fahren oft mit dem Zug nach Berlin.</span>
+      <p class="translation">Вони часто можуть їздити потягом до Берліна. Вони часто їздять потягом до Берліна.</p>
+    </div>
+    <div class="correction-row">
+      <span class="correction-text">Du kannst oft mit deinen Kollegen Englisch sprechen. Du sprichst oft mit deinen Kollegen Englisch.</span>
+      <p class="translation">Ти часто можеш розмовляти англійською зі своїми колегами. Ти часто розмовляєш англійською зі своїми колегами.</p>
+    </div>
+    <div class="correction-row">
+      <span class="correction-text">Wir können manchmal zusammen ins Kino fahren. Wir fahren manchmal zusammen ins Kino.</span>
+      <p class="translation">Ми іноді можемо разом поїхати в кіно. Ми іноді разом їздимо в кіно.</p>
+    </div>
+    <div class="correction-row">
+      <span class="correction-text">Er kann oft neue Leute im Café treffen. Er trifft oft neue Leute im Café.</span>
+      <p class="translation">Він часто може зустрічати нових людей у кафе. Він часто зустрічає нових людей у кафе.</p>
+    </div>
+    <div class="correction-row">
+      <span class="correction-text">Ihr könnt selten deutsche Texte lesen. Ihr lest selten deutsche Texte.</span>
+      <p class="translation">Ви рідко можете читати німецькі тексти. Ви рідко читаєте німецькі тексти.</p>
+    </div>
+    <div class="correction-row">
+      <span class="correction-text">Sie können manchmal mit dem Taxi fahren. Sie fahren manchmal mit dem Taxi.</span>
+      <p class="translation">Вони іноді можуть їздити на таксі. Вони іноді їздять на таксі.</p>
+    </div>
+    <div class="correction-row">
+      <span class="correction-text">Ich kann oft meine Freunde am Wochenende treffen. Ich treffe meine Freunde oft am Wochenende.</span>
+      <p class="translation">Я часто можу зустрічатися зі своїми друзями на вихідних. Я часто зустрічаюся зі своїми друзями на вихідних.</p>
+    </div>
+    <div class="correction-row">
+      <span class="correction-text">Wir können oft am Abend zusammen lange sprechen. Wir sprechen oft am Abend lange zusammen.</span>
+      <p class="translation">Ми часто можемо довго розмовляти разом увечері. Ми часто довго розмовляємо разом увечері.</p>
+    </div>
+  </section>
+</body>
+</html>

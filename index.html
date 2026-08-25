@@ -19,17 +19,10 @@
       </a>
       <div class="sidebar-label">Study</div>
       <nav class="nav">
-        <button class="nav-item" data-view="practice"><span class="nav-icon">◈</span> Practice <span class="nav-count">12</span></button>
+        <button class="nav-item" data-view="practice"><span class="nav-icon">◈</span> Practice <span class="nav-count">11</span></button>
         <button class="nav-item active" data-view="library"><span class="nav-icon">▤</span> Card library</button>
         <button class="nav-item" data-view="progress"><span class="nav-icon">◒</span> Progress</button>
       </nav>
-      <div class="sidebar-label decks-label">Decks</div>
-      <div class="deck-list">
-        <button class="deck-item active" data-filter="all"><i class="dot dot-purple"></i> All W-Fragen <span>12</span></button>
-        <button class="deck-item" data-filter="basics"><i class="dot dot-orange"></i> The basics <span>6</span></button>
-        <button class="deck-item" data-filter="place"><i class="dot dot-blue"></i> Place & direction <span>3</span></button>
-        <button class="deck-item" data-filter="time"><i class="dot dot-green"></i> Time & reason <span>3</span></button>
-      </div>
     </aside>
 
     <main class="main-content">
@@ -63,8 +56,12 @@
               </div>
               <ol class="journey-rail" id="lesson-steps" aria-label="Lesson chapters"></ol>
               <div class="journey-card-progress">
-                <span id="session-progress-label">Card 1 of 12</span>
+                <span id="session-progress-label">Card 1 of 10</span>
                 <div class="progress-track" role="progressbar" aria-labelledby="session-progress-label" aria-valuemin="0" aria-valuemax="12" aria-valuenow="0"><i id="session-progress"></i></div>
+              </div>
+              <div class="practice-portion" id="practice-portion" hidden>
+                <span id="practice-portion-note"></span>
+                <button id="new-practice-portion" type="button">New portion <span aria-hidden="true">↻</span></button>
               </div>
             </section>
             <section class="deck-guide" id="deck-guide" hidden aria-labelledby="deck-guide-title">
@@ -138,12 +135,12 @@
       </section>
 
       <section id="library-view" class="view">
-        <div class="library-header"><div><p class="eyebrow">YOUR STUDY LIBRARY</p><h2>Learning sections</h2><p>Each section is divided into short learn and practice steps.</p></div><span class="library-total">9 active sections</span></div>
+        <div class="library-header"><div><p class="eyebrow">YOUR STUDY LIBRARY</p><h2>Learning sections</h2><p>Each section is divided into short learn and practice steps.</p></div><span class="library-total">12 active sections</span></div>
         <div class="section-grid">
           <article class="library-section featured">
             <div class="section-card-top"><span class="section-icon purple">W?</span><span class="available-badge">Available</span></div>
-            <h3>W-Fragen</h3><p>Choose the right question word first, then practice it from its meaning.</p>
-            <div class="section-meta"><span>6 short steps</span><span>A1 level</span></div>
+            <h3>W-Fragen</h3><p>Learn every question word, then retrieve the full set in one practice sequence.</p>
+            <div class="section-meta"><span>2 sequences</span><span>A1 level</span></div>
             <button class="primary-button" id="start-library">Learn W-Fragen <span>→</span></button>
           </article>
           <article class="library-section featured">
@@ -166,20 +163,26 @@
           </article>
           <article class="library-section featured">
             <div class="section-card-top"><span class="section-icon blue">k</span><span class="available-badge">Available</span></div>
-            <h3>Können &amp; haben</h3><p>Learn each verb family first, then practice its forms and sentence patterns in context.</p>
-            <div class="section-meta"><span id="koennen-card-count">8 focused steps</span><span>A1 level</span></div>
-            <button class="primary-button" id="start-koennen">Learn können &amp; haben <span>→</span></button>
+            <h3>Können</h3><p>Learn the modal verb's forms, sentence patterns, and everyday contexts.</p>
+            <div class="section-meta"><span id="koennen-card-count">6 focused steps</span><span>A1 level</span></div>
+            <button class="primary-button" id="start-koennen">Learn können <span>→</span></button>
           </article>
-          <article class="library-section">
-            <div class="section-card-top"><span class="section-icon blue">S</span><span class="soon-badge">Coming soon</span></div>
-            <h3>Word order</h3><p>Practice German sentence structure in statements and questions.</p>
-            <div class="section-meta"><span>New section</span><span>A1 level</span></div>
-            <button class="secondary-button" disabled>Not available yet</button>
+          <article class="library-section featured">
+            <div class="section-card-top"><span class="section-icon green">hab</span><span class="available-badge">Available</span></div>
+            <h3>Haben, bekommen &amp; brauchen</h3><p>Distinguish having, receiving, and needing through their A1 present-tense forms.</p>
+            <div class="section-meta"><span>6 focused steps</span><span>A1 level</span></div>
+            <button class="primary-button" id="start-haben">Learn haben, bekommen &amp; brauchen <span>→</span></button>
+          </article>
+          <article class="library-section featured">
+            <div class="section-card-top"><span class="section-icon blue">S</span><span class="available-badge">Available</span></div>
+            <h3>Word order</h3><p>Build German statements, inversion patterns, and both kinds of questions.</p>
+            <div class="section-meta"><span>6 short steps</span><span>A1 level</span></div>
+            <button class="primary-button" id="start-word-order">Learn word order <span>→</span></button>
           </article>
           <article class="library-section featured">
             <div class="section-card-top"><span class="section-icon green">ich</span><span class="available-badge">Available</span></div>
-            <h3>Personal pronouns</h3><p>Start with singular forms, then add plural and formal <i>Sie</i> before practicing them.</p>
-            <div class="section-meta"><span>4 short steps</span><span>A1 level</span></div>
+            <h3>Personal pronouns</h3><p>Learn every pronoun first, then retrieve the full set in one practice sequence.</p>
+            <div class="section-meta"><span>2 sequences</span><span>A1 level</span></div>
             <button class="primary-button" id="start-pronouns">Learn pronouns <span>→</span></button>
           </article>
           <article class="library-section featured">
@@ -190,9 +193,9 @@
           </article>
           <article class="library-section featured">
             <div class="section-card-top"><span class="section-icon blue">sein</span><span class="available-badge">Available</span></div>
-            <h3>Verb sein</h3><p>Learn the irregular forms in two manageable groups, then practice the full pair.</p>
-            <div class="section-meta"><span>4 short steps</span><span>A1 level</span></div>
-            <button class="primary-button" id="start-sein">Learn sein <span>→</span></button>
+            <h3>Verb sein</h3><p>Learn every irregular form, then retrieve the full set in one practice sequence.</p>
+            <div class="section-meta"><span>2 sequences</span><span>A1 level</span></div>
+            <button class="primary-button" id="start-sein">Learn Verb sein <span>→</span></button>
           </article>
           <article class="library-section featured">
             <div class="section-card-top"><span class="section-icon orange">oft</span><span class="available-badge">Available</span></div>
@@ -200,9 +203,47 @@
             <div class="section-meta"><span>2 short steps</span><span>A1 level</span></div>
             <button class="primary-button" id="start-frequency">Learn frequency adverbs <span>→</span></button>
           </article>
+          <article class="library-section featured">
+            <div class="section-card-top"><span class="section-icon purple">Zeit</span><span class="available-badge">Available</span></div>
+            <h3>Time expressions</h3><p>Use calendar expressions and say times such as <i>fünf nach zehn</i> and <i>halb vier</i>.</p>
+            <div class="section-meta"><span>4 short steps</span><span>A1 level</span></div>
+            <button class="primary-button" id="start-time-expressions">Learn time expressions <span>→</span></button>
+          </article>
         </div>
       </section>
-      <section id="progress-view" class="view hidden"><div class="empty-view"><span class="big-icon">◒</span><h2>Your progress</h2><p>You’re building a strong foundation. Keep your 4-day streak going!</p><div class="progress-summary"><strong>86%</strong><span>average accuracy</span></div></div></section>
+      <section id="progress-view" class="view hidden" aria-labelledby="progress-heading">
+        <div class="progress-header">
+          <div>
+            <p class="eyebrow">YOUR LEARNING RHYTHM</p>
+            <h2 id="progress-heading">Progress overview</h2>
+            <p>Use your last practice and accuracy to choose what to retrieve again.</p>
+          </div>
+        </div>
+        <div class="progress-metrics" aria-label="Overall progress">
+          <article><strong id="progress-accuracy">0%</strong><span>overall accuracy</span></article>
+          <article><strong id="progress-streak">0</strong><span>day streak</span></article>
+          <article><strong id="progress-reviewed">0</strong><span>answers this week</span></article>
+        </div>
+        <section class="review-focus" aria-labelledby="review-focus-heading">
+          <div>
+            <p class="eyebrow">RETRIEVAL PRACTICE</p>
+            <h3 id="review-focus-heading">Choose your next review</h3>
+            <p id="review-focus-message"></p>
+          </div>
+          <button class="primary-button" id="review-focus-button" type="button"></button>
+        </section>
+        <section class="lesson-progress-section" aria-labelledby="lesson-progress-heading">
+          <div class="progress-section-heading">
+            <div><p class="eyebrow">BY LESSON</p><h3 id="lesson-progress-heading">Your lesson history</h3></div>
+            <span id="lesson-history-note"></span>
+          </div>
+          <div class="lesson-progress-list" id="lesson-progress-list"></div>
+        </section>
+        <aside class="progress-method" aria-labelledby="progress-method-heading">
+          <span aria-hidden="true">✦</span>
+          <div><h3 id="progress-method-heading">Study smarter</h3><p>Prioritize a short test on the lesson with the lowest accuracy, then mix in one stronger lesson. Spaced retrieval and interleaving strengthen recall better than rereading.</p></div>
+        </aside>
+      </section>
     </main>
   </div>
   <div class="celebration" id="celebration" hidden role="status" aria-live="polite">
