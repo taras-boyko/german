@@ -244,6 +244,7 @@ presentPracticeCards.forEach(card=>{
 });
 const modalClozeCard=(word,translation,prompt,answer,answerTranslation)=>({word,translation,category:"KÖNNEN · LÜCKENTEXT",prompt,example:prompt,exampleTranslation:"Доповни речення правильною формою können.",answer,answerTranslation});
 const modalSentenceCard=(word,translation,prompt,category="KÖNNEN · SATZBILDUNG")=>({word,translation,category,prompt,exampleTranslation:"Напиши повну відповідь німецькою.",answer:word,answerTranslation:translation,practiceType:"sentence"});
+const modalVerbClozeCard=(verb,word,translation,prompt,answer,answerTranslation)=>({word,translation,category:`MODALVERB · ${verb.toUpperCase()} · LÜCKENTEXT`,prompt,example:prompt,exampleTranslation:`Доповни речення правильною формою ${verb}.`,answer,answerTranslation});
 const koennenFormCards=[
   {word:"ich kann",translation:"я можу / вмію",category:"MODALVERB · KÖNNEN",example:"Ich kann sehr gut malen.",exampleTranslation:"Я можу дуже добре малювати."},
   {word:"du kannst",translation:"ти можеш / вмієш",category:"MODALVERB · KÖNNEN",example:"Du kannst im Sommer schwimmen.",exampleTranslation:"Ти можеш плавати влітку."},
@@ -251,6 +252,27 @@ const koennenFormCards=[
   {word:"wir können",translation:"ми можемо / вміємо",category:"MODALVERB · KÖNNEN",example:"Wir können im Winter Ski fahren.",exampleTranslation:"Ми можемо кататися на лижах узимку."},
   {word:"ihr könnt",translation:"ви можете / вмієте",category:"MODALVERB · KÖNNEN",example:"Ihr könnt zusammen Rad fahren.",exampleTranslation:"Ви можете разом кататися на велосипеді."},
   {word:"sie / Sie können",translation:"вони можуть / Ви можете",category:"MODALVERB · KÖNNEN",example:"Sie können gut Gitarre spielen.",exampleTranslation:"Вони можуть добре грати на гітарі."}
+];
+const moegenFormCards=[
+  {word:"ich mag",translation:"я люблю / мені подобається",category:"MODALVERB · MÖGEN",example:"Ich mag Kaffee.",exampleTranslation:"Я люблю каву."},
+  {word:"du magst",translation:"ти любиш / тобі подобається",category:"MODALVERB · MÖGEN",example:"Du magst deutsche Musik.",exampleTranslation:"Тобі подобається німецька музика."},
+  {word:"er / sie / es mag",translation:"він / вона / воно любить",category:"MODALVERB · MÖGEN",example:"Sie mag Schokolade.",exampleTranslation:"Вона любить шоколад."},
+  {word:"wir mögen",translation:"ми любимо / нам подобається",category:"MODALVERB · MÖGEN",example:"Wir mögen Pizza.",exampleTranslation:"Ми любимо піцу."},
+  {word:"ihr mögt",translation:"ви любите / вам подобається",category:"MODALVERB · MÖGEN",example:"Ihr mögt Bücher.",exampleTranslation:"Вам подобаються книжки."},
+  {word:"sie / Sie mögen",translation:"вони люблять / Ви любите",category:"MODALVERB · MÖGEN",example:"Sie mögen den Film.",exampleTranslation:"Їм подобається фільм."}
+];
+const moechtenFormCards=[
+  {word:"ich möchte",translation:"я хотів би / хотіла б",category:"MODALVERB · MÖCHTEN",example:"Ich möchte einen Tee.",exampleTranslation:"Я хотів би / хотіла б чай."},
+  {word:"du möchtest",translation:"ти хотів би / хотіла б",category:"MODALVERB · MÖCHTEN",example:"Du möchtest nach Hause gehen.",exampleTranslation:"Ти хотів би / хотіла б піти додому."},
+  {word:"er / sie / es möchte",translation:"він / вона / воно хотів би / хотіла б",category:"MODALVERB · MÖCHTEN",example:"Sie möchte Deutsch lernen.",exampleTranslation:"Вона хотіла б вивчати німецьку."},
+  {word:"wir möchten",translation:"ми хотіли б",category:"MODALVERB · MÖCHTEN",example:"Wir möchten etwas essen.",exampleTranslation:"Ми хотіли б щось поїсти."},
+  {word:"ihr möchtet",translation:"ви хотіли б",category:"MODALVERB · MÖCHTEN",example:"Ihr möchtet ins Kino gehen.",exampleTranslation:"Ви хотіли б піти в кіно."},
+  {word:"sie / Sie möchten",translation:"вони хотіли б / Ви хотіли б",category:"MODALVERB · MÖCHTEN",example:"Sie möchten bezahlen.",exampleTranslation:"Вони хотіли б заплатити."}
+];
+const moegenMoechtenComparisonCards=[
+  {word:"Ich mag Kaffee.",translation:"Мені подобається кава.",category:"MODALVERBEN · MÖGEN ODER MÖCHTEN",example:"mögen = мати вподобання",exampleTranslation:"Mögen описує те, що вам загалом подобається."},
+  {word:"Ich möchte einen Kaffee.",translation:"Я хотів би / хотіла б каву.",category:"MODALVERBEN · MÖGEN ODER MÖCHTEN",example:"möchten = ввічливе бажання",exampleTranslation:"Möchten висловлює ввічливе бажання або замовлення."},
+  {word:"mögen → möchten",translation:"möchten — форма Konjunktiv II від mögen",category:"MODALVERBEN · ЗВ'ЯЗОК",example:"Ich mag Kaffee. / Ich möchte einen Kaffee.",exampleTranslation:"Möchten походить від mögen, але в сучасній мові зазвичай означає «хотів би / хотіла б»."}
 ];
 const koennenWordOrderCards=[
   {word:"Ich kann heute mit dem Auto zur Arbeit fahren.",translation:"Я можу сьогодні їхати на роботу машиною.",category:"KÖNNEN · AUSSAGESATZ",example:"Subjekt + können + heute + ... + Infinitiv am Ende",exampleTranslation:"Після können основне дієслово стоїть в інфінітиві в кінці речення."},
@@ -477,6 +499,12 @@ const wordOrderQuestionCards=[
   {word:"Warum fährst du heute mit dem Bus nach Hause?",translation:"Чому ти сьогодні їдеш автобусом додому?",category:"WORTFOLGE · W-FRAGE",example:"Fragewort + Verb + Subjekt + weitere Informationen",exampleTranslation:"У W-Frage питальне слово стоїть першим, а відмінюване дієслово - другим."},
   {word:"Wo ist dein Handy?",translation:"Де твій телефон?",category:"WORTFOLGE · W-FRAGE",example:"Fragewort + Verb + Subjekt",exampleTranslation:"Після питального слова одразу ставте відмінюване дієслово."}
 ];
+const wordOrderModalCards=[
+  {word:"Ich mag am Morgen Kaffee trinken.",translation:"Я люблю вранці пити каву.",category:"WORTFOLGE · MODALVERB",example:"Subjekt (P1) + Modalverb (P2) + Temporal + Objekt + Verb am Ende",exampleTranslation:"У розповідному реченні підмет стоїть першим, відмінюване модальне дієслово - другим, а інфінітив - у кінці."},
+  {word:"Am Morgen mag ich Kaffee trinken.",translation:"Вранці я люблю пити каву.",category:"WORTFOLGE · MODALVERB",example:"Temporal + Modalverb (P2) + Subjekt (P3) + Objekt + Verb am Ende",exampleTranslation:"Якщо обставина часу стоїть першою, модальне дієслово все одно залишається на другому місці."},
+  {word:"Magst du am Morgen Kaffee trinken?",translation:"Ти любиш вранці пити каву?",category:"WORTFOLGE · MODALVERB · JA/NEIN",example:"Modalverb (P1) + Subjekt (P2) + Temporal + Objekt + Verb am Ende",exampleTranslation:"У питанні без питального слова модальне дієслово відкриває речення, а інфінітив залишається в кінці."},
+  {word:"Was magst du am Morgen trinken?",translation:"Що ти любиш пити вранці?",category:"WORTFOLGE · MODALVERB · W-FRAGE",example:"Fragewort + Modalverb (P2) + Subjekt (P3) + Temporal + Verb am Ende",exampleTranslation:"У W-Frage питальне слово стоїть першим, модальне дієслово - другим, а інфінітив - у кінці."}
+];
 const wordOrderStatementPracticeCards=[
   wordOrderSentenceCard("Der Mann ist da.","Чоловік тут.","da / der Mann / sein."),
   wordOrderSentenceCard("Das Arbeitszimmer ist groß.","Кабінет великий.","sein / groß / das Arbeitszimmer."),
@@ -497,7 +525,74 @@ const wordOrderQuestionPracticeCards=[
   wordOrderSentenceCard("Wann ist er zu Hause?","Коли він удома?","er / zu Hause / wann / sein?","WORTFOLGE · W-FRAGE"),
   wordOrderSentenceCard("Wie geht es dir?","Як у тебе справи?","es / dir / wie / gehen?","WORTFOLGE · W-FRAGE")
 ];
-const koennenCards=[...koennenFormCards,...koennenWordOrderCards,...koennenPracticeCards];
+const wordOrderModalPracticeCards=[
+  wordOrderSentenceCard("Ich mag am Morgen Kaffee trinken.","Я люблю вранці пити каву.","am Morgen / ich / Kaffee / trinken / mag.","WORTFOLGE · MODALVERB"),
+  wordOrderSentenceCard("Am Morgen mag ich Kaffee trinken.","Вранці я люблю пити каву.","Kaffee / am Morgen / trinken / ich / mag.","WORTFOLGE · MODALVERB"),
+  wordOrderSentenceCard("Magst du am Morgen Kaffee trinken?","Ти любиш вранці пити каву?","am Morgen / trinken / du / Kaffee / magst?","WORTFOLGE · MODALVERB · JA/NEIN"),
+  wordOrderSentenceCard("Was magst du am Morgen trinken?","Що ти любиш пити вранці?","am Morgen / trinken / du / was / magst?","WORTFOLGE · MODALVERB · W-FRAGE"),
+  wordOrderSentenceCard("Ich möchte am Abend einen Tee trinken.","Я хотів би / хотіла б увечері випити чаю.","am Abend / einen Tee / ich / trinken / möchte.","WORTFOLGE · MODALVERB"),
+  wordOrderSentenceCard("Wann kannst du Deutsch lernen?","Коли ти можеш вивчати німецьку?","Deutsch / du / wann / lernen / kannst?","WORTFOLGE · MODALVERB · W-FRAGE")
+];
+const separableVerbCards=[
+  {word:"aufstehen",translation:"вставати",category:"TRENNBARES VERB · AUF",example:"Ich stehe um sieben Uhr auf.",exampleTranslation:"Я встаю о сьомій годині."},
+  {word:"anrufen",translation:"телефонувати",category:"TRENNBARES VERB · AN",example:"Ich rufe dich später an.",exampleTranslation:"Я подзвоню тобі пізніше."},
+  {word:"einkaufen",translation:"робити покупки",category:"TRENNBARES VERB · EIN",example:"Wir kaufen heute im Supermarkt ein.",exampleTranslation:"Ми сьогодні робимо покупки в супермаркеті."},
+  {word:"abfahren",translation:"відправлятися",category:"TRENNBARES VERB · AB",example:"Der Zug fährt um neun Uhr ab.",exampleTranslation:"Потяг відправляється о дев'ятій годині."},
+  {word:"ankommen",translation:"прибувати",category:"TRENNBARES VERB · AN",example:"Der Bus kommt in fünf Minuten an.",exampleTranslation:"Автобус прибуде через п'ять хвилин."},
+  {word:"abholen",translation:"забирати / зустрічати",category:"TRENNBARES VERB · AB",example:"Ich hole meine Freundin vom Bahnhof ab.",exampleTranslation:"Я зустрічаю подругу на вокзалі."},
+  {word:"aussteigen",translation:"виходити (з транспорту)",category:"TRENNBARES VERB · AUS",example:"Wir steigen am Alexanderplatz aus.",exampleTranslation:"Ми виходимо на Александерплац."},
+  {word:"umsteigen",translation:"пересідати",category:"TRENNBARES VERB · UM",example:"Sie steigen in München um.",exampleTranslation:"Вони пересаджуються в Мюнхені."},
+  {word:"mitbringen",translation:"приносити із собою",category:"TRENNBARES VERB · MIT",example:"Ich bringe meine Tasche mit.",exampleTranslation:"Я беру із собою сумку."},
+  {word:"fernsehen",translation:"дивитися телевізор",category:"TRENNBARES VERB · FERN",example:"Er sieht am Abend fern.",exampleTranslation:"Він дивиться телевізор увечері."}
+];
+const separableVerbPatternCards=[
+  {word:"Hauptsatz: Ich stehe früh auf.",translation:"Головне речення: префікс іде в кінець.",category:"TRENNBARE VERBEN · HAUPTSATZ",example:"aufstehen → ich stehe auf",exampleTranslation:"У головному реченні відмінюється лише основа, а префікс стоїть наприкінці."},
+  {word:"..., weil ich früh aufstehe.",translation:"Підрядне речення: дієслово не розділяється.",category:"TRENNBARE VERBEN · NEBENSATZ",example:"weil ich früh aufstehe",exampleTranslation:"У підрядному реченні відмінювана форма з префіксом стоїть разом у кінці."},
+  {word:"Ich kann früh aufstehen.",translation:"З модальним дієсловом інфінітив не розділяється.",category:"TRENNBARE VERBEN · MODALVERB",example:"kann + aufstehen",exampleTranslation:"Відмінюване модальне дієслово стоїть на другому місці, а повний інфінітив — у кінці."},
+  {word:"Ich verstehe die Aufgabe.",translation:"Невідокремлюване дієслово: префікс не відділяється.",category:"NICHT TRENNBAR · VER-",example:"verstehen → ich verstehe",exampleTranslation:"Префікси be-, emp-, ent-, er-, ge-, miss-, ver-, zer- зазвичай не відокремлюються."}
+];
+const separableVerbSentenceCard=(word,translation,prompt,category="TRENNBARE VERBEN · SATZBILDUNG")=>wordOrderSentenceCard(word,translation,prompt,category);
+const separableVerbStatementPracticeCards=[
+  separableVerbSentenceCard("Ich stehe um sieben Uhr auf.","Я встаю о сьомій годині.","ich / um sieben Uhr / aufstehen."),
+  separableVerbSentenceCard("Ich rufe dich später an.","Я подзвоню тобі пізніше.","ich / dich / später / anrufen."),
+  separableVerbSentenceCard("Wir kaufen heute im Supermarkt ein.","Ми сьогодні робимо покупки в супермаркеті.","wir / heute / im Supermarkt / einkaufen."),
+  separableVerbSentenceCard("Der Zug fährt um neun Uhr ab.","Потяг відправляється о дев'ятій годині.","der Zug / um neun Uhr / abfahren."),
+  separableVerbSentenceCard("Wir steigen am Alexanderplatz aus.","Ми виходимо на Александерплац.","wir / am Alexanderplatz / aussteigen."),
+  separableVerbSentenceCard("Ich hole meine Freundin vom Bahnhof ab.","Я зустрічаю подругу на вокзалі.","ich / meine Freundin / vom Bahnhof / abholen."),
+  separableVerbSentenceCard("Sie steigen in München um.","Вони пересаджуються в Мюнхені.","sie / in München / umsteigen."),
+  separableVerbSentenceCard("Ich bringe meine Tasche mit.","Я беру із собою сумку.","ich / meine Tasche / mitbringen.")
+];
+const separableVerbContextPracticeCards=[
+  separableVerbSentenceCard("Warum rufst du mich nicht an?","Чому ти мені не телефонуєш?","warum / du / mich / nicht / anrufen?","TRENNBARE VERBEN · W-FRAGE"),
+  separableVerbSentenceCard("Er sieht am Abend fern.","Він дивиться телевізор увечері.","er / am Abend / fernsehen.","TRENNBARE VERBEN · HAUPTSATZ"),
+  separableVerbSentenceCard("Der Bus kommt in fünf Minuten an.","Автобус прибуде через п'ять хвилин.","der Bus / in fünf Minuten / ankommen.","TRENNBARE VERBEN · HAUPTSATZ"),
+  separableVerbSentenceCard("Wir können um acht Uhr aufstehen.","Ми можемо встати о восьмій годині.","wir / um acht Uhr / aufstehen / können.","TRENNBARE VERBEN · MODALVERB"),
+  separableVerbSentenceCard("Ich kann meine Freundin vom Bahnhof abholen.","Я можу зустріти подругу на вокзалі.","ich / meine Freundin / vom Bahnhof / abholen / können.","TRENNBARE VERBEN · MODALVERB"),
+  separableVerbSentenceCard("Ich bleibe zu Hause, weil ich früh aufstehe.","Я залишаюся вдома, бо рано встаю.","ich / zu Hause / bleiben / weil / ich / früh / aufstehen.","TRENNBARE VERBEN · NEBENSATZ")
+];
+const moegenPracticeCards=[
+  modalVerbClozeCard("mögen","Ich mag Kaffee.","Я люблю каву.","Ich ___ Kaffee.","mag","люблю"),
+  modalVerbClozeCard("mögen","Du magst deutsche Musik.","Тобі подобається німецька музика.","Du ___ deutsche Musik.","magst","любиш"),
+  modalVerbClozeCard("mögen","Sie mag Schokolade.","Вона любить шоколад.","Sie ___ Schokolade.","mag","любить"),
+  modalVerbClozeCard("mögen","Wir mögen Pizza.","Ми любимо піцу.","Wir ___ Pizza.","mögen","любимо"),
+  modalVerbClozeCard("mögen","Ihr mögt Bücher.","Вам подобаються книжки.","Ihr ___ Bücher.","mögt","любите"),
+  modalVerbClozeCard("mögen","Sie mögen den Film.","Їм подобається фільм.","Sie ___ den Film.","mögen","люблять")
+];
+const moechtenPracticeCards=[
+  modalVerbClozeCard("möchten","Ich möchte einen Tee.","Я хотів би / хотіла б чай.","Ich ___ einen Tee.","möchte","хотів би / хотіла б"),
+  modalVerbClozeCard("möchten","Du möchtest nach Hause gehen.","Ти хотів би / хотіла б піти додому.","Du ___ nach Hause gehen.","möchtest","хотів би / хотіла б"),
+  modalVerbClozeCard("möchten","Sie möchte Deutsch lernen.","Вона хотіла б вивчати німецьку.","Sie ___ Deutsch lernen.","möchte","хотіла б"),
+  modalVerbClozeCard("möchten","Wir möchten etwas essen.","Ми хотіли б щось поїсти.","Wir ___ etwas essen.","möchten","хотіли б"),
+  modalVerbClozeCard("möchten","Ihr möchtet ins Kino gehen.","Ви хотіли б піти в кіно.","Ihr ___ ins Kino gehen.","möchtet","хотіли б"),
+  modalVerbClozeCard("möchten","Sie möchten bezahlen.","Вони хотіли б заплатити.","Sie ___ bezahlen.","möchten","хотіли б")
+];
+const moegenMoechtenComparisonPracticeCards=[
+  modalVerbClozeCard("mögen oder möchten","Ich mag Kaffee.","Мені подобається кава.","Ich ___ Kaffee.","mag","подобається"),
+  modalVerbClozeCard("mögen oder möchten","Ich möchte einen Kaffee, bitte.","Я хотів би / хотіла б каву, будь ласка.","Ich ___ einen Kaffee, bitte.","möchte","хотів би / хотіла б"),
+  modalVerbClozeCard("mögen oder möchten","Sie mag deutsche Musik.","Їй подобається німецька музика.","Sie ___ deutsche Musik.","mag","подобається"),
+  modalVerbClozeCard("mögen oder möchten","Sie möchte bezahlen.","Вона хотіла б заплатити.","Sie ___ bezahlen.","möchte","хотіла б")
+];
+const koennenCards=[...koennenFormCards,...moegenFormCards,...moechtenFormCards,...moegenMoechtenComparisonCards,...koennenWordOrderCards,...koennenPracticeCards,...moegenPracticeCards,...moechtenPracticeCards,...moegenMoechtenComparisonPracticeCards];
 const habenCards=[...habenFormCards,...habenPracticeCards,...bekommenFormCards,...bekommenPracticeCards,...brauchenFormCards,...brauchenPracticeCards];
 const lessonStep=(id,title,objective,cards,mode="learn",chapter="",phase="",progressId=id)=>({id,title,objective,cards,mode,chapter:chapter||title,phase:phase||(mode==="input"?"Practice":"Learn"),progressId});
 const learnThenPractice=(id,title,objective,cards,chapter=title)=>[
@@ -531,10 +626,10 @@ const conjugationStages=[
   ...learnThenPractice("conjugation-extra-e","the extra -e rule","Use the extra e after stems ending in -t or -d.",conjugationCards.slice(6,15),"Extra -e"),
   ...learnThenPractice("conjugation-sibilants","sibilant stems","Use -t rather than -st after stems ending in -s, -ß, or -z.",conjugationCards.slice(15),"Sibilants")
 ];
-const strongVerbStages=["sprechen","fahren","treffen","lesen"].flatMap((verb,verbIndex)=>[
-  lessonStep(`strong-${verb}-learn`,`Learn ${verb}`,`Read the full paradigm first; notice the vowel change in du and er/sie/es.`,strongVerbFormCards.slice(verbIndex*6,verbIndex*6+6),"learn",verb,"Learn"),
-  lessonStep(`strong-${verb}-cloze`,`Practice ${verb}`,`Enter only the missing conjugated form in each sentence.`,strongVerbPracticeCards.slice(verbIndex*6,verbIndex*6+6),"input",verb,"Practice")
-]);
+const strongVerbStages=[
+  lessonStep("strong-verbs-learn","Learn strong verbs","Read the full paradigms for sprechen, fahren, treffen, and lesen. Notice how the stem vowel changes in du and er/sie/es.",strongVerbFormCards,"learn","Strong verbs","Learn"),
+  lessonStep("strong-verbs-practice","Practice strong verbs","Enter the missing conjugated form in mixed sentences for all four strong verbs.",strongVerbPracticeCards,"input","Strong verbs","Practice")
+];
 const presentClozeCards=presentPracticeCards.filter(card=>card.category==="CLOZE PRACTICE");
 const presentTranslationCards=presentPracticeCards.filter(card=>card.category==="TRANSLATION PRACTICE");
 const presentPracticeStages=[
@@ -549,6 +644,12 @@ const studyCardsFromPractice=cards=>cards.map(({answer,answerTranslation,practic
 const koennenStages=[
   lessonStep("koennen-forms-learn","Learn können","Read the six forms of können as complete pronoun-form pairs.",koennenFormCards,"learn","Können forms","Learn"),
   lessonStep("koennen-forms-practice","Practice the six forms","Test each pronoun-form pairing once by entering only the missing form of können.",koennenFormPracticeCards,"input","Können forms","Practice"),
+  lessonStep("moegen-forms-learn","Learn mögen","Read the six forms of mögen and use them to say what you like.",moegenFormCards,"learn","Mögen forms","Learn"),
+  lessonStep("moegen-forms-practice","Practice the six forms","Test each pronoun-form pairing once by entering only the missing form of mögen.",moegenPracticeCards,"input","Mögen forms","Practice"),
+  lessonStep("moechten-forms-learn","Learn möchten","Read the six forms of möchten and use them for polite wishes.",moechtenFormCards,"learn","Möchten forms","Learn"),
+  lessonStep("moechten-forms-practice","Practice the six forms","Test each pronoun-form pairing once by entering only the missing form of möchten.",moechtenPracticeCards,"input","Möchten forms","Practice"),
+  lessonStep("moegen-moechten-compare-learn","Compare mögen and möchten","See how mögen expresses a preference while möchten expresses a polite wish.",moegenMoechtenComparisonCards,"learn","Mögen & möchten","Learn"),
+  lessonStep("moegen-moechten-compare-practice","Choose mögen or möchten","Complete each sentence with the correct form: mag for a preference or möchte for a polite wish.",moegenMoechtenComparisonPracticeCards,"input","Mögen & möchten","Practice"),
   lessonStep("koennen-order-learn","Learn modal verb word order","Compare statements and both question patterns before building full sentences.",koennenWordOrderCards,"learn","Word order","Learn"),
   lessonStep("koennen-order-practice","Practice modal verb sentences","Reorder the given German chunks into a complete sentence. Put können in position two and the infinitive at the end.",koennenWordOrderPracticeCards,"input","Word order","Practice"),
   lessonStep("koennen-context-learn","See können in context","Read complete statements, questions, and short dialogues before completing the modal verb yourself.",studyCardsFromPractice(koennenContextCards),"learn","Können in context","Learn"),
@@ -577,10 +678,18 @@ const timeWorksheetVocabularyStages=[
 const wordOrderStages=[
   lessonStep("word-order-statements-learn","Learn direct statements","See how the subject comes first and the conjugated verb stays in second position.",wordOrderStatementCards,"learn","Direct statements","Learn"),
   lessonStep("word-order-statements-practice","Practice direct statements","Reorder the German chunks into direct statements with the verb in second position.",wordOrderStatementPracticeCards,"input","Direct statements","Practice"),
+  lessonStep("word-order-modal-learn","Learn modal verb word order","Use the four patterns from the worksheet: modal verb in position two, infinitive at the end, and the correct order for statements and questions.",wordOrderModalCards,"learn","Modal verbs","Learn"),
+  lessonStep("word-order-modal-practice","Practice modal verb word order","Reorder modal-verb sentences. Keep the conjugated modal in its sentence position and put the infinitive at the end.",wordOrderModalPracticeCards,"input","Modal verbs","Practice"),
   lessonStep("word-order-inversion-learn","Learn inversion","Start with time or another phrase, then place the conjugated verb second and the subject after it.",wordOrderInversionCards,"learn","Inversion","Learn"),
   lessonStep("word-order-inversion-practice","Practice inversion","Reorder the German chunks into statements that begin with a time expression.",wordOrderInversionPracticeCards,"input","Inversion","Practice"),
   lessonStep("word-order-questions-learn","Learn question patterns","Compare yes/no questions with W-questions and find the position of the conjugated verb.",wordOrderQuestionCards,"learn","Questions","Learn"),
   lessonStep("word-order-questions-practice","Practice question patterns","Build yes/no and W-questions from the German chunks.",wordOrderQuestionPracticeCards,"input","Questions","Practice")
+];
+const separableVerbStages=[
+  lessonStep("separable-verbs-learn","Learn separable verbs","Learn the common A1 separable verbs with a complete main-clause example.",separableVerbCards,"learn","Separable verbs","Learn"),
+  lessonStep("separable-verbs-statements-practice","Practice main clauses","Build main-clause sentences: conjugate the stem in position two and move the prefix to the end.",separableVerbStatementPracticeCards,"input","Main clauses","Practice"),
+  lessonStep("separable-verbs-patterns-learn","Learn when verbs stay together","Compare main clauses with subordinate clauses, modal-verb infinitives, and non-separable verbs.",separableVerbPatternCards,"learn","When to separate","Learn"),
+  lessonStep("separable-verbs-context-practice","Practice mixed contexts","Build statements, a W-question, modal-verb sentences, and a subordinate clause with separable verbs.",separableVerbContextPracticeCards,"input","Mixed contexts","Practice")
 ];
 const deckDefinitions={
   "w-questions":{title:"W-Fragen",label:"W-Fragen",badge:"W",tip:"W-questions always come first in a question, followed by the verb.",guide:{title:"W-Fragen: запитання",intro:"Оберіть питальне слово відповідно до потрібної інформації, а потім побудуйте речення навколо відмінюваного дієслова.",rules:["Питальне слово стоїть на першому місці, а відмінюване дієслово — на другому: Wo wohnst du?","Підмет зазвичай стоїть після дієслова: Wann kommt ihr? Решта інформації йде далі.","Використовуйте wo для місця, wohin для руху до місця, а woher — для місця, звідки хтось прибуває.","На W-Fragen не можна відповісти лише ja або nein: вони потребують конкретної інформації."]},cards,stages:wQuestionStages},
@@ -590,12 +699,13 @@ const deckDefinitions={
   conjugation:{title:"Verb conjugation",label:"Verb conjugation",badge:"V",tip:"Weak verbs take regular endings: -e, -st, -t, -en, -t, -en. After a stem ending in -t or -d, add an extra e.",guide:{title:"Слабкі дієслова в Präsens",intro:"Візьміть основу дієслова й доберіть закінчення, що відповідає підмету.",rules:[{title:"Використовуйте регулярні закінчення",detail:"Більшість слабких дієслів відмінюються за однаковою схемою від ich до sie/Sie.",formula:"ich -e · du -st · er/sie/es -t · wir -en · ihr -t · sie/Sie -en"},{title:"Додавайте додаткове -e",detail:"Якщо основа закінчується на -t, -d або приголосний + -m/-n, додайте e перед закінченням.",formula:"du arbeitest · er arbeitet · ihr arbeitet"},{title:"Не додавайте зайве -s",detail:"В основах на -s, -ß або -z форма du має закінчення -t замість -st.",formula:"du heißt · du tanzt · du übersetzt"}]},cards:conjugationCards,stages:conjugationStages},
   "strong-verbs":{title:"Strong verbs",label:"Strong verbs",badge:"ä",tip:"With these strong verbs, the stem vowel changes only in du and er/sie/es.",guide:{title:"Сильні дієслова в Präsens",intro:"Спочатку повторіть повну парадигму кожного дієслова, а потім утворюйте всі форми за картками з пропусками.",rules:[{title:"Зміна e на i",detail:"Sprechen, treffen і lesen змінюють e на i у другій та третій особі однини.",formula:"du sprichst · er trifft · sie liest"},{title:"Зміна a на ä",detail:"Fahren змінює a на ä у другій та третій особі однини.",formula:"du fährst · er fährt"},{title:"Зберігайте основу в множині",detail:"Зміна голосного не відбувається з wir, ihr або sie/Sie.",formula:"wir sprechen · ihr fahrt · sie lesen"},{title:"Уживайте звичайні закінчення Präsens",detail:"Змінюється лише голосний в основі; закінчення залишаються -e, -st, -t, -en, -t, -en.",formula:"ich lese · du liest · er liest · wir lesen"}]},cards:strongVerbCards,stages:strongVerbStages},
   "present-practice":{title:"Present-tense practice",practiceTitle:"Present-tense practice",label:"Präsens practice",badge:"P",tip:"Use this focused review to retrieve conjugated forms in context. Revise each verb pattern in its dedicated lesson first.",guide:{title:"Відпрацювання форм Präsens",intro:"Це повторення вже вивчених моделей дієвідмінювання, а не вступ до нових правил. Використовуйте речення як контекст, але вводьте лише відмінювану форму або форми.",rules:["У частині з пропусками введіть форму, якої бракує в німецькому реченні; підказка в дужках показує інфінітив.","У частині з українськими підказками визначте особу й число, а потім введіть лише відповідну німецьку форму, не все речення.","Вправа повторює слабкі, сильні та неправильні форми, зокрема sein, gehen, fahren, sehen і möchten."]},cards:presentPracticeCards,stages:presentPracticeStages},
-  koennen:{title:"Können",label:"Können",badge:"k",tip:"Conjugate können in second position and put the second verb in the infinitive at the end.",guide:{title:"Können: уміння та можливість",intro:"Уживайте können, щоб сказати, що хтось щось уміє або може зробити. Форма залежить від підмета, а друге дієслово залишається в інфінітиві.",rules:["Форми: ich kann, du kannst, er/sie/es kann, wir können, ihr könnt, sie/Sie können.","У розповідному реченні können стоїть на другому місці; спочатку може стояти обставина часу: Heute kann ich ... fahren.","У загальному запитанні können стоїть на першому місці. У W-Frage питальне слово стоїть першим, а können — другим.","Коли können вживається з іншим дієсловом, це дієслово переходить у кінець речення в інфінітиві: Ich kann gut Gitarre spielen."]},cards:koennenCards,stages:koennenStages},
+  koennen:{title:"Modal verbs",label:"Modal verbs",badge:"M",tip:"Use können for ability, mögen for likes, and möchten for polite wishes.",guide:{title:"Модальні дієслова: können, mögen і möchten",intro:"Ці дієслова допомагають говорити про вміння, уподобання та ввічливі бажання. Форма залежить від підмета.",rules:["Können означає «могти, вміти»: ich kann, du kannst, er/sie/es kann, wir können, ihr könnt, sie/Sie können.","Mögen означає «любити, подобатися»: ich mag, du magst, er/sie/es mag, wir mögen, ihr mögt, sie/Sie mögen.","Möchten — форма Konjunktiv II від mögen. У сучасній мові вона означає ввічливе «хотів би / хотіла б»: ich möchte, du möchtest, er/sie/es möchte, wir möchten, ihr möchtet, sie/Sie möchten.","Порівнюйте значення: Ich mag Kaffee. = «Мені подобається кава». Ich möchte einen Kaffee. = «Я хотів би / хотіла б каву».","З können і möchten друге дієслово стоїть в інфінітиві в кінці речення: Ich kann schwimmen. Wir möchten bezahlen."]},cards:koennenCards,stages:koennenStages},
   haben:{title:"Haben, bekommen & brauchen",label:"Haben, bekommen & brauchen",badge:"hab",tip:"Use haben for what you have, bekommen for what you receive, and brauchen for what you need.",guide:{title:"Haben, bekommen & brauchen",intro:"Ці три дієслова допомагають говорити про речі, людей, потреби та отримання в повсякденних ситуаціях A1.",rules:["haben означає «мати»: Ich habe einen Hund.","bekommen означає «отримувати»: Wir bekommen morgen Geld.","brauchen означає «потребувати»: Er braucht eine neue Brille.","Форми bekommen і brauchen відмінюються регулярно; haben має особливі форми du hast, er/sie/es hat та ihr habt."]},cards:habenCards,stages:habenStages},
   frequency:{title:"Frequency adverbs",label:"Frequency adverbs",badge:"oft",tip:"Frequency adverbs such as oft and nie normally stay in the middle of the sentence after the conjugated verb.",guide:{title:"Прислівники частоти",intro:"Прислівники частоти показують, як часто щось відбувається. Вони не змінюють форму й зазвичай стоять у середині речення.",rules:[{title:"Вивчайте шкалу частоти",detail:"Від найбільшої до найменшої частоти: immer, fast immer, meistens, oft, manchmal, selten, fast nie, nie.",formula:"immer → oft → manchmal → selten → nie"},{title:"Ставте прислівник після відмінюваного дієслова",detail:"У простому реченні прислівник частоти зазвичай стоїть після дієслова.",formula:"Ich lerne oft Deutsch."},{title:"Зберігайте дієслово на другому місці",detail:"Якщо речення починається з часу, підмет і прислівник ідуть після відмінюваного дієслова.",formula:"Am Sonntag lese ich manchmal ein Buch."},{title:"Використовуйте nie без nicht",detail:"Nie уже означає заперечення «ніколи», тому в таких реченнях nicht не потрібне.",formula:"Wir essen nie Fleisch."}]},cards:frequencyCards,stages:frequencyStages},
   "time-expressions":{title:"Time expressions",label:"Time expressions",badge:"Zeit",tip:"Use um for clock times, am for days and daytime periods, im for months and seasons, and nachts for habitual night actions.",guide:{title:"Час: um, am, im, in та Nacht",intro:"Ці короткі слова показують, коли щось відбувається. Обирайте форму за типом часу: година, день, місяць, проміжок часу або ніч.",rules:[{title:"Уживайте um з точною годиною",detail:"Um відповідає на запитання «о котрій годині?»",formula:"um acht Uhr"},{title:"Уживайте am з днями, датами й частинами дня",detail:"Am — це скорочення an dem. Воно вживається з днями тижня, датами та Morgen, Vormittag, Mittag, Nachmittag, Abend.",formula:"am Montag · am ersten Mai · am Abend"},{title:"Уживайте im з місяцями та порами року",detail:"Im — це скорочення in dem.",formula:"im Mai · im Sommer"},{title:"Уживайте in для майбутнього проміжку часу",detail:"In показує, через який час щось станеться.",formula:"in zwei Wochen · in einer Stunde"},{title:"Запам’ятайте особливі форми з Nacht",detail:"Не кажемо am Nacht. Nachts означає «уночі» загалом або регулярно; in der Nacht — під час конкретної ночі. З heute, gestern, letzte не потрібен прийменник.",formula:"nachts · in der Nacht · letzte Nacht"},{title:"Використовуйте nach і vor для розмовного часу",detail:"Nach означає хвилини після поточної години, vor — хвилини до наступної. Halb vier означає 3:30, тобто половина до четвертої.",formula:"fünf nach zehn · zehn vor sechs · halb vier"}]},cards:[...timeExpressionCards,...spokenTimeCards],stages:timeExpressionStages},
   "time-worksheet-vocabulary":{title:"Time worksheet vocabulary",label:"Time worksheet vocabulary",badge:"Zeit",tip:"Learn each new word with the seasonal or daily-routine context from the worksheet.",guide:{title:"Словник: час і пори року",intro:"У цьому уроці зібрано лише нові слова з аркуша про час. Вивчайте іменники разом з артиклем і формою множини, а дієслова — у короткому реченні.",rules:["Вивчайте іменники з артиклем: der Baum, die Kirche, das Restaurant.","Форма множини наведена там, де вона є в аркуші: die Bäume, die Blätter, die Pilze, die Vögel.","Дієслова fallen, blühen, verbringen і genießen найкраще запам'ятовувати разом із сезонним контекстом."]},cards:timeWorksheetVocabularyCards,stages:timeWorksheetVocabularyStages},
-  "word-order":{title:"Word order",label:"Word order",badge:"S",tip:"In German statements, the conjugated verb stays in second position; in yes/no questions, it moves to the first position.",guide:{title:"Порядок слів у реченні",intro:"Німецький порядок слів суворіший, ніж український. Спочатку визначте тип речення, а потім знайдіть місце для відмінюваного дієслова.",rules:[{title:"Будуйте пряме розповідне речення",detail:"Підмет стоїть першим, а відмінюване дієслово - другим.",formula:"Ich fahre heute mit dem Bus nach Hause."},{title:"Використовуйте інверсію після обставини",detail:"Якщо час, місце чи інша фраза стоїть першою, дієслово лишається другим, а підмет переходить після нього.",formula:"Heute fahre ich mit dem Bus nach Hause."},{title:"Ставте дієслово першим у питанні ja/nein",detail:"У питанні без питального слова відмінюване дієслово відкриває речення.",formula:"Fährst du heute mit dem Bus nach Hause?"},{title:"Починайте W-Frage з питального слова",detail:"Питальне слово стоїть першим, відмінюване дієслово - другим, а підмет - після нього.",formula:"Warum fährst du heute mit dem Bus nach Hause?"}]},cards:[...wordOrderStatementCards,...wordOrderInversionCards,...wordOrderQuestionCards],stages:wordOrderStages}
+  "word-order":{title:"Word order",label:"Word order",badge:"S",tip:"With a modal verb, the conjugated modal is first or second; the infinitive always goes to the end.",guide:{title:"Порядок слів у реченні",intro:"Німецький порядок слів суворіший, ніж український. Спочатку визначте тип речення, а потім знайдіть місце для відмінюваного дієслова й інфінітива.",rules:[{title:"Пряме речення з модальним дієсловом",detail:"Підмет стоїть першим, модальне дієслово - другим, а друге дієслово в інфінітиві - в кінці.",formula:"Ich mag am Morgen Kaffee trinken."},{title:"Інверсія з модальним дієсловом",detail:"Час або інша фраза може стояти першою, але модальне дієслово залишається на другому місці.",formula:"Am Morgen mag ich Kaffee trinken."},{title:"Питання ja/nein",detail:"Без питального слова модальне дієслово стоїть першим, підмет - другим, а інфінітив - у кінці.",formula:"Magst du am Morgen Kaffee trinken?"},{title:"W-Frage з модальним дієсловом",detail:"Питальне слово стоїть першим, модальне дієслово - другим, підмет - після нього, а інфінітив - у кінці.",formula:"Was magst du am Morgen trinken?"},{title:"Інші розповідні речення",detail:"Без модального дієслова відмінюване дієслово все одно стоїть на другому місці: підмет або обставина часу можуть бути першими.",formula:"Heute fahre ich mit dem Bus nach Hause."}]},cards:[...wordOrderStatementCards,...wordOrderModalCards,...wordOrderInversionCards,...wordOrderQuestionCards],stages:wordOrderStages},
+  "separable-verbs":{title:"Separable verbs",label:"Separable verbs",badge:"auf",tip:"In a main clause, conjugate the verb stem and put the separable prefix at the end.",guide:{title:"Відокремлювані дієслова",intro:"Багато німецьких дієслів мають префікс, який у головному реченні відокремлюється та переходить у кінець. Вивчайте дієслово як одну одиницю: aufstehen, anrufen, einkaufen.",rules:[{title:"У головному реченні префікс відокремлюється",detail:"Відмінюється основа, а префікс стоїть у кінці речення.",formula:"Ich stehe früh auf. · Der Zug fährt ab."},{title:"У питанні префікс теж у кінці",detail:"Відмінювана основа стоїть після W-слова або на початку питання ja/nein.",formula:"Warum rufst du mich an?"},{title:"У підрядному реченні дієслово не розділяється",detail:"Після weil, dass та інших сполучників повна відмінювана форма стоїть наприкінці.",formula:"..., weil ich früh aufstehe."},{title:"З модальним дієсловом інфінітив не розділяється",detail:"Модальне дієслово відмінюється, а повний інфінітив стоїть наприкінці.",formula:"Wir können früh aufstehen."},{title:"Не всі префіксальні дієслова відокремлюються",detail:"be-, emp-, ent-, er-, ge-, miss-, ver-, zer- зазвичай невідокремлювані.",formula:"Ich verstehe die Aufgabe. · Wir besuchen Freunde."}]},cards:[...separableVerbCards,...separableVerbPatternCards],stages:separableVerbStages}
 };
 let activeDeckId="w-questions",activeStageIndex=0,deck=[...wQuestionStages[0].cards],index=0,flipped=false,completed=0,roundCorrect=0,roundCorrectCards={},roundHadIncorrect=false,roundFinished=false,practiceInputStarted=false,verificationMode=false,verified=false,answerRevealed=false,celebrating=false,studyMode="learn",direction="uk-de";
 const $=id=>document.getElementById(id);
@@ -1245,4 +1355,5 @@ document.querySelector("#start-frequency").addEventListener("click",()=>{selectD
 document.querySelector("#start-time-expressions").addEventListener("click",()=>{selectDeck("time-expressions");document.querySelector('[data-view="practice"]').click()});
 document.querySelector("#start-time-worksheet-vocabulary").addEventListener("click",()=>{selectDeck("time-worksheet-vocabulary");document.querySelector('[data-view="practice"]').click()});
 document.querySelector("#start-word-order").addEventListener("click",()=>{selectDeck("word-order");document.querySelector('[data-view="practice"]').click()});
+document.querySelector("#start-separable-verbs").addEventListener("click",()=>{selectDeck("separable-verbs");document.querySelector('[data-view="practice"]').click()});
 render();updateStats();restoreLessonHistory();
