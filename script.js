@@ -14,25 +14,25 @@ const pronounCards=[
   {word:"ich",translation:"я",category:"PERSONAL PRONOUN",example:"Ich lerne Deutsch.",exampleTranslation:"Я вивчаю німецьку."},
   {word:"du",translation:"ти",category:"PERSONAL PRONOUN",example:"Du bist mein Freund.",exampleTranslation:"Ти мій друг."},
   {word:"er",translation:"він",category:"PERSONAL PRONOUN",example:"Er kommt aus Berlin.",exampleTranslation:"Він з Берліна."},
-  {word:"sie",translation:"вона",category:"PERSONAL PRONOUN",example:"Sie heißt Anna.",exampleTranslation:"Її звати Анна."},
+  {word:"sie",translation:"вона",category:"PERSONAL PRONOUN",targetId:"pronoun-feminine-sie",example:"Sie heißt Anna.",exampleTranslation:"Її звати Анна."},
   {word:"es",translation:"воно",category:"PERSONAL PRONOUN",example:"Es ist kalt.",exampleTranslation:"Холодно."},
   {word:"wir",translation:"ми",category:"PERSONAL PRONOUN",example:"Wir wohnen in Kyjiw.",exampleTranslation:"Ми живемо в Києві."},
   {word:"ihr",translation:"ви",category:"PERSONAL PRONOUN",example:"Ihr seid sehr nett.",exampleTranslation:"Ви дуже милі."},
-  {word:"Sie",translation:"Ви (ввічливо)",category:"PERSONAL PRONOUN",example:"Wie heißen Sie?",exampleTranslation:"Як Вас звати?"}
+  {word:"Sie",translation:"Ви (ввічливо)",category:"PERSONAL PRONOUN",targetId:"pronoun-formal-sie",example:"Wie heißen Sie?",exampleTranslation:"Як Вас звати?",caseSensitive:true}
 ];
 const possessivePronounCards=[
   {word:"mein",translation:"мій / моє",category:"POSSESSIVE PRONOUN",example:"Mein Bruder lernt Deutsch.",exampleTranslation:"Мій брат вивчає німецьку."},
   {word:"dein",translation:"твій / твоє",category:"POSSESSIVE PRONOUN",example:"Ist das dein Buch?",exampleTranslation:"Це твоя книга?"},
   {word:"sein",translation:"його",category:"POSSESSIVE PRONOUN",example:"Sein Auto ist neu.",exampleTranslation:"Його автомобіль новий."},
-  {word:"ihr / ihre",translation:"її",category:"POSSESSIVE PRONOUN",example:"Ihre Tasche ist hier.",exampleTranslation:"Її сумка тут."},
+  {word:"ihr / ihre",translation:"її",category:"POSSESSIVE PRONOUN",targetId:"possessive-her",example:"Ihre Tasche ist hier.",exampleTranslation:"Її сумка тут."},
   {word:"unser",translation:"наш / наше",category:"POSSESSIVE PRONOUN",example:"Unser Kurs beginnt heute.",exampleTranslation:"Наш курс починається сьогодні."},
   {word:"euer",translation:"ваш / ваше (неофіційно, множина)",category:"POSSESSIVE PRONOUN",example:"Euer Haus ist groß.",exampleTranslation:"Ваш будинок великий."},
-  {word:"Ihr",translation:"Ваш / Ваше (ввічливо)",category:"POSSESSIVE PRONOUN",example:"Wie ist Ihr Name?",exampleTranslation:"Як Ваше ім'я?"},
-  {word:"ihr / ihre",translation:"їхній / їхня",category:"POSSESSIVE PRONOUN",example:"Ihre Kinder spielen draußen.",exampleTranslation:"Їхні діти граються надворі."},
+  {word:"Ihr",translation:"Ваш / Ваше (ввічливо)",category:"POSSESSIVE PRONOUN",example:"Wie ist Ihr Name?",exampleTranslation:"Як Ваше ім'я?",caseSensitive:true},
+  {word:"ihr / ihre",translation:"їхній / їхня",category:"POSSESSIVE PRONOUN",targetId:"possessive-their",example:"Ihre Kinder spielen draußen.",exampleTranslation:"Їхні діти граються надворі."},
   {word:"meine",translation:"моя / моє / мої",category:"POSSESSIVE ENDING",example:"Meine Mutter arbeitet im Büro.",exampleTranslation:"Моя мама працює в офісі."},
   {word:"deine",translation:"твоя / твоє / твої",category:"POSSESSIVE ENDING",example:"Deine Freunde warten draußen.",exampleTranslation:"Твої друзі чекають надворі."},
   {word:"unsere",translation:"наша / наше / наші",category:"POSSESSIVE ENDING",example:"Unsere Wohnung ist hell.",exampleTranslation:"Наша квартира світла."},
-  {word:"Ihre",translation:"Ваша / Ваше / Ваші (ввічливо)",category:"POSSESSIVE ENDING",example:"Sind Ihre Kinder zu Hause?",exampleTranslation:"Ваші діти вдома?"}
+  {word:"Ihre",translation:"Ваша / Ваше / Ваші (ввічливо)",category:"POSSESSIVE ENDING",example:"Sind Ihre Kinder zu Hause?",exampleTranslation:"Ваші діти вдома?",caseSensitive:true}
 ];
 possessivePronounCards.filter(card=>card.word.includes("/")).forEach(card=>{card.allowIndividualOption=true});
 const seinCards=[
@@ -292,9 +292,9 @@ presentPracticeCards.forEach(card=>{
   card.answer=target[0];
   card.answerTranslation=target[1];
 });
-const modalClozeCard=(word,translation,prompt,answer,answerTranslation)=>({word,translation,category:"KÖNNEN · LÜCKENTEXT",prompt,example:prompt,exampleTranslation:"Доповни речення правильною формою können.",answer,answerTranslation});
+const modalClozeCard=(word,translation,prompt,answer,answerTranslation)=>({word,translation,category:"KÖNNEN · LÜCKENTEXT",prompt,example:prompt,exampleTranslation:"Доповни речення правильною формою können.",answer,answerTranslation,practiceVariants:false});
 const modalSentenceCard=(word,translation,prompt,category="KÖNNEN · SATZBILDUNG")=>({word,translation,category,prompt,exampleTranslation:"Напиши повну відповідь німецькою.",answer:word,answerTranslation:translation,practiceType:"sentence"});
-const modalVerbClozeCard=(verb,word,translation,prompt,answer,answerTranslation)=>({word,translation,category:`MODALVERB · ${verb.toUpperCase()} · LÜCKENTEXT`,prompt,example:prompt,exampleTranslation:`Доповни речення правильною формою ${verb}.`,answer,answerTranslation});
+const modalVerbClozeCard=(verb,word,translation,prompt,answer,answerTranslation)=>({word,translation,category:`MODALVERB · ${verb.toUpperCase()} · LÜCKENTEXT`,prompt,example:prompt,exampleTranslation:`Доповни речення правильною формою ${verb}.`,answer,answerTranslation,practiceVariants:false});
 const koennenFormCards=[
   {word:"ich kann",translation:"я можу / вмію",category:"MODALVERB · KÖNNEN",example:"Ich kann sehr gut malen.",exampleTranslation:"Я можу дуже добре малювати."},
   {word:"du kannst",translation:"ти можеш / вмієш",category:"MODALVERB · KÖNNEN",example:"Du kannst im Sommer schwimmen.",exampleTranslation:"Ти можеш плавати влітку."},
@@ -479,7 +479,7 @@ const frequencyCards=[
   {word:"fast nie",translation:"майже ніколи",category:"FREQUENCY ADVERB",example:"Du kommst fast nie zu spät.",exampleTranslation:"Ти майже ніколи не запізнюєшся."},
   {word:"nie",translation:"ніколи",category:"FREQUENCY ADVERB",example:"Wir essen nie Fleisch.",exampleTranslation:"Ми ніколи не їмо м'яса."}
 ];
-const frequencyPracticeCards=frequencyCards.map(card=>({...card,practiceVariants:false}));
+const frequencyPracticeCards=frequencyCards.map(card=>({...card}));
 const timeExpressionCards=[
   {word:"um",translation:"о (годині)",category:"PRÄPOSITION · ZEIT",example:"Der Deutschkurs beginnt um acht Uhr.",exampleTranslation:"Курс німецької починається о восьмій годині."},
   {word:"am (= an dem)",translation:"у / в (день, дата)",category:"PRÄPOSITION · TAG & DATUM",example:"Am Dienstag habe ich frei.",exampleTranslation:"У вівторок я вільний / вільна."},
@@ -896,6 +896,7 @@ const deckDefinitions={
   "word-order":{title:"Word order",label:"Word order",badge:"S",tip:"Use TE-KA-MO-LO for several adverbials: time, reason, manner, then place.",guide:{title:"Порядок слів у реченні",intro:"Німецький порядок слів суворіший, ніж український. Спочатку визначте тип речення, а потім знайдіть місце для відмінюваного дієслова й інфінітива.",rules:[{title:"TE-KA-MO-LO",detail:"Коли в середині речення є кілька обставин, їхній звичний порядок: TE (wann?) - KA (warum?) - MO (wie?) - LO (wo?/wohin?).",formula:"Ich fahre heute wegen des Regens mit dem Bus zur Arbeit."},{title:"Пряме речення з модальним дієсловом",detail:"Підмет стоїть першим, модальне дієслово - другим, а друге дієслово в інфінітиві - в кінці.",formula:"Ich mag am Morgen Kaffee trinken."},{title:"Інверсія з модальним дієсловом",detail:"Час або інша фраза може стояти першою, але модальне дієслово залишається на другому місці.",formula:"Am Morgen mag ich Kaffee trinken."},{title:"Питання ja/nein",detail:"Без питального слова модальне дієслово стоїть першим, підмет - другим, а інфінітив - у кінці.",formula:"Magst du am Morgen Kaffee trinken?"},{title:"W-Frage з модальним дієсловом",detail:"Питальне слово стоїть першим, модальне дієслово - другим, підмет - після нього, а інфінітив - у кінці.",formula:"Was magst du am Morgen trinken?"},{title:"Інші розповідні речення",detail:"Без модального дієслова відмінюване дієслово все одно стоїть на другому місці: підмет або обставина часу можуть бути першими.",formula:"Heute fahre ich mit dem Bus nach Hause."}]},cards:[...wordOrderStatementCards,...wordOrderTeKaMoLoCards,...wordOrderModalCards,...wordOrderInversionCards,...wordOrderQuestionCards],stages:wordOrderStages},
   "separable-verbs":{title:"Separable verbs",label:"Separable verbs",badge:"auf",tip:"In a main clause, conjugate the verb stem and put the separable prefix at the end.",guide:{title:"Відокремлювані дієслова",intro:"Багато німецьких дієслів мають префікс, який у головному реченні відокремлюється та переходить у кінець. Вивчайте дієслово як одну одиницю: aufstehen, anrufen, einkaufen.",rules:[{title:"У головному реченні префікс відокремлюється",detail:"Відмінюється основа, а префікс стоїть у кінці речення.",formula:"Ich stehe früh auf. · Der Zug fährt ab."},{title:"У питанні префікс теж у кінці",detail:"Відмінювана основа стоїть після W-слова або на початку питання ja/nein.",formula:"Warum rufst du mich an?"},{title:"У підрядному реченні дієслово не розділяється",detail:"Після weil, dass та інших сполучників повна відмінювана форма стоїть наприкінці.",formula:"..., weil ich früh aufstehe."},{title:"З модальним дієсловом інфінітив не розділяється",detail:"Модальне дієслово відмінюється, а повний інфінітив стоїть наприкінці.",formula:"Wir können früh aufstehen."},{title:"Не всі префіксальні дієслова відокремлюються",detail:"be-, emp-, ent-, er-, ge-, miss-, ver-, zer- зазвичай невідокремлювані.",formula:"Ich verstehe die Aufgabe. · Wir besuchen Freunde."}]},cards:[...separableVerbCards,...separableVerbPatternCards],stages:separableVerbStages}
 };
+if(false){
 let activeDeckId="w-questions",activeStageIndex=0,deck=[...wQuestionStages[0].cards],index=0,flipped=false,completed=0,roundCorrect=0,roundCorrectCards={},roundHadIncorrect=false,roundFinished=false,practiceInputStarted=false,verificationMode=false,verified=false,answerRevealed=false,celebrating=false,studyMode="learn",direction="uk-de";
 const $=id=>document.getElementById(id);
 function updatePageTitle(view){
@@ -1550,3 +1551,4 @@ document.querySelector("#start-es-gibt-leisure").addEventListener("click",()=>{s
 document.querySelector("#start-word-order").addEventListener("click",()=>{selectDeck("word-order");document.querySelector('[data-view="practice"]').click()});
 document.querySelector("#start-separable-verbs").addEventListener("click",()=>{selectDeck("separable-verbs");document.querySelector('[data-view="practice"]').click()});
 render();updateStats();restoreLessonHistory();
+}

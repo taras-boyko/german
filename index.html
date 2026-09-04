@@ -19,7 +19,7 @@
       </a>
       <div class="sidebar-label">Study</div>
       <nav class="nav">
-        <button class="nav-item" data-view="practice"><span class="nav-icon">◈</span> Practice <span class="nav-count">11</span></button>
+        <button class="nav-item" data-view="practice"><span class="nav-icon">◈</span> Practice <span class="nav-count">0</span></button>
         <button class="nav-item active" data-view="library"><span class="nav-icon">▤</span> Card library</button>
         <button class="nav-item" data-view="progress"><span class="nav-icon">◒</span> Progress</button>
       </nav>
@@ -35,6 +35,7 @@
           <div class="streak"><span>♨</span><strong id="streak">0</strong><small>day streak</small></div>
         </div>
       </header>
+      <p class="sync-status" id="sync-status" role="status" aria-live="polite" hidden></p>
 
       <section id="practice-view" class="view hidden">
         <div class="study-grid">
@@ -56,7 +57,7 @@
               </div>
               <ol class="journey-rail" id="lesson-steps" aria-label="Lesson chapters"></ol>
               <div class="journey-card-progress">
-                <span id="session-progress-label">Card 1 of 10</span>
+                <span id="session-progress-label">Card 0 of 0</span>
                 <div class="progress-track" role="progressbar" aria-labelledby="session-progress-label" aria-valuemin="0" aria-valuemax="12" aria-valuenow="0"><i id="session-progress"></i></div>
               </div>
               <div class="practice-portion" id="practice-portion" hidden>
@@ -118,7 +119,7 @@
           <aside class="insights">
             <div class="section-title"><h3>Quick overview</h3></div>
             <div class="stats-card">
-              <div class="stat"><span class="stat-icon purple">◉</span><div><strong id="remaining">12</strong><small>Cards left</small></div></div>
+              <div class="stat"><span class="stat-icon purple">◉</span><div><strong id="remaining">0</strong><small>Cards left</small></div></div>
               <div class="stat"><span class="stat-icon orange">♨</span><div><strong id="overview-streak">0</strong><small>Day streak</small></div></div>
               <div class="stat"><span class="stat-icon green">◔</span><div><strong id="accuracy-rate">0%</strong><small>Accuracy</small></div></div>
             </div>
@@ -135,117 +136,8 @@
       </section>
 
       <section id="library-view" class="view">
-        <div class="library-header"><div><p class="eyebrow">YOUR STUDY LIBRARY</p><h2>Learning sections</h2><p>Each section is divided into short learn and practice steps.</p></div><span class="library-total">18 active sections</span></div>
-        <div class="section-grid">
-          <article class="library-section featured">
-            <div class="section-card-top"><span class="section-icon purple">W?</span><span class="available-badge">Available</span></div>
-            <h3>W-Fragen</h3><p>Learn every question word, then retrieve the full set in one practice sequence.</p>
-            <div class="section-meta"><span>2 sequences</span><span>A1 level</span></div>
-            <button class="primary-button" id="start-library">Learn W-Fragen <span>→</span></button>
-          </article>
-          <article class="library-section featured">
-            <div class="section-card-top"><span class="section-icon orange">V</span><span class="available-badge">Available</span></div>
-            <h3>Verb conjugation</h3><p>Learn endings in small patterns, then write the matching pronoun-form pair.</p>
-            <div class="section-meta"><span>6 short steps</span><span>A1 level</span></div>
-            <button class="primary-button" id="start-conjugation">Learn conjugation <span>→</span></button>
-          </article>
-          <article class="library-section featured">
-            <div class="section-card-top"><span class="section-icon blue">ä</span><span class="available-badge">Available</span></div>
-            <h3>Strong verbs</h3><p>Learn all six verb families together, then complete their changed forms in context.</p>
-            <div class="section-meta"><span>2 sequences</span><span>A1 level</span></div>
-            <button class="primary-button" id="start-strong-verbs">Learn strong verbs <span>→</span></button>
-          </article>
-          <article class="library-section featured">
-            <div class="section-card-top"><span class="section-icon purple">V2</span><span class="available-badge">Available</span></div>
-            <h3>Past verb forms</h3><p>Connect common A1 verbs with their Präteritum and Perfekt forms, then retrieve both forms.</p>
-            <div class="section-meta"><span>2 sequences</span><span>A1 level</span></div>
-            <button class="primary-button" id="start-past-verbs">Learn past verb forms <span>→</span></button>
-          </article>
-          <article class="library-section featured">
-            <div class="section-card-top"><span class="section-icon green">P</span><span class="available-badge">Available</span></div>
-            <h3>Present-tense practice</h3><p>Complete one verb form at a time, then use the same skill in translation prompts.</p>
-            <div class="section-meta"><span>7 short steps</span><span>A1 level</span></div>
-            <button class="primary-button" id="start-present-practice">Practice Präsens <span>→</span></button>
-          </article>
-          <article class="library-section featured">
-            <div class="section-card-top"><span class="section-icon blue">M</span><span class="available-badge">Available</span></div>
-            <h3>Modal verbs</h3><p>Learn können, mögen, and möchten through their forms, sentence patterns, and everyday contexts.</p>
-            <div class="section-meta"><span id="koennen-card-count">12 focused steps</span><span>A1 level</span></div>
-            <button class="primary-button" id="start-koennen">Learn modal verbs <span>→</span></button>
-          </article>
-          <article class="library-section featured">
-            <div class="section-card-top"><span class="section-icon green">hab</span><span class="available-badge">Available</span></div>
-            <h3>Haben, bekommen &amp; brauchen</h3><p>Distinguish having, receiving, and needing through their A1 present-tense forms.</p>
-            <div class="section-meta"><span>6 focused steps</span><span>A1 level</span></div>
-            <button class="primary-button" id="start-haben">Learn haben, bekommen &amp; brauchen <span>→</span></button>
-          </article>
-          <article class="library-section featured">
-            <div class="section-card-top"><span class="section-icon blue">S</span><span class="available-badge">Available</span></div>
-            <h3>Word order</h3><p>Build statements with TE-KA-MO-LO, modal verbs, inversion patterns, and both kinds of questions.</p>
-            <div class="section-meta"><span>10 short steps</span><span>A1 level</span></div>
-            <button class="primary-button" id="start-word-order">Learn word order <span>→</span></button>
-          </article>
-          <article class="library-section featured">
-            <div class="section-card-top"><span class="section-icon purple">auf</span><span class="available-badge">Available</span></div>
-            <h3>Separable verbs</h3><p>Learn when prefixes move to the end of a sentence and when the verb stays together.</p>
-            <div class="section-meta"><span>4 short steps</span><span>A1 level</span></div>
-            <button class="primary-button" id="start-separable-verbs">Learn separable verbs <span>→</span></button>
-          </article>
-          <article class="library-section featured">
-            <div class="section-card-top"><span class="section-icon green">ich</span><span class="available-badge">Available</span></div>
-            <h3>Personal pronouns</h3><p>Learn every pronoun first, then retrieve the full set in one practice sequence.</p>
-            <div class="section-meta"><span>2 sequences</span><span>A1 level</span></div>
-            <button class="primary-button" id="start-pronouns">Learn pronouns <span>→</span></button>
-          </article>
-          <article class="library-section featured">
-            <div class="section-card-top"><span class="section-icon orange">mein</span><span class="available-badge">Available</span></div>
-            <h3>Possessive pronouns</h3><p>First connect each owner to its stem, then focus on endings in sentence context.</p>
-            <div class="section-meta"><span>4 short steps</span><span>A1 level</span></div>
-            <button class="primary-button" id="start-possessives">Learn possessives <span>→</span></button>
-          </article>
-          <article class="library-section featured">
-            <div class="section-card-top"><span class="section-icon blue">sein</span><span class="available-badge">Available</span></div>
-            <h3>Verb sein</h3><p>Learn every irregular form, then retrieve the full set in one practice sequence.</p>
-            <div class="section-meta"><span>2 sequences</span><span>A1 level</span></div>
-            <button class="primary-button" id="start-sein">Learn Verb sein <span>→</span></button>
-          </article>
-          <article class="library-section featured">
-            <div class="section-card-top"><span class="section-icon orange">oft</span><span class="available-badge">Available</span></div>
-            <h3>Frequency adverbs</h3><p>Describe how often something happens, from <i>immer</i> to <i>nie</i>.</p>
-            <div class="section-meta"><span>2 short steps</span><span>A1 level</span></div>
-            <button class="primary-button" id="start-frequency">Learn frequency adverbs <span>→</span></button>
-          </article>
-          <article class="library-section featured">
-            <div class="section-card-top"><span class="section-icon purple">Zeit</span><span class="available-badge">Available</span></div>
-            <h3>Time expressions</h3><p>Use calendar expressions and say times such as <i>fünf nach zehn</i> and <i>halb vier</i>.</p>
-            <div class="section-meta"><span>4 short steps</span><span>A1 level</span></div>
-            <button class="primary-button" id="start-time-expressions">Learn time expressions <span>→</span></button>
-          </article>
-          <article class="library-section featured">
-            <div class="section-card-top"><span class="section-icon green">Zeit</span><span class="available-badge">Available</span></div>
-            <h3>Time worksheet vocabulary</h3><p>Study the new seasonal and daily-routine words from the time worksheet without repeating known time expressions.</p>
-            <div class="section-meta"><span>2 short steps</span><span>A1 level</span></div>
-            <button class="primary-button" id="start-time-worksheet-vocabulary">Learn worksheet vocabulary <span>→</span></button>
-          </article>
-          <article class="library-section featured">
-            <div class="section-card-top"><span class="section-icon orange">Alltag</span><span class="available-badge">Available</span></div>
-            <h3>Everyday vocabulary</h3><p>Learn routine words, useful actions, and everyday food and drink with their articles.</p>
-            <div class="section-meta"><span>4 short steps</span><span>A1 level</span></div>
-            <button class="primary-button" id="start-everyday-vocabulary">Learn everyday vocabulary <span>→</span></button>
-          </article>
-          <article class="library-section featured">
-            <div class="section-card-top"><span class="section-icon orange">Bahn</span><span class="available-badge">Available</span></div>
-            <h3>Travel &amp; transport</h3><p>Learn vehicles, stations, route phrases, and useful travel actions for getting around in German.</p>
-            <div class="section-meta"><span>6 short steps</span><span>A1 level</span></div>
-            <button class="primary-button" id="start-travel-transport">Learn travel vocabulary <span>→</span></button>
-          </article>
-          <article class="library-section featured">
-            <div class="section-card-top"><span class="section-icon purple">gibt</span><span class="available-badge">Available</span></div>
-            <h3>Es gibt &amp; leisure places</h3><p>Describe what a town offers, name leisure venues, talk about what people can do there, and describe photos.</p>
-            <div class="section-meta"><span>8 short steps</span><span>A1 level</span></div>
-            <button class="primary-button" id="start-es-gibt-leisure">Learn Es gibt <span>→</span></button>
-          </article>
-        </div>
+        <div class="library-header"><div><p class="eyebrow">YOUR STUDY LIBRARY</p><h2>Learning sections</h2><p>Short, varied passes move each skill from examples to active recall.</p></div><span class="library-total" id="library-total"></span></div>
+        <div class="section-grid" id="section-grid"></div>
       </section>
       <section id="progress-view" class="view hidden" aria-labelledby="progress-heading">
         <div class="progress-header">
@@ -282,14 +174,21 @@
       </section>
     </main>
   </div>
-  <div class="celebration" id="celebration" hidden role="status" aria-live="polite">
-    <div class="celebration-card">
+  <div class="celebration" id="celebration" hidden role="dialog" aria-modal="true" aria-labelledby="celebration-title" aria-describedby="celebration-message">
+    <div class="celebration-card" tabindex="-1">
       <span class="celebration-icon">✦</span>
       <strong id="celebration-title">Sequence complete!</strong>
       <span id="celebration-message">Great work — every card is done.</span>
+      <span class="completion-stats" id="completion-stats"></span>
+      <div class="completion-actions">
+        <button class="primary-button" id="completion-primary" type="button"></button>
+        <button class="secondary-button" id="completion-secondary" type="button">Repeat with new examples</button>
+        <button class="text-button" id="completion-library" type="button">Return to library</button>
+      </div>
     </div>
     <div class="confetti" id="confetti" aria-hidden="true"></div>
   </div>
   <script src="script.js"></script>
+  <script src="app.js"></script>
 </body>
 </html>
