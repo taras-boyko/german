@@ -167,6 +167,203 @@ const pastVerbPracticeCards=pastVerbFormCards.map(card=>{
   return {word:infinitiveAndPresent,translation:card.translation,category:"PAST VERB FORMS · RECALL",prompt:`Schreibe Präteritum und Perfekt von ${infinitive}.`,exampleTranslation:"Введіть обидві форми через /.",answer:`${preterite} / ${perfect}`,answerTranslation:`${preterite} / ${perfect}`,practiceType:"cloze"};
 });
 const pastVerbCards=[...pastVerbFormCards,...pastVerbPracticeCards];
+const perfektFrameCards=[
+  {
+    id:"perfekt-frame-hausaufgaben",targetId:"perfekt-frame-haben",type:"sentence-build",
+    word:"Ich habe gestern die Hausaufgaben gemacht.",translation:"Я вчора зробив / зробила домашнє завдання.",category:"PERFEKT · SATZRAHMEN",
+    promptText:"Я вчора зробив / зробила домашнє завдання.",
+    example:"haben + gemacht",exampleTranslation:"Відмінюване haben стоїть на другому місці, Partizip II — у кінці.",
+    explanation:"Perfekt утворюється з відмінюваної форми haben та Partizip II у кінці речення.",
+    response:{mode:"text",scope:"sentence",accepted:["Ich habe gestern die Hausaufgaben gemacht."],caseSensitive:false,punctuationSensitive:false}
+  },
+  {
+    id:"perfekt-frame-abholen",targetId:"perfekt-frame-haben",type:"sentence-build",
+    word:"Ich habe meine Tochter von der Schule abgeholt.",translation:"Я забрав / забрала доньку зі школи.",category:"PERFEKT · SATZRAHMEN",
+    promptText:"Я забрав / забрала доньку зі школи.",
+    example:"habe + abgeholt",exampleTranslation:"У відокремлюваному дієслові ge стоїть між префіксом і основою.",
+    explanation:"Abholen утворює Partizip II abgeholt і вживається з haben.",
+    response:{mode:"text",scope:"sentence",accepted:["Ich habe meine Tochter von der Schule abgeholt."],caseSensitive:false,punctuationSensitive:false}
+  },
+  {
+    id:"perfekt-frame-schreiben",targetId:"perfekt-frame-haben",type:"sentence-build",
+    word:"Sie hat eine E-Mail geschrieben.",translation:"Вона написала електронного листа.",category:"PERFEKT · SATZRAHMEN",
+    promptText:"Вона написала електронного листа.",
+    example:"hat + geschrieben",exampleTranslation:"Неправильний Partizip II потрібно запам’ятати разом з інфінітивом.",
+    explanation:"Schreiben утворює Partizip II geschrieben і вживається з haben.",
+    response:{mode:"text",scope:"sentence",accepted:["Sie hat eine E-Mail geschrieben."],caseSensitive:false,punctuationSensitive:false}
+  },
+  {
+    id:"perfekt-frame-fahren",targetId:"perfekt-frame-sein",type:"sentence-build",
+    word:"Wir sind nach Berlin gefahren.",translation:"Ми поїхали до Берліна.",category:"PERFEKT · SATZRAHMEN",
+    promptText:"Ми поїхали до Берліна.",
+    example:"sein + gefahren",exampleTranslation:"Рух до іншого місця зазвичай утворює Perfekt із sein.",
+    explanation:"Fahren у значенні руху до іншого місця вживається з sein.",
+    response:{mode:"text",scope:"sentence",accepted:["Wir sind nach Berlin gefahren."],caseSensitive:false,punctuationSensitive:false}
+  },
+  {
+    id:"perfekt-frame-ankommen",targetId:"perfekt-frame-sein",type:"sentence-build",
+    word:"Der Bus ist spät angekommen.",translation:"Автобус прибув пізно.",category:"PERFEKT · SATZRAHMEN",
+    promptText:"Автобус прибув пізно.",
+    example:"ist + angekommen",exampleTranslation:"Ankommen описує прибуття й утворює Perfekt із sein.",
+    explanation:"Ankommen вживається з sein; Partizip II має форму angekommen.",
+    response:{mode:"text",scope:"sentence",accepted:["Der Bus ist spät angekommen."],caseSensitive:false,punctuationSensitive:false}
+  },
+  {
+    id:"perfekt-frame-bleiben",targetId:"perfekt-frame-sein",type:"sentence-build",
+    word:"Er ist zu Hause geblieben.",translation:"Він залишився вдома.",category:"PERFEKT · SATZRAHMEN",
+    promptText:"Він залишився вдома.",
+    example:"ist + geblieben",exampleTranslation:"Bleiben належить до поширених дієслів, що утворюють Perfekt із sein.",
+    explanation:"Bleiben вживається з sein і має Partizip II geblieben.",
+    response:{mode:"text",scope:"sentence",accepted:["Er ist zu Hause geblieben."],caseSensitive:false,punctuationSensitive:false}
+  }
+];
+const perfektRegularCards=[
+  {
+    id:"perfekt-regular-machen",targetId:"perfekt-participle-machen",type:"recall",
+    word:"gemacht",translation:"Partizip II від machen · робити",category:"PERFEKT · GE-…-T",promptText:"Утвори Partizip II: machen",
+    example:"Ich habe meine Hausaufgaben gemacht.",exampleTranslation:"Я зробив / зробила домашнє завдання.",
+    explanation:"Регулярне дієслово: ge- + mach + -t.",
+    response:{mode:"text",scope:"word",accepted:["gemacht"],caseSensitive:false,punctuationSensitive:false}
+  },
+  {
+    id:"perfekt-regular-spielen",targetId:"perfekt-participle-spielen",type:"recall",
+    word:"gespielt",translation:"Partizip II від spielen · грати",category:"PERFEKT · GE-…-T",promptText:"Утвори Partizip II: spielen",
+    example:"Die Kinder haben im Park gespielt.",exampleTranslation:"Діти гралися в парку.",
+    explanation:"Регулярне дієслово: ge- + spiel + -t.",
+    response:{mode:"text",scope:"word",accepted:["gespielt"],caseSensitive:false,punctuationSensitive:false}
+  },
+  {
+    id:"perfekt-regular-malen",targetId:"perfekt-participle-malen",type:"recall",
+    word:"gemalt",translation:"Partizip II від malen · малювати",category:"PERFEKT · GE-…-T",promptText:"Утвори Partizip II: malen",
+    example:"Du hast ein schönes Bild gemalt.",exampleTranslation:"Ти намалював / намалювала гарну картину.",
+    explanation:"Регулярне дієслово: ge- + mal + -t.",
+    response:{mode:"text",scope:"word",accepted:["gemalt"],caseSensitive:false,punctuationSensitive:false}
+  },
+  {
+    id:"perfekt-separable-abholen",targetId:"perfekt-participle-abholen",type:"recall",
+    word:"abgeholt",translation:"Partizip II від abholen · забирати",category:"PERFEKT · TRENNBAR",promptText:"Утвори Partizip II: abholen",
+    example:"Ich habe meine Tochter von der Schule abgeholt.",exampleTranslation:"Я забрав / забрала доньку зі школи.",
+    explanation:"У відокремлюваному дієслові ge стоїть після префікса: ab + ge + holt.",
+    response:{mode:"text",scope:"word",accepted:["abgeholt"],caseSensitive:false,punctuationSensitive:false}
+  },
+  {
+    id:"perfekt-separable-aufraeumen",targetId:"perfekt-participle-aufraeumen",type:"recall",
+    word:"aufgeräumt",translation:"Partizip II від aufräumen · прибирати",category:"PERFEKT · TRENNBAR",promptText:"Утвори Partizip II: aufräumen",
+    example:"Wir haben die Küche aufgeräumt.",exampleTranslation:"Ми прибрали кухню.",
+    explanation:"У відокремлюваному дієслові ge стоїть після префікса: auf + ge + räumt.",
+    response:{mode:"text",scope:"word",accepted:["aufgeräumt"],caseSensitive:false,punctuationSensitive:false}
+  },
+  {
+    id:"perfekt-separable-zumachen",targetId:"perfekt-participle-zumachen",type:"recall",
+    word:"zugemacht",translation:"Partizip II від zumachen · зачиняти",category:"PERFEKT · TRENNBAR",promptText:"Утвори Partizip II: zumachen",
+    example:"Sie hat das Fenster zugemacht.",exampleTranslation:"Вона зачинила вікно.",
+    explanation:"У відокремлюваному дієслові ge стоїть після префікса: zu + ge + macht.",
+    response:{mode:"text",scope:"word",accepted:["zugemacht"],caseSensitive:false,punctuationSensitive:false}
+  }
+];
+const perfektNoGeCards=[
+  {
+    id:"perfekt-no-ge-erzaehlen",targetId:"perfekt-participle-erzaehlen",type:"recall",
+    word:"erzählt",translation:"Partizip II від erzählen · розповідати",category:"PERFEKT · OHNE GE-",promptText:"Утвори Partizip II: erzählen",
+    example:"Er hat eine interessante Geschichte erzählt.",exampleTranslation:"Він розповів цікаву історію.",
+    explanation:"Невідокремлюваний префікс er- блокує ge-: erzähl + -t.",
+    response:{mode:"text",scope:"word",accepted:["erzählt"],caseSensitive:false,punctuationSensitive:false}
+  },
+  {
+    id:"perfekt-no-ge-beantworten",targetId:"perfekt-participle-beantworten",type:"recall",
+    word:"beantwortet",translation:"Partizip II від beantworten · відповідати",category:"PERFEKT · OHNE GE-",promptText:"Утвори Partizip II: beantworten",
+    example:"Ihr habt alle Fragen beantwortet.",exampleTranslation:"Ви відповіли на всі запитання.",
+    explanation:"Невідокремлюваний префікс be- блокує ge-; основа на -t потребує -et.",
+    response:{mode:"text",scope:"word",accepted:["beantwortet"],caseSensitive:false,punctuationSensitive:false}
+  },
+  {
+    id:"perfekt-no-ge-bearbeiten",targetId:"perfekt-participle-bearbeiten",type:"recall",
+    word:"bearbeitet",translation:"Partizip II від bearbeiten · опрацьовувати",category:"PERFEKT · OHNE GE-",promptText:"Утвори Partizip II: bearbeiten",
+    example:"Wir haben die Aufgabe zusammen bearbeitet.",exampleTranslation:"Ми разом опрацювали завдання.",
+    explanation:"Невідокремлюваний префікс be- блокує ge-; основа на -t потребує -et.",
+    response:{mode:"text",scope:"word",accepted:["bearbeitet"],caseSensitive:false,punctuationSensitive:false}
+  },
+  {
+    id:"perfekt-no-ge-studieren",targetId:"perfekt-participle-studieren",type:"recall",
+    word:"studiert",translation:"Partizip II від studieren · навчатися",category:"PERFEKT · -IEREN",promptText:"Утвори Partizip II: studieren",
+    example:"Ich habe in Kyjiw studiert.",exampleTranslation:"Я навчався / навчалася в Києві.",
+    explanation:"Дієслова на -ieren не мають ge- й утворюють Partizip II із закінченням -iert.",
+    response:{mode:"text",scope:"word",accepted:["studiert"],caseSensitive:false,punctuationSensitive:false}
+  },
+  {
+    id:"perfekt-no-ge-reparieren",targetId:"perfekt-participle-reparieren",type:"recall",
+    word:"repariert",translation:"Partizip II від reparieren · ремонтувати",category:"PERFEKT · -IEREN",promptText:"Утвори Partizip II: reparieren",
+    example:"Der Mechaniker hat das Auto repariert.",exampleTranslation:"Механік відремонтував автомобіль.",
+    explanation:"Дієслова на -ieren не мають ge- й утворюють Partizip II із закінченням -iert.",
+    response:{mode:"text",scope:"word",accepted:["repariert"],caseSensitive:false,punctuationSensitive:false}
+  },
+  {
+    id:"perfekt-no-ge-telefonieren",targetId:"perfekt-participle-telefonieren",type:"recall",
+    word:"telefoniert",translation:"Partizip II від telefonieren · телефонувати",category:"PERFEKT · -IEREN",promptText:"Утвори Partizip II: telefonieren",
+    example:"Sie hat lange mit ihrer Mutter telefoniert.",exampleTranslation:"Вона довго розмовляла телефоном зі своєю мамою.",
+    explanation:"Дієслова на -ieren не мають ge- й утворюють Partizip II із закінченням -iert.",
+    response:{mode:"text",scope:"word",accepted:["telefoniert"],caseSensitive:false,punctuationSensitive:false}
+  }
+];
+const perfektIrregularCards=[
+  {
+    id:"perfekt-irregular-schreiben",targetId:"perfekt-participle-schreiben",type:"recall",
+    word:"geschrieben",translation:"Partizip II від schreiben · писати",category:"PERFEKT · UNREGELMÄSSIG",promptText:"Утвори Partizip II: schreiben",
+    example:"Ich habe eine E-Mail geschrieben.",exampleTranslation:"Я написав / написала електронного листа.",
+    explanation:"Сильне дієслово змінює основу й має закінчення -en: geschrieben.",
+    response:{mode:"text",scope:"word",accepted:["geschrieben"],caseSensitive:false,punctuationSensitive:false}
+  },
+  {
+    id:"perfekt-irregular-sprechen",targetId:"perfekt-participle-sprechen",type:"recall",
+    word:"gesprochen",translation:"Partizip II від sprechen · говорити",category:"PERFEKT · UNREGELMÄSSIG",promptText:"Утвори Partizip II: sprechen",
+    example:"Wir haben über den Kurs gesprochen.",exampleTranslation:"Ми говорили про курс.",
+    explanation:"Сильне дієслово змінює основу й має закінчення -en: gesprochen.",
+    response:{mode:"text",scope:"word",accepted:["gesprochen"],caseSensitive:false,punctuationSensitive:false}
+  },
+  {
+    id:"perfekt-irregular-abfahren",targetId:"perfekt-participle-abfahren",type:"recall",
+    word:"abgefahren",translation:"Partizip II від abfahren · від'їжджати",category:"PERFEKT · TRENNBAR + STARK",promptText:"Утвори Partizip II: abfahren",
+    example:"Der Zug ist pünktlich abgefahren.",exampleTranslation:"Потяг відправився вчасно.",
+    explanation:"Відокремлюваний префікс зберігається перед ge: ab + ge + fahren.",
+    response:{mode:"text",scope:"word",accepted:["abgefahren"],caseSensitive:false,punctuationSensitive:false}
+  },
+  {
+    id:"perfekt-irregular-ankommen",targetId:"perfekt-participle-ankommen",type:"recall",
+    word:"angekommen",translation:"Partizip II від ankommen · прибувати",category:"PERFEKT · TRENNBAR + STARK",promptText:"Утвори Partizip II: ankommen",
+    example:"Meine Freunde sind gestern angekommen.",exampleTranslation:"Мої друзі прибули вчора.",
+    explanation:"Відокремлюваний префікс зберігається перед ge: an + ge + kommen.",
+    response:{mode:"text",scope:"word",accepted:["angekommen"],caseSensitive:false,punctuationSensitive:false}
+  },
+  {
+    id:"perfekt-irregular-versprechen",targetId:"perfekt-participle-versprechen",type:"recall",
+    word:"versprochen",translation:"Partizip II від versprechen · обіцяти",category:"PERFEKT · UNTRENNBAR",promptText:"Утвори Partizip II: versprechen",
+    example:"Du hast mir deine Hilfe versprochen.",exampleTranslation:"Ти пообіцяв / пообіцяла мені допомогу.",
+    explanation:"Невідокремлюваний префікс ver- блокує ge-; сильна форма — versprochen.",
+    response:{mode:"text",scope:"word",accepted:["versprochen"],caseSensitive:false,punctuationSensitive:false}
+  },
+  {
+    id:"perfekt-irregular-verbringen",targetId:"perfekt-participle-verbringen",type:"recall",
+    word:"verbracht",translation:"Partizip II від verbringen · проводити (час)",category:"PERFEKT · UNTRENNBAR",promptText:"Утвори Partizip II: verbringen",
+    example:"Wir haben den Sommer am Meer verbracht.",exampleTranslation:"Ми провели літо біля моря.",
+    explanation:"Невідокремлюваний префікс ver- блокує ge-; неправильна форма — verbracht.",
+    response:{mode:"text",scope:"word",accepted:["verbracht"],caseSensitive:false,punctuationSensitive:false}
+  },
+  {
+    id:"perfekt-irregular-gefallen",targetId:"perfekt-participle-gefallen",type:"recall",
+    word:"gefallen",translation:"Partizip II від gefallen · подобатися",category:"PERFEKT · BESONDERE FORM",promptText:"Утвори Partizip II: gefallen",
+    example:"Der Film hat mir gut gefallen.",exampleTranslation:"Мені дуже сподобався фільм.",
+    explanation:"Ge- належить до основи дієслова; Partizip II має форму gefallen.",
+    response:{mode:"text",scope:"word",accepted:["gefallen"],caseSensitive:false,punctuationSensitive:false}
+  },
+  {
+    id:"perfekt-irregular-gehoeren",targetId:"perfekt-participle-gehoeren",type:"recall",
+    word:"gehört",translation:"Partizip II від gehören · належати",category:"PERFEKT · BESONDERE FORM",promptText:"Утвори Partizip II: gehören",
+    example:"Das Buch hat meiner Schwester gehört.",exampleTranslation:"Книжка належала моїй сестрі.",
+    explanation:"Ge- належить до основи дієслова; регулярне закінчення дає форму gehört.",
+    response:{mode:"text",scope:"word",accepted:["gehört"],caseSensitive:false,punctuationSensitive:false}
+  }
+];
+const perfektCards=[...perfektFrameCards,...perfektRegularCards,...perfektNoGeCards,...perfektIrregularCards];
 const clozeCard=(word,translation,prompt)=>({word,translation,category:"CLOZE PRACTICE",prompt,exampleTranslation:"Доповни речення правильною формою дієслова.",practiceVariants:false});
 const translationCard=(word,translation)=>({word,translation,category:"TRANSLATION PRACTICE",prompt:translation,example:word,exampleTranslation:"Введіть лише відмінювану форму дієслова.",practiceVariants:false});
 const presentPracticeCards=[
@@ -796,6 +993,16 @@ const pastVerbStages=[
   lessonStep("past-verbs-learn","Learn past verb forms","Read the infinitive, present form, Präteritum, and Perfekt form for each common A1 verb.",pastVerbFormCards,"learn","Past verb forms","Learn"),
   lessonStep("past-verbs-practice","Practice past verb forms","Enter the Präteritum and Perfekt forms for every verb, separated by a slash.",pastVerbPracticeCards,"input","Past verb forms","Practice")
 ];
+const perfektStages=[
+  lessonStep("perfekt-frame-learn","Learn the Perfekt sentence frame","Compare sentences with haben and sein. The conjugated auxiliary is in position two and Partizip II closes the sentence.",perfektFrameCards,"learn","Sentence frame","Learn"),
+  lessonStep("perfekt-frame-practice","Build complete Perfekt sentences","Translate each Ukrainian cue into a complete German sentence with the correct auxiliary and final participle.",perfektFrameCards,"input","Sentence frame","Practice"),
+  lessonStep("perfekt-regular-learn","Learn regular participles","Form regular participles with ge-…-t, and place ge between a separable prefix and the stem.",perfektRegularCards,"learn","Regular & separable","Learn"),
+  lessonStep("perfekt-regular-practice","Practice regular participles","Write the Partizip II form for regular and separable verbs.",perfektRegularCards,"input","Regular & separable","Practice"),
+  lessonStep("perfekt-no-ge-learn","Learn when ge- disappears","Notice that inseparable prefixes and verbs ending in -ieren form Partizip II without an added ge-.",perfektNoGeCards,"learn","Without ge-","Learn"),
+  lessonStep("perfekt-no-ge-practice","Practice participles without ge-","Write the Partizip II form for verbs with inseparable prefixes and verbs ending in -ieren.",perfektNoGeCards,"input","Without ge-","Practice"),
+  lessonStep("perfekt-irregular-learn","Learn irregular participles","Learn strong and mixed participles, including separable and inseparable forms.",perfektIrregularCards,"learn","Irregular forms","Learn"),
+  lessonStep("perfekt-irregular-practice","Practice irregular participles","Retrieve each irregular Partizip II form from its infinitive and context.",perfektIrregularCards,"input","Irregular forms","Practice")
+];
 const presentClozeCards=presentPracticeCards.filter(card=>card.category==="CLOZE PRACTICE");
 const presentTranslationCards=presentPracticeCards.filter(card=>card.category==="TRANSLATION PRACTICE");
 const presentPracticeStages=[
@@ -884,6 +1091,7 @@ const deckDefinitions={
   conjugation:{title:"Verb conjugation",label:"Verb conjugation",badge:"V",tip:"Weak verbs take regular endings: -e, -st, -t, -en, -t, -en. After a stem ending in -t or -d, add an extra e.",guide:{title:"Слабкі дієслова в Präsens",intro:"Візьміть основу дієслова й доберіть закінчення, що відповідає підмету.",rules:[{title:"Використовуйте регулярні закінчення",detail:"Більшість слабких дієслів відмінюються за однаковою схемою від ich до sie/Sie.",formula:"ich -e · du -st · er/sie/es -t · wir -en · ihr -t · sie/Sie -en"},{title:"Додавайте додаткове -e",detail:"Якщо основа закінчується на -t, -d або приголосний + -m/-n, додайте e перед закінченням.",formula:"du arbeitest · er arbeitet · ihr arbeitet"},{title:"Не додавайте зайве -s",detail:"В основах на -s, -ß або -z форма du має закінчення -t замість -st.",formula:"du heißt · du tanzt · du übersetzt"}]},cards:conjugationCards,stages:conjugationStages},
   "strong-verbs":{title:"Strong verbs",label:"Strong verbs",badge:"ä",tip:"Strong verbs can change their stem vowel in singular present-tense forms.",guide:{title:"Сильні дієслова в Präsens",intro:"Спочатку повторіть повну парадигму кожного дієслова, а потім утворюйте всі форми за картками з пропусками.",rules:[{title:"Зміна e на i",detail:"Sprechen, treffen, lesen і essen змінюють e на i у другій та третій особі однини.",formula:"du sprichst · er trifft · sie liest · du isst"},{title:"Зміна a на ä",detail:"Fahren змінює a на ä у другій та третій особі однини.",formula:"du fährst · er fährt"},{title:"Особлива форма wissen",detail:"Wissen має weiß у ich і er/sie/es, weißt у du та регулярну основу wiss- у множині.",formula:"ich weiß · du weißt · wir wissen"},{title:"Зберігайте основу в множині",detail:"Зміна голосного не відбувається з wir, ihr або sie/Sie.",formula:"wir sprechen · ihr esst · sie wissen"}]},cards:strongVerbCards,stages:strongVerbStages},
   "past-verbs":{title:"Past verb forms",label:"Past verb forms",badge:"V2",tip:"Learn each verb as a four-part pattern: infinitive, present form, Präteritum, and Perfekt.",guide:{title:"Минулий час: Präteritum і Perfekt",intro:"Вивчайте поширені дієслова як повний набір форм, щоб упізнавати минулий час у текстах і вживати Perfekt у розмові.",rules:[{title:"Präteritum",detail:"Ця проста форма минулого часу часто трапляється в письмових текстах і розповідях.",formula:"gehen → ging · finden → fand"},{title:"Perfekt",detail:"Perfekt складається з haben або sein та Partizip II.",formula:"hat gefunden · ist gegangen"},{title:"Haben або sein",detail:"Дієслова руху та зміни стану зазвичай утворюють Perfekt з sein.",formula:"ist gefahren · ist geblieben · ist gekommen"},{title:"Упізнавайте форми в парі",detail:"Під час практики вводьте спочатку Präteritum, а потім Perfekt через похилу риску.",formula:"begann / hat begonnen"}]},cards:pastVerbCards,stages:pastVerbStages},
+  perfekt:{title:"Perfekt formation",label:"Perfekt formation",badge:"P2",tip:"Build Perfekt with a conjugated form of haben or sein and Partizip II at the end.",guide:{title:"Perfekt: haben / sein + Partizip II",intro:"Perfekt — основний розмовний минулий час. Спочатку оберіть haben або sein, потім утворіть Partizip II й поставте його в кінець речення.",rules:[{title:"Будуйте рамку речення",detail:"Відмінюване haben або sein стоїть на другому місці, а Partizip II — у кінці.",formula:"Ich habe die Hausaufgaben gemacht."},{title:"Уживайте sein для руху та зміни стану",detail:"Більшість дієслів уживаються з haben. Sein потрібне насамперед для руху до іншого місця, зміни стану, а також із bleiben.",formula:"Wir sind gefahren. · Er ist geblieben."},{title:"Регулярні дієслова: ge-…-t",detail:"Додайте ge- перед основою та -t у кінці. У відокремлюваних дієсловах ge стоїть після префікса.",formula:"machen → gemacht · abholen → abgeholt"},{title:"Без ge-",detail:"Невідокремлювані префікси be-, emp-, ent-, er-, miss-, ver-, zer- та дієслова на -ieren не отримують ge-.",formula:"erzählen → erzählt · studieren → studiert"},{title:"Неправильні форми",detail:"Сильні й змішані дієслова можуть змінювати основу; їхню форму потрібно запам’ятовувати.",formula:"schreiben → geschrieben · verbringen → verbracht"}]},cards:perfektCards,stages:perfektStages},
   "present-practice":{title:"Present-tense practice",practiceTitle:"Present-tense practice",label:"Präsens practice",badge:"P",tip:"Use this focused review to retrieve conjugated forms in context. Revise each verb pattern in its dedicated lesson first.",guide:{title:"Відпрацювання форм Präsens",intro:"Це повторення вже вивчених моделей дієвідмінювання, а не вступ до нових правил. Використовуйте речення як контекст, але вводьте лише відмінювану форму або форми.",rules:["У частині з пропусками введіть форму, якої бракує в німецькому реченні; підказка в дужках показує інфінітив.","У частині з українськими підказками визначте особу й число, а потім введіть лише відповідну німецьку форму, не все речення.","Вправа повторює слабкі, сильні та неправильні форми, зокрема sein, gehen, fahren, sehen і möchten."]},cards:presentPracticeCards,stages:presentPracticeStages},
   koennen:{title:"Modal verbs",label:"Modal verbs",badge:"M",tip:"Use können for ability, mögen for likes, and möchten for polite wishes.",guide:{title:"Модальні дієслова: können, mögen і möchten",intro:"Ці дієслова допомагають говорити про вміння, уподобання та ввічливі бажання. Форма залежить від підмета.",rules:["Können означає «могти, вміти»: ich kann, du kannst, er/sie/es kann, wir können, ihr könnt, sie/Sie können.","Mögen означає «любити, подобатися»: ich mag, du magst, er/sie/es mag, wir mögen, ihr mögt, sie/Sie mögen.","Möchten — форма Konjunktiv II від mögen. У сучасній мові вона означає ввічливе «хотів би / хотіла б»: ich möchte, du möchtest, er/sie/es möchte, wir möchten, ihr möchtet, sie/Sie möchten.","Порівнюйте значення: Ich mag Kaffee. = «Мені подобається кава». Ich möchte einen Kaffee. = «Я хотів би / хотіла б каву».","З können і möchten друге дієслово стоїть в інфінітиві в кінці речення: Ich kann schwimmen. Wir möchten bezahlen."]},cards:koennenCards,stages:koennenStages},
   haben:{title:"Haben, bekommen & brauchen",label:"Haben, bekommen & brauchen",badge:"hab",tip:"Use haben for what you have, bekommen for what you receive, and brauchen for what you need.",guide:{title:"Haben, bekommen & brauchen",intro:"Ці три дієслова допомагають говорити про речі, людей, потреби та отримання в повсякденних ситуаціях A1.",rules:["haben означає «мати»: Ich habe einen Hund.","bekommen означає «отримувати»: Wir bekommen morgen Geld.","brauchen означає «потребувати»: Er braucht eine neue Brille.","Форми bekommen і brauchen відмінюються регулярно; haben має особливі форми du hast, er/sie/es hat та ihr habt."]},cards:habenCards,stages:habenStages},

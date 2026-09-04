@@ -14,6 +14,7 @@ const lessonCatalog={
   conjugation:{outcome:"Apply regular present-tense endings and spelling rules.",className:"Morphology",color:"orange"},
   "strong-verbs":{outcome:"Produce strong-verb forms accurately in context.",className:"Morphology",color:"blue"},
   "past-verbs":{outcome:"Recall common Präteritum and Perfekt forms.",className:"Morphology",color:"purple"},
+  perfekt:{outcome:"Build Perfekt with the right auxiliary and Partizip II pattern.",className:"Morphology",color:"green"},
   "present-practice":{outcome:"Retrieve present-tense forms from context and meaning.",className:"Morphology",color:"green"},
   koennen:{outcome:"Use können, mögen, and möchten in useful sentences.",className:"Grammar choice",color:"blue"},
   haben:{outcome:"Distinguish having, receiving, and needing.",className:"Grammar choice",color:"green"},
