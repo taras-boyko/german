@@ -687,6 +687,12 @@ const leisureActivityCards=[
   {word:"ein paar",translation:"кілька",category:"FREIZEIT · MENGE",example:"Es gibt ein paar Cafés in der Straße.",exampleTranslation:"На вулиці є кілька кафе."},
   {word:"das ganze Jahr",translation:"увесь рік",category:"FREIZEIT · ZEIT",example:"Das Schwimmbad ist das ganze Jahr geöffnet.",exampleTranslation:"Басейн відкритий увесь рік."}
 ];
+const photoDescriptionCards=[
+  {word:"auf dem Foto",translation:"на фотографії",category:"FOTOBESCHREIBUNG · ORT",example:"Auf dem Foto sind zwei Menschen.",exampleTranslation:"На фотографії двоє людей."},
+  {word:"denken",translation:"думати",category:"FOTOBESCHREIBUNG · VERB",example:"Der Mann denkt an seine Familie.",exampleTranslation:"Чоловік думає про свою сім'ю."},
+  {word:"der Mensch / die Menschen",translation:"людина / люди",category:"FOTOBESCHREIBUNG · PERSON",example:"Die Menschen stehen vor dem Museum.",exampleTranslation:"Люди стоять перед музеєм."},
+  {word:"etwas",translation:"щось",category:"FOTOBESCHREIBUNG · PRONOMEN",example:"Die Frau sucht etwas in ihrer Tasche.",exampleTranslation:"Жінка шукає щось у своїй сумці."}
+];
 const separableVerbPatternCards=[
   {word:"Hauptsatz: Ich stehe früh auf.",translation:"Головне речення: префікс іде в кінець.",category:"TRENNBARE VERBEN · HAUPTSATZ",example:"aufstehen → ich stehe auf",exampleTranslation:"У головному реченні відмінюється лише основа, а префікс стоїть наприкінці."},
   {word:"..., weil ich früh aufstehe.",translation:"Підрядне речення: дієслово не розділяється.",category:"TRENNBARE VERBEN · NEBENSATZ",example:"weil ich früh aufstehe",exampleTranslation:"У підрядному реченні відмінювана форма з префіксом стоїть разом у кінці."},
@@ -830,7 +836,8 @@ const esGibtLeisureStages=[
   lessonStep("es-gibt-pattern-learn","Learn Es gibt","Use Es gibt to say that a place or thing exists. Notice the accusative article after it.",esGibtPatternCards,"learn","Es gibt","Learn"),
   lessonStep("es-gibt-pattern-practice","Practice Es gibt","Complete sentences with gibt or the correct accusative article after Es gibt.",esGibtPracticeCards,"input","Es gibt","Practice"),
   ...learnThenPractice("leisure-places","leisure places","Learn each leisure place with its article and plural form.",leisurePlaceCards,"Leisure places"),
-  ...learnThenPractice("leisure-activities","leisure activities","Describe what people can do in town and use the new words in context.",leisureActivityCards,"Leisure activities")
+  ...learnThenPractice("leisure-activities","leisure activities","Describe what people can do in town and use the new words in context.",leisureActivityCards,"Leisure activities"),
+  ...learnThenPractice("photo-description","photo descriptions","Describe what and who you see in a photo.",photoDescriptionCards,"Photo descriptions")
 ];
 const wordOrderStages=[
   lessonStep("word-order-statements-learn","Learn direct statements","See how the subject comes first and the conjugated verb stays in second position.",wordOrderStatementCards,"learn","Direct statements","Learn"),
