@@ -1,2 +1,6 @@
 ~$*.docx
 data/lesson-history.json
+.DS_Store
+.grammar-preview.html
+__pycache__/
+*.py[cod]
