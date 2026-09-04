@@ -479,6 +479,7 @@ const frequencyCards=[
   {word:"fast nie",translation:"майже ніколи",category:"FREQUENCY ADVERB",example:"Du kommst fast nie zu spät.",exampleTranslation:"Ти майже ніколи не запізнюєшся."},
   {word:"nie",translation:"ніколи",category:"FREQUENCY ADVERB",example:"Wir essen nie Fleisch.",exampleTranslation:"Ми ніколи не їмо м'яса."}
 ];
+const frequencyPracticeCards=frequencyCards.map(card=>({...card,practiceVariants:false}));
 const timeExpressionCards=[
   {word:"um",translation:"о (годині)",category:"PRÄPOSITION · ZEIT",example:"Der Deutschkurs beginnt um acht Uhr.",exampleTranslation:"Курс німецької починається о восьмій годині."},
   {word:"am (= an dem)",translation:"у / в (день, дата)",category:"PRÄPOSITION · TAG & DATUM",example:"Am Dienstag habe ich frei.",exampleTranslation:"У вівторок я вільний / вільна."},
@@ -829,7 +830,8 @@ const habenStages=[
   lessonStep("brauchen-practice","Practice brauchen","Enter only the missing conjugated form of brauchen in each sentence.",brauchenPracticeCards,"input","brauchen","Practice")
 ];
 const frequencyStages=[
-  ...learnThenPractice("frequency-scale","the frequency scale","Work through immer to nie in descending frequency, then practice every adverb in the same sequence.",frequencyCards,"Frequency scale")
+  lessonStep("frequency-scale-learn","Learn the frequency scale","Work through immer to nie in descending frequency before practising every adverb in the same sequence.",frequencyCards,"learn","Frequency scale","Learn"),
+  lessonStep("frequency-scale-recall","Practice the frequency scale","Write only the German frequency adverb for each Ukrainian meaning.",frequencyPracticeCards,"input","Frequency scale","Practice")
 ];
 const timeExpressionStages=[
   lessonStep("time-expressions-learn","Learn time expressions","Connect um, am, im, in, and the Nacht forms with their time patterns before practising in context.",timeExpressionCards,"learn","Time expressions","Learn"),
