@@ -92,21 +92,31 @@
                 <div class="w-badge" id="w-badge">W</div>
                 <h3 id="question-word">Warum?</h3>
                 <p class="translation" id="translation">Why?</p>
+                <p class="prompt-support" id="prompt-support" hidden></p>
+                <p class="feedback-outcome" id="feedback-outcome" hidden role="status" aria-live="polite">
+                  <strong id="feedback-title"></strong>
+                  <span id="feedback-detail"></span>
+                </p>
                 <div class="original-question" id="original-question" hidden>
                   <span class="answer-label">Original prompt</span>
                   <strong id="original-question-text"></strong>
                 </div>
-                <div class="answer" id="answer"><span class="answer-label">Example sentence</span><strong id="example">Warum fährst du heute mit dem Bus?</strong><small id="example-translation">Чому ти сьогодні їдеш автобусом?</small></div>
+                <div class="answer" id="answer">
+                  <details class="feedback-context" id="feedback-context">
+                    <summary><span class="answer-label" id="example-label">Example sentence</span><span class="context-action" aria-hidden="true">Show</span></summary>
+                    <div class="answer-content"><strong id="example">Warum fährst du heute mit dem Bus?</strong><small id="example-translation">Чому ти сьогодні їдеш автобусом?</small></div>
+                  </details>
+                </div>
                 <div class="verification-panel" id="verification-panel">
                   <span class="answer-label" id="verification-label">Write the German answer</span>
                   <div class="correction-display" id="correction-display" hidden aria-label="Answer corrections">
-                    <span class="answer-label">Your answer · corrections</span>
+                    <span class="answer-label">Your answer</span>
                     <div class="correction-text" id="correction-text"></div>
-                    <div class="correction-legend"><span class="legend-wrong">Crossed out</span><span class="legend-right">Corrected</span></div>
                   </div>
                   <input id="verification-input" type="text" autocomplete="off" placeholder="Type the German answer...">
                   <button class="check-button" id="check-button" type="button">Check answer</button>
                   <p class="verification-feedback" id="verification-feedback" role="status"></p>
+                  <p class="feedback-explanation" id="feedback-explanation" hidden></p>
                 </div>
               </div>
               <div class="flip-hint" id="flip-hint"><span>→</span> Example sentence shown below</div>

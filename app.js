@@ -490,13 +490,13 @@ function contextualRecallVariant(card){
   return {
     ...card,
     id:`${card.targetId}:context-recall:${stableHash(card.exampleTranslation)}`,
-    promptText:`${card.exampleTranslation} Target meaning: ${card.translation}`,
-    studyTranslation:card.exampleTranslation
+    promptText:card.translation,
+    support:card.exampleTranslation
   };
 }
 
 function variantsForStage(stage){
-  if(stage.mode!=="input")return stage.cards.flatMap(card=>[card,contextualRecallVariant(card)].filter(Boolean));
+  if(stage.mode!=="input")return stage.cards;
   return stage.cards.flatMap(card=>[card,contextualRecallVariant(card),contextVariant(card)].filter(Boolean));
 }
 
@@ -805,21 +805,55 @@ function inputCopy(card){
   return ["Write the German answer","Type the German answer..."];
 }
 
+function feedbackExample(card){
+  if(card.type==="recall")return {label:"Example in context",text:card.example||card.word,translation:card.exampleTranslation||card.translation};
+  if(/[.?!]$/.test(card.word.trim()))return {label:"Correct sentence",text:card.word,translation:card.translation};
+  if(card.example&&!card.example.includes("___"))return {label:"Example in context",text:card.example,translation:card.exampleTranslation||card.translation};
+  return {label:"Correct answer",text:card.response.accepted[0],translation:card.translation};
+}
+
+function feedbackExplanation(card){
+  if(card.explanation)return card.explanation;
+  if(card.type==="cloze")return "Use the sentence context to identify the required German form.";
+  if(card.type==="sentence-build")return "Rebuild the sentence with the required German word order.";
+  return `Connect “${card.translation}” with “${card.response.accepted[0]}”.`;
+}
+
+function feedbackOutcome(card,wasCorrect){
+  const answer=card.response.accepted[0];
+  if(wasCorrect)return {tone:"correct",title:`Correct — ${answer}`,detail:"Your recall is on target."};
+  return {tone:"incorrect",title:`Not quite — ${answer}`,detail:"Compare your answer with the correction below, then try this target again."};
+}
+
 function render(focusTarget=""){
   const card=deck[index],definition=activeDefinition(),stage=activeStage(),session=learningState.activeSession;
   if(!card)return;
   const revealed=verified||answerRevealed,expected=card.response.accepted[0],[inputLabel,inputPlaceholder]=inputCopy(card);
+  const example=feedbackExample(card);
+  const feedbackVisible=verificationMode&&revealed;
+  const support=verificationMode?card.support||"":"";
   renderLessonPath();
   renderDeckGuide();
-  $("question-word").textContent=verificationMode?(revealed?expected:card.promptText):card.word;
-  $("translation").textContent=verificationMode?(revealed?"Correct answer":inputLabel):(card.studyTranslation||card.translation);
+  $("question-word").textContent=verificationMode?card.promptText:card.word;
+  $("translation").textContent=verificationMode?(revealed?"Your German recall":inputLabel):(card.studyTranslation||card.translation);
+  $("prompt-support").textContent=support;
+  $("prompt-support").hidden=!support;
   $("original-question-text").textContent=card.promptText;
-  $("original-question").hidden=!answerRevealed;
+  $("original-question").hidden=true;
   $("category-label").textContent=`${card.category} · ${card.type.replace("-"," ").toUpperCase()}`;
   $("w-badge").textContent=definition.badge;
   $("study-tip").textContent=definition.tip;
-  $("example").textContent=verificationMode?card.word:(card.example||card.word);
-  $("example-translation").textContent=verificationMode?card.translation:(card.exampleTranslation||card.translation);
+  $("feedback-outcome").hidden=!feedbackVisible;
+  $("feedback-outcome").className=`feedback-outcome ${verified?"correct":"incorrect"}`;
+  if(feedbackVisible){
+    const outcome=feedbackOutcome(card,verified);
+    $("feedback-title").textContent=outcome.title;
+    $("feedback-detail").textContent=outcome.detail;
+  }
+  $("example-label").textContent=verificationMode&&revealed?example.label:"Example sentence";
+  $("example").textContent=verificationMode&&revealed?example.text:(card.example||card.word);
+  $("example-translation").textContent=verificationMode&&revealed?example.translation:(card.exampleTranslation||card.translation);
+  $("feedback-context").open=!verificationMode;
   $("practice-portion").hidden=false;
   $("new-practice-portion").innerHTML='New pass <span aria-hidden="true">↻</span>';
   const coverage=stageCoverage(stage);
@@ -838,16 +872,20 @@ function render(focusTarget=""){
   $("verification-input").readOnly=revealed;
   $("flashcard").classList.toggle("flipped",!verificationMode||revealed);
   $("flashcard").classList.toggle("retry-card",Boolean(card.retry));
+  $("flashcard").classList.toggle("long-prompt",verificationMode&&card.promptText.length>42);
   $("answer").style.display=verificationMode&&revealed?"block":verificationMode?"none":"";
   $("verification-panel").classList.toggle("visible",verificationMode);
   $("study-actions").classList.toggle("hidden",verificationMode);
   $("continue-button").innerHTML='Next card <span>→</span>';
-  $("flip-hint").hidden=!verificationMode;
+  $("flip-hint").hidden=!verificationMode||revealed;
   $("flip-hint").innerHTML=verificationMode?(revealed?'<span>→</span> Press Enter for next card':'<span>✓</span> Type the answer and press Enter'):"";
   $("check-button").textContent=revealed?"Next card":"Check answer";
   $("correction-display").hidden=!answerRevealed;
   $("verification-input").value=revealed?(session?.cardInputs?.[String(index)]||expected):"";
   if(answerRevealed)renderCorrection($("verification-input").value,expected,card.response);else $("correction-text").replaceChildren();
+  $("verification-feedback").hidden=feedbackVisible;
+  $("feedback-explanation").hidden=!answerRevealed;
+  $("feedback-explanation").textContent=answerRevealed?feedbackExplanation(card):"";
   const firstTotal=session?.firstAttemptTotal||0,firstCorrect=session?.firstAttemptCorrect||0;
   $("accuracy-rate").textContent=`${firstTotal?Math.round(firstCorrect/firstTotal*100):0}%`;
   updatePageTitle("practice");
