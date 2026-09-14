@@ -233,7 +233,7 @@ function createPastVerbLevelCards(level,entries,{includePreterite=()=>true}={}){
 const pastVerbA1AdditionalEntries=[
   ["lesen","lesen","liest","las","hat gelesen","читати","Ich habe den Brief gelesen.","Я прочитав / прочитала листа."],
   ["moegen","mögen","mag","mochte","hat gemocht","любити / подобатися","Als Kind habe ich keinen Spinat gemocht.","У дитинстві я не любив / не любила шпинат."],
-  ["muessen","müssen","muss","musste","hat gemusst","мусити","Wir haben lange warten müssen.","Нам довелося довго чекати."],
+  ["muessen","müssen","muss","musste","hat gemusst","мусити","Wir haben das nicht gemusst.","Нам не довелося цього робити."],
   ["nehmen","nehmen","nimmt","nahm","hat genommen","брати","Sie hat den Bus genommen.","Вона поїхала автобусом."],
   ["rufen","rufen","ruft","rief","hat gerufen","кликати","Er hat mich gerufen.","Він мене покликав."],
   ["schlafen","schlafen","schläft","schlief","hat geschlafen","спати","Das Kind hat gut geschlafen.","Дитина добре спала."],
@@ -242,14 +242,14 @@ const pastVerbA1AdditionalEntries=[
   ["sehen","sehen","sieht","sah","hat gesehen","бачити","Ich habe den Film schon gesehen.","Я вже бачив / бачила цей фільм."],
   ["sein","sein","ist","war","ist gewesen","бути","Ich bin gestern zu Hause gewesen.","Учора я був / була вдома."],
   ["singen","singen","singt","sang","hat gesungen","співати","Sie haben zusammen gesungen.","Вони співали разом."],
-  ["sollen","sollen","soll","sollte","hat gesollt","мати обов'язок / слід","Ich habe meine Mutter anrufen sollen.","Мені слід було зателефонувати мамі."],
+  ["sollen","sollen","soll","sollte","hat gesollt","мати обов'язок / слід","Ich habe das nicht gesollt.","Мені не слід було цього робити."],
   ["sprechen","sprechen","spricht","sprach","hat gesprochen","говорити","Wir haben über das Problem gesprochen.","Ми поговорили про проблему."],
   ["stehen","stehen","steht","stand","hat gestanden","стояти","Das Glas hat auf dem Tisch gestanden.","Склянка стояла на столі."],
   ["treffen","treffen","trifft","traf","hat getroffen","зустрічати","Ich habe meine Freunde getroffen.","Я зустрів / зустріла друзів."],
   ["trinken","trinken","trinkt","trank","hat getrunken","пити","Er hat einen Kaffee getrunken.","Він випив кави."],
   ["tun","tun","tut","tat","hat getan","робити","Was hast du getan?","Що ти зробив / зробила?"],
   ["wissen","wissen","weiß","wusste","hat gewusst","знати","Ich habe die Antwort nicht gewusst.","Я не знав / не знала відповіді."],
-  ["wollen","wollen","will","wollte","hat gewollt","хотіти","Sie hat früh nach Hause gehen wollen.","Вона хотіла рано піти додому."]
+  ["wollen","wollen","will","wollte","hat gewollt","хотіти","Sie hat das nicht gewollt.","Вона цього не хотіла."]
 ];
 const pastVerbA2Entries=[
   ["duerfen","dürfen","darf","durfte","hat gedurft","мати дозвіл","Als Kind durfte ich lange aufbleiben.","У дитинстві мені дозволяли довго не спати."],
