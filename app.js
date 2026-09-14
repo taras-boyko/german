@@ -574,7 +574,8 @@ function stageIsComplete(lessonId,stage){
 }
 
 function stageCoverage(stage){
-  const covered=progressTargets(activeDeckId,stage).size,total=new Set(stageTargetIds(stage)).size;
+  const targetIds=new Set(stageTargetIds(stage));
+  const covered=[...progressTargets(activeDeckId,stage)].filter(targetId=>targetIds.has(targetId)).length,total=targetIds.size;
   return {covered,total};
 }
 
