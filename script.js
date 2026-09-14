@@ -153,35 +153,45 @@ const strongVerbPracticeCards=[
   strongVerbClozeCard("Sie fangen am Montag mit dem neuen Projekt an.","Вони починають новий проєкт у понеділок.","Sie ___ am Montag mit dem neuen Projekt ___. (anfangen)","fangen / an","починають")
 ];
 const strongVerbCards=[...strongVerbFormCards,...strongVerbPracticeCards];
-const pastVerbLegacyA1FormCards=[
-  {word:"beginnen (beginnt) · begann · hat begonnen",translation:"починати",category:"VERB FORMS · BEGINNEN",example:"Der Kurs begann um neun Uhr.",exampleTranslation:"Курс почався о дев'ятій годині."},
-  {word:"bleiben (bleibt) · blieb · ist geblieben",translation:"залишатися",category:"VERB FORMS · BLEIBEN",example:"Ich blieb zu Hause.",exampleTranslation:"Я залишився / залишилася вдома."},
-  {word:"bringen (bringt) · brachte · hat gebracht",translation:"приносити",category:"VERB FORMS · BRINGEN",example:"Sie brachte Blumen.",exampleTranslation:"Вона принесла квіти."},
-  {word:"denken (denkt) · dachte · hat gedacht",translation:"думати",category:"VERB FORMS · DENKEN",example:"Ich dachte an dich.",exampleTranslation:"Я думав / думала про тебе."},
-  {word:"dürfen (darf) · durfte · hat gedurft",translation:"мати дозвіл",category:"VERB FORMS · DÜRFEN",example:"Wir durften früher gehen.",exampleTranslation:"Нам дозволили піти раніше."},
-  {word:"essen (isst) · aß · hat gegessen",translation:"їсти",category:"VERB FORMS · ESSEN",example:"Er aß ein Brot.",exampleTranslation:"Він з'їв хліб."},
-  {word:"fahren (fährt) · fuhr · ist gefahren",translation:"їхати / керувати",category:"VERB FORMS · FAHREN",example:"Sie fuhr mit dem Zug.",exampleTranslation:"Вона їхала потягом."},
-  {word:"fangen (fängt) · fing · hat gefangen",translation:"ловити",category:"VERB FORMS · FANGEN",example:"Das Kind fing den Ball.",exampleTranslation:"Дитина зловила м'яч."},
-  {word:"finden (findet) · fand · hat gefunden",translation:"знаходити",category:"VERB FORMS · FINDEN",example:"Ich fand meinen Schlüssel.",exampleTranslation:"Я знайшов / знайшла свій ключ."},
-  {word:"fliegen (fliegt) · flog · ist geflogen",translation:"літати",category:"VERB FORMS · FLIEGEN",example:"Wir flogen nach Berlin.",exampleTranslation:"Ми полетіли до Берліна."},
-  {word:"geben (gibt) · gab · hat gegeben",translation:"давати",category:"VERB FORMS · GEBEN",example:"Er gab mir ein Buch.",exampleTranslation:"Він дав мені книжку."},
-  {word:"gehen (geht) · ging · ist gegangen",translation:"йти",category:"VERB FORMS · GEHEN",example:"Sie ging nach Hause.",exampleTranslation:"Вона пішла додому."},
-  {word:"haben (hat) · hatte · hat gehabt",translation:"мати",category:"VERB FORMS · HABEN",example:"Wir hatten viel Zeit.",exampleTranslation:"У нас було багато часу."},
-  {word:"heißen (heißt) · hieß · hat geheißen",translation:"називатися",category:"VERB FORMS · HEISSEN",example:"Früher hieß die Straße anders.",exampleTranslation:"Раніше вулиця називалася інакше."},
-  {word:"helfen (hilft) · half · hat geholfen",translation:"допомагати",category:"VERB FORMS · HELFEN",example:"Meine Freundin half mir.",exampleTranslation:"Моя подруга допомогла мені."},
-  {word:"kennen (kennt) · kannte · hat gekannt",translation:"знати / бути знайомим",category:"VERB FORMS · KENNEN",example:"Ich kannte ihn lange.",exampleTranslation:"Я давно його знав / знала."},
-  {word:"kommen (kommt) · kam · ist gekommen",translation:"приходити / прибувати",category:"VERB FORMS · KOMMEN",example:"Der Bus kam spät.",exampleTranslation:"Автобус прибув пізно."},
-  {word:"können (kann) · konnte · hat gekonnt",translation:"могти / вміти",category:"VERB FORMS · KÖNNEN",example:"Als Kind konnte ich schon schwimmen.",exampleTranslation:"У дитинстві я вже вмів плавати."}
-].map(card=>({...card,exampleLabel:"Präteritum in context"}));
-const pastVerbLegacyA1PracticeCards=pastVerbLegacyA1FormCards.map(card=>{
-  const [infinitiveAndPresent,preterite,perfect]=card.word.split(" · ");
+const pastVerbLegacyA1SourceCards=[
+  {word:"beginnen (beginnt) · begann · hat begonnen",translation:"починати",category:"VERB FORMS · BEGINNEN",example:"Der Kurs hat um neun Uhr begonnen.",exampleTranslation:"Курс почався о дев'ятій годині."},
+  {word:"bleiben (bleibt) · blieb · ist geblieben",translation:"залишатися",category:"VERB FORMS · BLEIBEN",example:"Ich bin zu Hause geblieben.",exampleTranslation:"Я залишився вдома."},
+  {word:"bringen (bringt) · brachte · hat gebracht",translation:"приносити",category:"VERB FORMS · BRINGEN",example:"Sie hat Blumen gebracht.",exampleTranslation:"Вона принесла квіти."},
+  {word:"denken (denkt) · dachte · hat gedacht",translation:"думати",category:"VERB FORMS · DENKEN",example:"Ich habe an dich gedacht.",exampleTranslation:"Я думав про тебе."},
+  {word:"dürfen (darf) · durfte · hat gedurft",translation:"мати дозвіл",category:"VERB FORMS · DÜRFEN",example:"Wir haben das früher nicht gedurft.",exampleTranslation:"Раніше нам не дозволяли цього."},
+  {word:"essen (isst) · aß · hat gegessen",translation:"їсти",category:"VERB FORMS · ESSEN",example:"Er hat ein Brot gegessen.",exampleTranslation:"Він з'їв хліб."},
+  {word:"fahren (fährt) · fuhr · ist gefahren",translation:"їхати / керувати",category:"VERB FORMS · FAHREN",example:"Sie ist mit dem Zug gefahren.",exampleTranslation:"Вона їхала потягом."},
+  {word:"fangen (fängt) · fing · hat gefangen",translation:"ловити",category:"VERB FORMS · FANGEN",example:"Das Kind hat den Ball gefangen.",exampleTranslation:"Дитина зловила м'яч."},
+  {word:"finden (findet) · fand · hat gefunden",translation:"знаходити",category:"VERB FORMS · FINDEN",example:"Ich habe meinen Schlüssel gefunden.",exampleTranslation:"Я знайшов свій ключ."},
+  {word:"fliegen (fliegt) · flog · ist geflogen",translation:"літати",category:"VERB FORMS · FLIEGEN",example:"Wir sind nach Berlin geflogen.",exampleTranslation:"Ми полетіли до Берліна."},
+  {word:"geben (gibt) · gab · hat gegeben",translation:"давати",category:"VERB FORMS · GEBEN",example:"Er hat mir ein Buch gegeben.",exampleTranslation:"Він дав мені книжку."},
+  {word:"gehen (geht) · ging · ist gegangen",translation:"йти",category:"VERB FORMS · GEHEN",example:"Sie ist nach Hause gegangen.",exampleTranslation:"Вона пішла додому."},
+  {word:"haben (hat) · hatte · hat gehabt",translation:"мати",category:"VERB FORMS · HABEN",example:"Wir haben viel Zeit gehabt.",exampleTranslation:"У нас було багато часу."},
+  {word:"heißen (heißt) · hieß · hat geheißen",translation:"називатися",category:"VERB FORMS · HEISSEN",example:"Die Straße hat früher anders geheißen.",exampleTranslation:"Раніше вулиця називалася інакше."},
+  {word:"helfen (hilft) · half · hat geholfen",translation:"допомагати",category:"VERB FORMS · HELFEN",example:"Meine Freundin hat mir geholfen.",exampleTranslation:"Моя подруга допомогла мені."},
+  {word:"kennen (kennt) · kannte · hat gekannt",translation:"знати / бути знайомим",category:"VERB FORMS · KENNEN",example:"Ich habe ihn lange gekannt.",exampleTranslation:"Я давно його знав."},
+  {word:"kommen (kommt) · kam · ist gekommen",translation:"приходити / прибувати",category:"VERB FORMS · KOMMEN",example:"Der Bus ist spät gekommen.",exampleTranslation:"Автобус прибув пізно."},
+  {word:"können (kann) · konnte · hat gekonnt",translation:"могти / вміти",category:"VERB FORMS · KÖNNEN",example:"Als Kind habe ich das noch nicht gekonnt.",exampleTranslation:"У дитинстві я ще не вмів / не вміла цього."}
+];
+const a1PreteriteVerbs=new Set(["haben","sein"]);
+const pastVerbLegacyA1FormCards=pastVerbLegacyA1SourceCards.map(card=>{
+  const [infinitiveAndPresent,,perfect]=card.word.split(" · ");
   const infinitive=infinitiveAndPresent.split(" ")[0];
-  return {word:infinitiveAndPresent,translation:card.translation,category:"PAST VERB FORMS · RECALL",prompt:`Schreibe Präteritum und Perfekt von ${infinitive}.`,example:card.example,exampleLabel:card.exampleLabel,exampleTranslation:card.exampleTranslation,answer:`${preterite} / ${perfect}`,answerTranslation:`${preterite} / ${perfect}`,practiceType:"cloze"};
+  return a1PreteriteVerbs.has(infinitive)?card:{...card,word:`${infinitiveAndPresent} · ${perfect}`};
 });
-function createPastVerbLevelCards(level,entries){
+const pastVerbLegacyA1PracticeCards=pastVerbLegacyA1FormCards.map(card=>{
+  const [infinitiveAndPresent,...forms]=card.word.split(" · ");
+  const infinitive=infinitiveAndPresent.split(" ")[0];
+  const includesPreterite=a1PreteriteVerbs.has(infinitive);
+  const [preterite,perfect]=includesPreterite?forms:[null,forms[0]];
+  const answer=includesPreterite?`${preterite} / ${perfect}`:perfect;
+  return {word:infinitiveAndPresent,translation:card.translation,category:"PAST VERB FORMS · RECALL",prompt:includesPreterite?`Schreibe Präteritum und Perfekt von ${infinitive}.`:`Schreibe Perfekt von ${infinitive}.`,example:card.example,exampleTranslation:card.exampleTranslation,answer,answerTranslation:answer,practiceType:"cloze"};
+});
+function createPastVerbLevelCards(level,entries,{includePreterite=()=>true}={}){
   const formCards=entries.map(([id,infinitive,present,preterite,perfect,translation,example,exampleTranslation])=>{
     const perfectForms=Array.isArray(perfect)?perfect:[perfect];
-    const word=`${infinitive} (${present}) · ${preterite} · ${perfectForms[0]}`;
+    const showsPreterite=includePreterite({id,infinitive,present,preterite,perfect:perfectForms,translation});
+    const word=showsPreterite?`${infinitive} (${present}) · ${preterite} · ${perfectForms[0]}`:`${infinitive} (${present}) · ${perfectForms[0]}`;
     return {
       id:`past-verbs-${level}-${id}-learn`,
       targetId:`past-verb-${level}-${id}`,
@@ -191,16 +201,16 @@ function createPastVerbLevelCards(level,entries){
       category:`VERB FORMS · ${level.toUpperCase()}`,
       promptText:translation,
       example,
-      exampleLabel:"Präteritum in context",
       exampleTranslation,
-      explanation:`Präteritum: ${preterite}. Perfekt: ${perfectForms[0]}.`,
+      explanation:showsPreterite?`Präteritum: ${preterite}. Perfekt: ${perfectForms[0]}.`:`Perfekt: ${perfectForms[0]}.`,
       response:{mode:"text",scope:"phrase",accepted:[word],caseSensitive:false,punctuationSensitive:false},
       practiceVariants:false
     };
   });
   const practiceCards=entries.map(([id,infinitive,present,preterite,perfect,translation,example,exampleTranslation])=>{
     const perfectForms=Array.isArray(perfect)?perfect:[perfect];
-    const answer=`${preterite} / ${perfectForms[0]}`;
+    const showsPreterite=includePreterite({id,infinitive,present,preterite,perfect:perfectForms,translation});
+    const answer=showsPreterite?`${preterite} / ${perfectForms[0]}`:perfectForms[0];
     return {
       id:`past-verbs-${level}-${id}-practice`,
       targetId:`past-verb-${level}-${id}`,
@@ -208,12 +218,11 @@ function createPastVerbLevelCards(level,entries){
       word:`${infinitive} (${present})`,
       translation,
       category:`PAST VERB FORMS · ${level.toUpperCase()}`,
-      promptText:`Schreibe Präteritum und Perfekt von ${infinitive}.`,
+      promptText:showsPreterite?`Schreibe Präteritum und Perfekt von ${infinitive}.`:`Schreibe Perfekt von ${infinitive}.`,
       example,
-      exampleLabel:"Präteritum in context",
       exampleTranslation,
-      explanation:`Präteritum: ${preterite}. Perfekt: ${perfectForms[0]}.`,
-      response:{mode:"text",scope:"phrase",accepted:perfectForms.map(form=>`${preterite} / ${form}`),caseSensitive:false,punctuationSensitive:false},
+      explanation:showsPreterite?`Präteritum: ${preterite}. Perfekt: ${perfectForms[0]}.`:`Perfekt: ${perfectForms[0]}.`,
+      response:{mode:"text",scope:"phrase",accepted:showsPreterite?perfectForms.map(form=>`${preterite} / ${form}`):perfectForms,caseSensitive:false,punctuationSensitive:false},
       answer,
       answerTranslation:answer,
       practiceVariants:false
@@ -222,53 +231,35 @@ function createPastVerbLevelCards(level,entries){
   return {formCards,practiceCards,cards:[...formCards,...practiceCards]};
 }
 const pastVerbA1AdditionalEntries=[
-  ["lesen","lesen","liest","las","hat gelesen","читати","Ich las den Brief.","Я прочитав / прочитала листа."],
-  ["moegen","mögen","mag","mochte","hat gemocht","любити / подобатися","Als Kind mochte ich keinen Spinat.","У дитинстві я не любив / не любила шпинат."],
-  ["muessen","müssen","muss","musste","hat gemusst","мусити","Wir mussten lange warten.","Нам довелося довго чекати."],
-  ["nehmen","nehmen","nimmt","nahm","hat genommen","брати","Sie nahm den Bus.","Вона поїхала автобусом."],
-  ["rufen","rufen","ruft","rief","hat gerufen","кликати","Er rief mich.","Він мене покликав."],
-  ["schlafen","schlafen","schläft","schlief","hat geschlafen","спати","Das Kind schlief gut.","Дитина добре спала."],
-  ["schreiben","schreiben","schreibt","schrieb","hat geschrieben","писати","Ich schrieb eine E-Mail.","Я написав / написала електронного листа."],
-  ["schwimmen","schwimmen","schwimmt","schwamm",["hat/ist geschwommen","hat geschwommen","ist geschwommen"],"плавати","Wir schwammen ans andere Ufer.","Ми перепливли на інший берег."],
-  ["sehen","sehen","sieht","sah","hat gesehen","бачити","Ich sah den Film schon.","Я вже бачив / бачила цей фільм."],
-  ["sein","sein","ist","war","ist gewesen","бути","Ich war gestern zu Hause.","Учора я був / була вдома."],
-  ["singen","singen","singt","sang","hat gesungen","співати","Sie sangen zusammen.","Вони співали разом."],
-  ["sollen","sollen","soll","sollte","hat gesollt","мати обов'язок / слід","Als Kind sollte ich früh ins Bett gehen.","У дитинстві мені треба було рано лягати спати."],
-  ["sprechen","sprechen","spricht","sprach","hat gesprochen","говорити","Wir sprachen über das Problem.","Ми говорили про проблему."],
-  ["stehen","stehen","steht","stand","hat gestanden","стояти","Das Glas stand auf dem Tisch.","Склянка стояла на столі."],
-  ["treffen","treffen","trifft","traf","hat getroffen","зустрічати","Ich traf meine Freunde.","Я зустрів / зустріла друзів."],
-  ["trinken","trinken","trinkt","trank","hat getrunken","пити","Er trank einen Kaffee.","Він випив кави."],
-  ["tun","tun","tut","tat","hat getan","робити","Was tat er?","Що він зробив?"],
-  ["wissen","wissen","weiß","wusste","hat gewusst","знати","Ich wusste die Antwort nicht.","Я не знав / не знала відповіді."],
-  ["wollen","wollen","will","wollte","hat gewollt","хотіти","Sie wollte früh nach Hause gehen.","Вона хотіла рано піти додому."]
+  ["lesen","lesen","liest","las","hat gelesen","читати","Ich habe den Brief gelesen.","Я прочитав / прочитала листа."],
+  ["moegen","mögen","mag","mochte","hat gemocht","любити / подобатися","Als Kind habe ich keinen Spinat gemocht.","У дитинстві я не любив / не любила шпинат."],
+  ["muessen","müssen","muss","musste","hat gemusst","мусити","Wir haben lange warten müssen.","Нам довелося довго чекати."],
+  ["nehmen","nehmen","nimmt","nahm","hat genommen","брати","Sie hat den Bus genommen.","Вона поїхала автобусом."],
+  ["rufen","rufen","ruft","rief","hat gerufen","кликати","Er hat mich gerufen.","Він мене покликав."],
+  ["schlafen","schlafen","schläft","schlief","hat geschlafen","спати","Das Kind hat gut geschlafen.","Дитина добре спала."],
+  ["schreiben","schreiben","schreibt","schrieb","hat geschrieben","писати","Ich habe eine E-Mail geschrieben.","Я написав / написала електронного листа."],
+  ["schwimmen","schwimmen","schwimmt","schwamm",["hat/ist geschwommen","hat geschwommen","ist geschwommen"],"плавати","Wir sind ans andere Ufer geschwommen.","Ми перепливли на інший берег."],
+  ["sehen","sehen","sieht","sah","hat gesehen","бачити","Ich habe den Film schon gesehen.","Я вже бачив / бачила цей фільм."],
+  ["sein","sein","ist","war","ist gewesen","бути","Ich bin gestern zu Hause gewesen.","Учора я був / була вдома."],
+  ["singen","singen","singt","sang","hat gesungen","співати","Sie haben zusammen gesungen.","Вони співали разом."],
+  ["sollen","sollen","soll","sollte","hat gesollt","мати обов'язок / слід","Ich habe meine Mutter anrufen sollen.","Мені слід було зателефонувати мамі."],
+  ["sprechen","sprechen","spricht","sprach","hat gesprochen","говорити","Wir haben über das Problem gesprochen.","Ми поговорили про проблему."],
+  ["stehen","stehen","steht","stand","hat gestanden","стояти","Das Glas hat auf dem Tisch gestanden.","Склянка стояла на столі."],
+  ["treffen","treffen","trifft","traf","hat getroffen","зустрічати","Ich habe meine Freunde getroffen.","Я зустрів / зустріла друзів."],
+  ["trinken","trinken","trinkt","trank","hat getrunken","пити","Er hat einen Kaffee getrunken.","Він випив кави."],
+  ["tun","tun","tut","tat","hat getan","робити","Was hast du getan?","Що ти зробив / зробила?"],
+  ["wissen","wissen","weiß","wusste","hat gewusst","знати","Ich habe die Antwort nicht gewusst.","Я не знав / не знала відповіді."],
+  ["wollen","wollen","will","wollte","hat gewollt","хотіти","Sie hat früh nach Hause gehen wollen.","Вона хотіла рано піти додому."]
 ];
 const pastVerbA2Entries=[
-  ["backen","backen","backt","buk","hat gebacken","пекти","Meine Mutter buk Brot.","Моя мама пекла хліб."],
-  ["biegen","biegen","biegt","bog",["hat/ist gebogen","hat gebogen","ist gebogen"],"гнути / повертати","Der Wind bog den Ast.","Вітер зігнув гілку."],
-  ["bieten","bieten","bietet","bot","hat geboten","пропонувати","Er bot mir seine Hilfe.","Він запропонував мені свою допомогу."],
-  ["bitten","bitten","bittet","bat","hat gebeten","просити","Sie bat mich um Hilfe.","Вона попросила мене про допомогу."],
-  ["braten","braten","brät","briet","hat gebraten","смажити","Er briet Kartoffeln.","Він смажив картоплю."],
-  ["fallen","fallen","fällt","fiel","ist gefallen","падати","Das Glas fiel auf den Boden.","Склянка впала на підлогу."],
-  ["gefallen","gefallen","gefällt","gefiel","hat gefallen","подобатися","Der Film gefiel mir gut.","Мені дуже сподобався фільм."],
-  ["gewinnen","gewinnen","gewinnt","gewann","hat gewonnen","вигравати","Unsere Mannschaft gewann das Spiel.","Наша команда виграла матч."],
-  ["laden","laden","lädt","lud","hat geladen","вантажити / запрошувати","Sie lud die Kisten ins Auto.","Вона завантажила коробки в автомобіль."],
-  ["laufen","laufen","läuft","lief","ist gelaufen","бігти / ходити","Wir liefen schnell nach Hause.","Ми швидко побігли додому."],
-  ["liegen","liegen","liegt","lag","hat gelegen","лежати","Das Buch lag auf dem Tisch.","Книга лежала на столі."],
-  ["nennen","nennen","nennt","nannte","hat genannt","називати","Er nannte keinen Namen.","Він не назвав імені."],
-  ["rennen","rennen","rennt","rannte","ist gerannt","бігти","Das Kind rannte zur Tür.","Дитина побігла до дверей."],
-  ["riechen","riechen","riecht","roch","hat gerochen","пахнути / нюхати","Die Suppe roch gut.","Суп добре пахнув."],
-  ["schliessen","schließen","schließt","schloss","hat geschlossen","закривати","Sie schloss das Fenster.","Вона закрила вікно."],
-  ["sitzen","sitzen","sitzt","saß","hat gesessen","сидіти","Wir saßen lange im Garten.","Ми довго сиділи в саду."],
-  ["steigen","steigen","steigt","stieg","ist gestiegen","підніматися","Die Temperatur stieg schnell.","Температура швидко піднялася."],
-  ["sterben","sterben","stirbt","starb","ist gestorben","помирати","Der alte Mann starb gestern.","Літній чоловік помер учора."],
-  ["treiben","treiben","treibt","trieb",["hat/ist getrieben","hat getrieben","ist getrieben"],"гнати / дрейфувати","Der Wind trieb die Wolken nach Osten.","Вітер погнав хмари на схід."],
-  ["vergessen","vergessen","vergisst","vergaß","hat vergessen","забувати","Ich vergaß den Termin.","Я забув / забула про зустріч."],
-  ["verlieren","verlieren","verliert","verlor","hat verloren","втрачати","Sie verlor ihren Schlüssel.","Вона загубила ключ."],
-  ["wachsen","wachsen","wächst","wuchs","ist gewachsen","рости","Die Stadt wuchs schnell.","Місто швидко виросло."],
-  ["waschen","waschen","wäscht","wusch","hat gewaschen","мити / прати","Er wusch das Auto.","Він помив автомобіль."],
-  ["werden","werden","wird","wurde","ist geworden","ставати","Es wurde kalt.","Стало холодно."],
-  ["werfen","werfen","wirft","warf","hat geworfen","кидати","Sie warf den Ball weit.","Вона далеко кинула м'яч."],
-  ["ziehen","ziehen","zieht","zog",["hat/ist gezogen","hat gezogen","ist gezogen"],"тягнути / переїжджати","Wir zogen nach Berlin.","Ми переїхали до Берліна."]
+  ["duerfen","dürfen","darf","durfte","hat gedurft","мати дозвіл","Als Kind durfte ich lange aufbleiben.","У дитинстві мені дозволяли довго не спати."],
+  ["koennen","können","kann","konnte","hat gekonnt","могти / вміти","Als Kind konnte ich schon schwimmen.","У дитинстві я вже вмів / вміла плавати."],
+  ["moegen","mögen","mag","mochte","hat gemocht","любити / подобатися","Früher mochte ich keinen Kaffee.","Раніше я не любив / не любила каву."],
+  ["muessen","müssen","muss","musste","hat gemusst","мусити","Letzte Woche musste ich lange arbeiten.","Минулого тижня мені довелося довго працювати."],
+  ["sollen","sollen","soll","sollte","hat gesollt","мати обов'язок / слід","Der Arzt sagte, ich sollte zu Hause bleiben.","Лікар сказав, що мені слід залишитися вдома."],
+  ["wollen","wollen","will","wollte","hat gewollt","хотіти","Als Kind wollte ich Ärztin werden.","У дитинстві я хотіла стати лікаркою."],
+  ["werden","werden","wird","wurde","ist geworden","ставати","Er wurde 1985 in Wien geboren.","Він народився у Відні 1985 року."],
+  ["schreiben","schreiben","schreibt","schrieb","hat geschrieben","писати","Sie schrieb mir eine lange E-Mail.","Вона написала мені довгий електронний лист."],
 ];
 const pastVerbB1Entries=[
   ["befehlen","befehlen","befiehlt","befahl","hat befohlen","наказувати","Der Offizier befahl den Rückzug.","Офіцер наказав відступати."],
@@ -1156,10 +1147,13 @@ const strongVerbStages=[
   lessonStep("strong-verbs-learn","Learn strong verbs","Read the full paradigms for sprechen, fahren, treffen, lesen, essen, wissen, and anfangen. Notice the stem-vowel changes in singular forms.",strongVerbFormCards,"learn","Strong verbs","Learn"),
   lessonStep("strong-verbs-practice","Practice strong verbs","Enter the missing conjugated form in mixed sentences for all seven strong verbs. For anfangen, enter both the verb and its separated prefix.",strongVerbPracticeCards,"input","Strong verbs","Practice")
 ];
-const pastVerbStagesForLevel=(level,slug,formCards,practiceCards,legacyIds=false)=>[
-  {...lessonStep(legacyIds?"past-verbs-learn":`past-verbs-${slug}-learn`,`Learn Past verb forms · ${level}`,level==="A1"?`Read the infinitive, present form, Präteritum, and Perfekt form for each A1 verb. Use the Präteritum example to anchor the form first.`:`Read the infinitive, present form, Präteritum, and Perfekt form for each ${level} verb. Use the Präteritum example to anchor the past-tense form.`,formCards,"learn",`Past verb forms · ${level}`,"Learn"),requiresFullCoverage:true},
-  {...lessonStep(legacyIds?"past-verbs-practice":`past-verbs-${slug}-practice`,`Practice Past verb forms · ${level}`,"Enter the Präteritum and Perfekt forms for every verb, separated by a slash.",practiceCards,"input",`Past verb forms · ${level}`,"Practice"),requiresFullCoverage:true}
-];
+const pastVerbStagesForLevel=(level,slug,formCards,practiceCards,legacyIds=false)=>{
+  const a1=level==="A1";
+  return [
+    {...lessonStep(legacyIds?"past-verbs-learn":`past-verbs-${slug}-learn`,`Learn Past verb forms · ${level}`,a1?"Learn everyday Perfekt. Keep Präteritum only for sein and haben.":`Read the infinitive, present form, Präteritum, and Perfekt form for each ${level} verb.`,formCards,"learn",`Past verb forms · ${level}`,"Learn"),requiresFullCoverage:true},
+    {...lessonStep(legacyIds?"past-verbs-practice":`past-verbs-${slug}-practice`,`Practice Past verb forms · ${level}`,a1?"Enter the Perfekt form; enter Präteritum and Perfekt only for sein and haben.":"Enter the Präteritum and Perfekt forms for every verb, separated by a slash.",practiceCards,"input",`Past verb forms · ${level}`,"Practice"),requiresFullCoverage:true}
+  ];
+};
 const pastVerbA1Stages=pastVerbStagesForLevel("A1","a1",pastVerbA1FormCards,pastVerbA1PracticeCards,true);
 const pastVerbA2Stages=pastVerbStagesForLevel("A2","a2",pastVerbA2.formCards,pastVerbA2.practiceCards);
 const pastVerbB1Stages=pastVerbStagesForLevel("B1","b1",pastVerbB1.formCards,pastVerbB1.practiceCards);
@@ -1253,16 +1247,23 @@ const separableVerbStages=[
   lessonStep("separable-verbs-patterns-learn","Learn when verbs stay together","Compare main clauses with subordinate clauses, modal-verb infinitives, and non-separable verbs.",separableVerbPatternCards,"learn","When to separate","Learn"),
   lessonStep("separable-verbs-context-practice","Practice mixed contexts","Build statements, a W-question, modal-verb sentences, and a subordinate clause with separable verbs.",separableVerbContextPracticeCards,"input","Mixed contexts","Practice")
 ];
-const pastVerbGuide=level=>({
-  title:`Минулий час ${level}: Präteritum і Perfekt`,
-  intro:level==="A1"?`На рівні A1 спочатку закріпіть Präteritum у прикладах, а потім вивчайте Perfekt як парну форму кожного дієслова.`:`Вивчайте дієслова рівня ${level} як повний набір форм: приклади показують Präteritum, а Perfekt подано як парну форму для розмови.`,
-  rules:[
-    {title:"Präteritum",detail:"Ця проста форма минулого часу часто трапляється в письмових текстах і розповідях.",formula:"gehen → ging · finden → fand"},
-    {title:"Perfekt",detail:"Perfekt складається з haben або sein та Partizip II.",formula:"hat gefunden · ist gegangen"},
-    {title:"Haben або sein",detail:"Дієслова руху та зміни стану зазвичай утворюють Perfekt з sein; деякі дієслова допускають обидва допоміжні дієслова залежно від значення.",formula:"ist gefahren · hat das Auto gefahren"},
-    {title:"Упізнавайте форми в парі",detail:"Під час практики вводьте спочатку Präteritum, а потім Perfekt через похилу риску.",formula:"begann / hat begonnen"}
-  ]
-});
+const pastVerbGuide=level=>{
+  const a1=level==="A1";
+  return {
+    title:a1?"Минулий час A1: Perfekt":"Минулий час "+level+": Präteritum і Perfekt",
+    intro:a1?"На A1 основним минулим часом для розмови є Perfekt. Präteritum потрібен лише для високочастотних haben і sein.":`Вивчайте дієслова рівня ${level} як повний набір форм, щоб упізнавати минулий час у текстах і вживати Perfekt у розмові.`,
+    rules:a1?[
+      {title:"Perfekt — головна форма A1",detail:"Perfekt складається з haben або sein та Partizip II.",formula:"hat gefunden · ist gegangen"},
+      {title:"Haben або sein",detail:"Дієслова руху та зміни стану часто утворюють Perfekt із sein; більшість інших дієслів — із haben.",formula:"ist gefahren · hat gearbeitet"},
+      {title:"Präteritum: лише sein і haben",detail:"Ці дві дуже часті форми вивчайте для розуміння й коротких повідомлень.",formula:"sein → war · haben → hatte"}
+    ]:[
+      {title:"Präteritum",detail:"Ця проста форма минулого часу часто трапляється в письмових текстах і розповідях.",formula:"gehen → ging · finden → fand"},
+      {title:"Perfekt",detail:"Perfekt складається з haben або sein та Partizip II.",formula:"hat gefunden · ist gegangen"},
+      {title:"Haben або sein",detail:"Дієслова руху та зміни стану зазвичай утворюють Perfekt з sein; деякі дієслова допускають обидва допоміжні дієслова залежно від значення.",formula:"ist gefahren · hat das Auto gefahren"},
+      {title:"Упізнавайте форми в парі",detail:"Під час практики вводьте спочатку Präteritum, а потім Perfekt через похилу риску.",formula:"begann / hat begonnen"}
+    ]
+  };
+};
 const deckDefinitions={
   "w-questions":{title:"W-Fragen",label:"W-Fragen",badge:"W",tip:"W-questions always come first in a question, followed by the verb.",guide:{title:"W-Fragen: запитання",intro:"Оберіть питальне слово відповідно до потрібної інформації, а потім побудуйте речення навколо відмінюваного дієслова.",rules:["Питальне слово стоїть на першому місці, а відмінюване дієслово — на другому: Wo wohnst du?","Підмет зазвичай стоїть після дієслова: Wann kommt ihr? Решта інформації йде далі.","Використовуйте wo для місця, wohin для руху до місця, а woher — для місця, звідки хтось прибуває.","На W-Fragen не можна відповісти лише ja або nein: вони потребують конкретної інформації."]},cards,stages:wQuestionStages},
   pronouns:{title:"Personal pronouns",label:"Personal pronouns",badge:"ich",tip:"Use the pronoun that matches the person or people you are talking about.",guide:{title:"Особові займенники",intro:"Німецькі особові займенники показують, хто говорить, до кого звертаються або про кого йдеться.",rules:["ich, du, er/sie/es, wir, ihr, sie відповідають особі або групі в реченні.","Пишіть Sie з великої літери для ввічливого «Ви» в однині або множині; sie означає «вона» або «вони».","Займенник визначає форму дієслова: ich bin, du bist, wir sind.","Оберіть ihr для неформального звертання до кількох людей."]},cards:pronounCards,stages:pronounStages},
@@ -1270,9 +1271,9 @@ const deckDefinitions={
   sein:{title:"Verb sein",label:"Verb sein",badge:"sein",tip:"The verb sein is irregular, so learn each form as a complete pair with its pronoun.",guide:{title:"Sein у теперішньому часі",intro:"Sein означає «бути» й відмінюється неправильно, тому його форми потрібно вивчати окремо.",rules:["ich bin, du bist, er/sie/es ist, wir sind, ihr seid, sie/Sie sind.","Уживайте sein для ідентифікації, опису, місцеперебування та багатьох простих представлень: Ich bin müde.","Форма має відповідати підмету: Anna ist hier, але Anna und Paul sind hier.","Пам’ятайте про велику літеру S у Sie sind під час ввічливого звертання."]},cards:seinCards,stages:seinStages},
   conjugation:{title:"Verb conjugation",label:"Verb conjugation",badge:"V",tip:"Weak verbs take regular endings: -e, -st, -t, -en, -t, -en. After a stem ending in -t or -d, add an extra e.",guide:{title:"Слабкі дієслова в Präsens",intro:"Візьміть основу дієслова й доберіть закінчення, що відповідає підмету.",rules:[{title:"Використовуйте регулярні закінчення",detail:"Більшість слабких дієслів відмінюються за однаковою схемою від ich до sie/Sie.",formula:"ich -e · du -st · er/sie/es -t · wir -en · ihr -t · sie/Sie -en"},{title:"Додавайте додаткове -e",detail:"Якщо основа закінчується на -t, -d або приголосний + -m/-n, додайте e перед закінченням.",formula:"du arbeitest · er arbeitet · ihr arbeitet"},{title:"Не додавайте зайве -s",detail:"В основах на -s, -ß або -z форма du має закінчення -t замість -st.",formula:"du heißt · du tanzt · du übersetzt"}]},cards:conjugationCards,stages:conjugationStages},
   "strong-verbs":{title:"Strong verbs",label:"Strong verbs",badge:"ä",tip:"Strong verbs can change their stem vowel in singular present-tense forms.",guide:{title:"Сильні дієслова в Präsens",intro:"Спочатку повторіть повну парадигму кожного дієслова, а потім утворюйте всі форми за картками з пропусками.",rules:[{title:"Зміна e на i",detail:"Sprechen, treffen, lesen і essen змінюють e на i у другій та третій особі однини.",formula:"du sprichst · er trifft · sie liest · du isst"},{title:"Зміна a на ä",detail:"Fahren і anfangen змінюють a на ä у другій та третій особі однини.",formula:"du fährst · er fährt · du fängst an"},{title:"Особлива форма wissen",detail:"Wissen має weiß у ich і er/sie/es, weißt у du та регулярну основу wiss- у множині.",formula:"ich weiß · du weißt · wir wissen"},{title:"Anfangen є відокремлюваним",detail:"Відмінювана частина fängt стоїть на другому місці, а префікс an — у кінці головного речення.",formula:"Der Kurs fängt um neun Uhr an."},{title:"Зберігайте основу в множині",detail:"Зміна голосного не відбувається з wir, ihr або sie/Sie.",formula:"wir sprechen · ihr esst · sie wissen · wir fangen an"}]},cards:strongVerbCards,stages:strongVerbStages},
-  "past-verbs":{title:"Past verb forms · A1",label:"Past verb forms · A1",badge:"A1",tip:"Use the Präteritum example to anchor each A1 verb, then learn its paired Perfekt form.",guide:pastVerbGuide("A1"),cards:pastVerbA1Cards,stages:pastVerbA1Stages},
-  "past-verbs-a2":{title:"Past verb forms · A2",label:"Past verb forms · A2",badge:"A2",tip:"Use the Präteritum example to anchor each form, then learn its paired Perfekt.",guide:pastVerbGuide("A2"),cards:pastVerbA2.cards,stages:pastVerbA2Stages},
-  "past-verbs-b1":{title:"Past verb forms · B1",label:"Past verb forms · B1",badge:"B1",tip:"Use the Präteritum example to anchor each form, then learn its paired Perfekt.",guide:pastVerbGuide("B1"),cards:pastVerbB1.cards,stages:pastVerbB1Stages},
+  "past-verbs":{title:"Past verb forms · A1",label:"Past verb forms · A1",badge:"A1",tip:"Use Perfekt for everyday A1 past events; learn Präteritum only for sein and haben.",guide:pastVerbGuide("A1"),cards:pastVerbA1Cards,stages:pastVerbA1Stages},
+  "past-verbs-a2":{title:"Past verb forms · A2",label:"Past verb forms · A2",badge:"A2",tip:"Use Präteritum for modal verbs and common biography facts; retain Perfekt for everyday past events.",guide:pastVerbGuide("A2"),cards:pastVerbA2.cards,stages:pastVerbA2Stages},
+  "past-verbs-b1":{title:"Past verb forms · B1",label:"Past verb forms · B1",badge:"B1",tip:"Use the broader Präteritum vocabulary in written narratives and contrast it with Perfekt.",guide:pastVerbGuide("B1"),cards:pastVerbB1.cards,stages:pastVerbB1Stages},
   perfekt:{title:"Perfekt formation",label:"Perfekt formation",badge:"P2",tip:"Build Perfekt with a conjugated form of haben or sein and Partizip II at the end.",guide:{title:"Perfekt: haben / sein + Partizip II",intro:"Perfekt — основний розмовний минулий час. Спочатку оберіть haben або sein, потім утворіть Partizip II й поставте його в кінець речення.",rules:[{title:"Будуйте рамку речення",detail:"Відмінюване haben або sein стоїть на другому місці, а Partizip II — у кінці.",formula:"Ich habe die Hausaufgaben gemacht."},{title:"Уживайте sein для руху та зміни стану",detail:"Більшість дієслів уживаються з haben. Sein потрібне насамперед для руху до іншого місця, зміни стану, а також із bleiben.",formula:"Wir sind gefahren. · Er ist geblieben."},{title:"Регулярні дієслова: ge-…-t",detail:"Додайте ge- перед основою та -t у кінці. У відокремлюваних дієсловах ge стоїть після префікса.",formula:"machen → gemacht · abholen → abgeholt"},{title:"Без ge-",detail:"Невідокремлювані префікси be-, emp-, ent-, er-, miss-, ver-, zer- та дієслова на -ieren не отримують ge-.",formula:"erzählen → erzählt · studieren → studiert"},{title:"Неправильні форми",detail:"Сильні й змішані дієслова можуть змінювати основу; їхню форму потрібно запам’ятовувати.",formula:"schreiben → geschrieben · verbringen → verbracht"}]},cards:perfektCards,stages:perfektStages},
   "present-practice":{title:"Present-tense practice",practiceTitle:"Present-tense practice",label:"Präsens practice",badge:"P",tip:"Use this focused review to retrieve conjugated forms in context. Revise each verb pattern in its dedicated lesson first.",guide:{title:"Відпрацювання форм Präsens",intro:"Це повторення вже вивчених моделей дієвідмінювання, а не вступ до нових правил. Використовуйте речення як контекст, але вводьте лише відмінювану форму або форми.",rules:["У частині з пропусками введіть форму, якої бракує в німецькому реченні; підказка в дужках показує інфінітив.","У частині з українськими підказками визначте особу й число, а потім введіть лише відповідну німецьку форму, не все речення.","Вправа повторює слабкі, сильні та неправильні форми, зокрема sein, gehen, fahren, sehen і möchten."]},cards:presentPracticeCards,stages:presentPracticeStages},
   koennen:{title:"Modal verbs",label:"Modal verbs",badge:"M",tip:"Use können for ability, mögen for likes, and möchten for polite wishes.",guide:{title:"Модальні дієслова: können, mögen і möchten",intro:"Ці дієслова допомагають говорити про вміння, уподобання та ввічливі бажання. Форма залежить від підмета.",rules:["Können означає «могти, вміти»: ich kann, du kannst, er/sie/es kann, wir können, ihr könnt, sie/Sie können.","Mögen означає «любити, подобатися»: ich mag, du magst, er/sie/es mag, wir mögen, ihr mögt, sie/Sie mögen.","Möchten — форма Konjunktiv II від mögen. У сучасній мові вона означає ввічливе «хотів би / хотіла б»: ich möchte, du möchtest, er/sie/es möchte, wir möchten, ihr möchtet, sie/Sie möchten.","Порівнюйте значення: Ich mag Kaffee. = «Мені подобається кава». Ich möchte einen Kaffee. = «Я хотів би / хотіла б каву».","З können і möchten друге дієслово стоїть в інфінітиві в кінці речення: Ich kann schwimmen. Wir möchten bezahlen."]},cards:koennenCards,stages:koennenStages},
