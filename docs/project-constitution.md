@@ -57,8 +57,11 @@ input control when typed recall can assess the skill.
   schema. Never infer exercise type or valid answers from labels, punctuation, or the
   presence of optional fields.
 - Normalize Unicode, surrounding/repeated whitespace, and irrelevant terminal
-  punctuation. Ignore case only when capitalization is not the learning objective.
-  Preserve strict word order and required words for sentence building.
+  punctuation. Where a separator is part of an accepted answer, normalize equivalent
+  separator characters and optional surrounding whitespace. Normalize equivalent
+  typographic apostrophes and hyphens. Ignore case only when capitalization is not
+  the learning objective. Preserve strict required words, grammatical forms, and word
+  order; never infer or autocorrect missing, extra, or misspelled content.
 - A wrong answer shows a compact token-level correction and explanation. It does not
   expose the answer before an attempt and does not count as correct after reveal.
 - Track first-attempt correctness separately from eventual completion. This keeps

@@ -753,7 +753,12 @@ function markTarget(stage,targetId){
 }
 
 function normalizeAnswer(value,response={}){
-  let normalized=value.normalize("NFKC").trim().replace(/[⁄∕／]/g,"/").replace(/\s+/g," ");
+  let normalized=value.normalize("NFKC").trim()
+    .replace(/[⁄∕／]/g,"/")
+    .replace(/[\u2018\u2019\u02BC\uFF07]/g,"'")
+    .replace(/[\u2010-\u2015\u2212\uFE58\uFE63\uFF0D]/g,"-")
+    .replace(/\s+/g," ")
+    .replace(/\s*\/\s*/g," / ");
   if(!response.punctuationSensitive)normalized=normalized.replace(/[?!.,]+$/g,"");
   if(!response.caseSensitive)normalized=normalized.toLocaleLowerCase();
   return normalized;
@@ -809,6 +814,25 @@ function inputCopy(card){
   return ["Write the German answer","Type the German answer..."];
 }
 
+function practicePromptParts(prompt){
+  const match=prompt.match(/^(.*(?:\bvon|:))\s+(.+?)([.?!])?$/u);
+  return match?{instruction:match[1],target:match[2]}:null;
+}
+
+function renderPracticePrompt(card){
+  const prompt=$("question-word"),parts=practicePromptParts(card.promptText);
+  if(!parts){
+    prompt.textContent=card.promptText;
+    return;
+  }
+  const instruction=document.createElement("span"),target=document.createElement("span");
+  instruction.className="practice-prompt-instruction";
+  instruction.textContent=parts.instruction;
+  target.className="practice-prompt-target";
+  target.textContent=parts.target;
+  prompt.replaceChildren(instruction,target);
+}
+
 function feedbackExample(card){
   if(card.type==="recall")return {label:"Example in context",text:card.example||card.word,translation:card.exampleTranslation||card.translation};
   if(/[.?!]$/.test(card.word.trim()))return {label:"Correct sentence",text:card.word,translation:card.translation};
@@ -842,7 +866,8 @@ function render(focusTarget=""){
   }
   renderLessonPath();
   renderDeckGuide();
-  $("question-word").textContent=verificationMode?card.promptText:card.word;
+  if(verificationMode)renderPracticePrompt(card);
+  else $("question-word").textContent=card.word;
   $("translation").textContent=verificationMode?(revealed?"Your German recall":inputLabel):(card.studyTranslation||card.translation);
   $("prompt-support").textContent=support;
   $("prompt-support").hidden=!support;
@@ -863,7 +888,7 @@ function render(focusTarget=""){
   $("answer-translation").hidden=!verificationMode||!revealed;
   $("example").textContent=verificationMode&&revealed?example.text:(card.example||card.word);
   $("example-translation").textContent=verificationMode&&revealed?example.translation:(card.exampleTranslation||card.translation);
-  $("feedback-context").open=!verificationMode;
+  $("feedback-context").open=!verificationMode||answerRevealed;
   $("practice-portion").hidden=false;
   $("new-practice-portion").innerHTML='New pass <span aria-hidden="true">↻</span>';
   const coverage=stageCoverage(stage);

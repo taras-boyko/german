@@ -63,6 +63,10 @@
 .answer-content .answer-meaning{margin:0 0 8px;color:#675bc8;font-size:11px;font-weight:700}
 .answer-content strong{display:block;font-size:14px;font-weight:600}
 .answer-content small{display:block;margin-top:5px;color:#817b90;font-size:11px}
+#question-word{white-space:pre-line;text-align:center}
+#question-word .practice-prompt-instruction,#question-word .practice-prompt-target{display:block}
+#question-word .practice-prompt-instruction{font-size:22px;letter-spacing:-.4px;line-height:1.25}
+#question-word .practice-prompt-target{margin-top:8px}
 .verification-panel{margin-top:16px}
 .correction-display{margin-top:0}
 .check-button{width:100%;min-height:40px;margin-top:12px}
