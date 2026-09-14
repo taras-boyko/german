@@ -60,6 +60,7 @@
 .feedback-context[open] .context-action{font-size:0}
 .feedback-context[open] .context-action::after{content:"Hide";font-size:10px}
 .answer-content{margin-top:9px;padding:12px;border:1px solid #ece9f1;border-radius:9px;background:#fbfafc}
+.answer-content .answer-meaning{margin:0 0 8px;color:#675bc8;font-size:11px;font-weight:700}
 .answer-content strong{display:block;font-size:14px;font-weight:600}
 .answer-content small{display:block;margin-top:5px;color:#817b90;font-size:11px}
 .verification-panel{margin-top:16px}

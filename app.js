@@ -836,6 +836,10 @@ function render(focusTarget=""){
   const example=feedbackExample(card);
   const feedbackVisible=verificationMode&&revealed;
   const support=verificationMode?card.support||"":"";
+  if(!feedbackVisible){
+    $("verification-feedback").textContent="";
+    $("verification-feedback").className="verification-feedback";
+  }
   renderLessonPath();
   renderDeckGuide();
   $("question-word").textContent=verificationMode?card.promptText:card.word;
@@ -855,6 +859,8 @@ function render(focusTarget=""){
     $("feedback-detail").textContent=outcome.detail;
   }
   $("example-label").textContent=verificationMode&&revealed?example.label:"Example sentence";
+  $("answer-translation").textContent=verificationMode&&revealed?`Ukrainian meaning: ${card.translation}`:"";
+  $("answer-translation").hidden=!verificationMode||!revealed;
   $("example").textContent=verificationMode&&revealed?example.text:(card.example||card.word);
   $("example-translation").textContent=verificationMode&&revealed?example.translation:(card.exampleTranslation||card.translation);
   $("feedback-context").open=!verificationMode;
