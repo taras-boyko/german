@@ -262,64 +262,64 @@ const pastVerbA2Entries=[
   ["schreiben","schreiben","schreibt","schrieb","hat geschrieben","писати","Sie schrieb mir eine lange E-Mail.","Вона написала мені довгий електронний лист."],
 ];
 const pastVerbB1Entries=[
-  ["befehlen","befehlen","befiehlt","befahl","hat befohlen","наказувати","Der Offizier befahl den Rückzug.","Офіцер наказав відступати."],
-  ["beissen","beißen","beißt","biss","hat gebissen","кусати","Der Hund biss mich.","Собака мене вкусив."],
-  ["binden","binden","bindet","band","hat gebunden","зв'язувати","Sie band das Paket mit einer Schnur.","Вона перев'язала пакунок мотузкою."],
-  ["brechen","brechen","bricht","brach",["hat/ist gebrochen","hat gebrochen","ist gebrochen"],"ламати / ламатися","Er brach den Ast.","Він зламав гілку."],
-  ["brennen","brennen","brennt","brannte","hat gebrannt","горіти","Das Feuer brannte die ganze Nacht.","Вогонь горів усю ніч."],
-  ["empfehlen","empfehlen","empfiehlt","empfahl","hat empfohlen","рекомендувати","Die Ärztin empfahl mir Ruhe.","Лікарка порадила мені відпочинок."],
-  ["erschrecken","erschrecken","erschrickt","erschrak","ist erschrocken","лякатися","Ich erschrak über den Lärm.","Я злякався / злякалася шуму."],
-  ["fliehen","fliehen","flieht","floh","ist geflohen","тікати","Die Familie floh vor dem Feuer.","Родина втекла від пожежі."],
-  ["fliessen","fließen","fließt","floss","ist geflossen","текти","Das Wasser floss durch das Rohr.","Вода протекла трубою."],
-  ["fressen","fressen","frisst","fraß","hat gefressen","їсти (про тварин)","Die Katze fraß den Fisch.","Кішка з'їла рибу."],
-  ["frieren","frieren","friert","fror",["hat/ist gefroren","hat gefroren","ist gefroren"],"мерзнути / замерзати","Der See fror im Winter zu.","Озеро замерзло взимку."],
-  ["gelingen","gelingen","gelingt","gelang","ist gelungen","вдаватися","Der Plan gelang uns.","Наш план удався."],
-  ["gelten","gelten","gilt","galt","hat gegolten","бути чинним","Der alte Pass galt noch.","Старий паспорт ще був чинним."],
-  ["geniessen","genießen","genießt","genoss","hat genossen","насолоджуватися","Wir genossen den Urlaub.","Ми насолодилися відпусткою."],
-  ["geschehen","geschehen","geschieht","geschah","ist geschehen","траплятися","Was geschah gestern?","Що сталося вчора?"],
-  ["giessen","gießen","gießt","goss","hat gegossen","лити / поливати","Sie goss die Blumen.","Вона полила квіти."],
-  ["gleichen","gleichen","gleicht","glich","hat geglichen","бути схожим","Das Kind glich seinem Vater sehr.","Дитина була дуже схожа на батька."],
-  ["graben","graben","gräbt","grub","hat gegraben","копати","Der Hund grub ein Loch.","Собака викопав яму."],
-  ["greifen","greifen","greift","griff","hat gegriffen","хапати","Er griff nach meiner Hand.","Він схопив мене за руку."],
-  ["halten","halten","hält","hielt","hat gehalten","тримати / зупинятися","Der Bus hielt an der Haltestelle.","Автобус зупинився на зупинці."],
-  ["haengen","hängen","hängt","hing","hat gehangen","висіти","Das Bild hing an der Wand.","Картина висіла на стіні."],
-  ["heben","heben","hebt","hob","hat gehoben","піднімати","Sie hob die schwere Kiste.","Вона підняла важку коробку."],
-  ["klingen","klingen","klingt","klang","hat geklungen","звучати","Seine Stimme klang müde.","Його голос звучав утомлено."],
-  ["lassen","lassen","lässt","ließ","hat gelassen","залишати / дозволяти","Ich ließ die Tasche zu Hause.","Я залишив / залишила сумку вдома."],
-  ["leiden","leiden","leidet","litt","hat gelitten","страждати","Er litt lange unter Schmerzen.","Він довго страждав від болю."],
-  ["leihen","leihen","leiht","lieh","hat geliehen","позичати","Sie lieh mir ihr Fahrrad.","Вона позичила мені свій велосипед."],
-  ["luegen","lügen","lügt","log","hat gelogen","брехати","Er log über sein Alter.","Він збрехав про свій вік."],
-  ["meiden","meiden","meidet","mied","hat gemieden","уникати","Wir mieden die Hauptstraße.","Ми уникнули головної вулиці."],
-  ["messen","messen","misst","maß","hat gemessen","вимірювати","Die Ärztin maß meinen Blutdruck.","Лікарка виміряла мій тиск."],
-  ["raten","raten","rät","riet","hat geraten","радити","Mein Freund riet mir zu einer Pause.","Мій друг порадив мені зробити перерву."],
-  ["reiben","reiben","reibt","rieb","hat gerieben","терти","Sie rieb den Käse fein.","Вона дрібно натерла сир."],
-  ["reiten","reiten","reitet","ritt",["hat/ist geritten","hat geritten","ist geritten"],"їздити верхи","Wir ritten durch den Wald.","Ми проїхали верхи через ліс."],
-  ["schaffen","schaffen","schafft","schuf","hat geschaffen","створювати","Die Künstlerin schuf ein Meisterwerk.","Художниця створила шедевр."],
-  ["scheiden","scheiden","scheidet","schied",["hat/ist geschieden","hat geschieden","ist geschieden"],"розділяти / розлучатися","Der Richter schied die Ehe.","Суддя розірвав шлюб."],
-  ["scheinen","scheinen","scheint","schien","hat geschienen","світити / здаватися","Die Sonne schien den ganzen Tag.","Сонце світило весь день."],
-  ["scheissen","scheißen","scheißt","schiss","hat geschissen","випорожнюватися","Der Hund schiss auf den Gehweg.","Собака випорожнився на тротуарі."],
-  ["schieben","schieben","schiebt","schob","hat geschoben","штовхати","Er schob den Wagen in die Garage.","Він заштовхнув автомобіль у гараж."],
-  ["schiessen","schießen","schießt","schoss",["hat/ist geschossen","hat geschossen","ist geschossen"],"стріляти","Der Spieler schoss ein Tor.","Гравець забив гол."],
-  ["schlagen","schlagen","schlägt","schlug","hat geschlagen","бити","Der Blitz schlug in den Baum.","Блискавка вдарила в дерево."],
-  ["schmeissen","schmeißen","schmeißt","schmiss","hat geschmissen","кидати","Sie schmiss den Brief in den Müll.","Вона викинула лист у сміття."],
-  ["schneiden","schneiden","schneidet","schnitt","hat geschnitten","різати","Ich schnitt das Gemüse klein.","Я дрібно нарізав / нарізала овочі."],
-  ["schreien","schreien","schreit","schrie","hat geschrien","кричати","Das Kind schrie laut.","Дитина голосно кричала."],
-  ["senden","senden","sendet","sandte",["hat gesandt","hat gesendet"],"надсилати","Der Sender sandte die Nachricht.","Радіостанція передала повідомлення."],
-  ["sinken","sinken","sinkt","sank","ist gesunken","тонути / знижуватися","Die Temperatur sank stark.","Температура сильно знизилася."],
-  ["springen","springen","springt","sprang","ist gesprungen","стрибати","Das Kind sprang ins Wasser.","Дитина стрибнула у воду."],
-  ["stehlen","stehlen","stiehlt","stahl","hat gestohlen","красти","Jemand stahl mein Fahrrad.","Хтось украв мій велосипед."],
-  ["stinken","stinken","stinkt","stank","hat gestunken","смердіти","Der Abfall stank schrecklich.","Сміття жахливо смерділо."],
-  ["streiten","streiten","streitet","stritt","hat gestritten","сперечатися","Die beiden stritten über Geld.","Вони обоє сперечалися через гроші."],
-  ["tragen","tragen","trägt","trug","hat getragen","нести / носити","Er trug den Koffer nach oben.","Він заніс валізу нагору."],
-  ["treten","treten","tritt","trat",["hat/ist getreten","hat getreten","ist getreten"],"ступати / бити ногою","Sie trat ins Zimmer.","Вона увійшла до кімнати."],
-  ["truegen","trügen","trügt","trog","hat getrogen","обманювати","Der erste Eindruck trog.","Перше враження було оманливим."],
-  ["verzeihen","verzeihen","verzeiht","verzieh","hat verziehen","пробачати","Sie verzieh ihm den Fehler.","Вона пробачила йому помилку."],
-  ["weisen","weisen","weist","wies","hat gewiesen","вказувати","Der Polizist wies uns den Weg.","Поліцейський показав нам дорогу."],
-  ["werben","werben","wirbt","warb","hat geworben","рекламувати / вербувати","Die Firma warb für das neue Produkt.","Компанія рекламувала новий продукт."],
-  ["wiegen","wiegen","wiegt","wog","hat gewogen","важити / зважувати","Der Koffer wog zwanzig Kilo.","Валіза важила двадцять кілограмів."],
-  ["zwingen","zwingen","zwingt","zwang","hat gezwungen","змушувати","Der Sturm zwang uns zur Umkehr.","Буря змусила нас повернутися."]
+  ["befehlen","befehlen","befiehlt","befahl","hat befohlen","наказувати","Der Offizier hat den Rückzug befohlen.","Офіцер наказав відступати."],
+  ["beissen","beißen","beißt","biss","hat gebissen","кусати","Der Hund hat mich gebissen.","Собака мене вкусив."],
+  ["binden","binden","bindet","band","hat gebunden","зв'язувати","Sie hat das Paket mit einer Schnur gebunden.","Вона перев'язала пакунок мотузкою."],
+  ["brechen","brechen","bricht","brach",["hat/ist gebrochen","hat gebrochen","ist gebrochen"],"ламати / ламатися","Er hat den Ast gebrochen.","Він зламав гілку."],
+  ["brennen","brennen","brennt","brannte","hat gebrannt","горіти","Das Feuer hat die ganze Nacht gebrannt.","Вогонь горів усю ніч."],
+  ["empfehlen","empfehlen","empfiehlt","empfahl","hat empfohlen","рекомендувати","Die Ärztin hat mir Ruhe empfohlen.","Лікарка порадила мені відпочинок."],
+  ["erschrecken","erschrecken","erschrickt","erschrak","ist erschrocken","лякатися","Ich bin über den Lärm erschrocken.","Я злякався / злякалася шуму."],
+  ["fliehen","fliehen","flieht","floh","ist geflohen","тікати","Die Familie ist vor dem Feuer geflohen.","Родина втекла від пожежі."],
+  ["fliessen","fließen","fließt","floss","ist geflossen","текти","Das Wasser ist durch das Rohr geflossen.","Вода протекла трубою."],
+  ["fressen","fressen","frisst","fraß","hat gefressen","їсти (про тварин)","Die Katze hat den Fisch gefressen.","Кішка з'їла рибу."],
+  ["frieren","frieren","friert","fror",["hat/ist gefroren","hat gefroren","ist gefroren"],"мерзнути / замерзати","Der See ist im Winter gefroren.","Озеро замерзло взимку."],
+  ["gelingen","gelingen","gelingt","gelang","ist gelungen","вдаватися","Der Plan ist uns gelungen.","Наш план удався."],
+  ["gelten","gelten","gilt","galt","hat gegolten","бути чинним","Der alte Pass hat noch gegolten.","Старий паспорт ще був чинним."],
+  ["geniessen","genießen","genießt","genoss","hat genossen","насолоджуватися","Wir haben den Urlaub genossen.","Ми насолодилися відпусткою."],
+  ["geschehen","geschehen","geschieht","geschah","ist geschehen","траплятися","Was ist gestern geschehen?","Що сталося вчора?"],
+  ["giessen","gießen","gießt","goss","hat gegossen","лити / поливати","Sie hat die Blumen gegossen.","Вона полила квіти."],
+  ["gleichen","gleichen","gleicht","glich","hat geglichen","бути схожим","Das Kind hat seinem Vater sehr geglichen.","Дитина була дуже схожа на батька."],
+  ["graben","graben","gräbt","grub","hat gegraben","копати","Der Hund hat ein Loch gegraben.","Собака викопав яму."],
+  ["greifen","greifen","greift","griff","hat gegriffen","хапати","Er hat nach meiner Hand gegriffen.","Він схопив мене за руку."],
+  ["halten","halten","hält","hielt","hat gehalten","тримати / зупинятися","Der Bus hat an der Haltestelle gehalten.","Автобус зупинився на зупинці."],
+  ["haengen","hängen","hängt","hing","hat gehangen","висіти","Das Bild hat an der Wand gehangen.","Картина висіла на стіні."],
+  ["heben","heben","hebt","hob","hat gehoben","піднімати","Sie hat die schwere Kiste gehoben.","Вона підняла важку коробку."],
+  ["klingen","klingen","klingt","klang","hat geklungen","звучати","Seine Stimme hat müde geklungen.","Його голос звучав утомлено."],
+  ["lassen","lassen","lässt","ließ","hat gelassen","залишати / дозволяти","Ich habe die Tasche zu Hause gelassen.","Я залишив / залишила сумку вдома."],
+  ["leiden","leiden","leidet","litt","hat gelitten","страждати","Er hat lange unter Schmerzen gelitten.","Він довго страждав від болю."],
+  ["leihen","leihen","leiht","lieh","hat geliehen","позичати","Sie hat mir ihr Fahrrad geliehen.","Вона позичила мені свій велосипед."],
+  ["luegen","lügen","lügt","log","hat gelogen","брехати","Er hat über sein Alter gelogen.","Він збрехав про свій вік."],
+  ["meiden","meiden","meidet","mied","hat gemieden","уникати","Wir haben die Hauptstraße gemieden.","Ми уникнули головної вулиці."],
+  ["messen","messen","misst","maß","hat gemessen","вимірювати","Die Ärztin hat meinen Blutdruck gemessen.","Лікарка виміряла мій тиск."],
+  ["raten","raten","rät","riet","hat geraten","радити","Mein Freund hat mir zu einer Pause geraten.","Мій друг порадив мені зробити перерву."],
+  ["reiben","reiben","reibt","rieb","hat gerieben","терти","Sie hat den Käse fein gerieben.","Вона дрібно натерла сир."],
+  ["reiten","reiten","reitet","ritt",["hat/ist geritten","hat geritten","ist geritten"],"їздити верхи","Wir sind durch den Wald geritten.","Ми проїхали верхи через ліс."],
+  ["schaffen","schaffen","schafft","schuf","hat geschaffen","створювати","Die Künstlerin hat ein Meisterwerk geschaffen.","Художниця створила шедевр."],
+  ["scheiden","scheiden","scheidet","schied",["hat/ist geschieden","hat geschieden","ist geschieden"],"розділяти / розлучатися","Der Richter hat die Ehe geschieden.","Суддя розірвав шлюб."],
+  ["scheinen","scheinen","scheint","schien","hat geschienen","світити / здаватися","Die Sonne hat den ganzen Tag geschienen.","Сонце світило весь день."],
+  ["scheissen","scheißen","scheißt","schiss","hat geschissen","випорожнюватися","Der Hund hat auf den Gehweg geschissen.","Собака випорожнився на тротуарі."],
+  ["schieben","schieben","schiebt","schob","hat geschoben","штовхати","Er hat den Wagen in die Garage geschoben.","Він заштовхнув автомобіль у гараж."],
+  ["schiessen","schießen","schießt","schoss",["hat/ist geschossen","hat geschossen","ist geschossen"],"стріляти","Der Spieler hat ein Tor geschossen.","Гравець забив гол."],
+  ["schlagen","schlagen","schlägt","schlug","hat geschlagen","бити","Der Blitz hat in den Baum geschlagen.","Блискавка вдарила в дерево."],
+  ["schmeissen","schmeißen","schmeißt","schmiss","hat geschmissen","кидати","Sie hat den Brief in den Müll geschmissen.","Вона викинула лист у сміття."],
+  ["schneiden","schneiden","schneidet","schnitt","hat geschnitten","різати","Ich habe das Gemüse klein geschnitten.","Я дрібно нарізав / нарізала овочі."],
+  ["schreien","schreien","schreit","schrie","hat geschrien","кричати","Das Kind hat laut geschrien.","Дитина голосно кричала."],
+  ["senden","senden","sendet","sandte",["hat gesandt","hat gesendet"],"надсилати","Der Sender hat die Nachricht gesandt.","Радіостанція передала повідомлення."],
+  ["sinken","sinken","sinkt","sank","ist gesunken","тонути / знижуватися","Die Temperatur ist stark gesunken.","Температура сильно знизилася."],
+  ["springen","springen","springt","sprang","ist gesprungen","стрибати","Das Kind ist ins Wasser gesprungen.","Дитина стрибнула у воду."],
+  ["stehlen","stehlen","stiehlt","stahl","hat gestohlen","красти","Jemand hat mein Fahrrad gestohlen.","Хтось украв мій велосипед."],
+  ["stinken","stinken","stinkt","stank","hat gestunken","смердіти","Der Abfall hat schrecklich gestunken.","Сміття жахливо смерділо."],
+  ["streiten","streiten","streitet","stritt","hat gestritten","сперечатися","Die beiden haben über Geld gestritten.","Вони обоє сперечалися через гроші."],
+  ["tragen","tragen","trägt","trug","hat getragen","нести / носити","Er hat den Koffer nach oben getragen.","Він заніс валізу нагору."],
+  ["treten","treten","tritt","trat",["hat/ist getreten","hat getreten","ist getreten"],"ступати / бити ногою","Sie ist ins Zimmer getreten.","Вона увійшла до кімнати."],
+  ["truegen","trügen","trügt","trog","hat getrogen","обманювати","Der erste Eindruck hat getrogen.","Перше враження було оманливим."],
+  ["verzeihen","verzeihen","verzeiht","verzieh","hat verziehen","пробачати","Sie hat ihm den Fehler verziehen.","Вона пробачила йому помилку."],
+  ["weisen","weisen","weist","wies","hat gewiesen","вказувати","Der Polizist hat uns den Weg gewiesen.","Поліцейський показав нам дорогу."],
+  ["werben","werben","wirbt","warb","hat geworben","рекламувати / вербувати","Die Firma hat für das neue Produkt geworben.","Компанія рекламувала новий продукт."],
+  ["wiegen","wiegen","wiegt","wog","hat gewogen","важити / зважувати","Der Koffer hat zwanzig Kilo gewogen.","Валіза важила двадцять кілограмів."],
+  ["zwingen","zwingen","zwingt","zwang","hat gezwungen","змушувати","Der Sturm hat uns zur Umkehr gezwungen.","Буря змусила нас повернутися."]
 ];
-const pastVerbA1Additional=createPastVerbLevelCards("a1",pastVerbA1AdditionalEntries);
+const pastVerbA1Additional=createPastVerbLevelCards("a1",pastVerbA1AdditionalEntries,{includePreterite:({id})=>a1PreteriteVerbs.has(id)});
 const pastVerbA2=createPastVerbLevelCards("a2",pastVerbA2Entries);
 const pastVerbB1=createPastVerbLevelCards("b1",pastVerbB1Entries);
 const pastVerbA1FormCards=[...pastVerbLegacyA1FormCards,...pastVerbA1Additional.formCards];
@@ -373,6 +373,104 @@ const perfektFrameCards=[
     example:"ist + geblieben",exampleTranslation:"Bleiben належить до поширених дієслів, що утворюють Perfekt із sein.",
     explanation:"Bleiben вживається з sein і має Partizip II geblieben.",
     response:{mode:"text",scope:"sentence",accepted:["Er ist zu Hause geblieben."],caseSensitive:false,punctuationSensitive:false}
+  }
+];
+const perfektAuxiliaryCards=[
+  {
+    id:"perfekt-auxiliary-object-brief",targetId:"perfekt-auxiliary-haben-object",type:"cloze",
+    word:"Ich habe einen Brief geschrieben.",translation:"Я написав / написала листа.",category:"PERFEKT · HABEN ODER SEIN",
+    promptText:"Ich ___ einen Brief geschrieben.",support:"У реченні є прямий додаток: einen Brief.",
+    example:"Ich habe einen Brief geschrieben.",exampleTranslation:"Прямий додаток зазвичай вимагає haben.",
+    explanation:"Використовуємо haben, бо дія має прямий додаток einen Brief.",
+    practiceVariants:false,response:{mode:"text",scope:"word",accepted:["habe"],caseSensitive:false,punctuationSensitive:false}
+  },
+  {
+    id:"perfekt-auxiliary-object-door",targetId:"perfekt-auxiliary-haben-object",type:"cloze",
+    word:"Sie hat die Tür geöffnet.",translation:"Вона відчинила двері.",category:"PERFEKT · HABEN ODER SEIN",
+    promptText:"Sie ___ die Tür geöffnet.",support:"У реченні є прямий додаток: die Tür.",
+    example:"Sie hat die Tür geöffnet.",exampleTranslation:"Прямий додаток зазвичай вимагає haben.",
+    explanation:"Використовуємо haben, бо дія має прямий додаток die Tür.",
+    practiceVariants:false,response:{mode:"text",scope:"word",accepted:["hat"],caseSensitive:false,punctuationSensitive:false}
+  },
+  {
+    id:"perfekt-auxiliary-object-film",targetId:"perfekt-auxiliary-haben-object",type:"cloze",
+    word:"Ihr habt den Film gesehen.",translation:"Ви подивилися фільм.",category:"PERFEKT · HABEN ODER SEIN",
+    promptText:"Ihr ___ den Film gesehen.",support:"У реченні є прямий додаток: den Film.",
+    example:"Ihr habt den Film gesehen.",exampleTranslation:"Прямий додаток зазвичай вимагає haben.",
+    explanation:"Використовуємо haben, бо дія має прямий додаток den Film.",
+    practiceVariants:false,response:{mode:"text",scope:"word",accepted:["habt"],caseSensitive:false,punctuationSensitive:false}
+  },
+  {
+    id:"perfekt-auxiliary-activity-work",targetId:"perfekt-auxiliary-haben-activity",type:"cloze",
+    word:"Ich habe gestern gearbeitet.",translation:"Я вчора працював / працювала.",category:"PERFEKT · HABEN ODER SEIN",
+    promptText:"Ich ___ gestern gearbeitet.",support:"Це просто дія, без переміщення до іншого місця.",
+    example:"Ich habe gestern gearbeitet.",exampleTranslation:"Звичайна діяльність утворює Perfekt із haben.",
+    explanation:"Використовуємо haben, бо arbeiten описує діяльність, а не переміщення.",
+    practiceVariants:false,response:{mode:"text",scope:"word",accepted:["habe"],caseSensitive:false,punctuationSensitive:false}
+  },
+  {
+    id:"perfekt-auxiliary-activity-speak",targetId:"perfekt-auxiliary-haben-activity",type:"cloze",
+    word:"Wir haben lange gesprochen.",translation:"Ми довго розмовляли.",category:"PERFEKT · HABEN ODER SEIN",
+    promptText:"Wir ___ lange gesprochen.",support:"Це діяльність, а не зміна місця.",
+    example:"Wir haben lange gesprochen.",exampleTranslation:"Звичайна діяльність утворює Perfekt із haben.",
+    explanation:"Використовуємо haben, бо sprechen описує діяльність.",
+    practiceVariants:false,response:{mode:"text",scope:"word",accepted:["haben"],caseSensitive:false,punctuationSensitive:false}
+  },
+  {
+    id:"perfekt-auxiliary-activity-sleep",targetId:"perfekt-auxiliary-haben-activity",type:"cloze",
+    word:"Du hast gut geschlafen.",translation:"Ти добре спав / спала.",category:"PERFEKT · HABEN ODER SEIN",
+    promptText:"Du ___ gut geschlafen.",support:"Це стан або діяльність без переміщення.",
+    example:"Du hast gut geschlafen.",exampleTranslation:"Сон утворює Perfekt із haben.",
+    explanation:"Використовуємо haben, бо schlafen не означає переміщення або зміну стану.",
+    practiceVariants:false,response:{mode:"text",scope:"word",accepted:["hast"],caseSensitive:false,punctuationSensitive:false}
+  },
+  {
+    id:"perfekt-auxiliary-movement-berlin",targetId:"perfekt-auxiliary-sein-movement",type:"cloze",
+    word:"Er ist nach Berlin gefahren.",translation:"Він поїхав до Берліна.",category:"PERFEKT · HABEN ODER SEIN",
+    promptText:"Er ___ nach Berlin gefahren.",support:"Підмет перемістився до іншого місця: nach Berlin.",
+    example:"Er ist nach Berlin gefahren.",exampleTranslation:"Переміщення до іншого місця зазвичай вимагає sein.",
+    explanation:"Використовуємо sein, бо fahren описує переміщення до іншого місця.",
+    practiceVariants:false,response:{mode:"text",scope:"word",accepted:["ist"],caseSensitive:false,punctuationSensitive:false}
+  },
+  {
+    id:"perfekt-auxiliary-movement-arrive",targetId:"perfekt-auxiliary-sein-movement",type:"cloze",
+    word:"Wir sind spät angekommen.",translation:"Ми прибули пізно.",category:"PERFEKT · HABEN ODER SEIN",
+    promptText:"Wir ___ spät angekommen.",support:"Дієслово означає прибуття.",
+    example:"Wir sind spät angekommen.",exampleTranslation:"Прибуття утворює Perfekt із sein.",
+    explanation:"Використовуємо sein, бо ankommen означає прибуття в інше місце.",
+    practiceVariants:false,response:{mode:"text",scope:"word",accepted:["sind"],caseSensitive:false,punctuationSensitive:false}
+  },
+  {
+    id:"perfekt-auxiliary-movement-home",targetId:"perfekt-auxiliary-sein-movement",type:"cloze",
+    word:"Ihr seid nach Hause gegangen.",translation:"Ви пішли додому.",category:"PERFEKT · HABEN ODER SEIN",
+    promptText:"Ihr ___ nach Hause gegangen.",support:"Підмет перемістився додому.",
+    example:"Ihr seid nach Hause gegangen.",exampleTranslation:"Переміщення до іншого місця зазвичай вимагає sein.",
+    explanation:"Використовуємо sein, бо gehen описує переміщення.",
+    practiceVariants:false,response:{mode:"text",scope:"word",accepted:["seid"],caseSensitive:false,punctuationSensitive:false}
+  },
+  {
+    id:"perfekt-auxiliary-state-asleep",targetId:"perfekt-auxiliary-sein-state",type:"cloze",
+    word:"Das Kind ist eingeschlafen.",translation:"Дитина заснула.",category:"PERFEKT · HABEN ODER SEIN",
+    promptText:"Das Kind ___ eingeschlafen.",support:"Відбулася зміна стану: дитина не спала, а потім заснула.",
+    example:"Das Kind ist eingeschlafen.",exampleTranslation:"Зміна стану утворює Perfekt із sein.",
+    explanation:"Використовуємо sein, бо einschlafen означає перехід у новий стан.",
+    practiceVariants:false,response:{mode:"text",scope:"word",accepted:["ist"],caseSensitive:false,punctuationSensitive:false}
+  },
+  {
+    id:"perfekt-auxiliary-state-awake",targetId:"perfekt-auxiliary-sein-state",type:"cloze",
+    word:"Meine Schwester ist aufgewacht.",translation:"Моя сестра прокинулася.",category:"PERFEKT · HABEN ODER SEIN",
+    promptText:"Meine Schwester ___ aufgewacht.",support:"Відбулася зміна стану: від сну до пробудження.",
+    example:"Meine Schwester ist aufgewacht.",exampleTranslation:"Зміна стану утворює Perfekt із sein.",
+    explanation:"Використовуємо sein, бо aufwachen означає зміну стану.",
+    practiceVariants:false,response:{mode:"text",scope:"word",accepted:["ist"],caseSensitive:false,punctuationSensitive:false}
+  },
+  {
+    id:"perfekt-auxiliary-state-become",targetId:"perfekt-auxiliary-sein-state",type:"cloze",
+    word:"Der Mann ist krank geworden.",translation:"Чоловік захворів.",category:"PERFEKT · HABEN ODER SEIN",
+    promptText:"Der Mann ___ krank geworden.",support:"Стан змінився: здоровий → хворий.",
+    example:"Der Mann ist krank geworden.",exampleTranslation:"Зміна стану утворює Perfekt із sein.",
+    explanation:"Використовуємо sein, бо werden означає перехід у новий стан.",
+    practiceVariants:false,response:{mode:"text",scope:"word",accepted:["ist"],caseSensitive:false,punctuationSensitive:false}
   }
 ];
 const perfektRegularCards=[
@@ -521,7 +619,7 @@ const perfektIrregularCards=[
     response:{mode:"text",scope:"word",accepted:["gehört"],caseSensitive:false,punctuationSensitive:false}
   }
 ];
-const perfektCards=[...perfektFrameCards,...perfektRegularCards,...perfektNoGeCards,...perfektIrregularCards];
+const perfektCards=[...perfektFrameCards,...perfektAuxiliaryCards,...perfektRegularCards,...perfektNoGeCards,...perfektIrregularCards];
 const clozeCard=(word,translation,prompt)=>({word,translation,category:"CLOZE PRACTICE",prompt,exampleTranslation:"Доповни речення правильною формою дієслова.",practiceVariants:false});
 const translationCard=(word,translation)=>({word,translation,category:"TRANSLATION PRACTICE",prompt:translation,example:word,exampleTranslation:"Введіть лише відмінювану форму дієслова.",practiceVariants:false});
 const presentPracticeCards=[
@@ -1158,14 +1256,16 @@ const pastVerbA1Stages=pastVerbStagesForLevel("A1","a1",pastVerbA1FormCards,past
 const pastVerbA2Stages=pastVerbStagesForLevel("A2","a2",pastVerbA2.formCards,pastVerbA2.practiceCards);
 const pastVerbB1Stages=pastVerbStagesForLevel("B1","b1",pastVerbB1.formCards,pastVerbB1.practiceCards);
 const perfektStages=[
-  lessonStep("perfekt-frame-learn","Learn the Perfekt sentence frame","Compare sentences with haben and sein. The conjugated auxiliary is in position two and Partizip II closes the sentence.",perfektFrameCards,"learn","Sentence frame","Learn"),
-  lessonStep("perfekt-frame-practice","Build complete Perfekt sentences","Translate each Ukrainian cue into a complete German sentence with the correct auxiliary and final participle.",perfektFrameCards,"input","Sentence frame","Practice"),
-  lessonStep("perfekt-regular-learn","Learn regular participles","Form regular participles with ge-…-t, and place ge between a separable prefix and the stem.",perfektRegularCards,"learn","Regular & separable","Learn"),
-  lessonStep("perfekt-regular-practice","Practice regular participles","Write the Partizip II form for regular and separable verbs.",perfektRegularCards,"input","Regular & separable","Practice"),
-  lessonStep("perfekt-no-ge-learn","Learn when ge- disappears","Notice that inseparable prefixes and verbs ending in -ieren form Partizip II without an added ge-.",perfektNoGeCards,"learn","Without ge-","Learn"),
-  lessonStep("perfekt-no-ge-practice","Practice participles without ge-","Write the Partizip II form for verbs with inseparable prefixes and verbs ending in -ieren.",perfektNoGeCards,"input","Without ge-","Practice"),
-  lessonStep("perfekt-irregular-learn","Learn irregular participles","Learn strong and mixed participles, including separable and inseparable forms.",perfektIrregularCards,"learn","Irregular forms","Learn"),
-  lessonStep("perfekt-irregular-practice","Practice irregular participles","Retrieve each irregular Partizip II form from its infinitive and context.",perfektIrregularCards,"input","Irregular forms","Practice")
+  lessonStep("perfekt-frame-learn","Вивчіть рамку Perfekt","Відмінюване haben або sein стоїть на другому місці, а Partizip II — у кінці речення.",perfektFrameCards,"learn","Рамка речення","Вивчення"),
+  lessonStep("perfekt-frame-practice","Побудуйте речення в Perfekt","Перекладіть українську підказку повним німецьким реченням із правильним допоміжним дієсловом.",perfektFrameCards,"input","Рамка речення","Практика"),
+  lessonStep("perfekt-auxiliary-learn","Вивчіть: haben чи sein","Порівняйте чотири прості випадки: прямий додаток, звичайна дія, переміщення та зміна стану.",perfektAuxiliaryCards,"learn","Haben чи sein","Вивчення"),
+  lessonStep("perfekt-auxiliary-practice","Оберіть haben або sein","Вставте правильну форму haben або sein. Коротка підказка допоможе визначити правило.",perfektAuxiliaryCards,"input","Haben чи sein","Практика"),
+  lessonStep("perfekt-regular-learn","Вивчіть правильні Partizip II","Утворюйте правильні форми за схемою ge-…-t і ставте ge між відокремлюваним префіксом та основою.",perfektRegularCards,"learn","Правильні та відокремлювані","Вивчення"),
+  lessonStep("perfekt-regular-practice","Потренуйте правильні форми","Напишіть Partizip II правильних дієслів і дієслів із відокремлюваними префіксами.",perfektRegularCards,"input","Правильні та відокремлювані","Практика"),
+  lessonStep("perfekt-no-ge-learn","Дізнайтеся, коли зникає ge-","Дієслова з невідокремлюваними префіксами та дієслова на -ieren утворюють Partizip II без додаткового ge-.",perfektNoGeCards,"learn","Без ge-","Вивчення"),
+  lessonStep("perfekt-no-ge-practice","Потренуйте форми без ge-","Напишіть Partizip II дієслів із невідокремлюваними префіксами та дієслів на -ieren.",perfektNoGeCards,"input","Без ge-","Практика"),
+  lessonStep("perfekt-irregular-learn","Вивчіть неправильні форми","Запам’ятайте сильні та змішані дієприкметники, зокрема відокремлювані й невідокремлювані форми.",perfektIrregularCards,"learn","Неправильні форми","Вивчення"),
+  lessonStep("perfekt-irregular-practice","Потренуйте неправильні Partizip II","Відновіть кожну неправильну форму Partizip II за інфінітивом і контекстом.",perfektIrregularCards,"input","Неправильні форми","Практика")
 ];
 const presentClozeCards=presentPracticeCards.filter(card=>card.category==="CLOZE PRACTICE");
 const presentTranslationCards=presentPracticeCards.filter(card=>card.category==="TRANSLATION PRACTICE");
@@ -1274,7 +1374,7 @@ const deckDefinitions={
   "past-verbs":{title:"Past verb forms · A1",label:"Past verb forms · A1",badge:"A1",tip:"Use Perfekt for everyday A1 past events; learn Präteritum only for sein and haben.",guide:pastVerbGuide("A1"),cards:pastVerbA1Cards,stages:pastVerbA1Stages},
   "past-verbs-a2":{title:"Past verb forms · A2",label:"Past verb forms · A2",badge:"A2",tip:"Use Präteritum for modal verbs and common biography facts; retain Perfekt for everyday past events.",guide:pastVerbGuide("A2"),cards:pastVerbA2.cards,stages:pastVerbA2Stages},
   "past-verbs-b1":{title:"Past verb forms · B1",label:"Past verb forms · B1",badge:"B1",tip:"Use the broader Präteritum vocabulary in written narratives and contrast it with Perfekt.",guide:pastVerbGuide("B1"),cards:pastVerbB1.cards,stages:pastVerbB1Stages},
-  perfekt:{title:"Perfekt formation",label:"Perfekt formation",badge:"P2",tip:"Build Perfekt with a conjugated form of haben or sein and Partizip II at the end.",guide:{title:"Perfekt: haben / sein + Partizip II",intro:"Perfekt — основний розмовний минулий час. Спочатку оберіть haben або sein, потім утворіть Partizip II й поставте його в кінець речення.",rules:[{title:"Будуйте рамку речення",detail:"Відмінюване haben або sein стоїть на другому місці, а Partizip II — у кінці.",formula:"Ich habe die Hausaufgaben gemacht."},{title:"Уживайте sein для руху та зміни стану",detail:"Більшість дієслів уживаються з haben. Sein потрібне насамперед для руху до іншого місця, зміни стану, а також із bleiben.",formula:"Wir sind gefahren. · Er ist geblieben."},{title:"Регулярні дієслова: ge-…-t",detail:"Додайте ge- перед основою та -t у кінці. У відокремлюваних дієсловах ge стоїть після префікса.",formula:"machen → gemacht · abholen → abgeholt"},{title:"Без ge-",detail:"Невідокремлювані префікси be-, emp-, ent-, er-, miss-, ver-, zer- та дієслова на -ieren не отримують ge-.",formula:"erzählen → erzählt · studieren → studiert"},{title:"Неправильні форми",detail:"Сильні й змішані дієслова можуть змінювати основу; їхню форму потрібно запам’ятовувати.",formula:"schreiben → geschrieben · verbringen → verbracht"}]},cards:perfektCards,stages:perfektStages},
+  perfekt:{title:"Perfekt: haben und sein",label:"Perfekt",badge:"P2",tip:"Спочатку визначте: це дія, переміщення чи зміна стану? Потім виберіть haben або sein і поставте Partizip II в кінці.",guide:{title:"Perfekt: коли haben, а коли sein?",intro:"Perfekt утворюється з відмінюваного haben або sein та Partizip II. Починайте з простого алгоритму: haben — для більшості дій; sein — переважно для переміщення і зміни стану.",rules:[{title:"1. Побудуйте рамку речення",detail:"Допоміжне дієслово стоїть на другому місці, а Partizip II — у кінці.",formula:"Ich habe die Hausaufgaben gemacht."},{title:"2. Оберіть haben для більшості дій",detail:"Haben уживається з діяльністю, станами, зворотними та більшістю перехідних дієслів.",formula:"Ich habe gearbeitet. · Wir haben uns getroffen."},{title:"3. Оберіть sein для переміщення",detail:"Sein уживається, коли підмет сам переміщується або прибуває в інше місце.",formula:"Ich bin nach Hause gegangen. · Der Zug ist angekommen."},{title:"4. Оберіть sein для зміни стану",detail:"Sein уживається, коли хтось або щось переходить у новий стан.",formula:"Das Kind ist eingeschlafen. · Er ist krank geworden."},{title:"5. Запам’ятайте особливі дієслова",detail:"Sein також уживається з sein, werden, bleiben, passieren, geschehen, begegnen та gelingen.",formula:"Sie ist zu Hause geblieben. · Was ist passiert?"},{title:"6. Перевірте прямий додаток",detail:"Якщо дієслово має прямий додаток в Akkusativ, зазвичай потрібне haben.",formula:"Ich habe ein Buch gelesen. · Sie hat die Tür geöffnet."},{title:"7. Утворіть Partizip II",detail:"Для правильних дієслів зазвичай додаємо ge-…-t; дієслова на -ieren та з невідокремлюваним префіксом не отримують ge-.",formula:"machen → gemacht · studieren → studiert · erzählen → erzählt"},{title:"8. Не плутайте стан і зміну стану",detail:"Звичайний стан часто вживається з haben, а початок нового стану — із sein.",formula:"Ich habe geschlafen. · Ich bin eingeschlafen."}]},cards:perfektCards,stages:perfektStages},
   "present-practice":{title:"Present-tense practice",practiceTitle:"Present-tense practice",label:"Präsens practice",badge:"P",tip:"Use this focused review to retrieve conjugated forms in context. Revise each verb pattern in its dedicated lesson first.",guide:{title:"Відпрацювання форм Präsens",intro:"Це повторення вже вивчених моделей дієвідмінювання, а не вступ до нових правил. Використовуйте речення як контекст, але вводьте лише відмінювану форму або форми.",rules:["У частині з пропусками введіть форму, якої бракує в німецькому реченні; підказка в дужках показує інфінітив.","У частині з українськими підказками визначте особу й число, а потім введіть лише відповідну німецьку форму, не все речення.","Вправа повторює слабкі, сильні та неправильні форми, зокрема sein, gehen, fahren, sehen і möchten."]},cards:presentPracticeCards,stages:presentPracticeStages},
   koennen:{title:"Modal verbs",label:"Modal verbs",badge:"M",tip:"Use können for ability, mögen for likes, and möchten for polite wishes.",guide:{title:"Модальні дієслова: können, mögen і möchten",intro:"Ці дієслова допомагають говорити про вміння, уподобання та ввічливі бажання. Форма залежить від підмета.",rules:["Können означає «могти, вміти»: ich kann, du kannst, er/sie/es kann, wir können, ihr könnt, sie/Sie können.","Mögen означає «любити, подобатися»: ich mag, du magst, er/sie/es mag, wir mögen, ihr mögt, sie/Sie mögen.","Möchten — форма Konjunktiv II від mögen. У сучасній мові вона означає ввічливе «хотів би / хотіла б»: ich möchte, du möchtest, er/sie/es möchte, wir möchten, ihr möchtet, sie/Sie möchten.","Порівнюйте значення: Ich mag Kaffee. = «Мені подобається кава». Ich möchte einen Kaffee. = «Я хотів би / хотіла б каву».","З können і möchten друге дієслово стоїть в інфінітиві в кінці речення: Ich kann schwimmen. Wir möchten bezahlen."]},cards:koennenCards,stages:koennenStages},
   haben:{title:"Haben, bekommen & brauchen",label:"Haben, bekommen & brauchen",badge:"hab",tip:"Use haben for what you have, bekommen for what you receive, and brauchen for what you need.",guide:{title:"Haben, bekommen & brauchen",intro:"Ці три дієслова допомагають говорити про речі, людей, потреби та отримання в повсякденних ситуаціях A1.",rules:["haben означає «мати»: Ich habe einen Hund.","bekommen означає «отримувати»: Wir bekommen morgen Geld.","brauchen означає «потребувати»: Er braucht eine neue Brille.","Форми bekommen і brauchen відмінюються регулярно; haben має особливі форми du hast, er/sie/es hat та ihr habt."]},cards:habenCards,stages:habenStages},

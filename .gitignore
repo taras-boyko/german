@@ -4,3 +4,4 @@ data/lesson-history.json
 .grammar-preview.html
 __pycache__/
 *.py[cod]
+/training-materials/

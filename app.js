@@ -16,7 +16,7 @@ const lessonCatalog={
   "past-verbs":{outcome:"Use everyday A1 Perfekt and recognize Präteritum of sein and haben.",className:"Morphology",color:"purple",level:"A1"},
   "past-verbs-a2":{outcome:"Use modal Präteritum and common biography forms alongside Perfekt.",className:"Morphology",color:"orange",level:"A2"},
   "past-verbs-b1":{outcome:"Contrast Präteritum and Perfekt in contextual B1 narratives.",className:"Morphology",color:"blue",level:"B1"},
-  perfekt:{outcome:"Build Perfekt with the right auxiliary and Partizip II pattern.",className:"Morphology",color:"green"},
+  perfekt:{outcome:"Утворювати Perfekt із правильним haben або sein та Partizip II.",className:"Morphology",color:"green"},
   "present-practice":{outcome:"Retrieve present-tense forms from context and meaning.",className:"Morphology",color:"green"},
   koennen:{outcome:"Use können, mögen, and möchten in useful sentences.",className:"Grammar choice",color:"blue"},
   haben:{outcome:"Distinguish having, receiving, and needing.",className:"Grammar choice",color:"green"},
@@ -569,6 +569,7 @@ function stageIsComplete(lessonId,stage){
   const lesson=lessonState(lessonId);
   const completed=stage.mode==="input"?lesson.masteredPractice:lesson.completedLearn;
   const legacy=legacySequenceAliases[lessonId]?.[stage.progressId];
+  if(stage.requiresFullCoverage&&progressTargets(lessonId,stage).size<new Set(stageTargetIds(stage)).size)return false;
   return completed.includes(stage.id)||completed.includes(stage.progressId)||Boolean(legacy?.every(id=>completed.includes(id)));
 }
 
@@ -808,9 +809,9 @@ function inputCopy(card){
 }
 
 function feedbackExample(card){
-  if(card.type==="recall")return {label:card.exampleLabel||"Example in context",text:card.example||card.word,translation:card.exampleTranslation||card.translation};
+  if(card.type==="recall")return {label:"Example in context",text:card.example||card.word,translation:card.exampleTranslation||card.translation};
   if(/[.?!]$/.test(card.word.trim()))return {label:"Correct sentence",text:card.word,translation:card.translation};
-  if(card.example&&!card.example.includes("___"))return {label:card.exampleLabel||"Example in context",text:card.example,translation:card.exampleTranslation||card.translation};
+  if(card.example&&!card.example.includes("___"))return {label:"Example in context",text:card.example,translation:card.exampleTranslation||card.translation};
   return {label:"Correct answer",text:card.response.accepted[0],translation:card.translation};
 }
 
@@ -852,7 +853,7 @@ function render(focusTarget=""){
     $("feedback-title").textContent=outcome.title;
     $("feedback-detail").textContent=outcome.detail;
   }
-  $("example-label").textContent=verificationMode&&revealed?example.label:(card.exampleLabel||"Example sentence");
+  $("example-label").textContent=verificationMode&&revealed?example.label:"Example sentence";
   $("example").textContent=verificationMode&&revealed?example.text:(card.example||card.word);
   $("example-translation").textContent=verificationMode&&revealed?example.translation:(card.exampleTranslation||card.translation);
   $("feedback-context").open=!verificationMode;
@@ -1183,7 +1184,8 @@ function renderLibrary(){
     const meta=document.createElement("div");meta.className="section-meta";
     const sequences=document.createElement("span");sequences.textContent=`${definition.stages.length} sequence${definition.stages.length===1?"":"s"}`;
     const classification=document.createElement("span");classification.textContent=catalog.className;
-    meta.append(sequences,classification);
+    const level=document.createElement("span");level.textContent=catalog.level||"A1";
+    meta.append(sequences,level,classification);
     const button=document.createElement("button");button.type="button";button.className="primary-button";button.innerHTML=`<span>${actionLabel(lessonId)}</span><span aria-hidden="true">→</span>`;
     button.addEventListener("click",()=>{if(selectDeck(lessonId))showView("practice")});
     article.append(top,title,outcome,meta,button);
