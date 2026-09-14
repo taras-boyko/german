@@ -5,3 +5,4 @@ data/lesson-history.json
 __pycache__/
 *.py[cod]
 /training-materials/
+/text-books/
