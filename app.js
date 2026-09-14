@@ -13,7 +13,9 @@ const lessonCatalog={
   "w-questions":{outcome:"Choose and produce the right German question word.",className:"Vocabulary recall",color:"purple"},
   conjugation:{outcome:"Apply regular present-tense endings and spelling rules.",className:"Morphology",color:"orange"},
   "strong-verbs":{outcome:"Produce strong-verb forms accurately in context.",className:"Morphology",color:"blue"},
-  "past-verbs":{outcome:"Recall common Präteritum and Perfekt forms.",className:"Morphology",color:"purple"},
+  "past-verbs":{outcome:"Recall A1 Präteritum forms and their paired Perfekt forms from the qualification sheet.",className:"Morphology",color:"purple",level:"A1"},
+  "past-verbs-a2":{outcome:"Recall the A2 Präteritum and Perfekt forms from the qualification sheet.",className:"Morphology",color:"orange",level:"A2"},
+  "past-verbs-b1":{outcome:"Recall the B1 Präteritum and Perfekt forms from the qualification sheet.",className:"Morphology",color:"blue",level:"B1"},
   perfekt:{outcome:"Build Perfekt with the right auxiliary and Partizip II pattern.",className:"Morphology",color:"green"},
   "present-practice":{outcome:"Retrieve present-tense forms from context and meaning.",className:"Morphology",color:"green"},
   koennen:{outcome:"Use können, mögen, and möchten in useful sentences.",className:"Grammar choice",color:"blue"},
@@ -806,9 +808,9 @@ function inputCopy(card){
 }
 
 function feedbackExample(card){
-  if(card.type==="recall")return {label:"Example in context",text:card.example||card.word,translation:card.exampleTranslation||card.translation};
+  if(card.type==="recall")return {label:card.exampleLabel||"Example in context",text:card.example||card.word,translation:card.exampleTranslation||card.translation};
   if(/[.?!]$/.test(card.word.trim()))return {label:"Correct sentence",text:card.word,translation:card.translation};
-  if(card.example&&!card.example.includes("___"))return {label:"Example in context",text:card.example,translation:card.exampleTranslation||card.translation};
+  if(card.example&&!card.example.includes("___"))return {label:card.exampleLabel||"Example in context",text:card.example,translation:card.exampleTranslation||card.translation};
   return {label:"Correct answer",text:card.response.accepted[0],translation:card.translation};
 }
 
@@ -850,7 +852,7 @@ function render(focusTarget=""){
     $("feedback-title").textContent=outcome.title;
     $("feedback-detail").textContent=outcome.detail;
   }
-  $("example-label").textContent=verificationMode&&revealed?example.label:"Example sentence";
+  $("example-label").textContent=verificationMode&&revealed?example.label:(card.exampleLabel||"Example sentence");
   $("example").textContent=verificationMode&&revealed?example.text:(card.example||card.word);
   $("example-translation").textContent=verificationMode&&revealed?example.translation:(card.exampleTranslation||card.translation);
   $("feedback-context").open=!verificationMode;
