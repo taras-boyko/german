@@ -900,13 +900,37 @@ function renderLocationIllustration(card){
   $("flashcard").classList.add("illustrated-card");
 }
 
+function practiceSupport(card){
+  if(activeDeckId!=="local-prepositions")return {label:"In context",text:card.support||""};
+  const scene=locationScene(card);
+  if(!scene)return {label:"Meaning cue",text:card.translation||""};
+  const baseNouns={
+    drawer:"die Schublade",
+    wall:"die Wand",
+    newspaper:"der Tisch",
+    table:"der Tisch",
+    bed:"das Bett",
+    chair:"der Stuhl",
+    "house-front":"das Haus",
+    "house-behind":"das Haus",
+    people:"die Studentin",
+    windows:"die Fenster (Plural)",
+    bag:"die Tasche",
+    sofa:"das Sofa"
+  };
+  return {
+    label:`${scene.motion?"Wohin?":"Wo?"} · meaning + base noun`,
+    text:`${card.translation} · ${baseNouns[scene.kind]}`
+  };
+}
+
 function render(focusTarget=""){
   const card=deck[index],definition=activeDefinition(),stage=activeStage(),session=learningState.activeSession;
   if(!card)return;
   const revealed=verified||answerRevealed,expected=card.response.accepted[0],[inputLabel,inputPlaceholder]=inputCopy(card);
   const example=feedbackExample(card);
   const feedbackVisible=verificationMode&&revealed;
-  const support=verificationMode?card.support||"":"";
+  const support=verificationMode?practiceSupport(card):{label:"",text:""};
   if(!feedbackVisible){
     $("verification-feedback").textContent="";
     $("verification-feedback").className="verification-feedback";
@@ -917,12 +941,14 @@ function render(focusTarget=""){
   if(verificationMode)renderPracticePrompt(card);
   else $("question-word").textContent=card.word;
   $("translation").textContent=verificationMode?(revealed?"Your German recall":inputLabel):(card.studyTranslation||card.translation);
-  $("prompt-support").textContent=support;
-  $("prompt-support").hidden=!support;
+  $("prompt-support").dataset.label=support.label;
+  $("prompt-support").textContent=support.text;
+  $("prompt-support").hidden=!support.text;
   $("original-question-text").textContent=card.promptText;
   $("original-question").hidden=true;
   $("category-label").textContent=`${card.category} · ${card.type.replace("-"," ").toUpperCase()}`;
-  $("w-badge").textContent=definition.badge;
+  const location=locationScene(card);
+  $("w-badge").textContent=location?(location.motion?"Wohin?":"Wo?"):definition.badge;
   $("study-tip").textContent=definition.tip;
   $("feedback-outcome").hidden=!feedbackVisible;
   $("feedback-outcome").className=`feedback-outcome ${verified?"correct":"incorrect"}`;
