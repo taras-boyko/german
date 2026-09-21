@@ -26,6 +26,7 @@ const lessonCatalog={
   possessives:{outcome:"Choose the owner stem and the correct possessive ending.",className:"Morphology",color:"orange"},
   sein:{outcome:"Retrieve every present-tense form of sein.",className:"Morphology",color:"blue"},
   frequency:{outcome:"Express frequency precisely from immer to nie.",className:"Vocabulary recall",color:"orange"},
+  "local-prepositions":{outcome:"Choose Dativ for locations and Akkusativ for destinations with local prepositions.",className:"Grammar choice",color:"blue"},
   "time-expressions":{outcome:"Choose time expressions and produce spoken clock times.",className:"Grammar choice",color:"purple"},
   "time-worksheet-vocabulary":{outcome:"Use seasonal and daily-routine vocabulary in context.",className:"Vocabulary recall",color:"green"},
   "everyday-vocabulary":{outcome:"Use common routine, food, and drink vocabulary.",className:"Vocabulary recall",color:"orange"},
@@ -853,6 +854,52 @@ function feedbackOutcome(card,wasCorrect){
   return {tone:"incorrect",title:`Not quite — ${answer}`,detail:"Compare your answer with the correction below, then try this target again."};
 }
 
+function locationScene(card){
+  if(activeDeckId!=="local-prepositions")return null;
+  const id=card.targetId;
+  const motion=id.includes("accusative")||["local-contrast-vase","local-contrast-picture","local-contrast-key","local-contrast-sofa"].includes(id);
+  if(id.includes("schublade"))return {kind:"drawer",motion};
+  if(id.includes("wand")||id.includes("picture"))return {kind:"wall",motion};
+  if(id==="local-dative-auf-tisch")return {kind:"newspaper",motion};
+  if(id.includes("tisch")||id.includes("vase"))return {kind:"table",motion};
+  if(id.includes("bett"))return {kind:"bed",motion};
+  if(id.includes("stuhl"))return {kind:"chair",motion};
+  if(id.includes("vor-haus"))return {kind:"house-front",motion};
+  if(id.includes("hinter-haus"))return {kind:"house-behind",motion};
+  if(id.includes("studentin"))return {kind:"people",motion};
+  if(id.includes("fenster"))return {kind:"windows",motion};
+  if(id.includes("key"))return {kind:"bag",motion};
+  if(id.includes("sofa"))return {kind:"sofa",motion};
+  return null;
+}
+
+function renderLocationIllustration(card){
+  const figure=$("location-illustration"),art=$("location-illustration-art"),scene=locationScene(card);
+  if(!scene){
+    figure.hidden=true;
+    $("flashcard").classList.remove("illustrated-card");
+    return;
+  }
+  const arrow=(path,head)=>scene.motion?`<path d="${path}" class="scene-arrow"/><path d="${head}" class="scene-arrow-head"/>`:"";
+  const scenes={
+    drawer:`<ellipse cx="120" cy="111" rx="75" ry="7" class="scene-shadow"/><rect x="55" y="24" width="130" height="78" rx="12" class="scene-cabinet"/><rect x="68" y="61" width="104" height="33" rx="7" class="scene-drawer"/><path d="M108 72h24" class="scene-line"/><g transform="rotate(-7 120 71)"><rect x="91" y="57" width="51" height="25" rx="4" class="scene-book"/><path d="M99 57v25" class="scene-detail"/></g>${arrow("M34 41c22-8 39-1 56 18","M80 52l12 8-14 3")}`,
+    wall:`<path d="M37 102V25c0-6 5-11 11-11h144c6 0 11 5 11 11v77" class="scene-room"/><path d="M31 103h178" class="scene-floor"/><rect x="89" y="30" width="62" height="49" rx="6" class="scene-frame"/><rect x="97" y="38" width="46" height="33" rx="3" class="scene-picture"/><circle cx="108" cy="48" r="5" class="scene-sun"/><path d="M99 68l13-13 9 8 8-12 12 17" class="scene-mountain"/><path d="M178 103V75m-11 28V83m22 20V88" class="scene-plant"/>${arrow("M47 72c12-22 28-31 43-28","M80 38l13 5-9 10")}`,
+    newspaper:`<ellipse cx="121" cy="109" rx="78" ry="7" class="scene-shadow"/><path d="M43 72h154l-10 18H53z" class="scene-table"/><path d="M64 89l-7 25m118-25 8 25" class="scene-line"/><g transform="rotate(-5 119 65)"><rect x="85" y="49" width="68" height="31" rx="3" class="scene-paper"/><path d="M94 58h23m-23 7h48m-48 7h37" class="scene-detail"/><rect x="124" y="56" width="19" height="8" rx="2" class="scene-photo"/></g>`,
+    table:`<ellipse cx="121" cy="109" rx="78" ry="7" class="scene-shadow"/><path d="M43 72h154l-10 18H53z" class="scene-table"/><path d="M64 89l-7 25m118-25 8 25" class="scene-line"/><path d="M105 44h31l8 28H97z" class="scene-vase"/><path d="M112 44c-5-12-2-21 4-27m11 27c7-10 8-20 4-28m-15 14c-8-7-15-8-20-6m35 6c8-7 15-8 20-6" class="scene-stem"/><circle cx="94" cy="23" r="6" class="scene-flower"/><circle cx="154" cy="23" r="6" class="scene-flower"/><circle cx="116" cy="15" r="6" class="scene-flower"/><circle cx="132" cy="14" r="6" class="scene-flower"/>${arrow("M39 38c21-13 43-9 61 7","M89 38l13 8-14 5")}`,
+    bed:`<path d="M34 108h174" class="scene-floor"/><path d="M48 76h145v28H48z" class="scene-bed"/><path d="M55 57h127c6 0 11 5 11 11v8H48V64c0-4 3-7 7-7z" class="scene-sheet"/><rect x="58" y="61" width="43" height="12" rx="6" class="scene-pillow"/><path d="M58 76v32m122-32v32" class="scene-line"/><path d="M120 13v25" class="scene-cord"/><path d="M103 39h34l-7 17h-20z" class="scene-lamp"/><path d="M108 58l-10 13m24-13v13m10-13 10 13" class="scene-glow"/>${arrow("M62 27c17-9 29-7 42 6","M94 27l12 7-13 5")}`,
+    chair:`<ellipse cx="122" cy="111" rx="73" ry="7" class="scene-shadow"/><rect x="92" y="28" width="57" height="49" rx="8" class="scene-chair"/><path d="M99 77l-8 34m50-34 9 34" class="scene-line"/><path d="M75 96c7-15 32-19 47-6l-3 14H79z" class="scene-dog"/><circle cx="86" cy="87" r="10" class="scene-dog"/><path d="M77 80l-8-8m23 8 5-9m18 19c9-8 18-6 21 1" class="scene-line"/><circle cx="83" cy="85" r="1.8" class="scene-eye"/>${arrow("M40 87c15-14 27-15 39-8","M68 73l13 6-11 8")}`,
+    "house-front":`<ellipse cx="122" cy="112" rx="96" ry="8" class="scene-shadow"/><path d="M64 55l57-40 57 40v53H64z" class="scene-house"/><path d="M54 57l67-48 67 48" class="scene-roof"/><rect x="108" y="75" width="27" height="33" rx="3" class="scene-door"/><rect x="76" y="67" width="21" height="20" rx="3" class="scene-window"/><rect x="146" y="67" width="21" height="20" rx="3" class="scene-window"/><path d="M32 92h59v9H32zM38 101v12m47-12v12" class="scene-bench"/><path d="M30 84h63" class="scene-bench"/>${arrow("M20 67c10 4 18 10 23 20","M36 78l8 11-13-1")}`,
+    "house-behind":`<path d="M22 99c39-18 75-18 109-4 31 13 59 12 88-3" class="scene-road"/><g class="scene-car-behind"><path d="M151 67h55l13 18v15h-76V82z" class="scene-car"/><path d="M164 67l10-14h23l9 14" class="scene-car-window"/><circle cx="160" cy="100" r="8" class="scene-wheel"/><circle cx="204" cy="100" r="8" class="scene-wheel"/></g><path d="M51 58l62-43 62 43v53H51z" class="scene-house"/><path d="M41 60l72-51 72 51" class="scene-roof"/><rect x="99" y="77" width="28" height="34" rx="3" class="scene-door"/><rect x="63" y="68" width="22" height="20" rx="3" class="scene-window"/><path d="M35 111h159" class="scene-floor"/>${arrow("M204 30c-17-9-34-5-45 12","M166 34l-9 10 13 2")}`,
+    people:`<ellipse cx="122" cy="112" rx="79" ry="7" class="scene-shadow"/><path d="M57 94h129v9H57zM67 103v10m108-10v10" class="scene-bench"/><circle cx="96" cy="43" r="14" class="scene-person-one"/><path d="M75 91c2-25 10-39 21-39s19 14 21 39" class="scene-person-one"/><circle cx="146" cy="43" r="14" class="scene-person-two"/><path d="M125 91c2-25 10-39 21-39s19 14 21 39" class="scene-person-two"/><path d="M79 60l-11 20m95-20 12 20" class="scene-line"/>${arrow("M34 50c16-11 30-10 43 1","M68 44l11 7-12 6")}`,
+    windows:`<path d="M32 108V24c0-6 5-11 11-11h154c6 0 11 5 11 11v84" class="scene-room"/><rect x="47" y="31" width="48" height="56" rx="6" class="scene-window"/><rect x="145" y="31" width="48" height="56" rx="6" class="scene-window"/><path d="M71 31v56M47 59h48m74-28v56m-24-28h48" class="scene-window-line"/><rect x="106" y="43" width="29" height="39" rx="5" class="scene-frame"/><path d="M112 75l7-11 6 6 5-9" class="scene-mountain"/>${arrow("M117 106c0-10 1-17 3-24","M115 91l5-11 6 11")}`,
+    bag:`<ellipse cx="121" cy="111" rx="62" ry="7" class="scene-shadow"/><path d="M71 56h99l-9 52H80z" class="scene-bag"/><path d="M99 56c0-28 43-28 43 0" class="scene-handle"/><g transform="rotate(-18 122 77)"><circle cx="116" cy="76" r="9" class="scene-key-ring"/><path d="M124 76h27m-9 0v7m7-7v5" class="scene-key"/></g>${arrow("M47 46c17-8 35-4 49 10","M86 49l12 8-13 4")}`,
+    sofa:`<ellipse cx="121" cy="111" rx="83" ry="7" class="scene-shadow"/><path d="M47 63h148v44H47z" class="scene-sofa"/><path d="M60 50h122c10 0 18 8 18 18H42c0-10 8-18 18-18z" class="scene-cushion"/><path d="M65 67v40m110-40v40" class="scene-line"/><circle cx="120" cy="31" r="13" class="scene-person-one"/><path d="M99 68c2-22 10-34 21-34s19 12 21 34" class="scene-person-one"/><path d="M102 58L88 78m50-20 14 20" class="scene-line"/>${arrow("M33 35c19-10 39-7 61 5","M83 33l13 8-14 5")}`
+  };
+  art.innerHTML=`<title>Illustration of a location relationship</title><rect width="240" height="128" rx="18" class="scene-background"/>${scenes[scene.kind]}`;
+  figure.hidden=false;
+  $("flashcard").classList.add("illustrated-card");
+}
+
 function render(focusTarget=""){
   const card=deck[index],definition=activeDefinition(),stage=activeStage(),session=learningState.activeSession;
   if(!card)return;
@@ -866,6 +913,7 @@ function render(focusTarget=""){
   }
   renderLessonPath();
   renderDeckGuide();
+  renderLocationIllustration(card);
   if(verificationMode)renderPracticePrompt(card);
   else $("question-word").textContent=card.word;
   $("translation").textContent=verificationMode?(revealed?"Your German recall":inputLabel):(card.studyTranslation||card.translation);
