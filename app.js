@@ -31,6 +31,7 @@ const lessonCatalog={
   "time-worksheet-vocabulary":{outcome:"Use seasonal and daily-routine vocabulary in context.",className:"Vocabulary recall",color:"green"},
   "everyday-vocabulary":{outcome:"Use common routine, food, and drink vocabulary.",className:"Vocabulary recall",color:"orange"},
   "travel-transport":{outcome:"Navigate transport, routes, and travel actions in German.",className:"Vocabulary recall",color:"orange"},
+  "giving-directions":{outcome:"Give simple directions and locate familiar places around town.",className:"Vocabulary recall",color:"blue",level:"A1"},
   "es-gibt-leisure":{outcome:"Describe places, activities, and what a town offers.",className:"Grammar choice",color:"purple"}
 };
 const legacySequenceAliases={

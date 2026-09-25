@@ -1113,6 +1113,205 @@ const travelActionCards=[
   {word:"einkaufen",translation:"робити покупки",category:"EVERYDAY · ACTION",example:"Wir kaufen am Bahnhof ein.",exampleTranslation:"Ми робимо покупки на вокзалі."},
   {word:"fernsehen",translation:"дивитися телевізор",category:"EVERYDAY · ACTION",example:"Am Abend sehe ich fern.",exampleTranslation:"Увечері я дивлюся телевізор."}
 ];
+const directionInstructionCards=[
+  {
+    id:"directions-zuerst-1",targetId:"directions-zuerst",type:"recall",word:"zuerst",translation:"спочатку",category:"DIRECTIONS · ORDER",
+    example:"Zuerst gehen Sie bis zur Kreuzung.",exampleTranslation:"Спочатку йдіть до перехрестя.",
+    response:{mode:"text",scope:"word",accepted:["zuerst"],caseSensitive:false,punctuationSensitive:false}
+  },
+  {
+    id:"directions-zuerst-2",targetId:"directions-zuerst",type:"recall",word:"zuerst",translation:"спочатку",category:"DIRECTIONS · ORDER",
+    example:"Zuerst fährst du geradeaus.",exampleTranslation:"Спочатку їдь прямо.",
+    response:{mode:"text",scope:"word",accepted:["zuerst"],caseSensitive:false,punctuationSensitive:false}
+  },
+  {
+    id:"directions-zuerst-3",targetId:"directions-zuerst",type:"recall",word:"zuerst",translation:"спочатку",category:"DIRECTIONS · ORDER",
+    example:"Zuerst gehen wir zum Bahnhof.",exampleTranslation:"Спочатку ми йдемо до вокзалу.",
+    response:{mode:"text",scope:"word",accepted:["zuerst"],caseSensitive:false,punctuationSensitive:false}
+  },
+  {
+    id:"directions-geradeaus-1",targetId:"directions-geradeaus",type:"recall",word:"geradeaus",translation:"прямо",category:"DIRECTIONS · DIRECTION",
+    example:"Gehen Sie hier geradeaus.",exampleTranslation:"Ідіть тут прямо.",
+    response:{mode:"text",scope:"word",accepted:["geradeaus"],caseSensitive:false,punctuationSensitive:false}
+  },
+  {
+    id:"directions-geradeaus-2",targetId:"directions-geradeaus",type:"recall",word:"geradeaus",translation:"прямо",category:"DIRECTIONS · DIRECTION",
+    example:"Der Bus fährt geradeaus.",exampleTranslation:"Автобус їде прямо.",
+    response:{mode:"text",scope:"word",accepted:["geradeaus"],caseSensitive:false,punctuationSensitive:false}
+  },
+  {
+    id:"directions-geradeaus-3",targetId:"directions-geradeaus",type:"recall",word:"geradeaus",translation:"прямо",category:"DIRECTIONS · DIRECTION",
+    example:"Fahren Sie an der Ampel geradeaus.",exampleTranslation:"Їдьте прямо на світлофорі.",
+    response:{mode:"text",scope:"word",accepted:["geradeaus"],caseSensitive:false,punctuationSensitive:false}
+  },
+  {
+    id:"directions-nach-rechts-1",targetId:"directions-nach-rechts",type:"recall",word:"nach rechts",translation:"праворуч",category:"DIRECTIONS · DIRECTION",
+    example:"Biegen Sie an der Kreuzung nach rechts ab.",exampleTranslation:"Поверніть на перехресті праворуч.",
+    response:{mode:"text",scope:"phrase",accepted:["nach rechts"],caseSensitive:false,punctuationSensitive:false}
+  },
+  {
+    id:"directions-nach-rechts-2",targetId:"directions-nach-rechts",type:"recall",word:"nach rechts",translation:"праворуч",category:"DIRECTIONS · DIRECTION",
+    example:"Der Weg führt nach rechts.",exampleTranslation:"Дорога веде праворуч.",
+    response:{mode:"text",scope:"phrase",accepted:["nach rechts"],caseSensitive:false,punctuationSensitive:false}
+  },
+  {
+    id:"directions-nach-rechts-3",targetId:"directions-nach-rechts",type:"recall",word:"nach rechts",translation:"праворуч",category:"DIRECTIONS · DIRECTION",
+    example:"Gehen Sie an der nächsten Straße nach rechts.",exampleTranslation:"На наступній вулиці йдіть праворуч.",
+    response:{mode:"text",scope:"phrase",accepted:["nach rechts"],caseSensitive:false,punctuationSensitive:false}
+  },
+  {
+    id:"directions-nach-links-1",targetId:"directions-nach-links",type:"recall",word:"nach links",translation:"ліворуч",category:"DIRECTIONS · DIRECTION",
+    example:"Biegen Sie an der Ampel nach links ab.",exampleTranslation:"Поверніть ліворуч на світлофорі.",
+    response:{mode:"text",scope:"phrase",accepted:["nach links"],caseSensitive:false,punctuationSensitive:false}
+  },
+  {
+    id:"directions-nach-links-2",targetId:"directions-nach-links",type:"recall",word:"nach links",translation:"ліворуч",category:"DIRECTIONS · DIRECTION",
+    example:"Gehen Sie nach links.",exampleTranslation:"Ідіть ліворуч.",
+    response:{mode:"text",scope:"phrase",accepted:["nach links"],caseSensitive:false,punctuationSensitive:false}
+  },
+  {
+    id:"directions-nach-links-3",targetId:"directions-nach-links",type:"recall",word:"nach links",translation:"ліворуч",category:"DIRECTIONS · DIRECTION",
+    example:"Die nächste Straße führt nach links.",exampleTranslation:"Наступна вулиця веде ліворуч.",
+    response:{mode:"text",scope:"phrase",accepted:["nach links"],caseSensitive:false,punctuationSensitive:false}
+  },
+  {
+    id:"directions-abbiegen-1",targetId:"directions-abbiegen",type:"recall",word:"abbiegen",translation:"повертати",category:"DIRECTIONS · ACTION",
+    example:"Sie müssen hier rechts abbiegen.",exampleTranslation:"Тут потрібно повернути праворуч.",
+    response:{mode:"text",scope:"word",accepted:["abbiegen"],caseSensitive:false,punctuationSensitive:false}
+  },
+  {
+    id:"directions-abbiegen-2",targetId:"directions-abbiegen",type:"recall",word:"abbiegen",translation:"повертати",category:"DIRECTIONS · ACTION",
+    example:"Wir können an der nächsten Straße links abbiegen.",exampleTranslation:"Ми можемо повернути ліворуч на наступній вулиці.",
+    response:{mode:"text",scope:"word",accepted:["abbiegen"],caseSensitive:false,punctuationSensitive:false}
+  },
+  {
+    id:"directions-abbiegen-3",targetId:"directions-abbiegen",type:"recall",word:"abbiegen",translation:"повертати",category:"DIRECTIONS · ACTION",
+    example:"An dieser Kreuzung dürfen Sie nicht abbiegen.",exampleTranslation:"На цьому перехресті не можна повертати.",
+    response:{mode:"text",scope:"word",accepted:["abbiegen"],caseSensitive:false,punctuationSensitive:false}
+  },
+  {
+    id:"directions-wenden-1",targetId:"directions-wenden",type:"recall",word:"wenden",translation:"розвертатися",category:"DIRECTIONS · ACTION",
+    example:"Wenden Sie bitte an der Kreuzung.",exampleTranslation:"Будь ласка, розверніться на перехресті.",
+    response:{mode:"text",scope:"word",accepted:["wenden"],caseSensitive:false,punctuationSensitive:false}
+  },
+  {
+    id:"directions-wenden-2",targetId:"directions-wenden",type:"recall",word:"wenden",translation:"розвертатися",category:"DIRECTIONS · ACTION",
+    example:"Hier können Sie wenden.",exampleTranslation:"Тут ви можете розвернутися.",
+    response:{mode:"text",scope:"word",accepted:["wenden"],caseSensitive:false,punctuationSensitive:false}
+  },
+  {
+    id:"directions-wenden-3",targetId:"directions-wenden",type:"recall",word:"wenden",translation:"розвертатися",category:"DIRECTIONS · ACTION",
+    example:"Das Auto wendet auf der Straße.",exampleTranslation:"Автомобіль розвертається на дорозі.",
+    response:{mode:"text",scope:"word",accepted:["wenden"],caseSensitive:false,punctuationSensitive:false}
+  },
+  {
+    id:"directions-zurueck-1",targetId:"directions-zurueck",type:"recall",word:"zurück",translation:"назад",category:"DIRECTIONS · DIRECTION",
+    example:"Gehen Sie bitte ein Stück zurück.",exampleTranslation:"Пройдіть, будь ласка, трохи назад.",
+    response:{mode:"text",scope:"word",accepted:["zurück"],caseSensitive:false,punctuationSensitive:false}
+  },
+  {
+    id:"directions-zurueck-2",targetId:"directions-zurueck",type:"recall",word:"zurück",translation:"назад",category:"DIRECTIONS · DIRECTION",
+    example:"Fahren Sie bis zur Ampel und dann wieder zurück.",exampleTranslation:"Їдьте до світлофора, а потім назад.",
+    response:{mode:"text",scope:"word",accepted:["zurück"],caseSensitive:false,punctuationSensitive:false}
+  },
+  {
+    id:"directions-zurueck-3",targetId:"directions-zurueck",type:"recall",word:"zurück",translation:"назад",category:"DIRECTIONS · DIRECTION",
+    example:"Wir gehen zusammen zurück zum Bahnhof.",exampleTranslation:"Ми разом повертаємося назад до вокзалу.",
+    response:{mode:"text",scope:"word",accepted:["zurück"],caseSensitive:false,punctuationSensitive:false}
+  }
+];
+const directionLandmarkCards=[
+  {
+    id:"directions-kreuzung-1",targetId:"directions-an-der-kreuzung",type:"recall",word:"an der Kreuzung",translation:"на перехресті",category:"DIRECTIONS · LANDMARK",
+    example:"Biegen Sie an der Kreuzung links ab.",exampleTranslation:"Поверніть ліворуч на перехресті.",
+    response:{mode:"text",scope:"phrase",accepted:["an der Kreuzung"],caseSensitive:false,punctuationSensitive:false}
+  },
+  {
+    id:"directions-kreuzung-2",targetId:"directions-an-der-kreuzung",type:"recall",word:"an der Kreuzung",translation:"на перехресті",category:"DIRECTIONS · LANDMARK",
+    example:"An der Kreuzung gehen Sie geradeaus.",exampleTranslation:"На перехресті йдіть прямо.",
+    response:{mode:"text",scope:"phrase",accepted:["an der Kreuzung"],caseSensitive:false,punctuationSensitive:false}
+  },
+  {
+    id:"directions-kreuzung-3",targetId:"directions-an-der-kreuzung",type:"recall",word:"an der Kreuzung",translation:"на перехресті",category:"DIRECTIONS · LANDMARK",
+    example:"Wir treffen uns an der Kreuzung.",exampleTranslation:"Ми зустрінемося на перехресті.",
+    response:{mode:"text",scope:"phrase",accepted:["an der Kreuzung"],caseSensitive:false,punctuationSensitive:false}
+  },
+  {
+    id:"directions-naehe-1",targetId:"directions-in-der-naehe-von",type:"recall",word:"in der Nähe von",translation:"неподалік від",category:"DIRECTIONS · LOCATION",
+    example:"Das Hotel liegt in der Nähe von einem Park.",exampleTranslation:"Готель розташований неподалік від парку.",
+    response:{mode:"text",scope:"phrase",accepted:["in der Nähe von"],caseSensitive:false,punctuationSensitive:false}
+  },
+  {
+    id:"directions-naehe-2",targetId:"directions-in-der-naehe-von",type:"recall",word:"in der Nähe von",translation:"неподалік від",category:"DIRECTIONS · LOCATION",
+    example:"Die Haltestelle ist in der Nähe von unserem Hotel.",exampleTranslation:"Зупинка неподалік від нашого готелю.",
+    response:{mode:"text",scope:"phrase",accepted:["in der Nähe von"],caseSensitive:false,punctuationSensitive:false}
+  },
+  {
+    id:"directions-naehe-3",targetId:"directions-in-der-naehe-von",type:"recall",word:"in der Nähe von",translation:"неподалік від",category:"DIRECTIONS · LOCATION",
+    example:"Gibt es hier ein Café in der Nähe von der Schule?",exampleTranslation:"Тут є кафе неподалік від школи?",
+    response:{mode:"text",scope:"phrase",accepted:["in der Nähe von"],caseSensitive:false,punctuationSensitive:false}
+  },
+  {
+    id:"directions-bis-ampel-1",targetId:"directions-bis-zur-ampel",type:"recall",word:"bis zur Ampel",translation:"до світлофора",category:"DIRECTIONS · LANDMARK",
+    example:"Gehen Sie bis zur Ampel.",exampleTranslation:"Ідіть до світлофора.",
+    response:{mode:"text",scope:"phrase",accepted:["bis zur Ampel"],caseSensitive:false,punctuationSensitive:false}
+  },
+  {
+    id:"directions-bis-ampel-2",targetId:"directions-bis-zur-ampel",type:"recall",word:"bis zur Ampel",translation:"до світлофора",category:"DIRECTIONS · LANDMARK",
+    example:"Fahren Sie bis zur Ampel und dann nach links.",exampleTranslation:"Їдьте до світлофора, а потім поверніть ліворуч.",
+    response:{mode:"text",scope:"phrase",accepted:["bis zur Ampel"],caseSensitive:false,punctuationSensitive:false}
+  },
+  {
+    id:"directions-bis-ampel-3",targetId:"directions-bis-zur-ampel",type:"recall",word:"bis zur Ampel",translation:"до світлофора",category:"DIRECTIONS · LANDMARK",
+    example:"Bis zur Ampel ist es nicht weit.",exampleTranslation:"До світлофора недалеко.",
+    response:{mode:"text",scope:"phrase",accepted:["bis zur Ampel"],caseSensitive:false,punctuationSensitive:false}
+  },
+  {
+    id:"directions-an-ampel-1",targetId:"directions-an-der-ampel",type:"recall",word:"an der Ampel",translation:"на світлофорі",category:"DIRECTIONS · LANDMARK",
+    example:"Biegen Sie an der Ampel rechts ab.",exampleTranslation:"Поверніть праворуч на світлофорі.",
+    response:{mode:"text",scope:"phrase",accepted:["an der Ampel"],caseSensitive:false,punctuationSensitive:false}
+  },
+  {
+    id:"directions-an-ampel-2",targetId:"directions-an-der-ampel",type:"recall",word:"an der Ampel",translation:"на світлофорі",category:"DIRECTIONS · LANDMARK",
+    example:"Wir warten an der Ampel.",exampleTranslation:"Ми чекаємо на світлофорі.",
+    response:{mode:"text",scope:"phrase",accepted:["an der Ampel"],caseSensitive:false,punctuationSensitive:false}
+  },
+  {
+    id:"directions-an-ampel-3",targetId:"directions-an-der-ampel",type:"recall",word:"an der Ampel",translation:"на світлофорі",category:"DIRECTIONS · LANDMARK",
+    example:"An der Ampel gehen Sie über die Straße.",exampleTranslation:"На світлофорі перейдіть через дорогу.",
+    response:{mode:"text",scope:"phrase",accepted:["an der Ampel"],caseSensitive:false,punctuationSensitive:false}
+  },
+  {
+    id:"directions-erste-strasse-1",targetId:"directions-die-erste-strasse-links",type:"recall",word:"die erste Straße links",translation:"перша вулиця ліворуч",category:"DIRECTIONS · ROUTE",
+    example:"Nehmen Sie die erste Straße links.",exampleTranslation:"Поверніть на першу вулицю ліворуч.",
+    response:{mode:"text",scope:"phrase",accepted:["die erste Straße links"],caseSensitive:false,punctuationSensitive:false}
+  },
+  {
+    id:"directions-erste-strasse-2",targetId:"directions-die-erste-strasse-links",type:"recall",word:"die erste Straße links",translation:"перша вулиця ліворуч",category:"DIRECTIONS · ROUTE",
+    example:"Die erste Straße links führt zum Bahnhof.",exampleTranslation:"Перша вулиця ліворуч веде до вокзалу.",
+    response:{mode:"text",scope:"phrase",accepted:["die erste Straße links"],caseSensitive:false,punctuationSensitive:false}
+  },
+  {
+    id:"directions-erste-strasse-3",targetId:"directions-die-erste-strasse-links",type:"recall",word:"die erste Straße links",translation:"перша вулиця ліворуч",category:"DIRECTIONS · ROUTE",
+    example:"Gehen Sie bis zur ersten Straße links.",exampleTranslation:"Ідіть до першої вулиці ліворуч.",
+    response:{mode:"text",scope:"phrase",accepted:["die erste Straße links"],caseSensitive:false,punctuationSensitive:false}
+  },
+  {
+    id:"directions-ueber-die-strasse-1",targetId:"directions-ueber-die-strasse-gehen",type:"recall",word:"über die Straße gehen",translation:"переходити вулицю",category:"DIRECTIONS · ACTION",
+    example:"Gehen Sie an der Ampel über die Straße.",exampleTranslation:"Перейдіть вулицю на світлофорі.",
+    response:{mode:"text",scope:"phrase",accepted:["über die Straße gehen"],caseSensitive:false,punctuationSensitive:false}
+  },
+  {
+    id:"directions-ueber-die-strasse-2",targetId:"directions-ueber-die-strasse-gehen",type:"recall",word:"über die Straße gehen",translation:"переходити вулицю",category:"DIRECTIONS · ACTION",
+    example:"Wir gehen zusammen über die Straße.",exampleTranslation:"Ми разом переходимо вулицю.",
+    response:{mode:"text",scope:"phrase",accepted:["über die Straße gehen"],caseSensitive:false,punctuationSensitive:false}
+  },
+  {
+    id:"directions-ueber-die-strasse-3",targetId:"directions-ueber-die-strasse-gehen",type:"recall",word:"über die Straße gehen",translation:"переходити вулицю",category:"DIRECTIONS · ACTION",
+    example:"Gehen Sie vorsichtig über die Straße.",exampleTranslation:"Обережно переходьте вулицю.",
+    response:{mode:"text",scope:"phrase",accepted:["über die Straße gehen"],caseSensitive:false,punctuationSensitive:false}
+  }
+];
 const esGibtPatternCards=[
   {word:"Es gibt + Akkusativ",translation:"є / існує + знахідний відмінок",category:"GRAMMAR · ES GIBT",example:"In meiner Stadt gibt es ein Kino.",exampleTranslation:"У моєму місті є кінотеатр."},
   {word:"Es gibt einen Park.",translation:"Є парк.",category:"GRAMMAR · MASKULINUM",example:"Im Zentrum gibt es einen Park.",exampleTranslation:"У центрі є парк."},
@@ -1354,6 +1553,10 @@ const travelTransportStages=[
   ...learnThenPractice("travel-route-phrases","route phrases","Use common expressions for destinations, locations, directions, and travel times.",travelPhraseCards,"Route phrases"),
   ...learnThenPractice("travel-actions","travel actions","Learn the verbs you need for boarding, changing, arriving, and getting around.",travelActionCards,"Travel actions")
 ];
+const directionsStages=[
+  ...learnThenPractice("directions-instructions","direction instructions","Give simple turn-by-turn directions with sequence words, directions, and movement verbs.",directionInstructionCards,"Giving directions"),
+  ...learnThenPractice("directions-landmarks","street landmarks","Locate places and describe a route using intersections, traffic lights, and streets.",directionLandmarkCards,"Street landmarks")
+];
 const esGibtLeisureStages=[
   lessonStep("es-gibt-pattern-learn","Learn Es gibt","Use Es gibt to say that a place or thing exists. Notice the accusative article after it.",esGibtPatternCards,"learn","Es gibt","Learn"),
   lessonStep("es-gibt-pattern-practice","Practice Es gibt","Complete sentences with gibt or the correct accusative article after Es gibt.",esGibtPracticeCards,"input","Es gibt","Practice"),
@@ -1424,6 +1627,21 @@ const deckDefinitions={
   "time-worksheet-vocabulary":{title:"Time worksheet vocabulary",label:"Time worksheet vocabulary",badge:"Zeit",tip:"Learn each new word with the seasonal or daily-routine context from the worksheet.",guide:{title:"Словник: час і пори року",intro:"У цьому уроці зібрано лише нові слова з аркуша про час. Вивчайте іменники разом з артиклем і формою множини, а дієслова — у короткому реченні.",rules:["Вивчайте іменники з артиклем: der Baum, die Kirche, das Restaurant.","Форма множини наведена там, де вона є в аркуші: die Bäume, die Blätter, die Pilze, die Vögel.","Дієслова fallen, blühen, verbringen і genießen найкраще запам'ятовувати разом із сезонним контекстом."]},cards:timeWorksheetVocabularyCards,stages:timeWorksheetVocabularyStages},
   "everyday-vocabulary":{title:"Everyday vocabulary",label:"Everyday vocabulary",badge:"Alltag",tip:"Learn sequence words in pairs and nouns with their articles.",guide:{title:"Повсякденна лексика",intro:"Цей урок поєднує слова для опису послідовності дій із базовою лексикою про їжу та напої.",rules:[{title:"Zuerst і danach",detail:"Ці прислівники допомагають показати порядок дій.",formula:"Zuerst lese ich. Danach mache ich die Aufgabe."},{title:"Anfangen — відокремлюване дієслово",detail:"У простому реченні an стоїть у кінці.",formula:"Der Kurs fängt um neun Uhr an."},{title:"Вивчайте іменники з артиклем",detail:"Артикль показує рід іменника. Süßigkeiten уживається у множині.",formula:"der Kräutertee · die Süßigkeiten · der Kaugummi · der Brei"}]},cards:[...everydayVocabularyRoutineCards,...everydayVocabularyFoodCards],stages:everydayVocabularyStages},
   "travel-transport":{title:"Travel & transport",label:"Travel & transport",badge:"Bahn",tip:"Learn travel nouns with their articles, then connect route phrases and separable verbs to complete situations.",guide:{title:"Подорожі та транспорт",intro:"Цей урок охоплює транспорт, місця на станції, багаж, корисні фрази для маршруту та дії в дорозі.",rules:[{title:"Вивчайте іменники з артиклем",detail:"Артикль показує рід іменника, тому запам'ятовуйте його разом зі словом.",formula:"der Bahnhof · die Haltestelle · das Gepäck"},{title:"Mit для транспорту",detail:"Щоб сказати, чим ви подорожуєте, використовуйте mit + Dativ.",formula:"mit dem Zug · mit der S-Bahn · mit dem Flugzeug"},{title:"Nach і zu для напрямку",detail:"Nach уживається з містами без артикля, а zu - з людьми та багатьма місцями.",formula:"nach Paris · zu meiner Freundin"},{title:"Відокремлювані дієслова",detail:"У простому реченні префікс іде в кінець.",formula:"Der Zug fährt ab. · Wir steigen ein."}]},cards:[...travelTransportCards,...travelPhraseCards,...travelActionCards],stages:travelTransportStages},
+  "giving-directions":{
+    title:"Giving directions",label:"Giving directions",badge:"Weg",
+    tip:"Give clear route instructions with direction words and familiar street landmarks.",
+    guide:{
+      title:"Запитати й пояснити дорогу",
+      intro:"Вивчіть короткі вказівки для маршруту: спочатку задайте послідовність, потім назвіть напрямок і орієнтир.",
+      rules:[
+        {title:"Zuerst: спочатку",detail:"Zuerst може стояти на початку речення. Відмінюване дієслово залишається на другому місці, а підмет іде після нього.",formula:"Zuerst gehen Sie geradeaus. · Zuerst fährst du bis zur Ampel."},
+        {title:"Праворуч, ліворуч і прямо",detail:"Nach rechts і nach links називають напрямок; geradeaus означає рух прямо.",formula:"Gehen Sie geradeaus. · Biegen Sie nach rechts ab."},
+        {title:"Відокремлюване abbiegen",detail:"У головному реченні відмінюється biegen, а префікс ab стоїть наприкінці. В інфінітиві слово пишеться разом: abbiegen.",formula:"Sie biegen links ab. · Sie müssen links abbiegen."},
+        {title:"Орієнтири та відмінки",detail:"An der Kreuzung і an der Ampel позначають місце. Bis zur Ampel означає рух до світлофора; von керує Dativ, а zur — це скорочення zu der.",formula:"an der Kreuzung · bis zur Ampel · in der Nähe von einem Park"}
+      ]
+    },
+    cards:[...directionInstructionCards,...directionLandmarkCards],stages:directionsStages
+  },
   "es-gibt-leisure":{title:"Es gibt & leisure places",label:"Es gibt & leisure places",badge:"gibt",tip:"Use Es gibt to say that something exists; the noun after it is in the accusative.",guide:{title:"Es gibt і місця для дозвілля",intro:"За допомогою Es gibt можна сказати, що в місті або в певному місці щось є. Далі вивчайте назви місць разом з артиклем і вислови про дозвілля.",rules:[{title:"Es gibt означає «є»",detail:"Цей вираз уживається як в однині, так і в множині. Es не перекладається окремо.",formula:"Es gibt ein Kino. · Es gibt viele Cafés."},{title:"Після Es gibt - Akkusativ",detail:"Неозначений артикль чоловічого роду змінюється з ein на einen; жіночий і середній рід залишаються без змін.",formula:"einen Park · eine Ausstellung · ein Café"},{title:"Вивчайте місця з артиклем",detail:"Запам'ятовуйте рід і форму множини разом зі словом.",formula:"das Museum - die Museen · die Bar - die Bars"},{title:"Man для загальних дій",detail:"Man означає «людина / люди» в загальному значенні та має форму дієслова третьої особи однини.",formula:"Im Café kann man Kaffee trinken. · In der Disco tanzt man."},{title:"Denn пояснює причину",detail:"Denn означає «тому що». Після нього порядок слів у простому реченні не змінюється.",formula:"Ich gehe ins Kino, denn der Film ist interessant."}]},cards:[...esGibtPatternCards,...leisurePlaceCards,...leisureActivityCards],stages:esGibtLeisureStages},
   "word-order":{title:"Word order",label:"Word order",badge:"S",tip:"Use TE-KA-MO-LO for several adverbials: time, reason, manner, then place.",guide:{title:"Порядок слів у реченні",intro:"Німецький порядок слів суворіший, ніж український. Спочатку визначте тип речення, а потім знайдіть місце для відмінюваного дієслова й інфінітива.",rules:[{title:"TE-KA-MO-LO",detail:"Коли в середині речення є кілька обставин, їхній звичний порядок: TE (wann?) - KA (warum?) - MO (wie?) - LO (wo?/wohin?).",formula:"Ich fahre heute wegen des Regens mit dem Bus zur Arbeit."},{title:"Пряме речення з модальним дієсловом",detail:"Підмет стоїть першим, модальне дієслово - другим, а друге дієслово в інфінітиві - в кінці.",formula:"Ich mag am Morgen Kaffee trinken."},{title:"Інверсія з модальним дієсловом",detail:"Час або інша фраза може стояти першою, але модальне дієслово залишається на другому місці.",formula:"Am Morgen mag ich Kaffee trinken."},{title:"Питання ja/nein",detail:"Без питального слова модальне дієслово стоїть першим, підмет - другим, а інфінітив - у кінці.",formula:"Magst du am Morgen Kaffee trinken?"},{title:"W-Frage з модальним дієсловом",detail:"Питальне слово стоїть першим, модальне дієслово - другим, підмет - після нього, а інфінітив - у кінці.",formula:"Was magst du am Morgen trinken?"},{title:"Інші розповідні речення",detail:"Без модального дієслова відмінюване дієслово все одно стоїть на другому місці: підмет або обставина часу можуть бути першими.",formula:"Heute fahre ich mit dem Bus nach Hause."}]},cards:[...wordOrderStatementCards,...wordOrderTeKaMoLoCards,...wordOrderModalCards,...wordOrderInversionCards,...wordOrderQuestionCards],stages:wordOrderStages},
   "separable-verbs":{title:"Separable verbs",label:"Separable verbs",badge:"auf",tip:"In a main clause, conjugate the verb stem and put the separable prefix at the end.",guide:{title:"Відокремлювані дієслова",intro:"Багато німецьких дієслів мають префікс, який у головному реченні відокремлюється та переходить у кінець. Вивчайте дієслово як одну одиницю: aufstehen, anrufen, einkaufen.",rules:[{title:"У головному реченні префікс відокремлюється",detail:"Відмінюється основа, а префікс стоїть у кінці речення.",formula:"Ich stehe früh auf. · Der Zug fährt ab."},{title:"У питанні префікс теж у кінці",detail:"Відмінювана основа стоїть після W-слова або на початку питання ja/nein.",formula:"Warum rufst du mich an?"},{title:"У підрядному реченні дієслово не розділяється",detail:"Після weil, dass та інших сполучників повна відмінювана форма стоїть наприкінці.",formula:"..., weil ich früh aufstehe."},{title:"З модальним дієсловом інфінітив не розділяється",detail:"Модальне дієслово відмінюється, а повний інфінітив стоїть наприкінці.",formula:"Wir können früh aufstehen."},{title:"Не всі префіксальні дієслова відокремлюються",detail:"be-, emp-, ent-, er-, ge-, miss-, ver-, zer- зазвичай невідокремлювані.",formula:"Ich verstehe die Aufgabe. · Wir besuchen Freunde."}]},cards:[...separableVerbCards,...separableVerbPatternCards],stages:separableVerbStages}
