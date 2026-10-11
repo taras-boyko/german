@@ -24,17 +24,16 @@ const possessivePronounCards=[
   {word:"mein",translation:"мій / моє",category:"POSSESSIVE PRONOUN",example:"Mein Bruder lernt Deutsch.",exampleTranslation:"Мій брат вивчає німецьку."},
   {word:"dein",translation:"твій / твоє",category:"POSSESSIVE PRONOUN",example:"Ist das dein Buch?",exampleTranslation:"Це твоя книга?"},
   {word:"sein",translation:"його",category:"POSSESSIVE PRONOUN",example:"Sein Auto ist neu.",exampleTranslation:"Його автомобіль новий."},
-  {word:"ihr / ihre",translation:"її",category:"POSSESSIVE PRONOUN",targetId:"possessive-her",example:"Ihre Tasche ist hier.",exampleTranslation:"Її сумка тут."},
+  {word:"ihr / ihre",translation:"її",category:"POSSESSIVE PRONOUN",targetId:"possessive-her",acceptedAnswers:["ihr","ihre"],example:"Ihre Tasche ist hier.",exampleTranslation:"Її сумка тут."},
   {word:"unser",translation:"наш / наше",category:"POSSESSIVE PRONOUN",example:"Unser Kurs beginnt heute.",exampleTranslation:"Наш курс починається сьогодні."},
   {word:"euer",translation:"ваш / ваше (неофіційно, множина)",category:"POSSESSIVE PRONOUN",example:"Euer Haus ist groß.",exampleTranslation:"Ваш будинок великий."},
   {word:"Ihr",translation:"Ваш / Ваше (ввічливо)",category:"POSSESSIVE PRONOUN",example:"Wie ist Ihr Name?",exampleTranslation:"Як Ваше ім'я?",caseSensitive:true},
-  {word:"ihr / ihre",translation:"їхній / їхня",category:"POSSESSIVE PRONOUN",targetId:"possessive-their",example:"Ihre Kinder spielen draußen.",exampleTranslation:"Їхні діти граються надворі."},
-  {word:"meine",translation:"моя / моє / мої",category:"POSSESSIVE ENDING",example:"Meine Mutter arbeitet im Büro.",exampleTranslation:"Моя мама працює в офісі."},
-  {word:"deine",translation:"твоя / твоє / твої",category:"POSSESSIVE ENDING",example:"Deine Freunde warten draußen.",exampleTranslation:"Твої друзі чекають надворі."},
-  {word:"unsere",translation:"наша / наше / наші",category:"POSSESSIVE ENDING",example:"Unsere Wohnung ist hell.",exampleTranslation:"Наша квартира світла."},
-  {word:"Ihre",translation:"Ваша / Ваше / Ваші (ввічливо)",category:"POSSESSIVE ENDING",example:"Sind Ihre Kinder zu Hause?",exampleTranslation:"Ваші діти вдома?",caseSensitive:true}
+  {word:"ihr / ihre",translation:"їхній / їхня",category:"POSSESSIVE PRONOUN",targetId:"possessive-their",acceptedAnswers:["ihr","ihre"],example:"Ihre Kinder spielen draußen.",exampleTranslation:"Їхні діти граються надворі."},
+  {word:"meine",translation:"моя / моє / мої",category:"POSSESSIVE ENDING",promptText:"Присвійний займенник: Моя мама працює в офісі.",example:"Meine Mutter arbeitet im Büro.",exampleTranslation:"Моя мама працює в офісі."},
+  {word:"deine",translation:"твоя / твоє / твої",category:"POSSESSIVE ENDING",promptText:"Присвійний займенник: Твої друзі чекають надворі.",example:"Deine Freunde warten draußen.",exampleTranslation:"Твої друзі чекають надворі."},
+  {word:"unsere",translation:"наша / наше / наші",category:"POSSESSIVE ENDING",promptText:"Присвійний займенник: Наша квартира світла.",example:"Unsere Wohnung ist hell.",exampleTranslation:"Наша квартира світла."},
+  {word:"Ihre",translation:"Ваша / Ваше / Ваші (ввічливо)",category:"POSSESSIVE ENDING",promptText:"Присвійний займенник: Ваші діти вдома?",example:"Sind Ihre Kinder zu Hause?",exampleTranslation:"Ваші діти вдома?",caseSensitive:true}
 ];
-possessivePronounCards.filter(card=>card.word.includes("/")).forEach(card=>{card.allowIndividualOption=true});
 const seinCards=[
   {word:"ich bin",translation:"я є / я знаходжусь",category:"VERB SEIN",example:"Ich bin müde.",exampleTranslation:"Я втомлений."},
   {word:"du bist",translation:"ти є / ти знаходишся",category:"VERB SEIN",example:"Du bist sehr nett.",exampleTranslation:"Ти дуже милий."},
@@ -2102,7 +2101,7 @@ function updateStats(){
   const weeklyTotal=counts.reduce((sum,count)=>sum+count,0),maxCount=Math.max(...counts,1);
   let streak=0;
   for(let offset=0;offset<activity.attempts+1;offset+=1){const date=new Date(today);date.setDate(today.getDate()-offset);if((Number(activity.days[dateKey(date)])||0)===0)break;streak+=1}
-  $("streak").textContent=streak;$("overview-streak").textContent=streak;$("accuracy-rate").textContent=`${activity.attempts?Math.round(activity.correct/activity.attempts*100):0}%`;$("weekly-reviewed").innerHTML=`${weeklyTotal} <small>this week</small>`;
+  $("streak").textContent=streak;
   document.querySelectorAll(".bar[data-day]").forEach((bar,index)=>{bar.style.height=`${Math.max(8,counts[index]/maxCount*82)}%`;bar.classList.toggle("today",dateKey(new Date(today.getFullYear(),today.getMonth(),today.getDate()-6+index))===todayKey)});
   renderProgressDashboard(streak,weeklyTotal);
 }
@@ -2359,8 +2358,7 @@ function render(focusTarget=""){
   $("original-question-text").textContent=direction==="uk-de"?card.translation:germanPrompt;
   $("original-question").hidden=!answerRevealed||!hasTarget;
   $("category-label").textContent=card.category;
-  $("w-badge").textContent=activeDeck.badge;
-  $("study-tip").textContent=activeDeck.tip;
+  $("w-badge").hidden=true;
   $("example").textContent=answerSentence;
   $("example-translation").textContent=answerTranslation;
   const dynamicPractice=activeStage().mode==="input";
@@ -2369,7 +2367,6 @@ function render(focusTarget=""){
     const key=practicePortionKey(activeDeckId,activeStage()),portion=(Number(dailyPractice.portions[key])||0)+1,poolSize=practicePool(activeStage().cards).length;
     $("practice-portion-note").textContent=`Today's ${deck.length}-card set · ${poolSize} examples available${portion>1?` · portion ${portion}`:""}`;
   }
-  $("remaining").textContent=Math.max(deck.length-completed,0);
   $("session-progress-label").textContent=`Card ${index+1} of ${deck.length}`;
   const progress=Math.min(completed/deck.length*100,100),progressTrack=$("session-progress").parentElement;
   $("session-progress").style.width=`${progress}%`;

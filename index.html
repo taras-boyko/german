@@ -30,7 +30,7 @@
       <header class="topbar">
         <div>
           <p class="eyebrow">GERMAN · A1–B1</p>
-          <h1 id="page-title">Card library</h1>
+          <h1 id="page-title" tabindex="-1">Card library</h1>
         </div>
         <div class="top-actions">
           <div class="streak"><span>♨</span><strong id="streak">0</strong><small>day streak</small></div>
@@ -39,57 +39,60 @@
       <p class="sync-status" id="sync-status" role="status" aria-live="polite" hidden></p>
 
       <section id="practice-view" class="view hidden">
-        <div class="study-grid">
-          <section class="card-stage">
-            <section class="lesson-journey" aria-label="Lesson progress">
-              <div class="journey-top">
-                <nav class="journey-crumbs" aria-label="Your place in this lesson">
-                  <span class="crumb crumb-deck"><i class="dot dot-purple"></i><span id="deck-label">All W-Fragen</span></span>
-                  <span class="crumb-sep" aria-hidden="true">›</span>
-                  <span class="crumb crumb-chapter" id="lesson-chapter-label"></span>
-                  <span class="crumb-sep" aria-hidden="true">›</span>
-                  <span class="crumb crumb-phase" id="lesson-phase-label"></span>
-                </nav>
-                <p class="journey-tally" id="lesson-step-count"></p>
-              </div>
-              <div class="journey-now">
-                <h2 id="lesson-path-title"></h2>
-                <p id="stage-objective"></p>
-              </div>
-              <ol class="journey-rail" id="lesson-steps" aria-label="Lesson chapters"></ol>
+        <!-- Focus room: the card leads; lesson context stays compact, with optional
+             rules and chapter navigation. All lessons share the same study flow. -->
+        <header class="lesson-topbar">
+          <a class="brand" id="lesson-home" href="#" aria-label="DeutschDrill card library">
+            <img class="brand-mark" src="assets/deutschdrill-mark.svg" alt="">
+            <span>DeutschDrill</span>
+          </a>
+          <div class="lesson-identity">
+            <h1 id="deck-label">W-Fragen</h1>
+            <p id="lesson-chapter-count"></p>
+          </div>
+          <button class="lesson-library-button" id="lesson-library" type="button"><span aria-hidden="true">←</span> Library</button>
+        </header>
+        <div class="lesson-focus">
+          <header class="lesson-journey" aria-label="Lesson progress">
+            <div class="journey-top">
+              <h2 id="lesson-path-title"><span id="lesson-chapter-label"></span></h2>
+              <span class="lesson-phase" id="lesson-phase-label"></span>
+            </div>
+            <p id="stage-objective"></p>
+          </header>
+          <section class="card-stage" aria-label="Current card">
+            <div class="card-toolbar">
               <div class="journey-card-progress">
                 <span id="session-progress-label">Card 0 of 0</span>
                 <div class="progress-track" role="progressbar" aria-labelledby="session-progress-label" aria-valuemin="0" aria-valuemax="12" aria-valuenow="0"><i id="session-progress"></i></div>
               </div>
-              <div class="practice-portion" id="practice-portion" hidden>
-                <span id="practice-portion-note"></span>
-                <button id="new-practice-portion" type="button">New portion <span aria-hidden="true">↻</span></button>
-              </div>
-            </section>
-            <section class="deck-guide" id="deck-guide" hidden aria-labelledby="deck-guide-title">
-              <details id="deck-guide-disclosure">
-                <summary class="guide-summary">
-                  <span class="guide-icon" aria-hidden="true">✦</span>
-                  <span class="guide-heading">
-                    <span class="eyebrow" id="deck-guide-kicker">ГРАМАТИЧНИЙ ДОВІДНИК</span>
-                    <span class="guide-title" id="deck-guide-title" role="heading" aria-level="2"></span>
-                  </span>
-                  <span class="guide-summary-action"><span id="deck-guide-toggle-label">Показати правила</span><span class="guide-chevron" aria-hidden="true">⌄</span></span>
-                </summary>
-                <div class="guide-content">
-                  <p class="guide-intro" id="deck-guide-intro"></p>
-                  <div class="guide-rules-heading">
-                    <span>Основні правила</span>
-                    <span class="guide-rule-count" id="deck-guide-count"></span>
-                  </div>
-                  <ul id="deck-guide-rules" aria-label="Основні граматичні правила"></ul>
-                </div>
-              </details>
-            </section>
+              <p class="journey-tally" id="lesson-step-count"></p>
+            </div>
             <article class="flashcard" id="flashcard" tabindex="0" aria-label="Flashcard">
-              <div class="card-top"><span id="category-label">QUESTION WORD</span><span class="bookmark" id="bookmark" role="button" aria-label="Bookmark card">♡</span></div>
+              <div class="card-top">
+                <span id="category-label">QUESTION WORD</span>
+                <div class="card-tools">
+                  <button class="guide-toggle" id="guide-toggle" type="button" aria-controls="deck-guide" aria-expanded="false" hidden><span id="deck-guide-toggle-label">Rules</span><span class="guide-chevron" aria-hidden="true">+</span></button>
+                  <button class="bookmark" id="bookmark" type="button" aria-label="Bookmark card" aria-pressed="false">♡</button>
+                </div>
+              </div>
+              <section class="deck-guide" id="deck-guide" hidden aria-labelledby="deck-guide-title">
+                <details id="deck-guide-disclosure">
+                  <summary class="guide-summary" tabindex="-1">Rules</summary>
+                  <div class="guide-content">
+                    <span class="guide-title" id="deck-guide-title" role="heading" aria-level="3"></span>
+                    <p class="guide-intro" id="deck-guide-intro"></p>
+                    <p class="guide-answer-note" id="guide-answer-note" hidden>Examples that reveal this answer are hidden until you check.</p>
+                    <div class="guide-rules-heading">
+                      <span>Основні правила</span>
+                      <span class="guide-rule-count" id="deck-guide-count"></span>
+                    </div>
+                    <ul id="deck-guide-rules" aria-label="Основні граматичні правила"></ul>
+                  </div>
+                </details>
+              </section>
               <div class="card-body">
-                <div class="w-badge" id="w-badge">W</div>
+                <div class="w-badge" id="w-badge" hidden></div>
                 <figure class="location-illustration" id="location-illustration" hidden aria-hidden="true">
                   <svg id="location-illustration-art" viewBox="0 0 240 128" focusable="false"></svg>
                 </figure>
@@ -115,7 +118,7 @@
                   </details>
                 </div>
                 <div class="verification-panel" id="verification-panel">
-                  <span class="answer-label" id="verification-label">Write the German answer</span>
+                  <label class="answer-label" id="verification-label" for="verification-input">Write the German answer</label>
                   <div class="correction-display" id="correction-display" hidden aria-label="Answer corrections">
                     <span class="answer-label">Your answer</span>
                     <div class="correction-text" id="correction-text"></div>
@@ -129,27 +132,19 @@
               <div class="flip-hint" id="flip-hint"><span>→</span> Example sentence shown below</div>
             </article>
             <div class="study-actions" id="study-actions">
+              <button class="previous-button" id="previous-button" type="button"><span aria-hidden="true">←</span> Previous</button>
               <button class="continue-button" id="continue-button" type="button">Next card <span>→</span></button>
             </div>
-            <div class="keyboard-hint"><kbd>←</kbd><span>Previous</span><kbd>→</kbd><span>Continue</span><kbd>Space</kbd><span>Next card</span></div>
-          </section>
-
-          <aside class="insights">
-            <div class="section-title"><h3>Quick overview</h3></div>
-            <div class="stats-card">
-              <div class="stat"><span class="stat-icon purple">◉</span><div><strong id="remaining">0</strong><small>Cards left</small></div></div>
-              <div class="stat"><span class="stat-icon orange">♨</span><div><strong id="overview-streak">0</strong><small>Day streak</small></div></div>
-              <div class="stat"><span class="stat-icon green">◔</span><div><strong id="accuracy-rate">0%</strong><small>Accuracy</small></div></div>
-            </div>
-            <div class="section-title"><h3>Your activity</h3><button>View all <span>↗</span></button></div>
-            <div class="activity-card">
-              <div class="chart-labels"><span>Cards reviewed</span><strong id="weekly-reviewed">0 <small>this week</small></strong></div>
-              <div class="chart" aria-label="Weekly activity chart">
-                <div class="bar" data-day="0"><i>Mon</i></div><div class="bar" data-day="1"><i>Tue</i></div><div class="bar" data-day="2"><i>Wed</i></div><div class="bar" data-day="3"><i>Thu</i></div><div class="bar" data-day="4"><i>Fri</i></div><div class="bar" data-day="5"><i>Sat</i></div><div class="bar" data-day="6"><i>Sun</i></div>
+            <p class="keyboard-hint" id="lesson-keyboard-hint"></p>
+            <details class="lesson-outline" id="lesson-outline">
+              <summary>Lesson outline <span id="lesson-outline-count"></span><span class="outline-chevron" aria-hidden="true">+</span></summary>
+              <ol class="journey-rail" id="lesson-steps" aria-label="Lesson chapters"></ol>
+              <div class="practice-portion" id="practice-portion" hidden>
+                <span id="practice-portion-note"></span>
+                <button id="new-practice-portion" type="button">New pass <span aria-hidden="true">↻</span></button>
               </div>
-            </div>
-            <div class="tip-card"><span>✦</span><div><strong>Study tip</strong><p id="study-tip">W-questions always come first in a question, followed by the verb.</p></div></div>
-          </aside>
+            </details>
+          </section>
         </div>
       </section>
 

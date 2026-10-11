@@ -48,7 +48,13 @@ input control when typed recall can assess the skill.
 ```
 
 - `recall`: meaning or communicative cue -> German word or phrase.
-- `cloze`: contextual sentence with one assessable gap -> missing form.
+- `cloze`: contextual sentence with one assessable gap -> missing form. When the
+  German sentence alone admits several valid forms (for example any possessive in
+  `___ Auto ist neu.`), show its meaning as a cue so exactly one answer is correct.
+- Recall cues must determine one answer. Do not rely on Ukrainian gender to select a
+  German ending; cue endings with a sentence that fixes the German noun.
+- When a variant shows an example sentence, accept only the alternatives that
+  sentence uses (`Її сумка тут.` accepts `ihre`, not `ihr`).
 - `sentence-build`: shuffled German chunks or a translation cue -> complete sentence.
 - Multiple cards may share a `targetId`, but every variant has its own stable `id`.
   Completion and mastery are measured by target; variety and repeat avoidance are
@@ -151,6 +157,9 @@ future passes provide contextual variety and retention checks.
 ### Lesson
 
 - Keep lesson, chapter, phase, objective, card position, and completion visible.
+- Use the Focus room layout: one large centered card, a compact lesson header, and
+  a direct return to the library. Hide global navigation and activity metrics while
+  studying; keep chapter navigation and new-pass controls in a collapsed lesson outline.
 - Use one card workspace for all exercise types and one predictable keyboard flow.
 - Preserve position when switching screens. Explicitly starting a new attempt is the
   only action that resets order and response state.

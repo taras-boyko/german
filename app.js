@@ -432,7 +432,6 @@ function slugPart(value){
 function explicitAnswers(card){
   const expected=card.answer||card.word;
   if(card.acceptedAnswers)return uniqueStrings(card.acceptedAnswers);
-  if(card.allowIndividualOption===true)return expected.split(/\s*\/\s*/).filter(Boolean);
   return [expected];
 }
 
@@ -476,15 +475,19 @@ function standaloneOccurrence(sentence,expected){
 function contextVariant(card){
   if(card.practiceVariants===false||card.type==="sentence-build")return null;
   const sentence=card.answer?card.word:card.example;
-  const expected=card.response.accepted[0].replace(/[?!.,]+$/,"");
-  if(!sentence||!expected)return null;
-  const occurrence=standaloneOccurrence(sentence,expected);
-  if(!occurrence)return null;
+  if(!sentence)return null;
+  // Gap whichever accepted form the sentence uses, e.g. "ihre" in "Ihre Tasche ist hier."
+  const match=card.response.accepted.map(form=>form.replace(/[?!.,]+$/,"")).filter(Boolean)
+    .map(form=>({form,occurrence:standaloneOccurrence(sentence,form)})).find(item=>item.occurrence);
+  if(!match)return null;
+  const {form:expected,occurrence}=match;
   return {
     ...card,
     id:`${card.targetId}:context:${stableHash(`${sentence}\u0000${expected}`)}`,
     type:"cloze",
     promptText:`${sentence.slice(0,occurrence.start)}___${sentence.slice(occurrence.end)}`,
+    // The meaning keeps the gap to one valid answer (e.g. "___ Auto" fits any possessive).
+    support:card.support||(card.answer?"":card.exampleTranslation||""),
     exampleTranslation:"Complete the German sentence.",
     response:{...card.response,scope:expected.includes(" ")?"phrase":"word",accepted:[expected]}
   };
@@ -492,11 +495,14 @@ function contextVariant(card){
 
 function contextualRecallVariant(card){
   if(card.practiceVariants===false||card.type!=="recall"||!card.exampleTranslation)return null;
+  // The example sentence fixes the form, so accept only the alternatives it actually uses.
+  const used=card.example?card.response.accepted.filter(form=>standaloneOccurrence(card.example,form.replace(/[?!.,]+$/,""))):[];
   return {
     ...card,
     id:`${card.targetId}:context-recall:${stableHash(card.exampleTranslation)}`,
     promptText:card.translation,
-    support:card.exampleTranslation
+    support:card.exampleTranslation,
+    response:used.length?{...card.response,accepted:used}:card.response
   };
 }
 
@@ -938,11 +944,12 @@ function render(focusTarget=""){
     $("verification-feedback").className="verification-feedback";
   }
   renderLessonPath();
-  renderDeckGuide();
+  renderDeckGuide(card);
   renderLocationIllustration(card);
   if(verificationMode)renderPracticePrompt(card);
   else $("question-word").textContent=card.word;
   $("translation").textContent=verificationMode?(revealed?"Your German recall":inputLabel):(card.studyTranslation||card.translation);
+  $("translation").hidden=verificationMode;
   $("prompt-support").dataset.label=support.label;
   $("prompt-support").textContent=support.text;
   $("prompt-support").hidden=!support.text;
@@ -950,8 +957,8 @@ function render(focusTarget=""){
   $("original-question").hidden=true;
   $("category-label").textContent=`${card.category} · ${card.type.replace("-"," ").toUpperCase()}`;
   const location=locationScene(card);
-  $("w-badge").textContent=location?(location.motion?"Wohin?":"Wo?"):definition.badge;
-  $("study-tip").textContent=definition.tip;
+  $("w-badge").textContent=location?(location.motion?"Wohin?":"Wo?"):"";
+  $("w-badge").hidden=!location;
   $("feedback-outcome").hidden=!feedbackVisible;
   $("feedback-outcome").className=`feedback-outcome ${verified?"correct":"incorrect"}`;
   if(feedbackVisible){
@@ -969,11 +976,11 @@ function render(focusTarget=""){
   $("new-practice-portion").innerHTML='New pass <span aria-hidden="true">↻</span>';
   const coverage=stageCoverage(stage);
   $("practice-portion-note").textContent=`${deck.length}-card pass · ${coverage.covered}/${coverage.total} targets ${verificationMode?"mastered":"seen"}`;
-  $("remaining").textContent=Math.max(deck.length-index-1,0);
   $("session-progress-label").textContent=`Card ${index+1} of ${deck.length}`;
-  $("session-progress").style.width=`${Math.min((index+(revealed||!verificationMode?1:0))/deck.length*100,100)}%`;
+  const passProgress=Math.min(index+(revealed||!verificationMode?1:0),deck.length);
+  $("session-progress").style.width=`${passProgress/deck.length*100}%`;
   $("session-progress").parentElement.setAttribute("aria-valuemax",String(deck.length));
-  $("session-progress").parentElement.setAttribute("aria-valuenow",String(index));
+  $("session-progress").parentElement.setAttribute("aria-valuenow",String(passProgress));
   $("deck-label").textContent=definition.label;
   document.querySelector(".nav-count").textContent=String(deck.length);
   $("verification-label").textContent=inputLabel;
@@ -984,21 +991,22 @@ function render(focusTarget=""){
   $("flashcard").classList.toggle("flipped",!verificationMode||revealed);
   $("flashcard").classList.toggle("retry-card",Boolean(card.retry));
   $("flashcard").classList.toggle("long-prompt",verificationMode&&card.promptText.length>42);
+  $("flashcard").classList.toggle("practice-card",verificationMode);
   $("answer").style.display=verificationMode&&revealed?"block":verificationMode?"none":"";
   $("verification-panel").classList.toggle("visible",verificationMode);
   $("study-actions").classList.toggle("hidden",verificationMode);
+  $("previous-button").disabled=index===0;
   $("continue-button").innerHTML='Next card <span>→</span>';
-  $("flip-hint").hidden=!verificationMode||revealed;
-  $("flip-hint").innerHTML=verificationMode?(revealed?'<span>→</span> Press Enter for next card':'<span>✓</span> Type the answer and press Enter'):"";
+  $("flip-hint").hidden=true;
+  $("lesson-keyboard-hint").textContent=verificationMode?"Enter to check · Enter again to continue":"← Previous · → or Space to continue";
   $("check-button").textContent=revealed?"Next card":"Check answer";
   $("correction-display").hidden=!answerRevealed;
   $("verification-input").value=revealed?(session?.cardInputs?.[String(index)]||expected):"";
+  $("check-button").disabled=!revealed;
   if(answerRevealed)renderCorrection($("verification-input").value,expected,card.response);else $("correction-text").replaceChildren();
   $("verification-feedback").hidden=feedbackVisible;
   $("feedback-explanation").hidden=!answerRevealed;
   $("feedback-explanation").textContent=answerRevealed?feedbackExplanation(card):"";
-  const firstTotal=session?.firstAttemptTotal||0,firstCorrect=session?.firstAttemptCorrect||0;
-  $("accuracy-rate").textContent=`${firstTotal?Math.round(firstCorrect/firstTotal*100):0}%`;
   updatePageTitle("practice");
   if(focusTarget)requestAnimationFrame(()=>{
     const element=$(focusTarget);
@@ -1023,9 +1031,10 @@ function renderLessonPath(){
   const activeChapterIndex=chapters.findIndex(chapter=>chapter.steps.some(step=>step.stageIndex===activeStageIndex));
   $("lesson-chapter-label").textContent=current.chapter||current.title;
   $("lesson-phase-label").textContent=current.phase||(current.mode==="input"?"Practice":"Learn");
-  $("lesson-path-title").textContent=current.title;
+  $("lesson-chapter-count").textContent=`Chapter ${activeChapterIndex+1} of ${chapters.length}`;
   $("stage-objective").textContent=current.objective;
-  $("lesson-step-count").textContent=`Chapter ${activeChapterIndex+1} of ${chapters.length} · ${doneCount}/${stages.length} sequences complete`;
+  $("lesson-step-count").textContent=`${doneCount} of ${stages.length} sequences complete`;
+  $("lesson-outline-count").textContent=`${chapters.length} ${chapters.length===1?"chapter":"chapters"}`;
   $("lesson-steps").replaceChildren(...chapters.map((chapter,chapterIndex)=>{
     const item=document.createElement("li"),isComplete=chapter.steps.every(step=>stageIsComplete(activeDeckId,step.stage));
     item.className=`journey-chapter${chapterIndex===activeChapterIndex?" active":""}${isComplete?" complete":""}`;
@@ -1050,15 +1059,34 @@ function renderLessonPath(){
   }));
 }
 
-function renderDeckGuide(){
+function renderDeckGuide(card){
   const guide=activeDefinition().guide;
   $("deck-guide").hidden=!guide;
+  $("guide-toggle").hidden=!guide;
   if(!guide)return;
   $("deck-guide-title").textContent=guide.title;
-  $("deck-guide-intro").textContent=guide.intro;
-  $("deck-guide-count").textContent=`${guide.rules.length} rules`;
-  $("deck-guide-toggle-label").textContent=$("deck-guide-disclosure").open?"Hide rules":"Show rules";
-  $("deck-guide-rules").replaceChildren(...guide.rules.map((rule,index)=>{
+  const concealsAnswer=verificationMode&&!verified&&!answerRevealed;
+  let examplesHidden=false;
+  const safeGuideText=text=>{
+    if(concealsAnswer&&card.response.accepted.some(answer=>standaloneOccurrence(text,answer.replace(/[?!.,]+$/,"")))){
+      examplesHidden=true;
+      return "";
+    }
+    return text;
+  };
+  const rules=guide.rules.map(rule=>{
+    if(typeof rule==="string")return safeGuideText(rule)||null;
+    const title=safeGuideText(rule.title);
+    if(!title)return null;
+    return {...rule,title,detail:safeGuideText(rule.detail),formula:rule.formula?safeGuideText(rule.formula):""};
+  }).filter(Boolean);
+  const intro=safeGuideText(guide.intro);
+  $("deck-guide-intro").textContent=intro;
+  $("deck-guide-intro").hidden=!intro;
+  $("guide-answer-note").hidden=!examplesHidden;
+  $("deck-guide-count").textContent=`${rules.length} rules`;
+  $("deck-guide-toggle-label").textContent="Rules";
+  $("deck-guide-rules").replaceChildren(...rules.map((rule,index)=>{
     const item=document.createElement("li"),number=document.createElement("span"),text=document.createElement("span");
     number.className="guide-rule-number";number.textContent=String(index+1).padStart(2,"0");
     text.className="guide-rule-text";
@@ -1380,13 +1408,8 @@ function renderProgress(){
 }
 
 function updateStats(){
-  const summary=activitySummary(),accuracy=summary.firstAttempts?Math.round(summary.correct/summary.firstAttempts*100):0;
+  const summary=activitySummary();
   $("streak").textContent=String(summary.streak);
-  $("overview-streak").textContent=String(summary.streak);
-  $("weekly-reviewed").innerHTML=`${summary.weekly} <small>this week</small>`;
-  const max=Math.max(...summary.counts,1);
-  document.querySelectorAll(".bar[data-day]").forEach((bar,index)=>{bar.style.height=`${Math.max(8,summary.counts[index]/max*82)}%`;bar.classList.toggle("today",index===6)});
-  if(!learningState.activeSession)$("accuracy-rate").textContent=`${accuracy}%`;
   renderLibrary();
   renderProgress();
 }
@@ -1400,6 +1423,7 @@ function showView(view){
   document.querySelectorAll(".nav-item").forEach(item=>item.classList.toggle("active",item.dataset.view===view));
   document.querySelectorAll(".view").forEach(element=>element.classList.add("hidden"));
   $(`${view}-view`).classList.remove("hidden");
+  window.scrollTo(0,0);
   updatePageTitle(view);
   if(view==="practice"){
     if(!learningState.activeSession)selectDeck(activeDeckId,"",true);
@@ -1424,12 +1448,22 @@ function restorePendingCompletion(){
   showCompletion(activeStage(),pending.session,pending.newMastery);
 }
 
-$("bookmark").addEventListener("click",event=>{event.stopPropagation();event.currentTarget.classList.toggle("saved");event.currentTarget.textContent=event.currentTarget.classList.contains("saved")?"♥":"♡"});
-$("verification-input").addEventListener("input",event=>{if(verificationMode&&!practiceInputStarted&&event.target.value.trim())practiceInputStarted=true});
+$("bookmark").addEventListener("click",event=>{event.stopPropagation();const saved=event.currentTarget.classList.toggle("saved");event.currentTarget.textContent=saved?"♥":"♡";event.currentTarget.setAttribute("aria-pressed",String(saved))});
+$("verification-input").addEventListener("input",event=>{
+  if(verificationMode&&!practiceInputStarted&&event.target.value.trim())practiceInputStarted=true;
+  $("check-button").disabled=verificationMode&&!verified&&!answerRevealed&&!normalizeAnswer(event.target.value);
+});
 $("check-button").addEventListener("click",checkAnswer);
 $("continue-button").addEventListener("click",next);
+$("previous-button").addEventListener("click",previous);
+$("lesson-library").addEventListener("click",()=>{showView("library");$("page-title").focus()});
+$("lesson-home").addEventListener("click",event=>{event.preventDefault();$("lesson-library").click()});
 $("new-practice-portion").addEventListener("click",()=>startNewPass());
-$("deck-guide-disclosure").addEventListener("toggle",()=>{$("deck-guide-toggle-label").textContent=$("deck-guide-disclosure").open?"Hide rules":"Show rules"});
+$("deck-guide-disclosure").addEventListener("toggle",()=>{
+  const open=$("deck-guide-disclosure").open;
+  $("guide-toggle").setAttribute("aria-expanded",String(open));
+});
+$("guide-toggle").addEventListener("click",()=>{$("deck-guide-disclosure").open=!$("deck-guide-disclosure").open});
 $("completion-primary").addEventListener("click",()=>{closeCompletion();completionPrimaryAction()});
 $("completion-secondary").addEventListener("click",()=>{closeCompletion();completionSecondaryAction()});
 $("completion-library").addEventListener("click",()=>{closeCompletion();showView("library")});
