@@ -295,6 +295,30 @@ const personalPronounDativeCards=[
   }
 ];
 const personalPronounCaseCards=[...personalPronounAccusativeCards,...personalPronounDativeCards];
+const personalPronounMixedPrompts={
+  "pronoun-accusative-ich-recall":{promptText:"Meine Schwester besucht ___.",support:"Заміни ich (я)."},
+  "pronoun-accusative-du-recall":{promptText:"Ich besuche ___ am Abend.",support:"Заміни du (ти)."},
+  "pronoun-accusative-er-recall":{promptText:"Ich kenne ___ gut.",support:"Заміни er (він)."},
+  "pronoun-accusative-she-recall":{promptText:"Wir besuchen ___ heute.",support:"Заміни sie (вона)."},
+  "pronoun-accusative-es-recall":{promptText:"Das Baby schläft. Ich sehe ___.",support:"Заміни es (воно): das Baby."},
+  "pronoun-accusative-wir-recall":{promptText:"Unsere Freunde besuchen ___.",support:"Заміни wir (ми)."},
+  "pronoun-accusative-ihr-recall":{promptText:"Ich besuche ___ morgen.",support:"Заміни ihr (ви, неформально, кілька людей)."},
+  "pronoun-accusative-they-recall":{promptText:"Ich kenne ___ schon.",support:"Заміни sie (вони)."},
+  "pronoun-accusative-formal-recall":{promptText:"Ich besuche ___ morgen.",support:"Заміни Sie (Ви, ввічливо)."},
+  "pronoun-dative-ich-recall":{promptText:"Meine Schwester hilft ___.",support:"Заміни ich (я)."},
+  "pronoun-dative-du-recall":{promptText:"Ich helfe ___ gern.",support:"Заміни du (ти)."},
+  "pronoun-dative-er-recall":{promptText:"Ich helfe ___ heute.",support:"Заміни er (він)."},
+  "pronoun-dative-she-recall":{promptText:"Ich helfe ___ gern.",support:"Заміни sie (вона)."},
+  "pronoun-dative-es-recall":{promptText:"Das Baby weint. Die Mutter gibt ___ Milch.",support:"Заміни es (воно): das Baby."},
+  "pronoun-dative-wir-recall":{promptText:"Unsere Freunde helfen ___.",support:"Заміни wir (ми)."},
+  "pronoun-dative-ihr-recall":{promptText:"Ich helfe ___ morgen.",support:"Заміни ihr (ви, неформально, кілька людей)."},
+  "pronoun-dative-they-recall":{promptText:"Ich helfe ___ heute.",support:"Заміни sie (вони)."},
+  "pronoun-dative-formal-recall":{promptText:"Ich helfe ___ gern.",support:"Заміни Sie (Ви, ввічливо)."}
+};
+const personalPronounMixedPracticeCards=personalPronounCaseCards.map(card=>{
+  const context=personalPronounMixedPrompts[card.id];
+  return context?{...card,...context,type:"cloze"}:card;
+});
 const possessivePronounCards=[
   {word:"mein",translation:"мій / моє",category:"POSSESSIVE PRONOUN",example:"Mein Bruder lernt Deutsch.",exampleTranslation:"Мій брат вивчає німецьку."},
   {word:"dein",translation:"твій / твоє",category:"POSSESSIVE PRONOUN",example:"Ist das dein Buch?",exampleTranslation:"Це твоя книга?"},
@@ -2394,7 +2418,7 @@ const personalPronounCaseStages=[
   lessonStep("pronoun-cases-dative-learn","Вивчення займенників у Dativ","Вивчіть форми всіх дев’яти займенників: після helfen, danken і mit потрібен Dativ; з geben це форма одержувача.",personalPronounDativeCards,"learn","Давальний відмінок · Dativ","Вивчення"),
   lessonStep("pronoun-cases-dative-practice","Практика займенників у Dativ","Введіть форму Dativ за вихідним займенником або доповніть речення. Не плутайте їй, їм та ввічливе Вам.",personalPronounDativeCards,"input","Давальний відмінок · Dativ","Практика"),
   lessonStep("pronoun-cases-mixed-learn","Порівняння Akkusativ і Dativ","Порівняйте форми в контексті. Німецьке дієслово або прийменник визначає відмінок, а не український переклад.",personalPronounCaseCards,"learn","Akkusativ чи Dativ?","Вивчення"),
-  lessonStep("pronoun-cases-mixed-practice","Практика обох відмінків","Спочатку визначте Akkusativ чи Dativ, потім введіть один займенник. Працюйте з усіма особами й ввічливим звертанням.",personalPronounCaseCards,"input","Akkusativ чи Dativ?","Практика")
+  {...lessonStep("pronoun-cases-mixed-practice","Практика обох відмінків","Спочатку визначте Akkusativ чи Dativ, потім введіть один займенник. Працюйте з усіма особами й ввічливим звертанням.",personalPronounMixedPracticeCards,"input","Akkusativ чи Dativ?","Практика"),categoryBeforeCheck:"PERSONALPRONOMEN"}
 ];
 const possessiveStages=[
   ...learnThenPractice("possessives-stems","основи присвійних займенників","Визначте власника, перш ніж обирати mein, dein, sein, ihr, unser, euer, Ihr або ihr.",possessivePronounCards.slice(0,8),"Основи"),

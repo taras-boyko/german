@@ -955,6 +955,10 @@ function feedbackExample(card){
   return {label:"Правильна відповідь",text:card.response.accepted[0],translation:card.translation};
 }
 
+function translationKey(text){
+  return text.normalize("NFKC").trim().replace(/\s+/g," ");
+}
+
 function feedbackExplanation(card){
   if(card.explanation)return card.explanation;
   if(card.type==="cloze")return "Визначте потрібну німецьку форму за контекстом речення.";
@@ -1044,6 +1048,9 @@ function render(focusTarget=""){
   const revealed=verified||answerRevealed,expected=card.response.accepted[0],[inputLabel,inputPlaceholder]=inputCopy(card);
   const example=feedbackExample(card);
   const feedbackVisible=verificationMode&&revealed;
+  const exampleTranslation=feedbackVisible?example.translation:(card.exampleTranslation||card.translation);
+  const meaningTranslation=verificationMode?card.translation:(card.studyTranslation||card.translation);
+  const separateMeaning=Boolean(translationKey(meaningTranslation))&&translationKey(meaningTranslation)!==translationKey(exampleTranslation);
   const support=verificationMode?practiceSupport(card):{label:"",text:""};
   if(!feedbackVisible){
     $("verification-feedback").textContent="";
@@ -1054,14 +1061,15 @@ function render(focusTarget=""){
   renderLocationIllustration(card);
   if(verificationMode)renderPracticePrompt(card);
   else $("question-word").textContent=card.word;
-  $("translation").textContent=verificationMode?(revealed?"Ваша відповідь німецькою":inputLabel):(card.studyTranslation||card.translation);
-  $("translation").hidden=verificationMode;
+  $("translation").textContent=verificationMode?(revealed?"Ваша відповідь німецькою":inputLabel):meaningTranslation;
+  $("translation").hidden=verificationMode||!separateMeaning;
   $("prompt-support").dataset.label=support.label;
   $("prompt-support").textContent=support.text;
   $("prompt-support").hidden=!support.text;
   $("original-question-text").textContent=card.promptText;
   $("original-question").hidden=true;
-  $("category-label").textContent=`${categoryLabel(card.category)} · ${exerciseLabels[card.type]}`;
+  const category=verificationMode&&!revealed?(stage.categoryBeforeCheck||card.category):card.category;
+  $("category-label").textContent=`${categoryLabel(category)} · ${exerciseLabels[card.type]}`;
   const location=locationScene(card);
   $("w-badge").textContent=location?(location.motion?"Wohin?":"Wo?"):"";
   $("w-badge").hidden=!location;
@@ -1074,10 +1082,11 @@ function render(focusTarget=""){
     $("feedback-detail").hidden=!outcome.detail;
   }
   $("example-label").textContent=verificationMode&&revealed?example.label:"Приклад речення";
-  $("answer-translation").textContent=verificationMode&&revealed?`Значення українською: ${card.translation}`:"";
-  $("answer-translation").hidden=!verificationMode||!revealed;
+  $("answer-translation").textContent=feedbackVisible&&separateMeaning?`Значення українською: ${meaningTranslation}`:"";
+  $("answer-translation").hidden=!feedbackVisible||!separateMeaning;
   $("example").textContent=verificationMode&&revealed?example.text:(card.example||card.word);
-  $("example-translation").textContent=verificationMode&&revealed?example.translation:(card.exampleTranslation||card.translation);
+  $("example-translation").textContent=exampleTranslation;
+  $("example-translation").hidden=!translationKey(exampleTranslation);
   $("feedback-context").open=!verificationMode||answerRevealed;
   $("practice-portion").hidden=false;
   $("new-practice-portion").innerHTML='Новий підхід <span aria-hidden="true">↻</span>';

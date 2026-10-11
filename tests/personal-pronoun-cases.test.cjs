@@ -92,6 +92,26 @@ test("each chapter has matching learn and practice target pools",()=>{
   }
 });
 
+test("mixed practice uses three contextual gaps per target without changing saved identities or answers",()=>{
+  const learn=lesson.stages[4],practice=lesson.stages[5];
+  assert.equal(practice.categoryBeforeCheck,"PERSONALPRONOMEN");
+  for(const card of practice.cards){
+    const original=learn.cards.find(candidate=>candidate.id===card.id);
+    assert.ok(original,card.id);
+    assert.equal(card.targetId,original.targetId,card.id);
+    assert.deepEqual(card.response,original.response,card.id);
+    assert.equal(card.type,"cloze",card.id);
+    assert.equal(card.promptText.split("___").length,2,card.id);
+    assert.equal(card.promptText.replace("___",card.response.accepted[0]),card.example,card.id);
+    assert.doesNotMatch(`${card.promptText} ${card.support}`,/\b(?:Akkusativ|Dativ)\b/i,card.id);
+    assert.ok(card.support,card.id);
+  }
+  for(const targetId of new Set(practice.cards.map(card=>card.targetId))){
+    const variants=practice.cards.filter(card=>card.targetId===targetId);
+    assert.equal(new Set(variants.map(card=>`${card.promptText}\u0000${card.support}`)).size,3,targetId);
+  }
+});
+
 test("shared passes cover every target and rotate explicit variants without generated duplicates",()=>{
   const runtime=sharedRuntime();
   for(const stage of runtime.lesson.stages){

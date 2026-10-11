@@ -99,9 +99,9 @@ test("localization preserves the pre-localization identities, German content, an
       }))
     }))
   }));
-  // Baseline from 4781214 includes generated variants and legacy adapter IDs.
+  // Baseline from 4781214 plus explicit mixed-case gaps, preserving their IDs and answers.
   assert.equal(createHash("sha256").update(JSON.stringify(snapshot)).digest("hex"),
-    "fefbfb4d776ae53811713b4f665ba3f46296254b812af7e1533b18a3c14b37a3");
+    "0bff08ec36d176ed42674bfdba559bbcd25d4fceaf950531d1677996cea1430c");
   for(const [lessonId,definition] of Object.entries(app.definitions)){
     for(const stage of definition.stages){
       const cards=app.variantsForStage(stage).slice(0,7);

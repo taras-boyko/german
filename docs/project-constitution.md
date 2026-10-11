@@ -70,10 +70,17 @@ input control when typed recall can assess the skill.
   order; never infer or autocorrect missing, extra, or misspelled content.
 - A wrong answer shows a compact token-level correction and explanation. It does not
   expose the answer before an attempt and does not count as correct after reveal.
+- When practice asks the learner to choose a grammatical case or pattern, card labels
+  and prompts must not name the correct choice before checking. Use contextual gaps
+  with the person or owner cue needed for one answer; reveal the specific case in
+  feedback. Focused single-case drills may name the case being practiced.
 - Correct feedback states only the result and the answer; do not add generic praise.
   Wrong-answer explanations name the rule that decides this answer (case, ending, stem
   change, auxiliary, word position), not just its meaning. Plain vocabulary recall may
   fall back to a meaning association.
+- In learn cards and practice feedback, show an identical Ukrainian meaning and example
+  translation only once, beneath the German example or completed sentence. Keep a
+  separate target meaning only when it adds distinct information.
 - Track first-attempt correctness separately from eventual completion. This keeps
   accuracy meaningful while allowing learners to recover from mistakes.
 
