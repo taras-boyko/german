@@ -137,7 +137,7 @@ test("document language, accessible labels, and CSS-generated text are Ukrainian
   assert.ok(html.includes('<html lang="uk">'));
   assert.ok(html.includes('id="verification-input" type="text" lang="de"'));
   const names=[...html.matchAll(/aria-label="([^"]+)"/g)].map(match=>match[1]);
-  assert.equal(names.length,12);
+  assert.equal(names.length,10);
   for(const name of names)assert.match(name,ukrainian,name);
   assert.ok(readFileSync(join(__dirname,"../styles.css"),"utf8").includes('content:"Сховати"'));
 });

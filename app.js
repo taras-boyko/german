@@ -1110,8 +1110,8 @@ function render(focusTarget=""){
   $("lesson-keyboard-hint").textContent=verificationMode?"Enter — перевірити · ще раз Enter — далі":"← Попередня · → або пробіл — далі";
   $("check-button").textContent=revealed?"Наступна картка":"Перевірити";
   $("correction-display").hidden=!answerRevealed;
-  $("verification-input").value=revealed?(session?.cardInputs?.[String(index)]||expected):"";
-  $("check-button").disabled=!revealed;
+  $("verification-input").value=session?.cardInputs?.[String(index)]||(revealed?expected:"");
+  $("check-button").disabled=!revealed&&!normalizeAnswer($("verification-input").value);
   if(answerRevealed)renderCorrection($("verification-input").value,expected,card.response);else $("correction-text").replaceChildren();
   $("verification-feedback").hidden=feedbackVisible;
   updatePageTitle("practice");
@@ -1135,11 +1135,25 @@ function lessonChapters(stages){
 function stepButton(chapter,{stage,stageIndex},className){
   const button=document.createElement("button"),done=stageIsComplete(activeDeckId,stage),current=stageIndex===activeStageIndex;
   const paused=!current&&Boolean(suspendedEntry(activeDeckId,stage.id));
+  const stepIndex=chapter.steps.findIndex(step=>step.stageIndex===stageIndex);
+  const phase=stage.phase||(stage.mode==="input"?"Практика":"Вивчення");
   button.type="button";
   button.className=`${className}${current?" current":""}${done?" done":""}${paused?" paused":""}`;
-  button.textContent=stage.phase||(stage.mode==="input"?"Практика":"Вивчення");
+  if(className==="phase-option"){
+    const number=document.createElement("span"),copy=document.createElement("span");
+    const name=document.createElement("span"),status=document.createElement("span");
+    number.className="phase-number";number.textContent=String(stepIndex+1);number.setAttribute("aria-hidden","true");
+    copy.className="phase-copy";
+    name.textContent=phase;
+    status.className="phase-status";
+    status.textContent=current?(done?"Поточний · завершено":"Поточний етап")
+      :paused?(done?"Завершено · підхід збережено":"Підхід збережено")
+      :done?"Завершено":"Не розпочато";
+    copy.append(name,status);
+    button.append(number,copy);
+  }else button.textContent=phase;
   button.setAttribute("aria-current",current?"step":"false");
-  button.setAttribute("aria-label",`${chapter.name} · ${stage.title}${done?" (завершено)":""}${paused?" (незавершений підхід збережено)":""}`);
+  button.setAttribute("aria-label",`Етап ${stepIndex+1} з ${chapter.steps.length}: ${phase} · ${chapter.name} · ${stage.title}${current?" (поточний етап)":""}${done?" (завершено)":""}${paused?" (незавершений підхід збережено)":""}`);
   if(paused)button.title="Незавершений підхід збережено";
   button.addEventListener("click",()=>{if(!current)selectStage(stageIndex)});
   return button;
@@ -1166,9 +1180,13 @@ function renderLessonPath(){
   $("lesson-phase-label").textContent=current.phase||(current.mode==="input"?"Практика":"Вивчення");
   $("lesson-chapter-count").textContent=`Розділ ${activeChapterIndex+1} з ${chapters.length}`;
   $("stage-objective").textContent=current.objective;
-  $("lesson-step-count").textContent=`Завершено ${doneCount} з ${stages.length} етапів`;
+  $("lesson-step-count").textContent=`План уроку · завершено ${doneCount} з ${counted(stages.length,"етапу","етапів","етапів")}`;
   $("lesson-outline-count").textContent=counted(chapters.length,"розділ","розділи","розділів");
   const chapter=chapters[activeChapterIndex],multiChapter=chapters.length>1,multiStep=chapter.steps.length>1;
+  const currentStepIndex=chapter.steps.findIndex(step=>step.stageIndex===activeStageIndex);
+  $("lesson-stage-count").textContent=`Етап ${currentStepIndex+1} з ${chapter.steps.length} у розділі`;
+  $("lesson-navigation-hint").hidden=!multiChapter&&!multiStep;
+  $("lesson-chapter-count").htmlFor=multiChapter?"chapter-select":"";
   $("chapter-picker").classList.toggle("interactive",multiChapter);
   $("chapter-picker-chevron").hidden=!multiChapter;
   $("chapter-select").hidden=!multiChapter;
@@ -1176,7 +1194,7 @@ function renderLessonPath(){
     $("chapter-select").replaceChildren(...chapters.map((item,chapterIndex)=>{
       const option=document.createElement("option"),done=item.steps.every(step=>stageIsComplete(activeDeckId,step.stage));
       option.value=String(chapterIndex);
-      option.textContent=`${chapterIndex+1}. ${item.name}${done?" ✓":""}`;
+      option.textContent=`${chapterIndex+1}. ${item.name}${done?" (завершено)":""}`;
       return option;
     }));
     $("chapter-select").value=String(activeChapterIndex);
@@ -1602,11 +1620,29 @@ $("bookmark").addEventListener("click",event=>{event.stopPropagation();const sav
 $("verification-input").addEventListener("input",event=>{
   if(verificationMode&&!practiceInputStarted&&event.target.value.trim())practiceInputStarted=true;
   $("check-button").disabled=verificationMode&&!verified&&!answerRevealed&&!normalizeAnswer(event.target.value);
+  if(verificationMode&&!verified&&!answerRevealed&&learningState.activeSession){
+    const session=learningState.activeSession;
+    if(!session.cardInputs)session.cardInputs={};
+    if(event.target.value)session.cardInputs[String(index)]=event.target.value;
+    else delete session.cardInputs[String(index)];
+    persistPosition();
+  }
 });
 $("check-button").addEventListener("click",checkAnswer);
 $("continue-button").addEventListener("click",next);
 $("previous-button").addEventListener("click",previous);
 $("chapter-select").addEventListener("change",event=>selectChapter(Number(event.target.value)));
+$("lesson-progress-toggle").addEventListener("click",()=>{
+  $("lesson-outline").open=!$("lesson-outline").open;
+  $("lesson-progress-toggle").setAttribute("aria-expanded",String($("lesson-outline").open));
+  if($("lesson-outline").open){
+    $("lesson-outline").scrollIntoView({block:"nearest",behavior:"instant"});
+    $("lesson-outline").querySelector("summary").focus({preventScroll:true});
+  }
+});
+$("lesson-outline").addEventListener("toggle",()=>{
+  $("lesson-progress-toggle").setAttribute("aria-expanded",String($("lesson-outline").open));
+});
 $("lesson-library").addEventListener("click",()=>{showView("library");$("page-title").focus()});
 $("lesson-home").addEventListener("click",event=>{event.preventDefault();$("lesson-library").click()});
 $("new-practice-portion").addEventListener("click",()=>startNewPass());
@@ -1640,7 +1676,7 @@ document.addEventListener("keydown",event=>{
     if(event.key==="Enter"){event.preventDefault();checkAnswer()}
     return;
   }
-  if(event.target instanceof Element&&event.target.closest("button, a, input, summary, [role='button']"))return;
+  if(event.target instanceof Element&&event.target.closest("button, a, input, select, summary, [role='button']"))return;
   if(event.key==="Enter"&&verificationMode){event.preventDefault();checkAnswer();return}
   if(event.key===" "&&!verificationMode){event.preventDefault();next();return}
   if(event.key==="ArrowRight")next();

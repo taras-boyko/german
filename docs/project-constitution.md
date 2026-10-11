@@ -180,8 +180,10 @@ future passes provide contextual variety and retention checks.
 - The lesson header lets the learner switch freely: a chapter picker when the lesson
   has several chapters, and a step switch (Вивчення / Практика / Частина N) when the
   chapter has several steps. Each step shows whether it is done or has a saved
-  unfinished attempt. The collapsed lesson outline keeps the full overview and the
-  new-pass control.
+  unfinished attempt. Label the chapter picker and number steps within their chapter;
+  use visible text for current, completed, and saved-attempt states. Keep chapter-local
+  step position separate from lesson-wide completion, which opens the collapsed lesson
+  outline with the full overview and the new-pass control.
 - Leaving a step never discards its unfinished attempt: it is suspended and resumes
   exactly where it stopped when the learner returns. Switching needs no confirmation.
 - Use one card workspace for all exercise types and one predictable keyboard flow.
