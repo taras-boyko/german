@@ -145,6 +145,16 @@ future passes provide contextual variety and retention checks.
 
 ## 5. Screen responsibilities
 
+### Interface language
+
+- Use Ukrainian for navigation, lesson names, outcomes, chapter and phase labels,
+  instructions, feedback, completion, progress, and accessible control names.
+  Keep German examples, exercise text, answers, and useful grammar terms in German.
+- Use consistent terms: lesson = «урок», chapter = «розділ», sequence = «етап»,
+  pass = «підхід», learn = «вивчення», practice = «практика».
+- Inflect Ukrainian count labels correctly. Localization must not change lesson,
+  sequence, target, or variant IDs, accepted answers, sampling, or saved progress.
+
 ### Library
 
 - Derive lesson counts and status from lesson definitions and persisted state; never

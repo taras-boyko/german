@@ -58,7 +58,73 @@
 .feedback-context summary .answer-label{margin:0;color:#817b90}
 .context-action{color:var(--purple);font-size:10px;font-weight:700}
 .feedback-context[open] .context-action{font-size:0}
-.feedback-context[open] .context-action::after{content:"Hide";font-size:10px}
+.feedback-context[open] .context-action::after{content:"Сховати";font-size:10px}
+.main-content,
+.library-header > div,
+.review-focus > div {
+  min-width: 0;
+}
+.topbar,
+.library-header {
+  gap: 16px;
+}
+.library-header {
+  align-items: flex-start;
+}
+.library-total,
+.section-icon {
+  flex: none;
+}
+.section-card-top {
+  gap: 10px;
+}
+.status-badge {
+  text-align: right;
+}
+.section-meta {
+  flex-wrap: wrap;
+  row-gap: 6px;
+}
+.review-focus .primary-button {
+  max-width: 45%;
+  white-space: normal;
+  overflow-wrap: anywhere;
+}
+@media (max-width: 1100px) {
+  .section-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .lesson-progress-card {
+    grid-template-columns: minmax(0, 1fr) auto;
+    gap: 12px;
+  }
+  .lesson-progress-details {
+    grid-column: 1;
+  }
+  .lesson-review-button {
+    grid-column: 2;
+    grid-row: 1 / span 2;
+  }
+}
+@media (max-width: 700px) {
+  .section-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .topbar,
+  .library-header {
+    flex-wrap: wrap;
+  }
+  .review-focus .primary-button {
+    max-width: 100%;
+  }
+  .lesson-progress-card {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .lesson-review-button {
+    grid-column: auto;
+    grid-row: auto;
+  }
+}
 .answer-content{margin-top:9px;padding:12px;border:1px solid #ece9f1;border-radius:9px;background:#fbfafc}
 .answer-content .answer-meaning{margin:0 0 8px;color:#675bc8;font-size:11px;font-weight:700}
 .answer-content strong{display:block;font-size:14px;font-weight:600}

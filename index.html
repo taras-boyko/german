@@ -1,9 +1,9 @@
 <!doctype html>
-<html lang="en">
+<html lang="uk">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>DeutschDrill · German recall practice</title>
+  <title>DeutschDrill · Практика німецької</title>
   <link rel="icon" href="assets/deutschdrill-mark.svg" type="image/svg+xml">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -14,26 +14,26 @@
 <body>
   <div class="app-shell">
     <aside class="sidebar">
-      <a class="brand" href="#" aria-label="DeutschDrill home">
+      <a class="brand" href="#" aria-label="DeutschDrill — бібліотека уроків">
         <img class="brand-mark" src="assets/deutschdrill-mark.svg" alt="">
         <span>DeutschDrill</span>
       </a>
-      <div class="sidebar-label">Study</div>
+      <div class="sidebar-label">Навчання</div>
       <nav class="nav">
-        <button class="nav-item" data-view="practice"><span class="nav-icon">◈</span> Practice <span class="nav-count">0</span></button>
-        <button class="nav-item active" data-view="library"><span class="nav-icon">▤</span> Card library</button>
-        <button class="nav-item" data-view="progress"><span class="nav-icon">◒</span> Progress</button>
+        <button class="nav-item" data-view="practice"><span class="nav-icon">◈</span> Практика <span class="nav-count">0</span></button>
+        <button class="nav-item active" data-view="library"><span class="nav-icon">▤</span> Бібліотека уроків</button>
+        <button class="nav-item" data-view="progress"><span class="nav-icon">◒</span> Прогрес</button>
       </nav>
     </aside>
 
     <main class="main-content">
       <header class="topbar">
         <div>
-          <p class="eyebrow">GERMAN · A1–B1</p>
-          <h1 id="page-title" tabindex="-1">Card library</h1>
+          <p class="eyebrow">НІМЕЦЬКА · A1–B1</p>
+          <h1 id="page-title" tabindex="-1">Бібліотека уроків</h1>
         </div>
         <div class="top-actions">
-          <div class="streak"><span>♨</span><strong id="streak">0</strong><small>day streak</small></div>
+          <div class="streak"><span>♨</span><strong id="streak">0</strong><small id="streak-label">днів поспіль</small></div>
         </div>
       </header>
       <p class="sync-status" id="sync-status" role="status" aria-live="polite" hidden></p>
@@ -42,47 +42,47 @@
         <!-- Focus room: the card leads; lesson context stays compact, with optional
              rules and chapter navigation. All lessons share the same study flow. -->
         <header class="lesson-topbar">
-          <a class="brand" id="lesson-home" href="#" aria-label="DeutschDrill card library">
+          <a class="brand" id="lesson-home" href="#" aria-label="DeutschDrill — бібліотека уроків">
             <img class="brand-mark" src="assets/deutschdrill-mark.svg" alt="">
             <span>DeutschDrill</span>
           </a>
           <div class="lesson-identity">
-            <h1 id="deck-label">W-Fragen</h1>
+            <h1 id="deck-label">Питальні слова</h1>
             <p id="lesson-chapter-count"></p>
           </div>
-          <button class="lesson-library-button" id="lesson-library" type="button"><span aria-hidden="true">←</span> Library</button>
+          <button class="lesson-library-button" id="lesson-library" type="button"><span aria-hidden="true">←</span> Усі уроки</button>
         </header>
         <div class="lesson-focus">
-          <header class="lesson-journey" aria-label="Lesson progress">
+          <header class="lesson-journey" aria-label="Прогрес уроку">
             <div class="journey-top">
               <h2 id="lesson-path-title"><span id="lesson-chapter-label"></span></h2>
               <span class="lesson-phase" id="lesson-phase-label"></span>
             </div>
             <p id="stage-objective"></p>
           </header>
-          <section class="card-stage" aria-label="Current card">
+          <section class="card-stage" aria-label="Поточна картка">
             <div class="card-toolbar">
               <div class="journey-card-progress">
-                <span id="session-progress-label">Card 0 of 0</span>
+                <span id="session-progress-label">Картка 0 з 0</span>
                 <div class="progress-track" role="progressbar" aria-labelledby="session-progress-label" aria-valuemin="0" aria-valuemax="12" aria-valuenow="0"><i id="session-progress"></i></div>
               </div>
               <p class="journey-tally" id="lesson-step-count"></p>
             </div>
-            <article class="flashcard" id="flashcard" tabindex="0" aria-label="Flashcard">
+            <article class="flashcard" id="flashcard" tabindex="0" aria-label="Навчальна картка">
               <div class="card-top">
-                <span id="category-label">QUESTION WORD</span>
+                <span id="category-label">ПИТАЛЬНЕ СЛОВО</span>
                 <div class="card-tools">
-                  <button class="guide-toggle" id="guide-toggle" type="button" aria-controls="deck-guide" aria-expanded="false" hidden><span id="deck-guide-toggle-label">Rules</span><span class="guide-chevron" aria-hidden="true">+</span></button>
-                  <button class="bookmark" id="bookmark" type="button" aria-label="Bookmark card" aria-pressed="false">♡</button>
+                  <button class="guide-toggle" id="guide-toggle" type="button" aria-controls="deck-guide" aria-expanded="false" hidden><span id="deck-guide-toggle-label">Правила</span><span class="guide-chevron" aria-hidden="true">+</span></button>
+                  <button class="bookmark" id="bookmark" type="button" aria-label="Позначити картку" aria-pressed="false">♡</button>
                 </div>
               </div>
               <section class="deck-guide" id="deck-guide" hidden aria-labelledby="deck-guide-title">
                 <details id="deck-guide-disclosure">
-                  <summary class="guide-summary" tabindex="-1">Rules</summary>
+                  <summary class="guide-summary" tabindex="-1">Правила</summary>
                   <div class="guide-content">
                     <span class="guide-title" id="deck-guide-title" role="heading" aria-level="3"></span>
                     <p class="guide-intro" id="deck-guide-intro"></p>
-                    <p class="guide-answer-note" id="guide-answer-note" hidden>Examples that reveal this answer are hidden until you check.</p>
+                    <p class="guide-answer-note" id="guide-answer-note" hidden>Приклади з відповіддю приховано до перевірки.</p>
                     <div class="guide-rules-heading">
                       <span>Основні правила</span>
                       <span class="guide-rule-count" id="deck-guide-count"></span>
@@ -97,51 +97,51 @@
                   <svg id="location-illustration-art" viewBox="0 0 240 128" focusable="false"></svg>
                 </figure>
                 <h3 id="question-word">Warum?</h3>
-                <p class="translation" id="translation">Why?</p>
+                <p class="translation" id="translation">Чому?</p>
                 <p class="prompt-support" id="prompt-support" hidden></p>
                 <p class="feedback-outcome" id="feedback-outcome" hidden role="status" aria-live="polite">
                   <strong id="feedback-title"></strong>
                   <span id="feedback-detail"></span>
                 </p>
                 <div class="original-question" id="original-question" hidden>
-                  <span class="answer-label">Original prompt</span>
+                  <span class="answer-label">Початкове завдання</span>
                   <strong id="original-question-text"></strong>
                 </div>
                 <div class="answer" id="answer">
                   <details class="feedback-context" id="feedback-context">
-                    <summary><span class="answer-label" id="example-label">Example sentence</span><span class="context-action" aria-hidden="true">Show</span></summary>
+                    <summary><span class="answer-label" id="example-label">Приклад речення</span><span class="context-action" aria-hidden="true">Показати</span></summary>
                     <div class="answer-content">
                       <small class="answer-meaning" id="answer-translation"></small>
-                      <strong id="example">Warum fährst du heute mit dem Bus?</strong>
+                      <strong id="example" lang="de">Warum fährst du heute mit dem Bus?</strong>
                       <small id="example-translation">Чому ти сьогодні їдеш автобусом?</small>
                     </div>
                   </details>
                 </div>
                 <div class="verification-panel" id="verification-panel">
-                  <label class="answer-label" id="verification-label" for="verification-input">Write the German answer</label>
-                  <div class="correction-display" id="correction-display" hidden aria-label="Answer corrections">
-                    <span class="answer-label">Your answer</span>
+                  <label class="answer-label" id="verification-label" for="verification-input">Напишіть відповідь німецькою</label>
+                  <div class="correction-display" id="correction-display" hidden aria-label="Виправлення відповіді">
+                    <span class="answer-label">Ваша відповідь</span>
                     <div class="correction-text" id="correction-text"></div>
                   </div>
-                  <input id="verification-input" type="text" autocomplete="off" placeholder="Type the German answer...">
-                  <button class="check-button" id="check-button" type="button">Check answer</button>
+                  <input id="verification-input" type="text" lang="de" autocomplete="off" placeholder="Відповідь німецькою...">
+                  <button class="check-button" id="check-button" type="button">Перевірити</button>
                   <p class="verification-feedback" id="verification-feedback" role="status"></p>
                   <p class="feedback-explanation" id="feedback-explanation" hidden></p>
                 </div>
               </div>
-              <div class="flip-hint" id="flip-hint"><span>→</span> Example sentence shown below</div>
+              <div class="flip-hint" id="flip-hint"><span>→</span> Приклад речення нижче</div>
             </article>
             <div class="study-actions" id="study-actions">
-              <button class="previous-button" id="previous-button" type="button"><span aria-hidden="true">←</span> Previous</button>
-              <button class="continue-button" id="continue-button" type="button">Next card <span>→</span></button>
+              <button class="previous-button" id="previous-button" type="button"><span aria-hidden="true">←</span> Попередня</button>
+              <button class="continue-button" id="continue-button" type="button">Наступна картка <span>→</span></button>
             </div>
             <p class="keyboard-hint" id="lesson-keyboard-hint"></p>
             <details class="lesson-outline" id="lesson-outline">
-              <summary>Lesson outline <span id="lesson-outline-count"></span><span class="outline-chevron" aria-hidden="true">+</span></summary>
-              <ol class="journey-rail" id="lesson-steps" aria-label="Lesson chapters"></ol>
+              <summary>План уроку <span id="lesson-outline-count"></span><span class="outline-chevron" aria-hidden="true">+</span></summary>
+              <ol class="journey-rail" id="lesson-steps" aria-label="Розділи уроку"></ol>
               <div class="practice-portion" id="practice-portion" hidden>
                 <span id="practice-portion-note"></span>
-                <button id="new-practice-portion" type="button">New pass <span aria-hidden="true">↻</span></button>
+                <button id="new-practice-portion" type="button">Новий підхід <span aria-hidden="true">↻</span></button>
               </div>
             </details>
           </section>
@@ -149,40 +149,40 @@
       </section>
 
       <section id="library-view" class="view">
-        <div class="library-header"><div><p class="eyebrow">YOUR STUDY LIBRARY</p><h2>Learning sections</h2><p>Short, varied passes move each skill from examples to active recall.</p></div><span class="library-total" id="library-total"></span></div>
+        <div class="library-header"><div><p class="eyebrow">ВАША БІБЛІОТЕКА</p><h2>Уроки німецької</h2><p>Короткі підходи з різними прикладами допомагають перейти від вивчення до самостійної відповіді.</p></div><span class="library-total" id="library-total"></span></div>
         <div class="section-grid" id="section-grid"></div>
       </section>
       <section id="progress-view" class="view hidden" aria-labelledby="progress-heading">
         <div class="progress-header">
           <div>
-            <p class="eyebrow">YOUR LEARNING RHYTHM</p>
-            <h2 id="progress-heading">Progress overview</h2>
-            <p>Use your last practice and accuracy to choose what to retrieve again.</p>
+            <p class="eyebrow">ВАШ РИТМ НАВЧАННЯ</p>
+            <h2 id="progress-heading">Навчальний прогрес</h2>
+            <p>Оберіть, що повторити, з огляду на точність відповідей і час останньої практики.</p>
           </div>
         </div>
-        <div class="progress-metrics" aria-label="Overall progress">
-          <article><strong id="progress-accuracy">0%</strong><span>overall accuracy</span></article>
-          <article><strong id="progress-streak">0</strong><span>day streak</span></article>
-          <article><strong id="progress-reviewed">0</strong><span>answers this week</span></article>
+        <div class="progress-metrics" aria-label="Загальний прогрес">
+          <article><strong id="progress-accuracy">0%</strong><span>точність перших відповідей</span></article>
+          <article><strong id="progress-streak">0</strong><span id="progress-streak-label">днів поспіль</span></article>
+          <article><strong id="progress-reviewed">0</strong><span>відповідей за тиждень</span></article>
         </div>
         <section class="review-focus" aria-labelledby="review-focus-heading">
           <div>
-            <p class="eyebrow">RETRIEVAL PRACTICE</p>
-            <h3 id="review-focus-heading">Choose your next review</h3>
+            <p class="eyebrow">ПРАКТИКА ПРИГАДУВАННЯ</p>
+            <h3 id="review-focus-heading">Що повторити далі</h3>
             <p id="review-focus-message"></p>
           </div>
           <button class="primary-button" id="review-focus-button" type="button"></button>
         </section>
         <section class="lesson-progress-section" aria-labelledby="lesson-progress-heading">
           <div class="progress-section-heading">
-            <div><p class="eyebrow">BY LESSON</p><h3 id="lesson-progress-heading">Your lesson history</h3></div>
+            <div><p class="eyebrow">ЗА УРОКАМИ</p><h3 id="lesson-progress-heading">Історія навчання</h3></div>
             <span id="lesson-history-note"></span>
           </div>
           <div class="lesson-progress-list" id="lesson-progress-list"></div>
         </section>
         <aside class="progress-method" aria-labelledby="progress-method-heading">
           <span aria-hidden="true">✦</span>
-          <div><h3 id="progress-method-heading">Study smarter</h3><p>Prioritize a short test on the lesson with the lowest accuracy, then mix in one stronger lesson. Spaced retrieval and interleaving strengthen recall better than rereading.</p></div>
+          <div><h3 id="progress-method-heading">Навчайтеся ефективніше</h3><p>Почніть із короткої практики уроку з найнижчою точністю, потім повторіть один краще засвоєний урок. Пригадування з інтервалами й чергування тем зміцнюють пам’ять краще за перечитування.</p></div>
         </aside>
       </section>
     </main>
@@ -190,13 +190,13 @@
   <div class="celebration" id="celebration" hidden role="dialog" aria-modal="true" aria-labelledby="celebration-title" aria-describedby="celebration-message">
     <div class="celebration-card" tabindex="-1">
       <span class="celebration-icon">✦</span>
-      <strong id="celebration-title">Sequence complete!</strong>
-      <span id="celebration-message">Great work — every card is done.</span>
+      <strong id="celebration-title">Етап завершено!</strong>
+      <span id="celebration-message">Усі картки пройдено.</span>
       <span class="completion-stats" id="completion-stats"></span>
       <div class="completion-actions">
         <button class="primary-button" id="completion-primary" type="button"></button>
-        <button class="secondary-button" id="completion-secondary" type="button">Repeat with new examples</button>
-        <button class="text-button" id="completion-library" type="button">Return to library</button>
+        <button class="secondary-button" id="completion-secondary" type="button">Повторити з новими прикладами</button>
+        <button class="text-button" id="completion-library" type="button">До бібліотеки уроків</button>
       </div>
     </div>
     <div class="confetti" id="confetti" aria-hidden="true"></div>
