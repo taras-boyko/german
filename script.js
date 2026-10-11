@@ -309,6 +309,332 @@ const possessivePronounCards=[
   {word:"unsere",translation:"наша / наше / наші",category:"POSSESSIVE ENDING",promptText:"Присвійний займенник: Наша квартира світла.",example:"Unsere Wohnung ist hell.",exampleTranslation:"Наша квартира світла."},
   {word:"Ihre",translation:"Ваша / Ваше / Ваші (ввічливо)",category:"POSSESSIVE ENDING",promptText:"Присвійний займенник: Ваші діти вдома?",example:"Sind Ihre Kinder zu Hause?",exampleTranslation:"Ваші діти вдома?",caseSensitive:true}
 ];
+const possessiveAccusativeCards=[
+  {
+    id:"possessive-accusative-masculine-brother",targetId:"possessive-accusative-masculine",type:"cloze",word:"meinen",
+    promptText:"Ich besuche ___ Bruder.",support:"Я відвідую свого брата. Іменник: der Bruder; власник: ich (я).",
+    translation:"Я відвідую свого брата.",studyTranslation:"Akkusativ · der Bruder · мій",
+    example:"Ich besuche meinen Bruder.",explanation:"Besuchen вимагає Akkusativ. Der Bruder — чоловічий рід: mein + -en → meinen.",
+    category:"POSSESSIVE ENDING · AKKUSATIV · MASKULINUM",practiceVariants:false,
+    response:{mode:"text",scope:"word",accepted:["meinen"],caseSensitive:false,punctuationSensitive:false}
+  },
+  {
+    id:"possessive-accusative-masculine-key",targetId:"possessive-accusative-masculine",type:"cloze",word:"deinen",
+    promptText:"Suchst du ___ Schlüssel?",support:"Ти шукаєш свій ключ? Іменник: der Schlüssel; власник: du (ти).",
+    translation:"Ти шукаєш свій ключ?",studyTranslation:"Akkusativ · der Schlüssel · твій",
+    example:"Suchst du deinen Schlüssel?",explanation:"Suchen вимагає Akkusativ. Der Schlüssel — чоловічий рід: dein + -en → deinen.",
+    category:"POSSESSIVE ENDING · AKKUSATIV · MASKULINUM",practiceVariants:false,
+    response:{mode:"text",scope:"word",accepted:["deinen"],caseSensitive:false,punctuationSensitive:false}
+  },
+  {
+    id:"possessive-accusative-masculine-her-father",targetId:"possessive-accusative-masculine",type:"cloze",word:"ihren",
+    promptText:"Wir sehen ___ Vater im Park.",support:"Ми бачимо її тата в парку. Іменник: der Vater; власниця: sie (вона).",
+    translation:"Ми бачимо її тата в парку.",studyTranslation:"Akkusativ · der Vater · її",
+    example:"Wir sehen ihren Vater im Park.",explanation:"Sehen вимагає Akkusativ. Der Vater — чоловічий рід: ihr + -en → ihren. «Її» пишемо з малої літери.",
+    category:"POSSESSIVE ENDING · AKKUSATIV · MASKULINUM",practiceVariants:false,
+    response:{mode:"text",scope:"word",accepted:["ihren"],caseSensitive:true,punctuationSensitive:false}
+  },
+  {
+    id:"possessive-accusative-masculine-your-dog",targetId:"possessive-accusative-masculine",type:"cloze",word:"euren",
+    promptText:"Ich höre ___ Hund.",support:"Я чую вашого собаку. Іменник: der Hund; власники: ihr (ви, неформально, кілька людей).",
+    translation:"Я чую вашого собаку.",studyTranslation:"Akkusativ · der Hund · ваш (неформально)",
+    example:"Ich höre euren Hund.",explanation:"Hören вимагає Akkusativ. Der Hund — чоловічий рід: euer + -en → euren (також eueren). Зазвичай внутрішнє e випадає.",
+    category:"POSSESSIVE ENDING · AKKUSATIV · MASKULINUM",practiceVariants:false,
+    response:{mode:"text",scope:"word",accepted:["euren","eueren"],caseSensitive:false,punctuationSensitive:false}
+  },
+  {
+    id:"possessive-accusative-masculine-formal-passport",targetId:"possessive-accusative-masculine",type:"cloze",word:"Ihren",
+    promptText:"Haben Sie ___ Pass dabei?",support:"У Вас із собою Ваш паспорт? Іменник: der Pass; власник: Sie (Ви, ввічливо).",
+    translation:"У Вас із собою Ваш паспорт?",studyTranslation:"Akkusativ · der Pass · Ваш (ввічливо)",
+    example:"Haben Sie Ihren Pass dabei?",explanation:"Haben вимагає Akkusativ. Der Pass — чоловічий рід: Ihr + -en → Ihren. Ввічливе «Ваш» завжди пишемо з великої літери.",
+    category:"POSSESSIVE ENDING · AKKUSATIV · MASKULINUM",practiceVariants:false,
+    response:{mode:"text",scope:"word",accepted:["Ihren"],caseSensitive:true,punctuationSensitive:false}
+  },
+  {
+    id:"possessive-accusative-neuter-our-car",targetId:"possessive-accusative-neuter",type:"cloze",word:"unser",
+    promptText:"Wir verkaufen ___ Auto.",support:"Ми продаємо свій автомобіль. Іменник: das Auto; власники: wir (ми).",
+    translation:"Ми продаємо свій автомобіль.",studyTranslation:"Akkusativ · das Auto · наш",
+    example:"Wir verkaufen unser Auto.",explanation:"Verkaufen вимагає Akkusativ. Das Auto — середній рід, тому без закінчення: unser Auto, а не unseren Auto.",
+    category:"POSSESSIVE ENDING · AKKUSATIV · NEUTRUM",practiceVariants:false,
+    response:{mode:"text",scope:"word",accepted:["unser"],caseSensitive:false,punctuationSensitive:false}
+  },
+  {
+    id:"possessive-accusative-neuter-his-book",targetId:"possessive-accusative-neuter",type:"cloze",word:"sein",
+    promptText:"Anna liest ___ Buch.",support:"Анна читає його книжку. Іменник: das Buch; власник: er (він).",
+    translation:"Анна читає його книжку.",studyTranslation:"Akkusativ · das Buch · його",
+    example:"Anna liest sein Buch.",explanation:"Lesen вимагає Akkusativ. Das Buch — середній рід: sein без закінчення. Власник er визначає основу, а не рід книжки.",
+    category:"POSSESSIVE ENDING · AKKUSATIV · NEUTRUM",practiceVariants:false,
+    response:{mode:"text",scope:"word",accepted:["sein"],caseSensitive:false,punctuationSensitive:false}
+  },
+  {
+    id:"possessive-accusative-neuter-their-child",targetId:"possessive-accusative-neuter",type:"cloze",word:"ihr",
+    promptText:"Ich kenne ___ Kind.",support:"Я знаю їхню дитину. Іменник: das Kind; власники: sie (вони).",
+    translation:"Я знаю їхню дитину.",studyTranslation:"Akkusativ · das Kind · їхній",
+    example:"Ich kenne ihr Kind.",explanation:"Kennen вимагає Akkusativ. Das Kind — середній рід у німецькій, тому ihr без закінчення. «Їхній» пишемо з малої літери.",
+    category:"POSSESSIVE ENDING · AKKUSATIV · NEUTRUM",practiceVariants:false,
+    response:{mode:"text",scope:"word",accepted:["ihr"],caseSensitive:true,punctuationSensitive:false}
+  },
+  {
+    id:"possessive-accusative-neuter-your-house",targetId:"possessive-accusative-neuter",type:"cloze",word:"euer",
+    promptText:"Wir gehen in ___ Haus.",support:"Ми йдемо у ваш будинок. Іменник: das Haus; власники: ihr (ви, неформально, кілька людей).",
+    translation:"Ми йдемо у ваш будинок.",studyTranslation:"Akkusativ · das Haus · ваш (неформально)",
+    example:"Wir gehen in euer Haus.",explanation:"In описує напрямок (Wohin?), тому Akkusativ. Das Haus — середній рід: euer без закінчення; внутрішнє e зберігається.",
+    category:"POSSESSIVE ENDING · AKKUSATIV · NEUTRUM",practiceVariants:false,
+    response:{mode:"text",scope:"word",accepted:["euer"],caseSensitive:false,punctuationSensitive:false}
+  },
+  {
+    id:"possessive-accusative-neuter-formal-ticket",targetId:"possessive-accusative-neuter",type:"cloze",word:"Ihr",
+    promptText:"Zeigen Sie bitte ___ Ticket.",support:"Покажіть, будь ласка, Ваш квиток. Іменник: das Ticket; власник: Sie (Ви, ввічливо).",
+    translation:"Покажіть, будь ласка, Ваш квиток.",studyTranslation:"Akkusativ · das Ticket · Ваш (ввічливо)",
+    example:"Zeigen Sie bitte Ihr Ticket.",explanation:"Предмет, який показують, стоїть в Akkusativ. Das Ticket — середній рід: Ihr без закінчення, з великої літери.",
+    category:"POSSESSIVE ENDING · AKKUSATIV · NEUTRUM",practiceVariants:false,
+    response:{mode:"text",scope:"word",accepted:["Ihr"],caseSensitive:true,punctuationSensitive:false}
+  },
+  {
+    id:"possessive-accusative-feminine-my-bag",targetId:"possessive-accusative-feminine",type:"cloze",word:"meine",
+    promptText:"Ich suche ___ Tasche.",support:"Я шукаю свою сумку. Іменник: die Tasche; власник: ich (я).",
+    translation:"Я шукаю свою сумку.",studyTranslation:"Akkusativ · die Tasche · моя",
+    example:"Ich suche meine Tasche.",explanation:"Suchen вимагає Akkusativ. Die Tasche — жіночий рід: mein + -e → meine, як у Nominativ.",
+    category:"POSSESSIVE ENDING · AKKUSATIV · FEMININUM",practiceVariants:false,
+    response:{mode:"text",scope:"word",accepted:["meine"],caseSensitive:false,punctuationSensitive:false}
+  },
+  {
+    id:"possessive-accusative-feminine-his-sister",targetId:"possessive-accusative-feminine",type:"cloze",word:"seine",
+    promptText:"Wir besuchen ___ Schwester.",support:"Ми відвідуємо його сестру. Іменник: die Schwester; власник: er (він).",
+    translation:"Ми відвідуємо його сестру.",studyTranslation:"Akkusativ · die Schwester · його",
+    example:"Wir besuchen seine Schwester.",explanation:"Besuchen вимагає Akkusativ. Die Schwester — жіночий рід: sein + -e → seine. Er визначає основу sein, Schwester — закінчення -e.",
+    category:"POSSESSIVE ENDING · AKKUSATIV · FEMININUM",practiceVariants:false,
+    response:{mode:"text",scope:"word",accepted:["seine"],caseSensitive:false,punctuationSensitive:false}
+  },
+  {
+    id:"possessive-accusative-feminine-her-mother",targetId:"possessive-accusative-feminine",type:"cloze",word:"ihre",
+    promptText:"Das Geschenk ist für ___ Mutter.",support:"Подарунок для її мами. Іменник: die Mutter; власниця: sie (вона).",
+    translation:"Подарунок для її мами.",studyTranslation:"Akkusativ · die Mutter · її",
+    example:"Das Geschenk ist für ihre Mutter.",explanation:"Für завжди вимагає Akkusativ. Die Mutter — жіночий рід: ihr + -e → ihre. «Її» пишемо з малої літери.",
+    category:"POSSESSIVE ENDING · AKKUSATIV · FEMININUM",practiceVariants:false,
+    response:{mode:"text",scope:"word",accepted:["ihre"],caseSensitive:true,punctuationSensitive:false}
+  },
+  {
+    id:"possessive-accusative-feminine-your-apartment",targetId:"possessive-accusative-feminine",type:"cloze",word:"eure",
+    promptText:"Mögt ihr ___ Wohnung?",support:"Вам подобається ваша квартира? Іменник: die Wohnung; власники: ihr (ви, неформально, кілька людей).",
+    translation:"Вам подобається ваша квартира?",studyTranslation:"Akkusativ · die Wohnung · ваша (неформально)",
+    example:"Mögt ihr eure Wohnung?",explanation:"Mögen вимагає Akkusativ. Die Wohnung — жіночий рід: euer + -e → eure (також euere). Зазвичай внутрішнє e випадає.",
+    category:"POSSESSIVE ENDING · AKKUSATIV · FEMININUM",practiceVariants:false,
+    response:{mode:"text",scope:"word",accepted:["eure","euere"],caseSensitive:false,punctuationSensitive:false}
+  },
+  {
+    id:"possessive-accusative-feminine-formal-address",targetId:"possessive-accusative-feminine",type:"cloze",word:"Ihre",
+    promptText:"Ich brauche ___ Adresse.",support:"Мені потрібна Ваша адреса. Іменник: die Adresse; власник: Sie (Ви, ввічливо).",
+    translation:"Мені потрібна Ваша адреса.",studyTranslation:"Akkusativ · die Adresse · Ваша (ввічливо)",
+    example:"Ich brauche Ihre Adresse.",explanation:"Brauchen вимагає Akkusativ. Die Adresse — жіночий рід: Ihr + -e → Ihre. Ввічливе «Ваша» пишемо з великої літери.",
+    category:"POSSESSIVE ENDING · AKKUSATIV · FEMININUM",practiceVariants:false,
+    response:{mode:"text",scope:"word",accepted:["Ihre"],caseSensitive:true,punctuationSensitive:false}
+  },
+  {
+    id:"possessive-accusative-plural-your-shoes",targetId:"possessive-accusative-plural",type:"cloze",word:"deine",
+    promptText:"Wo kaufst du ___ Schuhe?",support:"Де ти купуєш своє взуття? Іменник: die Schuhe (множина); власник: du (ти).",
+    translation:"Де ти купуєш своє взуття?",studyTranslation:"Akkusativ · die Schuhe · твої",
+    example:"Wo kaufst du deine Schuhe?",explanation:"Kaufen вимагає Akkusativ. Schuhe — множина: dein + -e → deine. Wo питає про місце покупки, але відмінок взуття визначає kaufen.",
+    category:"POSSESSIVE ENDING · AKKUSATIV · PLURAL",practiceVariants:false,
+    response:{mode:"text",scope:"word",accepted:["deine"],caseSensitive:false,punctuationSensitive:false}
+  },
+  {
+    id:"possessive-accusative-plural-our-friends",targetId:"possessive-accusative-plural",type:"cloze",word:"unsere",
+    promptText:"Wir treffen ___ Freunde heute.",support:"Ми зустрічаємо своїх друзів сьогодні. Іменник: die Freunde (множина); власники: wir (ми).",
+    translation:"Ми зустрічаємо своїх друзів сьогодні.",studyTranslation:"Akkusativ · die Freunde · наші",
+    example:"Wir treffen unsere Freunde heute.",explanation:"Treffen вимагає Akkusativ. Freunde — множина: unser + -e → unsere. -er у слові unser є частиною основи.",
+    category:"POSSESSIVE ENDING · AKKUSATIV · PLURAL",practiceVariants:false,
+    response:{mode:"text",scope:"word",accepted:["unsere","unsre"],caseSensitive:false,punctuationSensitive:false}
+  },
+  {
+    id:"possessive-accusative-plural-their-children",targetId:"possessive-accusative-plural",type:"cloze",word:"ihre",
+    promptText:"Ich sehe ___ Kinder.",support:"Я бачу їхніх дітей. Іменник: die Kinder (множина); власники: sie (вони).",
+    translation:"Я бачу їхніх дітей.",studyTranslation:"Akkusativ · die Kinder · їхні",
+    example:"Ich sehe ihre Kinder.",explanation:"Sehen вимагає Akkusativ. Kinder — множина: ihr + -e → ihre. «Їхні» пишемо з малої літери, не як ввічливе Ihre.",
+    category:"POSSESSIVE ENDING · AKKUSATIV · PLURAL",practiceVariants:false,
+    response:{mode:"text",scope:"word",accepted:["ihre"],caseSensitive:true,punctuationSensitive:false}
+  },
+  {
+    id:"possessive-accusative-plural-your-parents",targetId:"possessive-accusative-plural",type:"cloze",word:"eure",
+    promptText:"Ruft ihr ___ Eltern an?",support:"Ви телефонуєте своїм батькам? Іменник: die Eltern (множина); власники: ihr (ви, неформально, кілька людей).",
+    translation:"Ви телефонуєте своїм батькам?",studyTranslation:"Akkusativ · die Eltern · ваші (неформально)",
+    example:"Ruft ihr eure Eltern an?",explanation:"Anrufen вимагає Akkusativ, хоча українською «телефонувати кому». Eltern — множина: euer + -e → eure (також euere).",
+    category:"POSSESSIVE ENDING · AKKUSATIV · PLURAL",practiceVariants:false,
+    response:{mode:"text",scope:"word",accepted:["eure","euere"],caseSensitive:false,punctuationSensitive:false}
+  },
+  {
+    id:"possessive-accusative-plural-formal-bags",targetId:"possessive-accusative-plural",type:"cloze",word:"Ihre",
+    promptText:"Haben Sie ___ Taschen dabei?",support:"У Вас із собою Ваші сумки? Іменник: die Taschen (множина); власник: Sie (Ви, ввічливо).",
+    translation:"У Вас із собою Ваші сумки?",studyTranslation:"Akkusativ · die Taschen · Ваші (ввічливо)",
+    example:"Haben Sie Ihre Taschen dabei?",explanation:"Haben вимагає Akkusativ. Taschen — множина: Ihr + -e → Ihre. Ввічливе «Ваші» завжди пишемо з великої літери.",
+    category:"POSSESSIVE ENDING · AKKUSATIV · PLURAL",practiceVariants:false,
+    response:{mode:"text",scope:"word",accepted:["Ihre"],caseSensitive:true,punctuationSensitive:false}
+  }
+];
+const possessiveDativeCards=[
+  {
+    id:"possessive-dative-masculine-brother",targetId:"possessive-dative-masculine",type:"cloze",word:"meinem",
+    promptText:"Ich helfe ___ Bruder.",support:"Я допомагаю своєму братові. Іменник: der Bruder; власник: ich (я).",
+    translation:"Я допомагаю своєму братові.",studyTranslation:"Dativ · der Bruder · мій",
+    example:"Ich helfe meinem Bruder.",explanation:"Helfen вимагає Dativ. Der Bruder — чоловічий рід: mein + -em → meinem, а не meinen.",
+    category:"POSSESSIVE ENDING · DATIV · MASKULINUM",practiceVariants:false,
+    response:{mode:"text",scope:"word",accepted:["meinem"],caseSensitive:false,punctuationSensitive:false}
+  },
+  {
+    id:"possessive-dative-masculine-your-father",targetId:"possessive-dative-masculine",type:"cloze",word:"deinem",
+    promptText:"Sprichst du mit ___ Vater?",support:"Ти розмовляєш зі своїм татом? Іменник: der Vater; власник: du (ти).",
+    translation:"Ти розмовляєш зі своїм татом?",studyTranslation:"Dativ · der Vater · твій",
+    example:"Sprichst du mit deinem Vater?",explanation:"Mit завжди вимагає Dativ. Der Vater — чоловічий рід: dein + -em → deinem.",
+    category:"POSSESSIVE ENDING · DATIV · MASKULINUM",practiceVariants:false,
+    response:{mode:"text",scope:"word",accepted:["deinem"],caseSensitive:false,punctuationSensitive:false}
+  },
+  {
+    id:"possessive-dative-masculine-her-father",targetId:"possessive-dative-masculine",type:"cloze",word:"ihrem",
+    promptText:"Wir danken ___ Vater.",support:"Ми дякуємо її татові. Іменник: der Vater; власниця: sie (вона).",
+    translation:"Ми дякуємо її татові.",studyTranslation:"Dativ · der Vater · її",
+    example:"Wir danken ihrem Vater.",explanation:"Danken вимагає Dativ. Der Vater — чоловічий рід: ihr + -em → ihrem. «Її» пишемо з малої літери.",
+    category:"POSSESSIVE ENDING · DATIV · MASKULINUM",practiceVariants:false,
+    response:{mode:"text",scope:"word",accepted:["ihrem"],caseSensitive:true,punctuationSensitive:false}
+  },
+  {
+    id:"possessive-dative-masculine-your-dog",targetId:"possessive-dative-masculine",type:"cloze",word:"eurem",
+    promptText:"Ich gehe mit ___ Hund spazieren.",support:"Я гуляю з вашим собакою. Іменник: der Hund; власники: ihr (ви, неформально, кілька людей).",
+    translation:"Я гуляю з вашим собакою.",studyTranslation:"Dativ · der Hund · ваш (неформально)",
+    example:"Ich gehe mit eurem Hund spazieren.",explanation:"Mit вимагає Dativ. Der Hund — чоловічий рід: euer + -em → eurem (також euerem). Не плутай з euren в Akkusativ.",
+    category:"POSSESSIVE ENDING · DATIV · MASKULINUM",practiceVariants:false,
+    response:{mode:"text",scope:"word",accepted:["eurem","euerem"],caseSensitive:false,punctuationSensitive:false}
+  },
+  {
+    id:"possessive-dative-masculine-formal-husband",targetId:"possessive-dative-masculine",type:"cloze",word:"Ihrem",
+    promptText:"Kommen Sie mit ___ Mann?",support:"Ви прийдете зі своїм чоловіком? Іменник: der Mann; власник: Sie (Ви, ввічливо).",
+    translation:"Ви прийдете зі своїм чоловіком?",studyTranslation:"Dativ · der Mann · Ваш (ввічливо)",
+    example:"Kommen Sie mit Ihrem Mann?",explanation:"Mit вимагає Dativ. Der Mann — чоловічий рід: Ihr + -em → Ihrem. Ввічливе «Ваш» пишемо з великої літери.",
+    category:"POSSESSIVE ENDING · DATIV · MASKULINUM",practiceVariants:false,
+    response:{mode:"text",scope:"word",accepted:["Ihrem"],caseSensitive:true,punctuationSensitive:false}
+  },
+  {
+    id:"possessive-dative-neuter-our-car",targetId:"possessive-dative-neuter",type:"cloze",word:"unserem",
+    promptText:"Wir fahren mit ___ Auto.",support:"Ми їдемо своїм автомобілем. Іменник: das Auto; власники: wir (ми).",
+    translation:"Ми їдемо своїм автомобілем.",studyTranslation:"Dativ · das Auto · наш",
+    example:"Wir fahren mit unserem Auto.",explanation:"Mit вимагає Dativ. Das Auto — середній рід: unser + -em → unserem. У Dativ чоловічий і середній рід мають -em.",
+    category:"POSSESSIVE ENDING · DATIV · NEUTRUM",practiceVariants:false,
+    response:{mode:"text",scope:"word",accepted:["unserem","unsrem"],caseSensitive:false,punctuationSensitive:false}
+  },
+  {
+    id:"possessive-dative-neuter-his-child",targetId:"possessive-dative-neuter",type:"cloze",word:"seinem",
+    promptText:"Anna gibt ___ Kind ein Buch.",support:"Анна дає його дитині книжку. Іменник: das Kind; власник: er (він).",
+    translation:"Анна дає його дитині книжку.",studyTranslation:"Dativ · das Kind · його",
+    example:"Anna gibt seinem Kind ein Buch.",explanation:"З geben одержувач стоїть у Dativ. Das Kind — середній рід у німецькій: sein + -em → seinem. Ein Buch — предмет в Akkusativ.",
+    category:"POSSESSIVE ENDING · DATIV · NEUTRUM",practiceVariants:false,
+    response:{mode:"text",scope:"word",accepted:["seinem"],caseSensitive:false,punctuationSensitive:false}
+  },
+  {
+    id:"possessive-dative-neuter-their-child",targetId:"possessive-dative-neuter",type:"cloze",word:"ihrem",
+    promptText:"Ich spiele mit ___ Kind.",support:"Я граюся з їхньою дитиною. Іменник: das Kind; власники: sie (вони).",
+    translation:"Я граюся з їхньою дитиною.",studyTranslation:"Dativ · das Kind · їхній",
+    example:"Ich spiele mit ihrem Kind.",explanation:"Mit вимагає Dativ. Das Kind — середній рід: ihr + -em → ihrem. «Їхній» пишемо з малої літери.",
+    category:"POSSESSIVE ENDING · DATIV · NEUTRUM",practiceVariants:false,
+    response:{mode:"text",scope:"word",accepted:["ihrem"],caseSensitive:true,punctuationSensitive:false}
+  },
+  {
+    id:"possessive-dative-neuter-your-house",targetId:"possessive-dative-neuter",type:"cloze",word:"eurem",
+    promptText:"Wir wohnen in ___ Haus.",support:"Ми живемо у вашому будинку. Іменник: das Haus; власники: ihr (ви, неформально, кілька людей).",
+    translation:"Ми живемо у вашому будинку.",studyTranslation:"Dativ · das Haus · ваш (неформально)",
+    example:"Wir wohnen in eurem Haus.",explanation:"In описує розташування (Wo?), тому Dativ. Das Haus — середній рід: euer + -em → eurem (також euerem).",
+    category:"POSSESSIVE ENDING · DATIV · NEUTRUM",practiceVariants:false,
+    response:{mode:"text",scope:"word",accepted:["eurem","euerem"],caseSensitive:false,punctuationSensitive:false}
+  },
+  {
+    id:"possessive-dative-neuter-formal-car",targetId:"possessive-dative-neuter",type:"cloze",word:"Ihrem",
+    promptText:"Fahren Sie mit ___ Auto?",support:"Ви їдете своїм автомобілем? Іменник: das Auto; власник: Sie (Ви, ввічливо).",
+    translation:"Ви їдете своїм автомобілем?",studyTranslation:"Dativ · das Auto · Ваш (ввічливо)",
+    example:"Fahren Sie mit Ihrem Auto?",explanation:"Mit завжди вимагає Dativ, навіть під час руху. Das Auto — середній рід: Ihr + -em → Ihrem, з великої літери.",
+    category:"POSSESSIVE ENDING · DATIV · NEUTRUM",practiceVariants:false,
+    response:{mode:"text",scope:"word",accepted:["Ihrem"],caseSensitive:true,punctuationSensitive:false}
+  },
+  {
+    id:"possessive-dative-feminine-my-sister",targetId:"possessive-dative-feminine",type:"cloze",word:"meiner",
+    promptText:"Ich helfe ___ Schwester.",support:"Я допомагаю своїй сестрі. Іменник: die Schwester; власник: ich (я).",
+    translation:"Я допомагаю своїй сестрі.",studyTranslation:"Dativ · die Schwester · моя",
+    example:"Ich helfe meiner Schwester.",explanation:"Helfen вимагає Dativ. Die Schwester — жіночий рід: mein + -er → meiner, а не meine.",
+    category:"POSSESSIVE ENDING · DATIV · FEMININUM",practiceVariants:false,
+    response:{mode:"text",scope:"word",accepted:["meiner"],caseSensitive:false,punctuationSensitive:false}
+  },
+  {
+    id:"possessive-dative-feminine-his-mother",targetId:"possessive-dative-feminine",type:"cloze",word:"seiner",
+    promptText:"Wir sprechen mit ___ Mutter.",support:"Ми розмовляємо з його мамою. Іменник: die Mutter; власник: er (він).",
+    translation:"Ми розмовляємо з його мамою.",studyTranslation:"Dativ · die Mutter · його",
+    example:"Wir sprechen mit seiner Mutter.",explanation:"Mit вимагає Dativ. Die Mutter — жіночий рід: sein + -er → seiner. Власник er визначає основу, Mutter — закінчення.",
+    category:"POSSESSIVE ENDING · DATIV · FEMININUM",practiceVariants:false,
+    response:{mode:"text",scope:"word",accepted:["seiner"],caseSensitive:false,punctuationSensitive:false}
+  },
+  {
+    id:"possessive-dative-feminine-her-bag",targetId:"possessive-dative-feminine",type:"cloze",word:"ihrer",
+    promptText:"Der Schlüssel liegt in ___ Tasche.",support:"Ключ лежить у її сумці. Іменник: die Tasche; власниця: sie (вона).",
+    translation:"Ключ лежить у її сумці.",studyTranslation:"Dativ · die Tasche · її",
+    example:"Der Schlüssel liegt in ihrer Tasche.",explanation:"In описує місце (Wo?), тому Dativ. Die Tasche — жіночий рід: ihr + -er → ihrer. «Її» пишемо з малої літери.",
+    category:"POSSESSIVE ENDING · DATIV · FEMININUM",practiceVariants:false,
+    response:{mode:"text",scope:"word",accepted:["ihrer"],caseSensitive:true,punctuationSensitive:false}
+  },
+  {
+    id:"possessive-dative-feminine-your-apartment",targetId:"possessive-dative-feminine",type:"cloze",word:"eurer",
+    promptText:"Seid ihr in ___ Wohnung?",support:"Ви у своїй квартирі? Іменник: die Wohnung; власники: ihr (ви, неформально, кілька людей).",
+    translation:"Ви у своїй квартирі?",studyTranslation:"Dativ · die Wohnung · ваша (неформально)",
+    example:"Seid ihr in eurer Wohnung?",explanation:"In описує місце (Wo?), тому Dativ. Die Wohnung — жіночий рід: euer + -er → eurer (також euerer). Не плутай з eure в Akkusativ.",
+    category:"POSSESSIVE ENDING · DATIV · FEMININUM",practiceVariants:false,
+    response:{mode:"text",scope:"word",accepted:["eurer","euerer"],caseSensitive:false,punctuationSensitive:false}
+  },
+  {
+    id:"possessive-dative-feminine-formal-daughter",targetId:"possessive-dative-feminine",type:"cloze",word:"Ihrer",
+    promptText:"Ich antworte ___ Tochter.",support:"Я відповідаю Вашій доньці. Іменник: die Tochter; власник: Sie (Ви, ввічливо).",
+    translation:"Я відповідаю Вашій доньці.",studyTranslation:"Dativ · die Tochter · Ваша (ввічливо)",
+    example:"Ich antworte Ihrer Tochter.",explanation:"Antworten вимагає Dativ. Die Tochter — жіночий рід: Ihr + -er → Ihrer. Ввічливе «Ваша» пишемо з великої літери.",
+    category:"POSSESSIVE ENDING · DATIV · FEMININUM",practiceVariants:false,
+    response:{mode:"text",scope:"word",accepted:["Ihrer"],caseSensitive:true,punctuationSensitive:false}
+  },
+  {
+    id:"possessive-dative-plural-your-friends",targetId:"possessive-dative-plural",type:"cloze",word:"deinen",
+    promptText:"Lernst du mit ___ Freunden?",support:"Ти вчишся зі своїми друзями? Іменник: die Freunde (множина); власник: du (ти).",
+    translation:"Ти вчишся зі своїми друзями?",studyTranslation:"Dativ · die Freunde → Freunden · твої",
+    example:"Lernst du mit deinen Freunden?",explanation:"Mit вимагає Dativ. Множина: dein + -en → deinen; іменник також отримує -n: Freunde → Freunden.",
+    category:"POSSESSIVE ENDING · DATIV · PLURAL",practiceVariants:false,
+    response:{mode:"text",scope:"word",accepted:["deinen"],caseSensitive:false,punctuationSensitive:false}
+  },
+  {
+    id:"possessive-dative-plural-our-children",targetId:"possessive-dative-plural",type:"cloze",word:"unseren",
+    promptText:"Wir helfen ___ Kindern.",support:"Ми допомагаємо своїм дітям. Іменник: die Kinder (множина); власники: wir (ми).",
+    translation:"Ми допомагаємо своїм дітям.",studyTranslation:"Dativ · die Kinder → Kindern · наші",
+    example:"Wir helfen unseren Kindern.",explanation:"Helfen вимагає Dativ. Множина: unser + -en → unseren (також unsren); Kinder отримує -n: Kindern.",
+    category:"POSSESSIVE ENDING · DATIV · PLURAL",practiceVariants:false,
+    response:{mode:"text",scope:"word",accepted:["unseren","unsren"],caseSensitive:false,punctuationSensitive:false}
+  },
+  {
+    id:"possessive-dative-plural-their-cars",targetId:"possessive-dative-plural",type:"cloze",word:"ihren",
+    promptText:"Sie fahren mit ___ Autos.",support:"Вони їдуть своїми автомобілями. Іменник: die Autos (множина); власники: sie (вони).",
+    translation:"Вони їдуть своїми автомобілями.",studyTranslation:"Dativ · die Autos · їхні",
+    example:"Sie fahren mit ihren Autos.",explanation:"Mit вимагає Dativ. Множина: ihr + -en → ihren. До множини на -s не додаємо -n: Autos. «Їхні» пишемо з малої літери.",
+    category:"POSSESSIVE ENDING · DATIV · PLURAL",practiceVariants:false,
+    response:{mode:"text",scope:"word",accepted:["ihren"],caseSensitive:true,punctuationSensitive:false}
+  },
+  {
+    id:"possessive-dative-plural-your-parents",targetId:"possessive-dative-plural",type:"cloze",word:"euren",
+    promptText:"Wohnt ihr bei ___ Eltern?",support:"Ви живете у своїх батьків? Іменник: die Eltern (множина); власники: ihr (ви, неформально, кілька людей).",
+    translation:"Ви живете у своїх батьків?",studyTranslation:"Dativ · die Eltern · ваші (неформально)",
+    example:"Wohnt ihr bei euren Eltern?",explanation:"Bei вимагає Dativ. Множина: euer + -en → euren (також eueren). Eltern уже закінчується на -n, тому ще одне -n не додаємо.",
+    category:"POSSESSIVE ENDING · DATIV · PLURAL",practiceVariants:false,
+    response:{mode:"text",scope:"word",accepted:["euren","eueren"],caseSensitive:false,punctuationSensitive:false}
+  },
+  {
+    id:"possessive-dative-plural-formal-children",targetId:"possessive-dative-plural",type:"cloze",word:"Ihren",
+    promptText:"Ich gebe ___ Kindern die Bücher.",support:"Я даю Вашим дітям книжки. Іменник: die Kinder (множина); власник: Sie (Ви, ввічливо).",
+    translation:"Я даю Вашим дітям книжки.",studyTranslation:"Dativ · die Kinder → Kindern · Ваші (ввічливо)",
+    example:"Ich gebe Ihren Kindern die Bücher.",explanation:"З geben одержувачі стоять у Dativ. Множина: Ihr + -en → Ihren, з великої літери; Kinder → Kindern. Die Bücher — предмет в Akkusativ.",
+    category:"POSSESSIVE ENDING · DATIV · PLURAL",practiceVariants:false,
+    response:{mode:"text",scope:"word",accepted:["Ihren"],caseSensitive:true,punctuationSensitive:false}
+  }
+];
+const possessiveCaseCards=[...possessiveAccusativeCards,...possessiveDativeCards];
+const possessiveMixedCards=possessiveCaseCards.map(card=>({...card,category:"POSSESSIVE ENDING"}));
 const seinCards=[
   {word:"ich bin",translation:"я є / я знаходжусь",category:"VERB SEIN",example:"Ich bin müde.",exampleTranslation:"Я втомлений."},
   {word:"du bist",translation:"ти є / ти знаходишся",category:"VERB SEIN",example:"Du bist sehr nett.",exampleTranslation:"Ти дуже милий."},
@@ -2074,6 +2400,15 @@ const possessiveStages=[
   ...learnThenPractice("possessives-stems","основи присвійних займенників","Визначте власника, перш ніж обирати mein, dein, sein, ihr, unser, euer, Ihr або ihr.",possessivePronounCards.slice(0,8),"Основи"),
   ...learnThenPractice("possessives-endings","присвійні закінчення","Зверніть увагу, як закінчення змінюється залежно від іменника в кожному прикладі.",possessivePronounCards.slice(8),"Закінчення")
 ];
+// Each case is a closed four-target gender/number paradigm, so its passes contain four cards.
+const possessiveCaseStages=[
+  lessonStep("possessive-cases-accusative-learn","Вивчення присвійних артиклів в Akkusativ","Вивчіть чотири моделі: чоловічий рід -en, середній без закінчення, жіночий і множина -e.",possessiveAccusativeCards,"learn","Присвійні артиклі · Akkusativ","Вивчення"),
+  lessonStep("possessive-cases-accusative-practice","Практика присвійних артиклів в Akkusativ","Доповніть речення одним присвійним артиклем. Власник визначає основу, а німецький рід або множина — закінчення.",possessiveAccusativeCards,"input","Присвійні артиклі · Akkusativ","Практика"),
+  lessonStep("possessive-cases-dative-learn","Вивчення присвійних артиклів у Dativ","Вивчіть чотири моделі: чоловічий і середній рід -em, жіночий -er, множина -en. Зверніть увагу на -n в іменнику множини.",possessiveDativeCards,"learn","Присвійні артиклі · Dativ","Вивчення"),
+  lessonStep("possessive-cases-dative-practice","Практика присвійних артиклів у Dativ","Доповніть речення одним присвійним артиклем. Після mit і bei, з helfen і danken та для одержувача з geben потрібен Dativ.",possessiveDativeCards,"input","Присвійні артиклі · Dativ","Практика"),
+  lessonStep("possessive-cases-mixed-learn","Порівняння присвійних артиклів у двох відмінках","Порівняйте вісім моделей у контексті. Спочатку визначте відмінок за дієсловом або прийменником, потім власника й рід іменника.",possessiveMixedCards,"learn","Akkusativ чи Dativ?","Вивчення"),
+  lessonStep("possessive-cases-mixed-practice","Змішана практика присвійних артиклів","Самостійно визначте Akkusativ чи Dativ та введіть один присвійний артикль. Розрізняйте euer з закінченням і ввічливе Ihr.",possessiveMixedCards,"input","Akkusativ чи Dativ?","Практика")
+];
 const seinStages=[
   lessonStep("sein-learn","Вивчення дієслова sein","Прочитайте всі шість форм теперішнього часу разом із займенниками, перш ніж перевіряти себе.",seinCards,"learn","Дієслово sein","Вивчення","sein:learn"),
   lessonStep("sein-practice","Практика дієслова sein","Пригадайте всі шість форм теперішнього часу в змішаному підході. Повторюйте набір для кращого запам’ятовування.",seinCards,"input","Дієслово sein","Практика","sein:practice")
@@ -2568,6 +2903,24 @@ const deckDefinitions={
     cards:personalPronounCaseCards,stages:personalPronounCaseStages
   },
   possessives:{title:"Possessive pronouns",label:"Possessive pronouns",badge:"mein",tip:"Possessive pronouns show who something belongs to. Their ending follows the noun.",guide:{title:"Присвійні займенники",intro:"Уживайте присвійний займенник перед іменником, щоб показати належність: mein означає «мій», dein — «твій» тощо.",rules:["Особа-власник визначає основу: mein, dein, sein, ihr, unser, euer, Ihr, ihr.","Закінчення змінюється відповідно до іменника: mein Bruder, meine Mutter, mein Kind, meine Freunde.","Пишіть Ihr з великої літери для ввічливого «Ваш»; ihr залежно від контексту означає «її» або «їхній».","Присвійний займенник стоїть перед іменником і зазвичай має ті самі закінчення, що й ein: ein Buch, mein Buch; eine Tasche, meine Tasche."]},cards:possessivePronounCards,stages:possessiveStages},
+  "possessive-cases":{
+    title:"Possessivartikel: Akkusativ und Dativ",label:"Possessivartikel: Akkusativ und Dativ",badge:"-em",
+    tip:"Спочатку визнач відмінок, потім основу за власником і закінчення за німецьким родом або множиною іменника.",
+    guide:{
+      title:"Присвійні артиклі: Akkusativ і Dativ",
+      intro:"Повторіть основи в уроці «Присвійні займенники». Тут вивчайте чотири моделі роду й числа в кожному відмінку. Присвійний артикль стоїть перед іменником; у відповідь вводьте лише артикль.",
+      rules:[
+        {title:"Власник визначає основу",detail:"Ich → mein, du → dein, er/es → sein, sie (вона) → ihr, wir → unser, ihr (ви, неформально) → euer, sie (вони) → ihr, Sie (ввічливо) → Ihr. Закінчення визначає не власник, а іменник після артикля."},
+        {title:"Таблиця закінчень: Nominativ для порівняння",detail:"Порядок у всіх трьох рядках: Maskulinum · Neutrum · Femininum · Plural. Позначка «—» означає відсутність закінчення.",formula:"Nominativ: — · — · -e · -e"},
+        {title:"Akkusativ визначає дієслово або прийменник",detail:"Besuchen, sehen, suchen, haben і brauchen вимагають Akkusativ; після für також завжди Akkusativ. У порівнянні з Nominativ змінюється лише чоловічий рід.",formula:"Akkusativ: -en · — · -e · -e"},
+        {title:"Dativ: кому? або після mit і bei",detail:"Helfen, danken і antworten вимагають Dativ. З geben одержувач стоїть у Dativ, а предмет — в Akkusativ. Mit і bei завжди мають Dativ, навіть під час руху.",formula:"Dativ: -em · -em · -er · -en"},
+        {title:"Дві зміни в Dativ множини",detail:"Присвійний артикль отримує -en; іменник зазвичай також отримує -n. Не додавайте -n, якщо множина вже закінчується на -n або -s.",formula:"mit meinen Freunden · mit meinen Kindern · bei meinen Eltern · mit meinen Autos"},
+        {title:"Euer і ввічливе Ihr",detail:"Без закінчення пишемо euer; з закінченням зазвичай випадає внутрішнє e: eure, euren, eurem, eurer. Повні форми euere, eueren, euerem, euerer теж правильні. Ввічливе Ihr та його форми завжди мають велику літеру."},
+        {title:"Не переносьте український відмінок",detail:"Anrufen має Akkusativ, хоча українською «телефонувати кому». Das Kind має середній рід, хоча «дитина» — жіночий. З in і neben місце (Wo?) має Dativ, напрямок (Wohin?) — Akkusativ."}
+      ]
+    },
+    cards:possessiveCaseCards,stages:possessiveCaseStages
+  },
   sein:{title:"Verb sein",label:"Verb sein",badge:"sein",tip:"The verb sein is irregular, so learn each form as a complete pair with its pronoun.",guide:{title:"Sein у теперішньому часі",intro:"Sein означає «бути» й відмінюється неправильно, тому його форми потрібно вивчати окремо.",rules:["ich bin, du bist, er/sie/es ist, wir sind, ihr seid, sie/Sie sind.","Уживайте sein для ідентифікації, опису, місцеперебування та багатьох простих представлень: Ich bin müde.","Форма має відповідати підмету: Anna ist hier, але Anna und Paul sind hier.","Пам’ятайте про велику літеру S у Sie sind під час ввічливого звертання."]},cards:seinCards,stages:seinStages},
   conjugation:{title:"Verb conjugation",label:"Verb conjugation",badge:"V",tip:"Weak verbs take regular endings: -e, -st, -t, -en, -t, -en. After a stem ending in -t or -d, add an extra e.",guide:{title:"Слабкі дієслова в Präsens",intro:"Візьміть основу дієслова й доберіть закінчення, що відповідає підмету.",rules:[{title:"Використовуйте регулярні закінчення",detail:"Більшість слабких дієслів відмінюються за однаковою схемою від ich до sie/Sie.",formula:"ich -e · du -st · er/sie/es -t · wir -en · ihr -t · sie/Sie -en"},{title:"Додавайте додаткове -e",detail:"Якщо основа закінчується на -t, -d або приголосний + -m/-n, додайте e перед закінченням.",formula:"du arbeitest · er arbeitet · ihr arbeitet"},{title:"Не додавайте зайве -s",detail:"В основах на -s, -ß або -z форма du має закінчення -t замість -st.",formula:"du heißt · du tanzt · du übersetzt"}]},cards:conjugationCards,stages:conjugationStages},
   "strong-verbs":{title:"Strong verbs",label:"Strong verbs",badge:"ä",tip:"Strong verbs can change their stem vowel in singular present-tense forms.",guide:{title:"Сильні дієслова в Präsens",intro:"Спочатку повторіть повну парадигму кожного дієслова, а потім утворюйте всі форми за картками з пропусками.",rules:[{title:"Зміна e на i",detail:"Sprechen, treffen, lesen і essen змінюють e на i у другій та третій особі однини.",formula:"du sprichst · er trifft · sie liest · du isst"},{title:"Зміна a на ä",detail:"Fahren і anfangen змінюють a на ä у другій та третій особі однини.",formula:"du fährst · er fährt · du fängst an"},{title:"Особлива форма wissen",detail:"Wissen має weiß у ich і er/sie/es, weißt у du та регулярну основу wiss- у множині.",formula:"ich weiß · du weißt · wir wissen"},{title:"Anfangen є відокремлюваним",detail:"Відмінювана частина fängt стоїть на другому місці, а префікс an — у кінці головного речення.",formula:"Der Kurs fängt um neun Uhr an."},{title:"Зберігайте основу в множині",detail:"Зміна голосного не відбувається з wir, ihr або sie/Sie.",formula:"wir sprechen · ihr esst · sie wissen · wir fangen an"}]},cards:strongVerbCards,stages:strongVerbStages},
