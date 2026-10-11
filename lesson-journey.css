@@ -684,9 +684,9 @@
   color: var(--lesson-accent);
 }
 
-.card-stage .continue-button:hover,
-.card-stage .check-button:hover:not(:disabled),
-.chapter-phases .phase.current:hover {
+#practice-view .continue-button:hover:not(:disabled),
+#practice-view .check-button:hover:not(:disabled),
+#practice-view .phase.current:hover:not(:disabled) {
   background: #5543c7;
   color: #fff;
 }
