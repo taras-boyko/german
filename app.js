@@ -1132,26 +1132,14 @@ function lessonChapters(stages){
   },[]);
 }
 
-function stepButton(chapter,{stage,stageIndex},className){
+function stepButton(chapter,{stage,stageIndex}){
   const button=document.createElement("button"),done=stageIsComplete(activeDeckId,stage),current=stageIndex===activeStageIndex;
   const paused=!current&&Boolean(suspendedEntry(activeDeckId,stage.id));
   const stepIndex=chapter.steps.findIndex(step=>step.stageIndex===stageIndex);
   const phase=stage.phase||(stage.mode==="input"?"Практика":"Вивчення");
   button.type="button";
-  button.className=`${className}${current?" current":""}${done?" done":""}${paused?" paused":""}`;
-  if(className==="phase-option"){
-    const number=document.createElement("span"),copy=document.createElement("span");
-    const name=document.createElement("span"),status=document.createElement("span");
-    number.className="phase-number";number.textContent=String(stepIndex+1);number.setAttribute("aria-hidden","true");
-    copy.className="phase-copy";
-    name.textContent=phase;
-    status.className="phase-status";
-    status.textContent=current?(done?"Поточний · завершено":"Поточний етап")
-      :paused?(done?"Завершено · підхід збережено":"Підхід збережено")
-      :done?"Завершено":"Не розпочато";
-    copy.append(name,status);
-    button.append(number,copy);
-  }else button.textContent=phase;
+  button.className=`phase${current?" current":""}${done?" done":""}${paused?" paused":""}`;
+  button.textContent=phase;
   button.setAttribute("aria-current",current?"step":"false");
   button.setAttribute("aria-label",`Етап ${stepIndex+1} з ${chapter.steps.length}: ${phase} · ${chapter.name} · ${stage.title}${current?" (поточний етап)":""}${done?" (завершено)":""}${paused?" (незавершений підхід збережено)":""}`);
   if(paused)button.title="Незавершений підхід збережено";
@@ -1159,49 +1147,18 @@ function stepButton(chapter,{stage,stageIndex},className){
   return button;
 }
 
-// Prefer the same kind of step (learn or practice) when moving between chapters.
-function selectChapter(chapterIndex){
-  const chapter=lessonChapters(activeDefinition().stages)[chapterIndex];
-  if(!chapter)return;
-  const mode=activeStage().mode,sameMode=chapter.steps.filter(step=>step.stage.mode===mode);
-  const step=sameMode.find(item=>suspendedEntry(activeDeckId,item.stage.id))
-    ||sameMode.find(item=>!stageIsComplete(activeDeckId,item.stage))
-    ||sameMode[0]
-    ||chapter.steps.find(item=>suspendedEntry(activeDeckId,item.stage.id))
-    ||chapter.steps[0];
-  if(step.stageIndex!==activeStageIndex)selectStage(step.stageIndex,false,"chapter-select");
-}
-
 function renderLessonPath(){
   const stages=activeDefinition().stages,chapters=lessonChapters(stages),current=activeStage();
   const doneCount=stages.filter(stage=>stageIsComplete(activeDeckId,stage)).length;
   const activeChapterIndex=chapters.findIndex(chapter=>chapter.steps.some(step=>step.stageIndex===activeStageIndex));
   $("lesson-chapter-label").textContent=current.chapter||current.title;
-  $("lesson-phase-label").textContent=current.phase||(current.mode==="input"?"Практика":"Вивчення");
+  const chapter=chapters[activeChapterIndex],currentStepIndex=chapter.steps.findIndex(step=>step.stageIndex===activeStageIndex);
+  const phase=current.phase||(current.mode==="input"?"Практика":"Вивчення");
+  $("lesson-phase-label").textContent=`${phase} · етап ${currentStepIndex+1} з ${chapter.steps.length}`;
   $("lesson-chapter-count").textContent=`Розділ ${activeChapterIndex+1} з ${chapters.length}`;
   $("stage-objective").textContent=current.objective;
   $("lesson-step-count").textContent=`План уроку · завершено ${doneCount} з ${counted(stages.length,"етапу","етапів","етапів")}`;
   $("lesson-outline-count").textContent=counted(chapters.length,"розділ","розділи","розділів");
-  const chapter=chapters[activeChapterIndex],multiChapter=chapters.length>1,multiStep=chapter.steps.length>1;
-  const currentStepIndex=chapter.steps.findIndex(step=>step.stageIndex===activeStageIndex);
-  $("lesson-stage-count").textContent=`Етап ${currentStepIndex+1} з ${chapter.steps.length} у розділі`;
-  $("lesson-navigation-hint").hidden=!multiChapter&&!multiStep;
-  $("lesson-chapter-count").htmlFor=multiChapter?"chapter-select":"";
-  $("chapter-picker").classList.toggle("interactive",multiChapter);
-  $("chapter-picker-chevron").hidden=!multiChapter;
-  $("chapter-select").hidden=!multiChapter;
-  if(multiChapter){
-    $("chapter-select").replaceChildren(...chapters.map((item,chapterIndex)=>{
-      const option=document.createElement("option"),done=item.steps.every(step=>stageIsComplete(activeDeckId,step.stage));
-      option.value=String(chapterIndex);
-      option.textContent=`${chapterIndex+1}. ${item.name}${done?" (завершено)":""}`;
-      return option;
-    }));
-    $("chapter-select").value=String(activeChapterIndex);
-  }
-  $("lesson-phase-label").hidden=multiStep;
-  $("phase-switch").hidden=!multiStep;
-  $("phase-switch").replaceChildren(...(multiStep?chapter.steps.map(step=>stepButton(chapter,step,"phase-option")):[]));
   $("lesson-steps").replaceChildren(...chapters.map((chapter,chapterIndex)=>{
     const item=document.createElement("li"),isComplete=chapter.steps.every(step=>stageIsComplete(activeDeckId,step.stage));
     item.className=`journey-chapter${chapterIndex===activeChapterIndex?" active":""}${isComplete?" complete":""}`;
@@ -1211,7 +1168,7 @@ function renderLessonPath(){
     const name=document.createElement("span");name.className="chapter-name";name.textContent=chapter.name;
     head.append(marker,name);
     const phases=document.createElement("div");phases.className="chapter-phases";
-    phases.append(...chapter.steps.map(step=>stepButton(chapter,step,"phase")));
+    phases.append(...chapter.steps.map(step=>stepButton(chapter,step)));
     item.append(head,phases);
     return item;
   }));
@@ -1631,17 +1588,9 @@ $("verification-input").addEventListener("input",event=>{
 $("check-button").addEventListener("click",checkAnswer);
 $("continue-button").addEventListener("click",next);
 $("previous-button").addEventListener("click",previous);
-$("chapter-select").addEventListener("change",event=>selectChapter(Number(event.target.value)));
-$("lesson-progress-toggle").addEventListener("click",()=>{
-  $("lesson-outline").open=!$("lesson-outline").open;
-  $("lesson-progress-toggle").setAttribute("aria-expanded",String($("lesson-outline").open));
-  if($("lesson-outline").open){
-    $("lesson-outline").scrollIntoView({block:"nearest",behavior:"instant"});
-    $("lesson-outline").querySelector("summary").focus({preventScroll:true});
-  }
-});
-$("lesson-outline").addEventListener("toggle",()=>{
-  $("lesson-progress-toggle").setAttribute("aria-expanded",String($("lesson-outline").open));
+$("lesson-plan-link").addEventListener("click",()=>{
+  $("lesson-outline").scrollIntoView({block:"nearest",behavior:"instant"});
+  $("lesson-outline-title").focus({preventScroll:true});
 });
 $("lesson-library").addEventListener("click",()=>{showView("library");$("page-title").focus()});
 $("lesson-home").addEventListener("click",event=>{event.preventDefault();$("lesson-library").click()});

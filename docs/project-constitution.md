@@ -177,13 +177,14 @@ future passes provide contextual variety and retention checks.
 - Use the Focus room layout: one large centered card, a compact lesson header, and
   a direct return to the library. Hide global navigation and activity metrics while
   studying.
-- The lesson header lets the learner switch freely: a chapter picker when the lesson
-  has several chapters, and a step switch (Вивчення / Практика / Частина N) when the
-  chapter has several steps. Each step shows whether it is done or has a saved
-  unfinished attempt. Label the chapter picker and number steps within their chapter;
-  use visible text for current, completed, and saved-attempt states. Keep chapter-local
-  step position separate from lesson-wide completion, which opens the collapsed lesson
-  outline with the full overview and the new-pass control.
+- The lesson header shows compact, non-interactive chapter and phase context.
+  Keep the lesson plan permanently visible below the card workspace, without a
+  collapse control or duplicate header switches. Its chapter rows and step switches
+  (Вивчення / Практика / Частина N) let the learner open any step freely. Expose current,
+  completed, and saved-attempt states visually and in accessible labels, numbering
+  steps within their chapter. Keep chapter-local step position separate from
+  lesson-wide completion; the completion link scrolls to the plan without hiding it.
+  Keep the new-pass control in the plan.
 - Leaving a step never discards its unfinished attempt: it is suspended and resumes
   exactly where it stopped when the learner returns. Switching needs no confirmation.
 - Use one card workspace for all exercise types and one predictable keyboard flow.

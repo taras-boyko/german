@@ -49,27 +49,16 @@
           <div class="lesson-identity">
             <h1 id="deck-label">Питальні слова</h1>
             <p class="lesson-title-de" id="deck-label-de" lang="de" hidden></p>
+            <p id="lesson-chapter-count"></p>
           </div>
           <button class="lesson-library-button" id="lesson-library" type="button"><span aria-hidden="true">←</span> Усі уроки</button>
         </header>
         <div class="lesson-focus">
           <header class="lesson-journey" aria-label="Прогрес уроку">
-            <div class="journey-top">
-              <div class="chapter-navigation">
-                <label class="journey-control-label" id="lesson-chapter-count" for="chapter-select"></label>
-                <div class="chapter-picker" id="chapter-picker">
-                  <h2 id="lesson-chapter-label"></h2>
-                  <select id="chapter-select" aria-describedby="lesson-navigation-hint" hidden></select>
-                  <span class="chapter-picker-chevron" id="chapter-picker-chevron" aria-hidden="true" hidden></span>
-                </div>
-              </div>
-              <div class="stage-navigation">
-                <p class="journey-control-label" id="lesson-stage-count"></p>
-                <span class="lesson-phase" id="lesson-phase-label"></span>
-                <nav class="phase-switch" id="phase-switch" aria-labelledby="lesson-stage-count" aria-describedby="lesson-navigation-hint" hidden></nav>
-              </div>
+            <div class="lesson-context">
+              <h2 id="lesson-chapter-label"></h2>
+              <span class="lesson-phase" id="lesson-phase-label"></span>
             </div>
-            <p class="lesson-navigation-hint" id="lesson-navigation-hint">Перемикайте розділи й етапи — незавершений підхід збережеться.</p>
             <p id="stage-objective"></p>
           </header>
           <section class="card-stage" aria-label="Поточна картка">
@@ -78,7 +67,7 @@
                 <span id="session-progress-label">Картка 0 з 0</span>
                 <div class="progress-track" role="progressbar" aria-labelledby="session-progress-label" aria-valuemin="0" aria-valuemax="12" aria-valuenow="0"><i id="session-progress"></i></div>
               </div>
-              <button class="journey-tally" id="lesson-progress-toggle" type="button" aria-controls="lesson-outline" aria-expanded="false"><span id="lesson-step-count"></span><span aria-hidden="true">↓</span></button>
+              <button class="journey-tally" id="lesson-plan-link" type="button" aria-controls="lesson-outline"><span id="lesson-step-count"></span><span aria-hidden="true">↓</span></button>
             </div>
             <article class="flashcard" id="flashcard" tabindex="0" aria-label="Навчальна картка">
               <div class="card-top">
@@ -147,14 +136,14 @@
               <button class="continue-button" id="continue-button" type="button">Наступна картка <span>→</span></button>
             </div>
             <p class="keyboard-hint" id="lesson-keyboard-hint"></p>
-            <details class="lesson-outline" id="lesson-outline">
-              <summary>План уроку <span id="lesson-outline-count"></span><span class="outline-chevron" aria-hidden="true">+</span></summary>
+            <section class="lesson-outline" id="lesson-outline" aria-labelledby="lesson-outline-title">
+              <h2 class="lesson-outline-heading" id="lesson-outline-title" tabindex="-1">План уроку <span id="lesson-outline-count"></span></h2>
               <ol class="journey-rail" id="lesson-steps" aria-label="Розділи уроку"></ol>
               <div class="practice-portion" id="practice-portion" hidden>
                 <span id="practice-portion-note"></span>
                 <button id="new-practice-portion" type="button">Новий підхід <span aria-hidden="true">↻</span></button>
               </div>
-            </details>
+            </section>
           </section>
         </div>
       </section>
