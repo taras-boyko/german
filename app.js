@@ -32,6 +32,7 @@ const lessonCatalog={
   "everyday-vocabulary":{outcome:"Use common routine, food, and drink vocabulary.",className:"Vocabulary recall",color:"orange"},
   "travel-transport":{outcome:"Navigate transport, routes, and travel actions in German.",className:"Vocabulary recall",color:"orange"},
   "giving-directions":{outcome:"Give simple directions and locate familiar places around town.",className:"Vocabulary recall",color:"blue",level:"A1"},
+  "dative-verbs":{outcome:"Recall 16 verbs and use their present-tense forms with dative complements.",className:"Vocabulary recall",color:"green",level:"A2"},
   "es-gibt-leisure":{outcome:"Describe places, activities, and what a town offers.",className:"Grammar choice",color:"purple"}
 };
 const legacySequenceAliases={

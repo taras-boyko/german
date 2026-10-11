@@ -1440,6 +1440,335 @@ const localPrepositionsContrastCards=[
   {id:"local-contrast-sofa",targetId:"local-contrast-sofa",type:"sentence-build",word:"Ich setze mich auf das Sofa.",translation:"Я сідаю на диван.",promptText:"auf das Sofa / mich / ich / setze",response:{mode:"text",scope:"sentence",accepted:["Ich setze mich auf das Sofa."],caseSensitive:false,punctuationSensitive:false},explanation:"Sich setzen describes movement to a seat, so auf takes Akkusativ.",example:"Ich sitze auf dem Sofa.",exampleTranslation:"Я сиджу на дивані.",category:"LOKALE PRÄPOSITIONEN · SATZBAU"},
   {id:"local-contrast-sofa-position",targetId:"local-contrast-sofa-position",type:"sentence-build",word:"Ich sitze auf dem Sofa.",translation:"Я сиджу на дивані.",promptText:"auf dem Sofa / ich / sitze",response:{mode:"text",scope:"sentence",accepted:["Ich sitze auf dem Sofa."],caseSensitive:false,punctuationSensitive:false},explanation:"Sitzen describes a position, so auf takes Dativ.",example:"Ich setze mich auf das Sofa.",exampleTranslation:"Я сідаю на диван.",category:"LOKALE PRÄPOSITIONEN · SATZBAU"}
 ];
+const dativeVerbCards=[
+  {
+    id:"dative-antworten-recall",targetId:"dative-antworten",type:"recall",word:"antworten",translation:"відповідати",category:"VERBEN MIT DATIV",practiceVariants:false,
+    promptText:"відповідати (інфінітив)",response:{mode:"text",scope:"word",accepted:["antworten"],caseSensitive:false,punctuationSensitive:false},
+    example:"Er antwortet dem Lehrer.",exampleTranslation:"Він відповідає вчителю.",
+    explanation:"Antworten: відповідати комусь. Одержувач відповіді стоїть у Dativ: der Lehrer → dem Lehrer."
+  },
+  {
+    id:"dative-antworten-cloze-ich",targetId:"dative-antworten",type:"cloze",word:"antworten",translation:"відповідати",category:"VERBEN MIT DATIV",practiceVariants:false,
+    promptText:"Ich ___ dir morgen.",support:"Я відповім тобі завтра.",
+    response:{mode:"text",scope:"word",accepted:["antworte"],caseSensitive:false,punctuationSensitive:false},
+    example:"Ich antworte dir morgen.",exampleTranslation:"Я відповім тобі завтра.",
+    explanation:"З ich: antworte. Відповідати тобі: dir, а не dich."
+  },
+  {
+    id:"dative-antworten-cloze-wir",targetId:"dative-antworten",type:"cloze",word:"antworten",translation:"відповідати",category:"VERBEN MIT DATIV",practiceVariants:false,
+    promptText:"Wir ___ der Lehrerin.",support:"Ми відповідаємо вчительці.",
+    response:{mode:"text",scope:"word",accepted:["antworten"],caseSensitive:false,punctuationSensitive:false},
+    example:"Wir antworten der Lehrerin.",exampleTranslation:"Ми відповідаємо вчительці.",
+    explanation:"З wir: antworten. Die Lehrerin у Dativ стає der Lehrerin."
+  },
+  {
+    id:"dative-danken-recall",targetId:"dative-danken",type:"recall",word:"danken",translation:"дякувати",category:"VERBEN MIT DATIV",practiceVariants:false,
+    promptText:"дякувати (інфінітив)",response:{mode:"text",scope:"word",accepted:["danken"],caseSensitive:false,punctuationSensitive:false},
+    example:"Ich danke dir.",exampleTranslation:"Я дякую тобі.",
+    explanation:"Danken: дякувати комусь. Людина стоїть у Dativ: dir, а не dich."
+  },
+  {
+    id:"dative-danken-cloze-wir",targetId:"dative-danken",type:"cloze",word:"danken",translation:"дякувати",category:"VERBEN MIT DATIV",practiceVariants:false,
+    promptText:"Wir ___ euch für die Hilfe.",support:"Ми дякуємо вам за допомогу.",
+    response:{mode:"text",scope:"word",accepted:["danken"],caseSensitive:false,punctuationSensitive:false},
+    example:"Wir danken euch für die Hilfe.",exampleTranslation:"Ми дякуємо вам за допомогу.",
+    explanation:"З wir: danken. Кому дякуємо? Euch. За що? Für die Hilfe."
+  },
+  {
+    id:"dative-danken-cloze-du",targetId:"dative-danken",type:"cloze",word:"danken",translation:"дякувати",category:"VERBEN MIT DATIV",practiceVariants:false,
+    promptText:"Du ___ deiner Mutter.",support:"Ти дякуєш своїй мамі.",
+    response:{mode:"text",scope:"word",accepted:["dankst"],caseSensitive:false,punctuationSensitive:false},
+    example:"Du dankst deiner Mutter.",exampleTranslation:"Ти дякуєш своїй мамі.",
+    explanation:"З du: dankst. Deine Mutter у Dativ стає deiner Mutter."
+  },
+  {
+    id:"dative-fehlen-recall",targetId:"dative-fehlen",type:"recall",word:"fehlen",translation:"бракувати; не вистачати",category:"VERBEN MIT DATIV",practiceVariants:false,
+    promptText:"бракувати, не вистачати (інфінітив)",response:{mode:"text",scope:"word",accepted:["fehlen"],caseSensitive:false,punctuationSensitive:false},
+    example:"Sie fehlt mir.",exampleTranslation:"Мені її бракує.",
+    explanation:"Те або той, кого бракує, є підметом. Кому бракує? Mir. Fehlen також уживають, коли сумують за людиною."
+  },
+  {
+    id:"dative-fehlen-cloze-geld",targetId:"dative-fehlen",type:"cloze",word:"fehlen",translation:"бракувати; не вистачати",category:"VERBEN MIT DATIV",practiceVariants:false,
+    promptText:"Mir ___ das Geld.",support:"Мені бракує грошей.",
+    response:{mode:"text",scope:"word",accepted:["fehlt"],caseSensitive:false,punctuationSensitive:false},
+    example:"Mir fehlt das Geld.",exampleTranslation:"Мені бракує грошей.",
+    explanation:"Das Geld — підмет в однині, тому fehlt. Mir показує, кому бракує грошей."
+  },
+  {
+    id:"dative-fehlen-cloze-freunde",targetId:"dative-fehlen",type:"cloze",word:"fehlen",translation:"бракувати; не вистачати",category:"VERBEN MIT DATIV",practiceVariants:false,
+    promptText:"Meine Freunde ___ mir.",support:"Мені бракує моїх друзів.",
+    response:{mode:"text",scope:"word",accepted:["fehlen"],caseSensitive:false,punctuationSensitive:false},
+    example:"Meine Freunde fehlen mir.",exampleTranslation:"Мені бракує моїх друзів.",
+    explanation:"Meine Freunde — підмет у множині, тому fehlen. Людина, яка сумує, стоїть у Dativ: mir."
+  },
+  {
+    id:"dative-gefallen-recall",targetId:"dative-gefallen",type:"recall",word:"gefallen",translation:"подобатися",category:"VERBEN MIT DATIV",practiceVariants:false,
+    promptText:"подобатися (інфінітив)",response:{mode:"text",scope:"word",accepted:["gefallen"],caseSensitive:false,punctuationSensitive:false},
+    example:"Gefällt dir mein Hemd?",exampleTranslation:"Тобі подобається моя сорочка?",
+    explanation:"Те, що подобається, є підметом. Людина стоїть у Dativ. Однина: gefällt; множина: gefallen."
+  },
+  {
+    id:"dative-gefallen-cloze-buch",targetId:"dative-gefallen",type:"cloze",word:"gefallen",translation:"подобатися",category:"VERBEN MIT DATIV",practiceVariants:false,
+    promptText:"Das Buch ___ mir.",support:"Мені подобається ця книга.",
+    response:{mode:"text",scope:"word",accepted:["gefällt"],caseSensitive:false,punctuationSensitive:false},
+    example:"Das Buch gefällt mir.",exampleTranslation:"Мені подобається ця книга.",
+    explanation:"Das Buch — однина, тому gefällt зі зміною a → ä. Кому подобається? Mir."
+  },
+  {
+    id:"dative-gefallen-cloze-schuhe",targetId:"dative-gefallen",type:"cloze",word:"gefallen",translation:"подобатися",category:"VERBEN MIT DATIV",practiceVariants:false,
+    promptText:"___ dir die Schuhe?",support:"Тобі подобаються ці туфлі?",
+    response:{mode:"text",scope:"word",accepted:["gefallen"],caseSensitive:false,punctuationSensitive:false},
+    example:"Gefallen dir die Schuhe?",exampleTranslation:"Тобі подобаються ці туфлі?",
+    explanation:"Die Schuhe — множина, тому gefallen без зміни голосного. Питання починається з дієслова."
+  },
+  {
+    id:"dative-gehoeren-recall",targetId:"dative-gehoeren",type:"recall",word:"gehören",translation:"належати",category:"VERBEN MIT DATIV",practiceVariants:false,
+    promptText:"належати (інфінітив)",response:{mode:"text",scope:"word",accepted:["gehören"],caseSensitive:false,punctuationSensitive:false},
+    example:"Das Haus gehört meiner Mutter.",exampleTranslation:"Цей будинок належить моїй мамі.",
+    explanation:"Gehören: належати комусь. Власник стоїть у Dativ: meiner Mutter."
+  },
+  {
+    id:"dative-gehoeren-cloze-tasche",targetId:"dative-gehoeren",type:"cloze",word:"gehören",translation:"належати",category:"VERBEN MIT DATIV",practiceVariants:false,
+    promptText:"Die Tasche ___ mir.",support:"Ця сумка належить мені.",
+    response:{mode:"text",scope:"word",accepted:["gehört"],caseSensitive:false,punctuationSensitive:false},
+    example:"Die Tasche gehört mir.",exampleTranslation:"Ця сумка належить мені.",
+    explanation:"Die Tasche — однина, тому gehört. Кому належить? Mir, а не mich."
+  },
+  {
+    id:"dative-gehoeren-cloze-buecher",targetId:"dative-gehoeren",type:"cloze",word:"gehören",translation:"належати",category:"VERBEN MIT DATIV",practiceVariants:false,
+    promptText:"Die Bücher ___ uns.",support:"Ці книги належать нам.",
+    response:{mode:"text",scope:"word",accepted:["gehören"],caseSensitive:false,punctuationSensitive:false},
+    example:"Die Bücher gehören uns.",exampleTranslation:"Ці книги належать нам.",
+    explanation:"Die Bücher — множина, тому gehören. Uns позначає власників у Dativ."
+  },
+  {
+    id:"dative-glauben-recall",targetId:"dative-glauben",type:"recall",word:"glauben",translation:"вірити",category:"VERBEN MIT DATIV",practiceVariants:false,
+    promptText:"вірити комусь (інфінітив)",response:{mode:"text",scope:"word",accepted:["glauben"],caseSensitive:false,punctuationSensitive:false},
+    example:"Ich glaube keinem Wort von dir.",exampleTranslation:"Я не вірю жодному твоєму слову.",
+    explanation:"Glauben у значенні «вірити комусь» керує Dativ. Das Wort → keinem Wort."
+  },
+  {
+    id:"dative-glauben-cloze-ich",targetId:"dative-glauben",type:"cloze",word:"glauben",translation:"вірити",category:"VERBEN MIT DATIV",practiceVariants:false,
+    promptText:"Ich ___ dir.",support:"Я вірю тобі.",
+    response:{mode:"text",scope:"word",accepted:["glaube"],caseSensitive:false,punctuationSensitive:false},
+    example:"Ich glaube dir.",exampleTranslation:"Я вірю тобі.",
+    explanation:"З ich: glaube. Glauben + Dativ: dir. Це не те саме, що glauben an + Akkusativ."
+  },
+  {
+    id:"dative-glauben-cloze-du",targetId:"dative-glauben",type:"cloze",word:"glauben",translation:"вірити",category:"VERBEN MIT DATIV",practiceVariants:false,
+    promptText:"___ du dem Kind?",support:"Ти віриш цій дитині?",
+    response:{mode:"text",scope:"word",accepted:["glaubst"],caseSensitive:false,punctuationSensitive:false},
+    example:"Glaubst du dem Kind?",exampleTranslation:"Ти віриш цій дитині?",
+    explanation:"З du: glaubst. Das Kind у Dativ стає dem Kind."
+  },
+  {
+    id:"dative-gratulieren-recall",targetId:"dative-gratulieren",type:"recall",word:"gratulieren",translation:"вітати з нагоди",category:"VERBEN MIT DATIV",practiceVariants:false,
+    promptText:"вітати когось із днем народження або іншою подією (інфінітив)",
+    response:{mode:"text",scope:"word",accepted:["gratulieren"],caseSensitive:false,punctuationSensitive:false},
+    example:"Ich gratuliere dir zu deinem Geburtstag.",exampleTranslation:"Я вітаю тебе з днем народження.",
+    explanation:"Jemandem zu etwas gratulieren: людина і подія після zu стоять у Dativ: dir, zu deinem Geburtstag."
+  },
+  {
+    id:"dative-gratulieren-cloze-wir",targetId:"dative-gratulieren",type:"cloze",word:"gratulieren",translation:"вітати з нагоди",category:"VERBEN MIT DATIV",practiceVariants:false,
+    promptText:"Wir ___ unserer Mutter zum Geburtstag.",support:"Ми вітаємо нашу маму з днем народження.",
+    response:{mode:"text",scope:"word",accepted:["gratulieren"],caseSensitive:false,punctuationSensitive:false},
+    example:"Wir gratulieren unserer Mutter zum Geburtstag.",exampleTranslation:"Ми вітаємо нашу маму з днем народження.",
+    explanation:"З wir: gratulieren. Кого вітаємо? Unserer Mutter у Dativ. Zum = zu dem."
+  },
+  {
+    id:"dative-gratulieren-cloze-du",targetId:"dative-gratulieren",type:"cloze",word:"gratulieren",translation:"вітати з нагоди",category:"VERBEN MIT DATIV",practiceVariants:false,
+    promptText:"Du ___ ihm zur bestandenen Prüfung.",support:"Ти вітаєш його з успішним складанням іспиту.",
+    response:{mode:"text",scope:"word",accepted:["gratulierst"],caseSensitive:false,punctuationSensitive:false},
+    example:"Du gratulierst ihm zur bestandenen Prüfung.",exampleTranslation:"Ти вітаєш його з успішним складанням іспиту.",
+    explanation:"З du: gratulierst. Людина: ihm. Подія: zur bestandenen Prüfung; zur = zu der."
+  },
+  {
+    id:"dative-helfen-recall",targetId:"dative-helfen",type:"recall",word:"helfen",translation:"допомагати",category:"VERBEN MIT DATIV",practiceVariants:false,
+    promptText:"допомагати (інфінітив)",response:{mode:"text",scope:"word",accepted:["helfen"],caseSensitive:false,punctuationSensitive:false},
+    example:"Wir helfen alten Leuten.",exampleTranslation:"Ми допомагаємо літнім людям.",
+    explanation:"Helfen керує Dativ. У множині: alten Leuten. З du та er/sie/es основа змінюється: hilfst, hilft."
+  },
+  {
+    id:"dative-helfen-cloze-du",targetId:"dative-helfen",type:"cloze",word:"helfen",translation:"допомагати",category:"VERBEN MIT DATIV",practiceVariants:false,
+    promptText:"___ du mir?",support:"Ти допоможеш мені?",
+    response:{mode:"text",scope:"word",accepted:["hilfst"],caseSensitive:false,punctuationSensitive:false},
+    example:"Hilfst du mir?",exampleTranslation:"Ти допоможеш мені?",
+    explanation:"З du: hilfst зі зміною e → i. Кому допомагаєш? Mir, а не mich."
+  },
+  {
+    id:"dative-helfen-cloze-er",targetId:"dative-helfen",type:"cloze",word:"helfen",translation:"допомагати",category:"VERBEN MIT DATIV",practiceVariants:false,
+    promptText:"Er ___ seiner Schwester.",support:"Він допомагає своїй сестрі.",
+    response:{mode:"text",scope:"word",accepted:["hilft"],caseSensitive:false,punctuationSensitive:false},
+    example:"Er hilft seiner Schwester.",exampleTranslation:"Він допомагає своїй сестрі.",
+    explanation:"З er: hilft. Seine Schwester у Dativ стає seiner Schwester."
+  },
+  {
+    id:"dative-wehtun-recall",targetId:"dative-wehtun",type:"recall",word:"wehtun",translation:"боліти; завдавати болю",category:"VERBEN MIT DATIV",practiceVariants:false,
+    promptText:"боліти, завдавати болю (інфінітив)",
+    response:{mode:"text",scope:"word",accepted:["wehtun","weh tun"],caseSensitive:false,punctuationSensitive:false},
+    example:"Was tut dir weh?",exampleTranslation:"Що в тебе болить?",
+    explanation:"Wehtun (також weh tun) у головному реченні розділяється: tut ... weh. Кому болить? Dir."
+  },
+  {
+    id:"dative-wehtun-cloze-kopf",targetId:"dative-wehtun",type:"cloze",word:"wehtun",translation:"боліти; завдавати болю",category:"VERBEN MIT DATIV",practiceVariants:false,
+    promptText:"Mein Kopf ___ mir weh.",support:"У мене болить голова.",
+    response:{mode:"text",scope:"word",accepted:["tut"],caseSensitive:false,punctuationSensitive:false},
+    example:"Mein Kopf tut mir weh.",exampleTranslation:"У мене болить голова.",
+    explanation:"Mein Kopf — однина, тому tut. Weh уже стоїть у кінці речення; впишіть лише tut."
+  },
+  {
+    id:"dative-wehtun-cloze-fuesse",targetId:"dative-wehtun",type:"cloze",word:"wehtun",translation:"боліти; завдавати болю",category:"VERBEN MIT DATIV",practiceVariants:false,
+    promptText:"Meine Füße ___ mir weh.",support:"У мене болять ноги.",
+    response:{mode:"text",scope:"word",accepted:["tun"],caseSensitive:false,punctuationSensitive:false},
+    example:"Meine Füße tun mir weh.",exampleTranslation:"У мене болять ноги.",
+    explanation:"Meine Füße — множина, тому tun. Людина стоїть у Dativ: mir."
+  },
+  {
+    id:"dative-erlauben-recall",targetId:"dative-erlauben",type:"recall",word:"erlauben",translation:"дозволяти",category:"VERBEN MIT DATIV",practiceVariants:false,
+    promptText:"дозволяти (інфінітив)",response:{mode:"text",scope:"word",accepted:["erlauben"],caseSensitive:false,punctuationSensitive:false},
+    example:"Sie erlaubt mir nicht, hier zu rauchen.",exampleTranslation:"Вона не дозволяє мені тут курити.",
+    explanation:"Erlauben: дозволяти комусь щось. Людина стоїть у Dativ; перед інфінітивом потрібне zu: mir, zu rauchen."
+  },
+  {
+    id:"dative-erlauben-cloze-wir",targetId:"dative-erlauben",type:"cloze",word:"erlauben",translation:"дозволяти",category:"VERBEN MIT DATIV",practiceVariants:false,
+    promptText:"Wir ___ dir, hier zu spielen.",support:"Ми дозволяємо тобі тут гратися.",
+    response:{mode:"text",scope:"word",accepted:["erlauben"],caseSensitive:false,punctuationSensitive:false},
+    example:"Wir erlauben dir, hier zu spielen.",exampleTranslation:"Ми дозволяємо тобі тут гратися.",
+    explanation:"З wir: erlauben. Кому дозволяємо? Dir. Дія оформлюється як zu spielen."
+  },
+  {
+    id:"dative-erlauben-cloze-vater",targetId:"dative-erlauben",type:"cloze",word:"erlauben",translation:"дозволяти",category:"VERBEN MIT DATIV",practiceVariants:false,
+    promptText:"Mein Vater ___ mir, das Auto zu nehmen.",support:"Мій батько дозволяє мені взяти автомобіль.",
+    response:{mode:"text",scope:"word",accepted:["erlaubt"],caseSensitive:false,punctuationSensitive:false},
+    example:"Mein Vater erlaubt mir, das Auto zu nehmen.",exampleTranslation:"Мій батько дозволяє мені взяти автомобіль.",
+    explanation:"Mein Vater — третя особа однини, тому erlaubt. Mir — Dativ; інфінітив: zu nehmen."
+  },
+  {
+    id:"dative-folgen-recall",targetId:"dative-folgen",type:"recall",word:"folgen",translation:"слідувати; стежити за",category:"VERBEN MIT DATIV",practiceVariants:false,
+    promptText:"слідувати за кимось, стежити за новинами (інфінітив)",
+    response:{mode:"text",scope:"word",accepted:["folgen"],caseSensitive:false,punctuationSensitive:false},
+    example:"Ich folge den aktuellen Nachrichten.",exampleTranslation:"Я стежу за актуальними новинами.",
+    explanation:"Folgen керує Dativ без додаткового прийменника: den aktuellen Nachrichten."
+  },
+  {
+    id:"dative-folgen-cloze-wir",targetId:"dative-folgen",type:"cloze",word:"folgen",translation:"слідувати; стежити за",category:"VERBEN MIT DATIV",practiceVariants:false,
+    promptText:"Wir ___ dem Lehrer.",support:"Ми йдемо слідом за вчителем.",
+    response:{mode:"text",scope:"word",accepted:["folgen"],caseSensitive:false,punctuationSensitive:false},
+    example:"Wir folgen dem Lehrer.",exampleTranslation:"Ми йдемо слідом за вчителем.",
+    explanation:"З wir: folgen. Der Lehrer у Dativ стає dem Lehrer."
+  },
+  {
+    id:"dative-folgen-cloze-du",targetId:"dative-folgen",type:"cloze",word:"folgen",translation:"слідувати; стежити за",category:"VERBEN MIT DATIV",practiceVariants:false,
+    promptText:"___ du mir?",support:"Ти йдеш слідом за мною?",
+    response:{mode:"text",scope:"word",accepted:["folgst"],caseSensitive:false,punctuationSensitive:false},
+    example:"Folgst du mir?",exampleTranslation:"Ти йдеш слідом за мною?",
+    explanation:"З du: folgst. Українське «за мною» тут передається німецьким Dativ mir без прийменника."
+  },
+  {
+    id:"dative-passen-recall",targetId:"dative-passen",type:"recall",word:"passen",translation:"пасувати; підходити за розміром",category:"VERBEN MIT DATIV",practiceVariants:false,
+    promptText:"пасувати, підходити комусь за розміром (інфінітив)",
+    response:{mode:"text",scope:"word",accepted:["passen"],caseSensitive:false,punctuationSensitive:false},
+    example:"Die Bluse passt ihr sehr gut.",exampleTranslation:"Ця блузка їй дуже добре підходить.",
+    explanation:"Passen описує, чи підходить річ людині, зокрема за розміром. Людина стоїть у Dativ: ihr."
+  },
+  {
+    id:"dative-passen-cloze-jacke",targetId:"dative-passen",type:"cloze",word:"passen",translation:"пасувати; підходити за розміром",category:"VERBEN MIT DATIV",practiceVariants:false,
+    promptText:"Die Jacke ___ mir nicht.",support:"Ця куртка не підходить мені за розміром.",
+    response:{mode:"text",scope:"word",accepted:["passt"],caseSensitive:false,punctuationSensitive:false},
+    example:"Die Jacke passt mir nicht.",exampleTranslation:"Ця куртка не підходить мені за розміром.",
+    explanation:"Die Jacke — однина, тому passt. Кому не підходить? Mir."
+  },
+  {
+    id:"dative-passen-cloze-schuhe",targetId:"dative-passen",type:"cloze",word:"passen",translation:"пасувати; підходити за розміром",category:"VERBEN MIT DATIV",practiceVariants:false,
+    promptText:"___ dir die Schuhe?",support:"Ці туфлі підходять тобі за розміром?",
+    response:{mode:"text",scope:"word",accepted:["passen"],caseSensitive:false,punctuationSensitive:false},
+    example:"Passen dir die Schuhe?",exampleTranslation:"Ці туфлі підходять тобі за розміром?",
+    explanation:"Die Schuhe — множина, тому passen. Dir — Dativ людини, яка приміряє взуття."
+  },
+  {
+    id:"dative-vertrauen-recall",targetId:"dative-vertrauen",type:"recall",word:"vertrauen",translation:"довіряти",category:"VERBEN MIT DATIV",practiceVariants:false,
+    promptText:"довіряти (інфінітив)",response:{mode:"text",scope:"word",accepted:["vertrauen"],caseSensitive:false,punctuationSensitive:false},
+    example:"Diesem Mann vertraue ich nicht.",exampleTranslation:"Цьому чоловікові я не довіряю.",
+    explanation:"Vertrauen керує Dativ: diesem Mann. Навіть коли додаток стоїть першим, дієслово залишається на другому місці."
+  },
+  {
+    id:"dative-vertrauen-cloze-ich",targetId:"dative-vertrauen",type:"cloze",word:"vertrauen",translation:"довіряти",category:"VERBEN MIT DATIV",practiceVariants:false,
+    promptText:"Ich ___ meiner Freundin.",support:"Я довіряю своїй подрузі.",
+    response:{mode:"text",scope:"word",accepted:["vertraue"],caseSensitive:false,punctuationSensitive:false},
+    example:"Ich vertraue meiner Freundin.",exampleTranslation:"Я довіряю своїй подрузі.",
+    explanation:"З ich: vertraue. Meine Freundin у Dativ стає meiner Freundin."
+  },
+  {
+    id:"dative-vertrauen-cloze-wir",targetId:"dative-vertrauen",type:"cloze",word:"vertrauen",translation:"довіряти",category:"VERBEN MIT DATIV",practiceVariants:false,
+    promptText:"Wir ___ euch.",support:"Ми довіряємо вам.",
+    response:{mode:"text",scope:"word",accepted:["vertrauen"],caseSensitive:false,punctuationSensitive:false},
+    example:"Wir vertrauen euch.",exampleTranslation:"Ми довіряємо вам.",
+    explanation:"З wir: vertrauen. Кому довіряємо? Euch у Dativ."
+  },
+  {
+    id:"dative-schmecken-recall",targetId:"dative-schmecken",type:"recall",word:"schmecken",translation:"смакувати; подобатися на смак",category:"VERBEN MIT DATIV",practiceVariants:false,
+    promptText:"смакувати, подобатися на смак (інфінітив)",
+    response:{mode:"text",scope:"word",accepted:["schmecken"],caseSensitive:false,punctuationSensitive:false},
+    example:"Schmeckt euch das Essen?",exampleTranslation:"Вам смакує ця їжа?",
+    explanation:"Їжа є підметом, а людина стоїть у Dativ: euch. Das Essen — однина, тому schmeckt."
+  },
+  {
+    id:"dative-schmecken-cloze-suppe",targetId:"dative-schmecken",type:"cloze",word:"schmecken",translation:"смакувати; подобатися на смак",category:"VERBEN MIT DATIV",practiceVariants:false,
+    promptText:"Die Suppe ___ mir gut.",support:"Цей суп мені смакує.",
+    response:{mode:"text",scope:"word",accepted:["schmeckt"],caseSensitive:false,punctuationSensitive:false},
+    example:"Die Suppe schmeckt mir gut.",exampleTranslation:"Цей суп мені смакує.",
+    explanation:"Die Suppe — однина, тому schmeckt. Кому смакує? Mir."
+  },
+  {
+    id:"dative-schmecken-cloze-aepfel",targetId:"dative-schmecken",type:"cloze",word:"schmecken",translation:"смакувати; подобатися на смак",category:"VERBEN MIT DATIV",practiceVariants:false,
+    promptText:"Die Äpfel ___ uns.",support:"Ці яблука нам смакують.",
+    response:{mode:"text",scope:"word",accepted:["schmecken"],caseSensitive:false,punctuationSensitive:false},
+    example:"Die Äpfel schmecken uns.",exampleTranslation:"Ці яблука нам смакують.",
+    explanation:"Die Äpfel — множина, тому schmecken. Uns показує, кому смакують яблука."
+  },
+  {
+    id:"dative-widersprechen-recall",targetId:"dative-widersprechen",type:"recall",word:"widersprechen",translation:"суперечити; заперечувати комусь",category:"VERBEN MIT DATIV",practiceVariants:false,
+    promptText:"суперечити, заперечувати комусь (інфінітив)",
+    response:{mode:"text",scope:"word",accepted:["widersprechen"],caseSensitive:false,punctuationSensitive:false},
+    example:"Der Sohn widerspricht seiner Mutter.",exampleTranslation:"Син суперечить своїй мамі.",
+    explanation:"Widersprechen керує Dativ: seiner Mutter. Дієслово не розділяється; e → i у du та er/sie/es."
+  },
+  {
+    id:"dative-widersprechen-cloze-ich",targetId:"dative-widersprechen",type:"cloze",word:"widersprechen",translation:"суперечити; заперечувати комусь",category:"VERBEN MIT DATIV",practiceVariants:false,
+    promptText:"Ich ___ dir nicht.",support:"Я не суперечу тобі.",
+    response:{mode:"text",scope:"word",accepted:["widerspreche"],caseSensitive:false,punctuationSensitive:false},
+    example:"Ich widerspreche dir nicht.",exampleTranslation:"Я не суперечу тобі.",
+    explanation:"З ich: widerspreche без зміни голосного. Кому суперечимо? Dir."
+  },
+  {
+    id:"dative-widersprechen-cloze-du",targetId:"dative-widersprechen",type:"cloze",word:"widersprechen",translation:"суперечити; заперечувати комусь",category:"VERBEN MIT DATIV",practiceVariants:false,
+    promptText:"Warum ___ du dem Lehrer?",support:"Чому ти суперечиш учителю?",
+    response:{mode:"text",scope:"word",accepted:["widersprichst"],caseSensitive:false,punctuationSensitive:false},
+    example:"Warum widersprichst du dem Lehrer?",exampleTranslation:"Чому ти суперечиш учителю?",
+    explanation:"З du: widersprichst зі зміною e → i. Der Lehrer → dem Lehrer."
+  },
+  {
+    id:"dative-auffallen-recall",targetId:"dative-auffallen",type:"recall",word:"auffallen",translation:"привертати увагу; впадати в око",category:"VERBEN MIT DATIV",practiceVariants:false,
+    promptText:"привертати увагу, впадати в око (інфінітив)",
+    response:{mode:"text",scope:"word",accepted:["auffallen"],caseSensitive:false,punctuationSensitive:false},
+    example:"Die Dame fällt ihm auf.",exampleTranslation:"Ця пані привертає його увагу.",
+    explanation:"Auffallen — відокремлюване дієслово: fällt ... auf. Людина, яка помічає, стоїть у Dativ: ihm."
+  },
+  {
+    id:"dative-auffallen-cloze-fehler",targetId:"dative-auffallen",type:"cloze",word:"auffallen",translation:"привертати увагу; впадати в око",category:"VERBEN MIT DATIV",practiceVariants:false,
+    promptText:"Der Fehler ___ mir sofort auf.",support:"Ця помилка відразу впадає мені в око.",
+    response:{mode:"text",scope:"word",accepted:["fällt"],caseSensitive:false,punctuationSensitive:false},
+    example:"Der Fehler fällt mir sofort auf.",exampleTranslation:"Ця помилка відразу впадає мені в око.",
+    explanation:"Der Fehler — однина, тому fällt зі зміною a → ä. Auf уже стоїть у кінці; впишіть лише fällt."
+  },
+  {
+    id:"dative-auffallen-cloze-blumen",targetId:"dative-auffallen",type:"cloze",word:"auffallen",translation:"привертати увагу; впадати в око",category:"VERBEN MIT DATIV",practiceVariants:false,
+    promptText:"Die Blumen ___ ihr auf.",support:"Ці квіти привертають її увагу.",
+    response:{mode:"text",scope:"word",accepted:["fallen"],caseSensitive:false,punctuationSensitive:false},
+    example:"Die Blumen fallen ihr auf.",exampleTranslation:"Ці квіти привертають її увагу.",
+    explanation:"Die Blumen — множина, тому fallen без умлаута. Кому впадають в око? Ihr."
+  }
+];
 const lessonStep=(id,title,objective,cards,mode="learn",chapter="",phase="",progressId=id)=>({id,title,objective,cards,mode,chapter:chapter||title,phase:phase||(mode==="input"?"Practice":"Learn"),progressId});
 const learnThenPractice=(id,title,objective,cards,chapter=title)=>[
   lessonStep(`${id}-learn`,`Learn ${title}`,objective,cards,"learn",chapter,"Learn"),
@@ -1557,6 +1886,10 @@ const directionsStages=[
   ...learnThenPractice("directions-instructions","direction instructions","Give simple turn-by-turn directions with sequence words, directions, and movement verbs.",directionInstructionCards,"Giving directions"),
   ...learnThenPractice("directions-landmarks","street landmarks","Locate places and describe a route using intersections, traffic lights, and streets.",directionLandmarkCards,"Street landmarks")
 ];
+const dativeVerbStages=[
+  {...lessonStep("dative-verbs-learn","Learn verbs with Dativ","Learn all 16 verbs with Ukrainian meanings and natural examples. Notice who receives the action or experiences the feeling.",dativeVerbCards,"learn","Verbs with Dativ","Learn"),requiresFullCoverage:true},
+  {...lessonStep("dative-verbs-practice","Practice verbs with Dativ","Recall the infinitive from Ukrainian or complete one missing verb form. For wehtun and auffallen, the separated part is already shown.",dativeVerbCards,"input","Verbs with Dativ","Practice"),requiresFullCoverage:true}
+];
 const esGibtLeisureStages=[
   lessonStep("es-gibt-pattern-learn","Learn Es gibt","Use Es gibt to say that a place or thing exists. Notice the accusative article after it.",esGibtPatternCards,"learn","Es gibt","Learn"),
   lessonStep("es-gibt-pattern-practice","Practice Es gibt","Complete sentences with gibt or the correct accusative article after Es gibt.",esGibtPracticeCards,"input","Es gibt","Practice"),
@@ -1641,6 +1974,23 @@ const deckDefinitions={
       ]
     },
     cards:[...directionInstructionCards,...directionLandmarkCards],stages:directionsStages
+  },
+  "dative-verbs":{
+    title:"Verbs with Dativ",label:"Verbs with Dativ",badge:"D",
+    tip:"Learn the verb together with its dative complement: jemandem helfen, danken, antworten.",
+    guide:{
+      title:"Дієслова з Dativ",
+      intro:"Вивчіть 16 дієслів із таблиці. У цих значеннях людина або інший додаток стоїть у Dativ. Під час практики відновлюйте інфінітив або одну форму дієслова за українською підказкою.",
+      rules:[
+        {title:"Запитайте Wem? — кому?",detail:"Німецький відмінок визначає дієслово, а не український переклад. Наприклад, українське «допомагати комусь» і «слідувати за кимось» обидва мають Dativ у німецькій.",formula:"Wem? → mir · dir · ihm · ihr"},
+        {title:"Займенники й артиклі",detail:"Dativ: ich → mir, du → dir, er → ihm, sie → ihr, es → ihm, wir → uns, ihr → euch, sie → ihnen, Sie → Ihnen. Артиклі: der/das → dem, die → der; множина die → den, зазвичай із -n в іменнику.",formula:"dem Lehrer · der Mutter · den Kindern"},
+        {title:"Що є підметом?",detail:"Коли описуєте, що подобається, належить, підходить, смакує, болить, привертає увагу або чого бракує, підметом є відповідна річ або людина. Той, хто відчуває, помічає або володіє, стоїть у Dativ. Дієслово узгоджується з підметом.",formula:"підмет: die Schuhe · Dativ: dir"},
+        {title:"Особливі форми й відокремлення",detail:"У деяких дієслів голосний змінюється з a на ä або з e на i у du та er/sie/es, але не в множині. У дієсловах зі значеннями «боліти» й «привертати увагу» відокремлювана частина стоїть у кінці головного речення.",formula:"a → ä · e → i"},
+        {title:"Вітати з подією",detail:"Коли вітаєте когось із подією, і людина, і подія після zu стоять у Dativ; zum = zu dem, zur = zu der.",formula:"кому: dir · з чим: zu deinem Geburtstag"},
+        {title:"Дозволяти та вірити",detail:"Коли дозволяєте щось, людина стоїть у Dativ. Дозволена річ може бути в Akkusativ, а дія — у формі zu + інфінітив. «Вірити комусь» має Dativ; «вірити в когось або щось» має an + Akkusativ.",formula:"людина: Dativ · дія: zu + Infinitiv"}
+      ]
+    },
+    cards:dativeVerbCards,stages:dativeVerbStages
   },
   "es-gibt-leisure":{title:"Es gibt & leisure places",label:"Es gibt & leisure places",badge:"gibt",tip:"Use Es gibt to say that something exists; the noun after it is in the accusative.",guide:{title:"Es gibt і місця для дозвілля",intro:"За допомогою Es gibt можна сказати, що в місті або в певному місці щось є. Далі вивчайте назви місць разом з артиклем і вислови про дозвілля.",rules:[{title:"Es gibt означає «є»",detail:"Цей вираз уживається як в однині, так і в множині. Es не перекладається окремо.",formula:"Es gibt ein Kino. · Es gibt viele Cafés."},{title:"Після Es gibt - Akkusativ",detail:"Неозначений артикль чоловічого роду змінюється з ein на einen; жіночий і середній рід залишаються без змін.",formula:"einen Park · eine Ausstellung · ein Café"},{title:"Вивчайте місця з артиклем",detail:"Запам'ятовуйте рід і форму множини разом зі словом.",formula:"das Museum - die Museen · die Bar - die Bars"},{title:"Man для загальних дій",detail:"Man означає «людина / люди» в загальному значенні та має форму дієслова третьої особи однини.",formula:"Im Café kann man Kaffee trinken. · In der Disco tanzt man."},{title:"Denn пояснює причину",detail:"Denn означає «тому що». Після нього порядок слів у простому реченні не змінюється.",formula:"Ich gehe ins Kino, denn der Film ist interessant."}]},cards:[...esGibtPatternCards,...leisurePlaceCards,...leisureActivityCards],stages:esGibtLeisureStages},
   "word-order":{title:"Word order",label:"Word order",badge:"S",tip:"Use TE-KA-MO-LO for several adverbials: time, reason, manner, then place.",guide:{title:"Порядок слів у реченні",intro:"Німецький порядок слів суворіший, ніж український. Спочатку визначте тип речення, а потім знайдіть місце для відмінюваного дієслова й інфінітива.",rules:[{title:"TE-KA-MO-LO",detail:"Коли в середині речення є кілька обставин, їхній звичний порядок: TE (wann?) - KA (warum?) - MO (wie?) - LO (wo?/wohin?).",formula:"Ich fahre heute wegen des Regens mit dem Bus zur Arbeit."},{title:"Пряме речення з модальним дієсловом",detail:"Підмет стоїть першим, модальне дієслово - другим, а друге дієслово в інфінітиві - в кінці.",formula:"Ich mag am Morgen Kaffee trinken."},{title:"Інверсія з модальним дієсловом",detail:"Час або інша фраза може стояти першою, але модальне дієслово залишається на другому місці.",formula:"Am Morgen mag ich Kaffee trinken."},{title:"Питання ja/nein",detail:"Без питального слова модальне дієслово стоїть першим, підмет - другим, а інфінітив - у кінці.",formula:"Magst du am Morgen Kaffee trinken?"},{title:"W-Frage з модальним дієсловом",detail:"Питальне слово стоїть першим, модальне дієслово - другим, підмет - після нього, а інфінітив - у кінці.",formula:"Was magst du am Morgen trinken?"},{title:"Інші розповідні речення",detail:"Без модального дієслова відмінюване дієслово все одно стоїть на другому місці: підмет або обставина часу можуть бути першими.",formula:"Heute fahre ich mit dem Bus nach Hause."}]},cards:[...wordOrderStatementCards,...wordOrderTeKaMoLoCards,...wordOrderModalCards,...wordOrderInversionCards,...wordOrderQuestionCards],stages:wordOrderStages},
