@@ -20,6 +20,281 @@ const pronounCards=[
   {word:"ihr",translation:"ви",category:"PERSONAL PRONOUN",example:"Ihr seid sehr nett.",exampleTranslation:"Ви дуже милі."},
   {word:"Sie",translation:"Ви (ввічливо)",category:"PERSONAL PRONOUN",targetId:"pronoun-formal-sie",example:"Wie heißen Sie?",exampleTranslation:"Як Вас звати?",caseSensitive:true}
 ];
+const personalPronounAccusativeCards=[
+  {
+    id:"pronoun-accusative-ich-recall",targetId:"pronoun-accusative-ich",type:"recall",word:"mich",translation:"мене · Akkusativ від ich",promptText:"Akkusativ: ich (я)",
+    example:"Meine Schwester besucht mich.",exampleTranslation:"Моя сестра відвідує мене.",explanation:"Besuchen вимагає Akkusativ: ich → mich.",category:"PERSONALPRONOMEN · AKKUSATIV",practiceVariants:false,
+    response:{mode:"text",scope:"word",accepted:["mich"],caseSensitive:false,punctuationSensitive:false}
+  },
+  {
+    id:"pronoun-accusative-ich-see",targetId:"pronoun-accusative-ich",type:"cloze",word:"Paul sieht mich heute.",translation:"Пауль бачить мене сьогодні.",studyTranslation:"ich → mich · мене",promptText:"Paul sieht ___ heute.",support:"Заміни ich (я).",
+    explanation:"Sehen вимагає Akkusativ: ich → mich.",category:"PERSONALPRONOMEN · AKKUSATIV",practiceVariants:false,
+    response:{mode:"text",scope:"word",accepted:["mich"],caseSensitive:false,punctuationSensitive:false}
+  },
+  {
+    id:"pronoun-accusative-ich-call",targetId:"pronoun-accusative-ich",type:"cloze",word:"Rufst du mich morgen an?",translation:"Ти зателефонуєш мені завтра?",studyTranslation:"ich → mich · мене",promptText:"Rufst du ___ morgen an?",support:"Заміни ich (я).",
+    explanation:"Anrufen вимагає Akkusativ, хоча українською кажемо «телефонувати кому»: ich → mich.",category:"PERSONALPRONOMEN · AKKUSATIV",practiceVariants:false,
+    response:{mode:"text",scope:"word",accepted:["mich"],caseSensitive:false,punctuationSensitive:false}
+  },
+  {
+    id:"pronoun-accusative-du-recall",targetId:"pronoun-accusative-du",type:"recall",word:"dich",translation:"тебе · Akkusativ від du",promptText:"Akkusativ: du (ти)",
+    example:"Ich besuche dich am Abend.",exampleTranslation:"Я відвідаю тебе ввечері.",explanation:"Besuchen вимагає Akkusativ: du → dich.",category:"PERSONALPRONOMEN · AKKUSATIV",practiceVariants:false,
+    response:{mode:"text",scope:"word",accepted:["dich"],caseSensitive:false,punctuationSensitive:false}
+  },
+  {
+    id:"pronoun-accusative-du-hear",targetId:"pronoun-accusative-du",type:"cloze",word:"Ich höre dich nicht.",translation:"Я тебе не чую.",studyTranslation:"du → dich · тебе",promptText:"Ich höre ___ nicht.",support:"Заміни du (ти).",
+    explanation:"Hören вимагає Akkusativ: du → dich.",category:"PERSONALPRONOMEN · AKKUSATIV",practiceVariants:false,
+    response:{mode:"text",scope:"word",accepted:["dich"],caseSensitive:false,punctuationSensitive:false}
+  },
+  {
+    id:"pronoun-accusative-du-for",targetId:"pronoun-accusative-du",type:"cloze",word:"Ist das Geschenk für dich?",translation:"Цей подарунок для тебе?",studyTranslation:"du → dich · тебе",promptText:"Ist das Geschenk für ___?",support:"Заміни du (ти).",
+    explanation:"Für завжди вимагає Akkusativ: du → dich.",category:"PERSONALPRONOMEN · AKKUSATIV",practiceVariants:false,
+    response:{mode:"text",scope:"word",accepted:["dich"],caseSensitive:false,punctuationSensitive:false}
+  },
+  {
+    id:"pronoun-accusative-er-recall",targetId:"pronoun-accusative-er",type:"recall",word:"ihn",translation:"його · Akkusativ від er",promptText:"Akkusativ: er (він)",
+    example:"Ich kenne ihn gut.",exampleTranslation:"Я добре його знаю.",explanation:"Kennen вимагає Akkusativ: er → ihn.",category:"PERSONALPRONOMEN · AKKUSATIV",practiceVariants:false,
+    response:{mode:"text",scope:"word",accepted:["ihn"],caseSensitive:false,punctuationSensitive:false}
+  },
+  {
+    id:"pronoun-accusative-er-see",targetId:"pronoun-accusative-er",type:"cloze",word:"Wir sehen ihn im Park.",translation:"Ми бачимо його в парку.",studyTranslation:"er → ihn · його",promptText:"Wir sehen ___ im Park.",support:"Заміни er (він).",
+    explanation:"Sehen вимагає Akkusativ: er → ihn, а не ihm.",category:"PERSONALPRONOMEN · AKKUSATIV",practiceVariants:false,
+    response:{mode:"text",scope:"word",accepted:["ihn"],caseSensitive:false,punctuationSensitive:false}
+  },
+  {
+    id:"pronoun-accusative-er-call",targetId:"pronoun-accusative-er",type:"cloze",word:"Rufst du ihn heute an?",translation:"Ти зателефонуєш йому сьогодні?",studyTranslation:"er → ihn · його",promptText:"Rufst du ___ heute an?",support:"Заміни er (він).",
+    explanation:"Anrufen вимагає Akkusativ: er → ihn. Український відмінок не завжди збігається з німецьким.",category:"PERSONALPRONOMEN · AKKUSATIV",practiceVariants:false,
+    response:{mode:"text",scope:"word",accepted:["ihn"],caseSensitive:false,punctuationSensitive:false}
+  },
+  {
+    id:"pronoun-accusative-she-recall",targetId:"pronoun-accusative-she",type:"recall",word:"sie",translation:"її · Akkusativ від sie (вона)",promptText:"Akkusativ: sie (вона)",
+    example:"Wir besuchen sie heute.",exampleTranslation:"Ми відвідаємо її сьогодні.",explanation:"Sie (вона) в Akkusativ залишається sie. Усередині речення це мала літера, на відміну від ввічливого Sie.",category:"PERSONALPRONOMEN · AKKUSATIV",practiceVariants:false,
+    response:{mode:"text",scope:"word",accepted:["sie"],caseSensitive:true,punctuationSensitive:false}
+  },
+  {
+    id:"pronoun-accusative-she-know",targetId:"pronoun-accusative-she",type:"cloze",word:"Ich kenne sie gut.",translation:"Я добре її знаю.",studyTranslation:"sie (вона) → sie · її",promptText:"Ich kenne ___ gut.",support:"Заміни sie (вона). Зверни увагу на регістр.",
+    explanation:"Kennen вимагає Akkusativ: sie (вона) → sie, а не ihr.",category:"PERSONALPRONOMEN · AKKUSATIV",practiceVariants:false,
+    response:{mode:"text",scope:"word",accepted:["sie"],caseSensitive:true,punctuationSensitive:false}
+  },
+  {
+    id:"pronoun-accusative-she-for",targetId:"pronoun-accusative-she",type:"cloze",word:"Ist der Tee für sie?",translation:"Цей чай для неї?",studyTranslation:"sie (вона) → sie · її",promptText:"Ist der Tee für ___?",support:"Заміни sie (вона). Зверни увагу на регістр.",
+    explanation:"Für вимагає Akkusativ: sie (вона) → sie. Ввічливе «Ви» писали б Sie.",category:"PERSONALPRONOMEN · AKKUSATIV",practiceVariants:false,
+    response:{mode:"text",scope:"word",accepted:["sie"],caseSensitive:true,punctuationSensitive:false}
+  },
+  {
+    id:"pronoun-accusative-es-recall",targetId:"pronoun-accusative-es",type:"recall",word:"es",translation:"його · Akkusativ від es (воно, середній рід)",promptText:"Akkusativ: es (воно)",
+    example:"Das Baby schläft. Ich sehe es.",exampleTranslation:"Немовля спить. Я його бачу.",explanation:"Es в Akkusativ не змінюється. Займенник узгоджується з німецьким родом: das Baby → es.",category:"PERSONALPRONOMEN · AKKUSATIV",practiceVariants:false,
+    response:{mode:"text",scope:"word",accepted:["es"],caseSensitive:false,punctuationSensitive:false}
+  },
+  {
+    id:"pronoun-accusative-es-see",targetId:"pronoun-accusative-es",type:"cloze",word:"Die Mutter sieht es.",translation:"Мама бачить його (немовля).",studyTranslation:"es → es · його (середній рід)",promptText:"Die Mutter sieht ___.",support:"Заміни es: das Baby (немовля, середній рід).",
+    explanation:"Sehen вимагає Akkusativ: es → es, а не ihm.",category:"PERSONALPRONOMEN · AKKUSATIV",practiceVariants:false,
+    response:{mode:"text",scope:"word",accepted:["es"],caseSensitive:false,punctuationSensitive:false}
+  },
+  {
+    id:"pronoun-accusative-es-photo",targetId:"pronoun-accusative-es",type:"cloze",word:"Fotografierst du es?",translation:"Ти фотографуєш його (немовля)?",studyTranslation:"es → es · його (середній рід)",promptText:"Fotografierst du ___?",support:"Заміни es: das Baby (немовля, середній рід).",
+    explanation:"Fotografieren вимагає Akkusativ: es → es.",category:"PERSONALPRONOMEN · AKKUSATIV",practiceVariants:false,
+    response:{mode:"text",scope:"word",accepted:["es"],caseSensitive:false,punctuationSensitive:false}
+  },
+  {
+    id:"pronoun-accusative-wir-recall",targetId:"pronoun-accusative-wir",type:"recall",word:"uns",translation:"нас · Akkusativ від wir",promptText:"Akkusativ: wir (ми)",
+    example:"Unsere Freunde besuchen uns.",exampleTranslation:"Наші друзі відвідують нас.",explanation:"Besuchen вимагає Akkusativ: wir → uns.",category:"PERSONALPRONOMEN · AKKUSATIV",practiceVariants:false,
+    response:{mode:"text",scope:"word",accepted:["uns"],caseSensitive:false,punctuationSensitive:false}
+  },
+  {
+    id:"pronoun-accusative-wir-hear",targetId:"pronoun-accusative-wir",type:"cloze",word:"Der Lehrer hört uns.",translation:"Учитель чує нас.",studyTranslation:"wir → uns · нас",promptText:"Der Lehrer hört ___.",support:"Заміни wir (ми).",
+    explanation:"Hören вимагає Akkusativ: wir → uns. Uns має однакову форму в Akkusativ і Dativ.",category:"PERSONALPRONOMEN · AKKUSATIV",practiceVariants:false,
+    response:{mode:"text",scope:"word",accepted:["uns"],caseSensitive:false,punctuationSensitive:false}
+  },
+  {
+    id:"pronoun-accusative-wir-for",targetId:"pronoun-accusative-wir",type:"cloze",word:"Ist der Kuchen für uns?",translation:"Цей пиріг для нас?",studyTranslation:"wir → uns · нас",promptText:"Ist der Kuchen für ___?",support:"Заміни wir (ми).",
+    explanation:"Für вимагає Akkusativ: wir → uns.",category:"PERSONALPRONOMEN · AKKUSATIV",practiceVariants:false,
+    response:{mode:"text",scope:"word",accepted:["uns"],caseSensitive:false,punctuationSensitive:false}
+  },
+  {
+    id:"pronoun-accusative-ihr-recall",targetId:"pronoun-accusative-ihr",type:"recall",word:"euch",translation:"вас · Akkusativ від ihr (ви, неформально, множина)",promptText:"Akkusativ: ihr (ви, неформально, кілька людей)",
+    example:"Ich besuche euch morgen.",exampleTranslation:"Я відвідаю вас завтра.",explanation:"Besuchen вимагає Akkusativ: ihr → euch. Це неформальне звертання до кількох людей.",category:"PERSONALPRONOMEN · AKKUSATIV",practiceVariants:false,
+    response:{mode:"text",scope:"word",accepted:["euch"],caseSensitive:false,punctuationSensitive:false}
+  },
+  {
+    id:"pronoun-accusative-ihr-see",targetId:"pronoun-accusative-ihr",type:"cloze",word:"Wir sehen euch am Bahnhof.",translation:"Ми бачимо вас на вокзалі.",studyTranslation:"ihr → euch · вас (неформально, множина)",promptText:"Wir sehen ___ am Bahnhof.",support:"Заміни ihr (ви, неформально, кілька людей).",
+    explanation:"Sehen вимагає Akkusativ: ihr → euch.",category:"PERSONALPRONOMEN · AKKUSATIV",practiceVariants:false,
+    response:{mode:"text",scope:"word",accepted:["euch"],caseSensitive:false,punctuationSensitive:false}
+  },
+  {
+    id:"pronoun-accusative-ihr-call",targetId:"pronoun-accusative-ihr",type:"cloze",word:"Ruft Anna euch heute an?",translation:"Анна зателефонує вам сьогодні?",studyTranslation:"ihr → euch · вас (неформально, множина)",promptText:"Ruft Anna ___ heute an?",support:"Заміни ihr (ви, неформально, кілька людей).",
+    explanation:"Anrufen вимагає Akkusativ: ihr → euch.",category:"PERSONALPRONOMEN · AKKUSATIV",practiceVariants:false,
+    response:{mode:"text",scope:"word",accepted:["euch"],caseSensitive:false,punctuationSensitive:false}
+  },
+  {
+    id:"pronoun-accusative-they-recall",targetId:"pronoun-accusative-they",type:"recall",word:"sie",translation:"їх · Akkusativ від sie (вони)",promptText:"Akkusativ: sie (вони)",
+    example:"Ich kenne sie schon.",exampleTranslation:"Я їх уже знаю.",explanation:"Sie (вони) в Akkusativ залишається sie. Усередині речення пишемо малу літеру.",category:"PERSONALPRONOMEN · AKKUSATIV",practiceVariants:false,
+    response:{mode:"text",scope:"word",accepted:["sie"],caseSensitive:true,punctuationSensitive:false}
+  },
+  {
+    id:"pronoun-accusative-they-visit",targetId:"pronoun-accusative-they",type:"cloze",word:"Wir besuchen sie am Sonntag.",translation:"Ми відвідаємо їх у неділю.",studyTranslation:"sie (вони) → sie · їх",promptText:"Wir besuchen ___ am Sonntag.",support:"Заміни sie (вони). Зверни увагу на регістр.",
+    explanation:"Besuchen вимагає Akkusativ: sie (вони) → sie, а не ihnen.",category:"PERSONALPRONOMEN · AKKUSATIV",practiceVariants:false,
+    response:{mode:"text",scope:"word",accepted:["sie"],caseSensitive:true,punctuationSensitive:false}
+  },
+  {
+    id:"pronoun-accusative-they-for",targetId:"pronoun-accusative-they",type:"cloze",word:"Sind die Bücher für sie?",translation:"Ці книжки для них?",studyTranslation:"sie (вони) → sie · їх",promptText:"Sind die Bücher für ___?",support:"Заміни sie (вони). Зверни увагу на регістр.",
+    explanation:"Für вимагає Akkusativ: sie (вони) → sie. Ввічливе «Ви» писали б Sie.",category:"PERSONALPRONOMEN · AKKUSATIV",practiceVariants:false,
+    response:{mode:"text",scope:"word",accepted:["sie"],caseSensitive:true,punctuationSensitive:false}
+  },
+  {
+    id:"pronoun-accusative-formal-recall",targetId:"pronoun-accusative-formal",type:"recall",word:"Sie",translation:"Вас · Akkusativ від Sie (Ви, ввічливо)",promptText:"Akkusativ: Sie (Ви, ввічливо)",
+    example:"Ich besuche Sie morgen.",exampleTranslation:"Я відвідаю Вас завтра.",explanation:"Ввічливе Sie в Akkusativ залишається Sie й завжди пишеться з великої літери.",category:"PERSONALPRONOMEN · AKKUSATIV",practiceVariants:false,
+    response:{mode:"text",scope:"word",accepted:["Sie"],caseSensitive:true,punctuationSensitive:false}
+  },
+  {
+    id:"pronoun-accusative-formal-hear",targetId:"pronoun-accusative-formal",type:"cloze",word:"Ich höre Sie nicht.",translation:"Я Вас не чую.",studyTranslation:"Sie → Sie · Вас (ввічливо)",promptText:"Ich höre ___ nicht.",support:"Заміни Sie (Ви, ввічливо). Зверни увагу на регістр.",
+    explanation:"Hören вимагає Akkusativ: Sie → Sie. Мала літера sie означала б «її» або «їх».",category:"PERSONALPRONOMEN · AKKUSATIV",practiceVariants:false,
+    response:{mode:"text",scope:"word",accepted:["Sie"],caseSensitive:true,punctuationSensitive:false}
+  },
+  {
+    id:"pronoun-accusative-formal-for",targetId:"pronoun-accusative-formal",type:"cloze",word:"Ist der Brief für Sie?",translation:"Цей лист для Вас?",studyTranslation:"Sie → Sie · Вас (ввічливо)",promptText:"Ist der Brief für ___?",support:"Заміни Sie (Ви, ввічливо). Зверни увагу на регістр.",
+    explanation:"Für вимагає Akkusativ: ввічливе Sie пишемо з великої літери.",category:"PERSONALPRONOMEN · AKKUSATIV",practiceVariants:false,
+    response:{mode:"text",scope:"word",accepted:["Sie"],caseSensitive:true,punctuationSensitive:false}
+  }
+];
+const personalPronounDativeCards=[
+  {
+    id:"pronoun-dative-ich-recall",targetId:"pronoun-dative-ich",type:"recall",word:"mir",translation:"мені · Dativ від ich",promptText:"Dativ: ich (я)",
+    example:"Meine Schwester hilft mir.",exampleTranslation:"Моя сестра допомагає мені.",explanation:"Helfen вимагає Dativ: ich → mir.",category:"PERSONALPRONOMEN · DATIV",practiceVariants:false,
+    response:{mode:"text",scope:"word",accepted:["mir"],caseSensitive:false,punctuationSensitive:false}
+  },
+  {
+    id:"pronoun-dative-ich-give",targetId:"pronoun-dative-ich",type:"cloze",word:"Paul gibt mir das Buch.",translation:"Пауль дає мені книжку.",studyTranslation:"ich → mir · мені",promptText:"Paul gibt ___ das Buch.",support:"Заміни ich (я): одержувач книжки.",
+    explanation:"Одержувач із geben стоїть у Dativ: ich → mir. Das Buch — предмет, який передають, в Akkusativ.",category:"PERSONALPRONOMEN · DATIV",practiceVariants:false,
+    response:{mode:"text",scope:"word",accepted:["mir"],caseSensitive:false,punctuationSensitive:false}
+  },
+  {
+    id:"pronoun-dative-ich-with",targetId:"pronoun-dative-ich",type:"cloze",word:"Kommst du mit mir?",translation:"Ти підеш зі мною?",studyTranslation:"ich → mir · мені",promptText:"Kommst du mit ___?",support:"Заміни ich (я).",
+    explanation:"Mit завжди вимагає Dativ: ich → mir. Українською тут уживаємо орудний відмінок «зі мною».",category:"PERSONALPRONOMEN · DATIV",practiceVariants:false,
+    response:{mode:"text",scope:"word",accepted:["mir"],caseSensitive:false,punctuationSensitive:false}
+  },
+  {
+    id:"pronoun-dative-du-recall",targetId:"pronoun-dative-du",type:"recall",word:"dir",translation:"тобі · Dativ від du",promptText:"Dativ: du (ти)",
+    example:"Ich helfe dir gern.",exampleTranslation:"Я охоче допомагаю тобі.",explanation:"Helfen вимагає Dativ: du → dir.",category:"PERSONALPRONOMEN · DATIV",practiceVariants:false,
+    response:{mode:"text",scope:"word",accepted:["dir"],caseSensitive:false,punctuationSensitive:false}
+  },
+  {
+    id:"pronoun-dative-du-thank",targetId:"pronoun-dative-du",type:"cloze",word:"Wir danken dir.",translation:"Ми дякуємо тобі.",studyTranslation:"du → dir · тобі",promptText:"Wir danken ___.",support:"Заміни du (ти).",
+    explanation:"Danken вимагає Dativ: du → dir.",category:"PERSONALPRONOMEN · DATIV",practiceVariants:false,
+    response:{mode:"text",scope:"word",accepted:["dir"],caseSensitive:false,punctuationSensitive:false}
+  },
+  {
+    id:"pronoun-dative-du-with",targetId:"pronoun-dative-du",type:"cloze",word:"Darf ich mit dir lernen?",translation:"Можна мені вчитися з тобою?",studyTranslation:"du → dir · тобі",promptText:"Darf ich mit ___ lernen?",support:"Заміни du (ти).",
+    explanation:"Mit вимагає Dativ: du → dir, а не dich.",category:"PERSONALPRONOMEN · DATIV",practiceVariants:false,
+    response:{mode:"text",scope:"word",accepted:["dir"],caseSensitive:false,punctuationSensitive:false}
+  },
+  {
+    id:"pronoun-dative-er-recall",targetId:"pronoun-dative-er",type:"recall",word:"ihm",translation:"йому · Dativ від er",promptText:"Dativ: er (він)",
+    example:"Ich helfe ihm heute.",exampleTranslation:"Я допомагаю йому сьогодні.",explanation:"Helfen вимагає Dativ: er → ihm.",category:"PERSONALPRONOMEN · DATIV",practiceVariants:false,
+    response:{mode:"text",scope:"word",accepted:["ihm"],caseSensitive:false,punctuationSensitive:false}
+  },
+  {
+    id:"pronoun-dative-er-give",targetId:"pronoun-dative-er",type:"cloze",word:"Anna gibt ihm den Schlüssel.",translation:"Анна дає йому ключ.",studyTranslation:"er → ihm · йому",promptText:"Anna gibt ___ den Schlüssel.",support:"Заміни er (він): одержувач ключа.",
+    explanation:"Одержувач із geben стоїть у Dativ: er → ihm, а не ihn.",category:"PERSONALPRONOMEN · DATIV",practiceVariants:false,
+    response:{mode:"text",scope:"word",accepted:["ihm"],caseSensitive:false,punctuationSensitive:false}
+  },
+  {
+    id:"pronoun-dative-er-with",targetId:"pronoun-dative-er",type:"cloze",word:"Sprichst du mit ihm?",translation:"Ти розмовляєш з ним?",studyTranslation:"er → ihm · йому",promptText:"Sprichst du mit ___?",support:"Заміни er (він).",
+    explanation:"Mit вимагає Dativ: er → ihm.",category:"PERSONALPRONOMEN · DATIV",practiceVariants:false,
+    response:{mode:"text",scope:"word",accepted:["ihm"],caseSensitive:false,punctuationSensitive:false}
+  },
+  {
+    id:"pronoun-dative-she-recall",targetId:"pronoun-dative-she",type:"recall",word:"ihr",translation:"їй · Dativ від sie (вона)",promptText:"Dativ: sie (вона)",
+    example:"Ich helfe ihr gern.",exampleTranslation:"Я охоче допомагаю їй.",explanation:"Helfen вимагає Dativ: sie (вона) → ihr. Не плутай з ihr у Nominativ («ви», неформально).",category:"PERSONALPRONOMEN · DATIV",practiceVariants:false,
+    response:{mode:"text",scope:"word",accepted:["ihr"],caseSensitive:false,punctuationSensitive:false}
+  },
+  {
+    id:"pronoun-dative-she-thank",targetId:"pronoun-dative-she",type:"cloze",word:"Wir danken ihr.",translation:"Ми дякуємо їй.",studyTranslation:"sie (вона) → ihr · їй",promptText:"Wir danken ___.",support:"Заміни sie (вона).",
+    explanation:"Danken вимагає Dativ: sie (вона) → ihr, а не sie.",category:"PERSONALPRONOMEN · DATIV",practiceVariants:false,
+    response:{mode:"text",scope:"word",accepted:["ihr"],caseSensitive:false,punctuationSensitive:false}
+  },
+  {
+    id:"pronoun-dative-she-with",targetId:"pronoun-dative-she",type:"cloze",word:"Gehst du mit ihr ins Kino?",translation:"Ти йдеш з нею в кіно?",studyTranslation:"sie (вона) → ihr · їй",promptText:"Gehst du mit ___ ins Kino?",support:"Заміни sie (вона).",
+    explanation:"Mit вимагає Dativ: sie (вона) → ihr.",category:"PERSONALPRONOMEN · DATIV",practiceVariants:false,
+    response:{mode:"text",scope:"word",accepted:["ihr"],caseSensitive:false,punctuationSensitive:false}
+  },
+  {
+    id:"pronoun-dative-es-recall",targetId:"pronoun-dative-es",type:"recall",word:"ihm",translation:"йому · Dativ від es (воно, середній рід)",promptText:"Dativ: es (воно)",
+    example:"Das Baby weint. Die Mutter gibt ihm Milch.",exampleTranslation:"Немовля плаче. Мама дає йому молоко.",explanation:"Одержувач із geben стоїть у Dativ: es → ihm. Er і es мають однакову форму Dativ.",category:"PERSONALPRONOMEN · DATIV",practiceVariants:false,
+    response:{mode:"text",scope:"word",accepted:["ihm"],caseSensitive:false,punctuationSensitive:false}
+  },
+  {
+    id:"pronoun-dative-es-help",targetId:"pronoun-dative-es",type:"cloze",word:"Der Vater hilft ihm.",translation:"Тато допомагає йому (дитині).",studyTranslation:"es → ihm · йому (середній рід)",promptText:"Der Vater hilft ___.",support:"Заміни es: das Kind (дитина, середній рід).",
+    explanation:"Helfen вимагає Dativ: es → ihm. Рід визначає німецький іменник das Kind.",category:"PERSONALPRONOMEN · DATIV",practiceVariants:false,
+    response:{mode:"text",scope:"word",accepted:["ihm"],caseSensitive:false,punctuationSensitive:false}
+  },
+  {
+    id:"pronoun-dative-es-with",targetId:"pronoun-dative-es",type:"cloze",word:"Spielst du mit ihm?",translation:"Ти граєшся з ним (немовлям)?",studyTranslation:"es → ihm · йому (середній рід)",promptText:"Spielst du mit ___?",support:"Заміни es: das Baby (немовля, середній рід).",
+    explanation:"Mit вимагає Dativ: es → ihm, а не es.",category:"PERSONALPRONOMEN · DATIV",practiceVariants:false,
+    response:{mode:"text",scope:"word",accepted:["ihm"],caseSensitive:false,punctuationSensitive:false}
+  },
+  {
+    id:"pronoun-dative-wir-recall",targetId:"pronoun-dative-wir",type:"recall",word:"uns",translation:"нам · Dativ від wir",promptText:"Dativ: wir (ми)",
+    example:"Unsere Freunde helfen uns.",exampleTranslation:"Наші друзі допомагають нам.",explanation:"Helfen вимагає Dativ: wir → uns. Форма збігається з Akkusativ.",category:"PERSONALPRONOMEN · DATIV",practiceVariants:false,
+    response:{mode:"text",scope:"word",accepted:["uns"],caseSensitive:false,punctuationSensitive:false}
+  },
+  {
+    id:"pronoun-dative-wir-give",targetId:"pronoun-dative-wir",type:"cloze",word:"Der Lehrer gibt uns die Bücher.",translation:"Учитель дає нам книжки.",studyTranslation:"wir → uns · нам",promptText:"Der Lehrer gibt ___ die Bücher.",support:"Заміни wir (ми): одержувачі книжок.",
+    explanation:"Одержувачі з geben стоять у Dativ: wir → uns.",category:"PERSONALPRONOMEN · DATIV",practiceVariants:false,
+    response:{mode:"text",scope:"word",accepted:["uns"],caseSensitive:false,punctuationSensitive:false}
+  },
+  {
+    id:"pronoun-dative-wir-with",targetId:"pronoun-dative-wir",type:"cloze",word:"Lernst du mit uns?",translation:"Ти вчишся з нами?",studyTranslation:"wir → uns · нам",promptText:"Lernst du mit ___?",support:"Заміни wir (ми).",
+    explanation:"Mit вимагає Dativ: wir → uns.",category:"PERSONALPRONOMEN · DATIV",practiceVariants:false,
+    response:{mode:"text",scope:"word",accepted:["uns"],caseSensitive:false,punctuationSensitive:false}
+  },
+  {
+    id:"pronoun-dative-ihr-recall",targetId:"pronoun-dative-ihr",type:"recall",word:"euch",translation:"вам · Dativ від ihr (ви, неформально, множина)",promptText:"Dativ: ihr (ви, неформально, кілька людей)",
+    example:"Ich helfe euch morgen.",exampleTranslation:"Я допоможу вам завтра.",explanation:"Helfen вимагає Dativ: ihr → euch. Форма збігається з Akkusativ.",category:"PERSONALPRONOMEN · DATIV",practiceVariants:false,
+    response:{mode:"text",scope:"word",accepted:["euch"],caseSensitive:false,punctuationSensitive:false}
+  },
+  {
+    id:"pronoun-dative-ihr-thank",targetId:"pronoun-dative-ihr",type:"cloze",word:"Wir danken euch.",translation:"Ми дякуємо вам.",studyTranslation:"ihr → euch · вам (неформально, множина)",promptText:"Wir danken ___.",support:"Заміни ihr (ви, неформально, кілька людей).",
+    explanation:"Danken вимагає Dativ: ihr → euch.",category:"PERSONALPRONOMEN · DATIV",practiceVariants:false,
+    response:{mode:"text",scope:"word",accepted:["euch"],caseSensitive:false,punctuationSensitive:false}
+  },
+  {
+    id:"pronoun-dative-ihr-with",targetId:"pronoun-dative-ihr",type:"cloze",word:"Darf ich mit euch kommen?",translation:"Можна мені піти з вами?",studyTranslation:"ihr → euch · вам (неформально, множина)",promptText:"Darf ich mit ___ kommen?",support:"Заміни ihr (ви, неформально, кілька людей).",
+    explanation:"Mit вимагає Dativ: ihr → euch.",category:"PERSONALPRONOMEN · DATIV",practiceVariants:false,
+    response:{mode:"text",scope:"word",accepted:["euch"],caseSensitive:false,punctuationSensitive:false}
+  },
+  {
+    id:"pronoun-dative-they-recall",targetId:"pronoun-dative-they",type:"recall",word:"ihnen",translation:"їм · Dativ від sie (вони)",promptText:"Dativ: sie (вони)",
+    example:"Ich helfe ihnen heute.",exampleTranslation:"Я допомагаю їм сьогодні.",explanation:"Helfen вимагає Dativ: sie (вони) → ihnen. Мала літера відрізняє їх від ввічливого «Ви».",category:"PERSONALPRONOMEN · DATIV",practiceVariants:false,
+    response:{mode:"text",scope:"word",accepted:["ihnen"],caseSensitive:true,punctuationSensitive:false}
+  },
+  {
+    id:"pronoun-dative-they-give",targetId:"pronoun-dative-they",type:"cloze",word:"Anna gibt ihnen die Karten.",translation:"Анна дає їм квитки.",studyTranslation:"sie (вони) → ihnen · їм",promptText:"Anna gibt ___ die Karten.",support:"Заміни sie (вони): одержувачі квитків. Зверни увагу на регістр.",
+    explanation:"Одержувачі з geben стоять у Dativ: sie (вони) → ihnen, з малої літери.",category:"PERSONALPRONOMEN · DATIV",practiceVariants:false,
+    response:{mode:"text",scope:"word",accepted:["ihnen"],caseSensitive:true,punctuationSensitive:false}
+  },
+  {
+    id:"pronoun-dative-they-with",targetId:"pronoun-dative-they",type:"cloze",word:"Fährst du mit ihnen nach Berlin?",translation:"Ти їдеш з ними до Берліна?",studyTranslation:"sie (вони) → ihnen · їм",promptText:"Fährst du mit ___ nach Berlin?",support:"Заміни sie (вони). Зверни увагу на регістр.",
+    explanation:"Mit вимагає Dativ: sie (вони) → ihnen. Ihnen з великої літери означало б ввічливе «Вам».",category:"PERSONALPRONOMEN · DATIV",practiceVariants:false,
+    response:{mode:"text",scope:"word",accepted:["ihnen"],caseSensitive:true,punctuationSensitive:false}
+  },
+  {
+    id:"pronoun-dative-formal-recall",targetId:"pronoun-dative-formal",type:"recall",word:"Ihnen",translation:"Вам · Dativ від Sie (Ви, ввічливо)",promptText:"Dativ: Sie (Ви, ввічливо)",
+    example:"Ich helfe Ihnen gern.",exampleTranslation:"Я охоче допомагаю Вам.",explanation:"Ввічливе Sie у Dativ стає Ihnen. Велика літера обов'язкова навіть усередині речення.",category:"PERSONALPRONOMEN · DATIV",practiceVariants:false,
+    response:{mode:"text",scope:"word",accepted:["Ihnen"],caseSensitive:true,punctuationSensitive:false}
+  },
+  {
+    id:"pronoun-dative-formal-thank",targetId:"pronoun-dative-formal",type:"cloze",word:"Wir danken Ihnen.",translation:"Ми дякуємо Вам.",studyTranslation:"Sie → Ihnen · Вам (ввічливо)",promptText:"Wir danken ___.",support:"Заміни Sie (Ви, ввічливо). Зверни увагу на регістр.",
+    explanation:"Danken вимагає Dativ: Sie → Ihnen. Ihnen з великої літери — ввічливе звертання.",category:"PERSONALPRONOMEN · DATIV",practiceVariants:false,
+    response:{mode:"text",scope:"word",accepted:["Ihnen"],caseSensitive:true,punctuationSensitive:false}
+  },
+  {
+    id:"pronoun-dative-formal-with",targetId:"pronoun-dative-formal",type:"cloze",word:"Darf ich mit Ihnen sprechen?",translation:"Можна мені поговорити з Вами?",studyTranslation:"Sie → Ihnen · Вам (ввічливо)",promptText:"Darf ich mit ___ sprechen?",support:"Заміни Sie (Ви, ввічливо). Зверни увагу на регістр.",
+    explanation:"Mit вимагає Dativ: Sie → Ihnen, а не Sie. Зберігай велику літеру у ввічливому звертанні.",category:"PERSONALPRONOMEN · DATIV",practiceVariants:false,
+    response:{mode:"text",scope:"word",accepted:["Ihnen"],caseSensitive:true,punctuationSensitive:false}
+  }
+];
+const personalPronounCaseCards=[...personalPronounAccusativeCards,...personalPronounDativeCards];
 const possessivePronounCards=[
   {word:"mein",translation:"мій / моє",category:"POSSESSIVE PRONOUN",example:"Mein Bruder lernt Deutsch.",exampleTranslation:"Мій брат вивчає німецьку."},
   {word:"dein",translation:"твій / твоє",category:"POSSESSIVE PRONOUN",example:"Ist das dein Buch?",exampleTranslation:"Це твоя книга?"},
@@ -1459,6 +1734,14 @@ const pronounStages=[
   lessonStep("pronouns-learn","Learn personal pronouns","Read every singular, plural, and formal pronoun as a complete set before testing your recall.",pronounCards,"learn","Personal pronouns","Learn","pronouns:learn"),
   lessonStep("pronouns-practice","Practice personal pronouns","Retrieve every singular, plural, and formal pronoun in one mixed practice sequence.",pronounCards,"input","Personal pronouns","Practice","pronouns:practice")
 ];
+const personalPronounCaseStages=[
+  lessonStep("pronoun-cases-accusative-learn","Learn Akkusativ pronouns","Вивчи форми всіх дев'яти займенників: після sehen, hören, besuchen, anrufen та für потрібен Akkusativ.",personalPronounAccusativeCards,"learn","Akkusativ","Learn"),
+  lessonStep("pronoun-cases-accusative-practice","Practice Akkusativ pronouns","Введи форму Akkusativ за вихідним займенником або доповни речення. Розрізняй sie (вона / вони) і Sie (Ви).",personalPronounAccusativeCards,"input","Akkusativ","Practice"),
+  lessonStep("pronoun-cases-dative-learn","Learn Dativ pronouns","Вивчи форми всіх дев'яти займенників: після helfen, danken і mit потрібен Dativ; з geben це форма одержувача.",personalPronounDativeCards,"learn","Dativ","Learn"),
+  lessonStep("pronoun-cases-dative-practice","Practice Dativ pronouns","Введи форму Dativ за вихідним займенником або доповни речення. Не плутай їй, їм та ввічливе Вам.",personalPronounDativeCards,"input","Dativ","Practice"),
+  lessonStep("pronoun-cases-mixed-learn","Compare Akkusativ and Dativ","Порівняй форми в контексті. Німецьке дієслово або прийменник визначає відмінок, а не український переклад.",personalPronounCaseCards,"learn","Akkusativ or Dativ?","Learn"),
+  lessonStep("pronoun-cases-mixed-practice","Practice mixed pronoun cases","Спочатку визнач Akkusativ чи Dativ, потім введи один займенник. Працюй з усіма особами й ввічливим звертанням.",personalPronounCaseCards,"input","Akkusativ or Dativ?","Practice")
+];
 const possessiveStages=[
   ...learnThenPractice("possessives-stems","ownership stems","Identify the owner before choosing mein, dein, sein, ihr, unser, euer, Ihr, or ihr.",possessivePronounCards.slice(0,8),"Stems"),
   ...learnThenPractice("possessives-endings","possessive endings","Notice how the ending changes with the noun in each example.",possessivePronounCards.slice(8),"Endings")
@@ -1610,6 +1893,23 @@ const pastVerbGuide=level=>{
 const deckDefinitions={
   "w-questions":{title:"W-Fragen",label:"W-Fragen",badge:"W",tip:"W-questions always come first in a question, followed by the verb.",guide:{title:"W-Fragen: запитання",intro:"Оберіть питальне слово відповідно до потрібної інформації, а потім побудуйте речення навколо відмінюваного дієслова.",rules:["Питальне слово стоїть на першому місці, а відмінюване дієслово — на другому: Wo wohnst du?","Підмет зазвичай стоїть після дієслова: Wann kommt ihr? Решта інформації йде далі.","Використовуйте wo для місця, wohin для руху до місця, а woher — для місця, звідки хтось прибуває.","На W-Fragen не можна відповісти лише ja або nein: вони потребують конкретної інформації."]},cards,stages:wQuestionStages},
   pronouns:{title:"Personal pronouns",label:"Personal pronouns",badge:"ich",tip:"Use the pronoun that matches the person or people you are talking about.",guide:{title:"Особові займенники",intro:"Німецькі особові займенники показують, хто говорить, до кого звертаються або про кого йдеться.",rules:["ich, du, er/sie/es, wir, ihr, sie відповідають особі або групі в реченні.","Пишіть Sie з великої літери для ввічливого «Ви» в однині або множині; sie означає «вона» або «вони».","Займенник визначає форму дієслова: ich bin, du bist, wir sind.","Оберіть ihr для неформального звертання до кількох людей."]},cards:pronounCards,stages:pronounStages},
+  "personal-pronoun-cases":{
+    title:"Personal pronouns: Akkusativ & Dativ",label:"Pronouns · Akkusativ & Dativ",badge:"A/D",
+    tip:"Спочатку визнач відмінок за німецьким дієсловом або прийменником, потім зміни займенник. Український відмінок не завжди збігається.",
+    guide:{
+      title:"Особові займенники: Akkusativ і Dativ",
+      intro:"Повтори Nominativ в уроці Personal pronouns. Тут вивчай, як та сама особа змінює форму в ролі додатка. У кожному завданні потрібен лише один займенник.",
+      rules:[
+        {title:"Nominativ: хто виконує дію?",detail:"Вихідний займенник називає особу: ich — я, du — ти, er — він, sie — вона, es — воно, wir — ми, ihr — ви (неформально), sie — вони, Sie — Ви (ввічливо)."},
+        {title:"Akkusativ: wen? / was?",detail:"Sehen, hören, kennen, besuchen і anrufen вимагають Akkusativ. Прийменник für також завжди вимагає Akkusativ."},
+        {title:"Dativ: wem?",detail:"Helfen і danken вимагають Dativ. З geben одержувач стоїть у Dativ, а предмет, який передають, — в Akkusativ. Після mit завжди потрібен Dativ."},
+        {title:"Не перекладай відмінок механічно",detail:"Українською кажемо «телефонувати кому», але німецьке anrufen вимагає Akkusativ. Після mit українською часто вживаємо орудний відмінок, а німецькою — Dativ."},
+        {title:"Особа, число й регістр",detail:"Вона й вони мають однакову форму Nominativ, але різні форми Dativ. Ввічливе звертання завжди пишеться з великої літери, зокрема в Dativ."},
+        {title:"Рід і незмінні форми",detail:"Для er та es форми Dativ збігаються; для wir та ihr Akkusativ і Dativ мають однакову форму. Рід es визначається німецьким іменником, навіть якщо український переклад має інший рід."}
+      ]
+    },
+    cards:personalPronounCaseCards,stages:personalPronounCaseStages
+  },
   possessives:{title:"Possessive pronouns",label:"Possessive pronouns",badge:"mein",tip:"Possessive pronouns show who something belongs to. Their ending follows the noun.",guide:{title:"Присвійні займенники",intro:"Уживайте присвійний займенник перед іменником, щоб показати належність: mein означає «мій», dein — «твій» тощо.",rules:["Особа-власник визначає основу: mein, dein, sein, ihr, unser, euer, Ihr, ihr.","Закінчення змінюється відповідно до іменника: mein Bruder, meine Mutter, mein Kind, meine Freunde.","Пишіть Ihr з великої літери для ввічливого «Ваш»; ihr залежно від контексту означає «її» або «їхній».","Присвійний займенник стоїть перед іменником і зазвичай має ті самі закінчення, що й ein: ein Buch, mein Buch; eine Tasche, meine Tasche."]},cards:possessivePronounCards,stages:possessiveStages},
   sein:{title:"Verb sein",label:"Verb sein",badge:"sein",tip:"The verb sein is irregular, so learn each form as a complete pair with its pronoun.",guide:{title:"Sein у теперішньому часі",intro:"Sein означає «бути» й відмінюється неправильно, тому його форми потрібно вивчати окремо.",rules:["ich bin, du bist, er/sie/es ist, wir sind, ihr seid, sie/Sie sind.","Уживайте sein для ідентифікації, опису, місцеперебування та багатьох простих представлень: Ich bin müde.","Форма має відповідати підмету: Anna ist hier, але Anna und Paul sind hier.","Пам’ятайте про велику літеру S у Sie sind під час ввічливого звертання."]},cards:seinCards,stages:seinStages},
   conjugation:{title:"Verb conjugation",label:"Verb conjugation",badge:"V",tip:"Weak verbs take regular endings: -e, -st, -t, -en, -t, -en. After a stem ending in -t or -d, add an extra e.",guide:{title:"Слабкі дієслова в Präsens",intro:"Візьміть основу дієслова й доберіть закінчення, що відповідає підмету.",rules:[{title:"Використовуйте регулярні закінчення",detail:"Більшість слабких дієслів відмінюються за однаковою схемою від ich до sie/Sie.",formula:"ich -e · du -st · er/sie/es -t · wir -en · ihr -t · sie/Sie -en"},{title:"Додавайте додаткове -e",detail:"Якщо основа закінчується на -t, -d або приголосний + -m/-n, додайте e перед закінченням.",formula:"du arbeitest · er arbeitet · ihr arbeitet"},{title:"Не додавайте зайве -s",detail:"В основах на -s, -ß або -z форма du має закінчення -t замість -st.",formula:"du heißt · du tanzt · du übersetzt"}]},cards:conjugationCards,stages:conjugationStages},

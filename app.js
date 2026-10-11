@@ -23,6 +23,7 @@ const lessonCatalog={
   "word-order":{outcome:"Build statements and questions with reliable word order.",className:"Sentence structure",color:"blue"},
   "separable-verbs":{outcome:"Place separable prefixes correctly across sentence types.",className:"Sentence structure",color:"purple"},
   pronouns:{outcome:"Retrieve personal pronouns by person and register.",className:"Vocabulary recall",color:"green"},
+  "personal-pronoun-cases":{outcome:"Добирати особові займенники в Akkusativ і Dativ та розрізняти sie і Sie.",className:"Morphology",color:"green",level:"A1"},
   possessives:{outcome:"Choose the owner stem and the correct possessive ending.",className:"Morphology",color:"orange"},
   sein:{outcome:"Retrieve every present-tense form of sein.",className:"Morphology",color:"blue"},
   frequency:{outcome:"Express frequency precisely from immer to nie.",className:"Vocabulary recall",color:"orange"},
