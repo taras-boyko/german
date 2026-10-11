@@ -66,6 +66,17 @@
   font-size: 12px;
 }
 
+.lesson-identity .lesson-title-de {
+  margin-top: 1px;
+  font-size: 12px;
+  line-height: 1.35;
+}
+
+.lesson-identity .lesson-title-de:not([hidden]) + p {
+  margin-top: 2px;
+  font-size: 11px;
+}
+
 .lesson-library-button,
 .previous-button,
 #new-practice-portion {
@@ -98,10 +109,11 @@
 
 .journey-top {
   display: flex;
-  align-items: baseline;
+  flex-wrap: wrap;
+  align-items: center;
   justify-content: space-between;
-  gap: 16px;
-  margin-bottom: 8px;
+  gap: 10px 16px;
+  margin-bottom: 10px;
 }
 
 .journey-top h2 {
@@ -118,6 +130,118 @@
   color: var(--lesson-accent);
   font-size: 12px;
   font-weight: 600;
+}
+
+.chapter-picker {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  max-width: 100%;
+  border-radius: 6px;
+}
+
+.chapter-picker.interactive {
+  max-width: calc(100% + 12px);
+  margin-inline: -6px;
+  padding: 2px 6px;
+  transition: background-color .15s ease-out;
+}
+
+.chapter-picker.interactive:hover {
+  background: #efedf6;
+}
+
+.chapter-picker.interactive:hover #lesson-chapter-label {
+  color: var(--lesson-accent);
+}
+
+.chapter-picker:focus-within {
+  outline: 3px solid var(--lesson-accent);
+  outline-offset: 2px;
+}
+
+.chapter-picker-chevron {
+  flex: none;
+  width: 8px;
+  height: 8px;
+  margin-top: -4px;
+  border-right: 2px solid var(--lesson-accent);
+  border-bottom: 2px solid var(--lesson-accent);
+  transform: rotate(45deg);
+}
+
+/* The native select stays fully accessible while the heading text sizes the control. */
+#chapter-select {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  border: 0;
+  opacity: 0;
+  font: inherit;
+  font-size: 16px;
+  cursor: pointer;
+  appearance: none;
+}
+
+.phase-switch {
+  display: inline-flex;
+  flex: none;
+  gap: 2px;
+  padding: 3px;
+  border: 1px solid var(--lesson-line);
+  border-radius: 9px;
+  background: #fff;
+}
+
+.phase-switch .phase-option {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-height: 36px;
+  padding: 6px 12px;
+  border-radius: 6px;
+  color: var(--lesson-muted);
+  font-size: 13px;
+  font-weight: 600;
+  white-space: nowrap;
+  transition: background-color .15s ease-out, color .15s ease-out;
+}
+
+.phase-switch .phase-option:hover:not(.current) {
+  background: #f3f1f8;
+}
+
+.phase-switch .phase-option.done:not(.current) {
+  color: #1c6846;
+}
+
+.phase-switch .phase-option.done::before {
+  content: "✓";
+}
+
+.phase-switch .phase-option.current {
+  background: var(--lesson-accent);
+  color: #fff;
+  cursor: default;
+}
+
+.phase-option.paused::after,
+.chapter-phases .phase.paused::after {
+  content: "";
+  width: 6px;
+  height: 6px;
+  margin-left: 2px;
+  border-radius: 50%;
+  background: #d9822b;
+}
+
+.chapter-phases .phase.paused::after {
+  display: inline-block;
+  margin: 0 0 1px 6px;
+  vertical-align: middle;
 }
 
 #stage-objective {
@@ -496,18 +620,9 @@
   color: #923a2b;
 }
 
-.card-stage .feedback-outcome span,
-.card-stage #feedback-explanation {
+.card-stage .feedback-outcome span {
   font-size: 13px;
   line-height: 1.5;
-}
-
-.card-stage #feedback-explanation {
-  padding: 12px 0;
-  border: 0;
-  border-radius: 0;
-  background: none;
-  color: var(--lesson-muted);
 }
 
 .card-stage .correction-display {
@@ -691,6 +806,14 @@
   color: #fff;
 }
 
+#practice-view .phase-switch .phase-option.current {
+  color: #fff;
+}
+
+#practice-view #chapter-select:focus-visible {
+  outline: none;
+}
+
 #practice-view button:focus-visible,
 #practice-view a:focus-visible,
 .lesson-outline summary:focus-visible,
@@ -718,6 +841,12 @@
 
   .lesson-identity h1 {
     font-size: 14px;
+  }
+
+  .lesson-identity .lesson-title-de {
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
   }
 
   .lesson-library-button {

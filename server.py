@@ -24,10 +24,11 @@ class UnsupportedHistoryVersion(ValueError):
 
 def empty_history() -> dict[str, object]:
     return {
-        "version": 4,
+        "version": 5,
         "lessons": {},
         "activeSession": None,
         "activeSessionUpdatedAt": None,
+        "suspendedSessions": {},
         "pendingCompletion": None,
         "pendingCompletionUpdatedAt": None,
         "pendingCompletions": {},
@@ -44,7 +45,7 @@ def normalize_history(value: object) -> dict[str, object]:
     if not isinstance(value, dict):
         raise ValueError("History must be an object.")
     version = value.get("version")
-    if isinstance(version, int) and version > 4:
+    if isinstance(version, int) and version > 5:
         raise UnsupportedHistoryVersion(
             f"History version {version!r} is newer or unsupported."
         )
@@ -53,10 +54,10 @@ def normalize_history(value: object) -> dict[str, object]:
 
     if version == 2:
         return migrate_version_two(value)
-    if version == 3:
-        value = {**value, "version": 4}
-        version = 4
-    if version != 4:
+    if version in (3, 4):
+        value = {**value, "version": 5}
+        version = 5
+    if version != 5:
         raise UnsupportedHistoryVersion(
             f"History version {version!r} is newer or unsupported."
         )
@@ -103,6 +104,7 @@ def normalize_history(value: object) -> dict[str, object]:
     active_session = value.get("activeSession")
     if active_session is not None and not isinstance(active_session, dict):
         raise ValueError("Active session must be an object or null.")
+    suspended_sessions = normalize_suspended_sessions(value.get("suspendedSessions", {}))
     legacy_pending = value.get("pendingCompletion")
     if legacy_pending is not None and not isinstance(legacy_pending, dict):
         raise ValueError("Pending completion must be an object or null.")
@@ -159,10 +161,11 @@ def normalize_history(value: object) -> dict[str, object]:
     }
 
     history = {
-        "version": 4,
+        "version": 5,
         "lessons": lessons,
         "activeSession": active_session,
         "activeSessionUpdatedAt": active_session_updated_at,
+        "suspendedSessions": suspended_sessions,
         "pendingCompletion": pending_completion,
         "pendingCompletionUpdatedAt": pending_completion_updated_at,
         "pendingCompletions": pending_completions,
@@ -356,6 +359,22 @@ def recalculate_counters(history: dict[str, object]) -> None:
         history["activityByDate"][date] = totals
 
 
+def normalize_suspended_sessions(value: object) -> dict[str, dict[str, object]]:
+    """Paused attempts keyed by "lessonId::sequenceId"; a null session is a tombstone."""
+    if not isinstance(value, dict):
+        raise ValueError("Suspended sessions must be an object.")
+    sessions: dict[str, dict[str, object]] = {}
+    for key, entry in value.items():
+        if not isinstance(key, str) or not isinstance(entry, dict):
+            continue
+        updated_at = optional_string(entry.get("updatedAt"))
+        session = entry.get("session")
+        if not updated_at or (session is not None and not isinstance(session, dict)):
+            continue
+        sessions[key] = {"session": session, "updatedAt": updated_at}
+    return sessions
+
+
 def merge_string_lists(first: list[str], second: list[str]) -> list[str]:
     return list(dict.fromkeys([*first, *second]))
 
@@ -424,6 +443,18 @@ def merge_history(current: dict[str, object], incoming: dict[str, object]) -> di
     ):
         merged["activeSession"] = incoming["activeSession"]
         merged["activeSessionUpdatedAt"] = incoming["activeSessionUpdatedAt"]
+    for key, entry in incoming["suspendedSessions"].items():
+        current = merged["suspendedSessions"].get(key)
+        if current is None or str(entry["updatedAt"]) > str(current["updatedAt"]):
+            merged["suspendedSessions"][key] = copy.deepcopy(entry)
+    active = merged.get("activeSession")
+    if isinstance(active, dict):
+        active_key = f"{active.get('lessonId')}::{active.get('sequenceId')}"
+        if (merged["suspendedSessions"].get(active_key) or {}).get("session"):
+            merged["suspendedSessions"][active_key] = {
+                "session": None,
+                "updatedAt": merged.get("activeSessionUpdatedAt") or "",
+            }
     for completion_id, completion in incoming["pendingCompletions"].items():
         current = merged["pendingCompletions"].get(completion_id)
         if current is None or str(completion["completedAt"]) > str(
@@ -481,10 +512,11 @@ def migrate_version_two(value: dict[str, object]) -> dict[str, object]:
         if isinstance(date, str)
     }
     history = {
-        "version": 4,
+        "version": 5,
         "lessons": lessons,
         "activeSession": None,
         "activeSessionUpdatedAt": None,
+        "suspendedSessions": {},
         "pendingCompletion": None,
         "pendingCompletionUpdatedAt": None,
         "pendingCompletions": {},

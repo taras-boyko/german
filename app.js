@@ -1,40 +1,40 @@
 (function(){
 "use strict";
 
-const STATE_VERSION=4;
+const STATE_VERSION=5;
 const PASS_SIZE=7;
-const stateStorageKey="german-learning-state-v4";
-const previousStateStorageKey="german-learning-state-v3";
+const stateStorageKey="german-learning-state-v5";
+const previousStateStorageKeys=["german-learning-state-v4","german-learning-state-v3"];
 const deviceStorageKey="german-learning-device-id";
 const writerStorageKey="german-learning-writer-id";
 const historyEndpoint="/api/lesson-history";
 const $=id=>document.getElementById(id);
 const lessonCatalog={
-  "w-questions":{title:"Питальні слова",outcome:"Добирати потрібне питальне слово й ставити запитання німецькою.",className:"Лексика",color:"purple"},
-  conjugation:{title:"Відмінювання дієслів",outcome:"Уживати правильні закінчення теперішнього часу й дотримуватися правил правопису.",className:"Морфологія",color:"orange"},
-  "strong-verbs":{title:"Сильні дієслова",outcome:"Правильно утворювати форми сильних дієслів у контексті.",className:"Морфологія",color:"blue"},
-  "past-verbs":{title:"Минулий час · A1",outcome:"Уживати Perfekt у повсякденному спілкуванні та впізнавати Präteritum дієслів sein і haben.",className:"Морфологія",color:"purple",level:"A1"},
-  "past-verbs-a2":{title:"Минулий час · A2",outcome:"Уживати Präteritum модальних дієслів і поширені форми для розповіді про життя поряд із Perfekt.",className:"Морфологія",color:"orange",level:"A2"},
-  "past-verbs-b1":{title:"Минулий час · B1",outcome:"Розрізняти Präteritum і Perfekt у розповідях рівня B1.",className:"Морфологія",color:"blue",level:"B1"},
-  perfekt:{title:"Минулий час Perfekt: haben і sein",outcome:"Утворювати Perfekt із правильним haben або sein та Partizip II.",className:"Морфологія",color:"green"},
-  "present-practice":{title:"Теперішній час: практика",outcome:"Пригадувати форми теперішнього часу за контекстом і значенням.",className:"Морфологія",color:"green"},
-  koennen:{title:"Модальні дієслова",outcome:"Уживати können, mögen і möchten у корисних реченнях.",className:"Граматика",color:"blue"},
-  haben:{title:"Мати, отримувати, потребувати",outcome:"Розрізняти значення й форми haben, bekommen і brauchen.",className:"Граматика",color:"green"},
-  "word-order":{title:"Порядок слів",outcome:"Будувати розповідні й питальні речення з правильним порядком слів.",className:"Синтаксис",color:"blue"},
-  "separable-verbs":{title:"Дієслова з відокремлюваними префіксами",outcome:"Правильно розміщувати відокремлювані префікси в різних типах речень.",className:"Синтаксис",color:"purple"},
-  pronouns:{title:"Особові займенники",outcome:"Добирати особові займенники за особою, числом і формою звертання.",className:"Лексика",color:"green"},
-  "personal-pronoun-cases":{title:"Особові займенники: Akkusativ і Dativ",outcome:"Добирати особові займенники в Akkusativ і Dativ та розрізняти sie і Sie.",className:"Морфологія",color:"green",level:"A1"},
-  possessives:{title:"Присвійні займенники",outcome:"Добирати основу за власником і правильне закінчення присвійного займенника.",className:"Морфологія",color:"orange"},
-  sein:{title:"Дієслово sein — бути",outcome:"Пригадувати всі форми sein у теперішньому часі.",className:"Морфологія",color:"blue"},
-  frequency:{title:"Прислівники частотності",outcome:"Точно виражати частотність: від immer до nie.",className:"Лексика",color:"orange"},
-  "local-prepositions":{title:"Прийменники місця: Dativ і Akkusativ",outcome:"Добирати Dativ для місця та Akkusativ для напрямку руху.",className:"Граматика",color:"blue"},
-  "time-expressions":{title:"Часові вирази",outcome:"Добирати часові вирази й називати час у розмові.",className:"Граматика",color:"purple"},
-  "time-worksheet-vocabulary":{title:"Пори року й розпорядок дня",outcome:"Уживати лексику про пори року та розпорядок дня в контексті.",className:"Лексика",color:"green"},
-  "everyday-vocabulary":{title:"Повсякденна лексика",outcome:"Уживати поширені слова про щоденні справи, їжу та напої.",className:"Лексика",color:"orange"},
-  "travel-transport":{title:"Подорожі й транспорт",outcome:"Говорити німецькою про транспорт, маршрути й дії під час подорожі.",className:"Лексика",color:"orange"},
-  "giving-directions":{title:"Як пояснити дорогу",outcome:"Пояснювати прості маршрути й розташування знайомих місць у місті.",className:"Лексика",color:"blue",level:"A1"},
-  "dative-verbs":{title:"Дієслова з Dativ",outcome:"Пригадувати 16 дієслів і вживати їхні форми теперішнього часу з додатками в Dativ.",className:"Лексика",color:"green",level:"A2"},
-  "es-gibt-leisure":{title:"Місто й дозвілля: es gibt",outcome:"Описувати місця, заняття й можливості для дозвілля в місті.",className:"Граматика",color:"purple"}
+  "w-questions":{title:"Питальні слова",germanTitle:"W-Fragen",outcome:"Добирати потрібне питальне слово й ставити запитання німецькою.",className:"Лексика",color:"purple"},
+  conjugation:{title:"Відмінювання дієслів",germanTitle:"Verbkonjugation",outcome:"Уживати правильні закінчення теперішнього часу й дотримуватися правил правопису.",className:"Морфологія",color:"orange"},
+  "strong-verbs":{title:"Сильні дієслова",germanTitle:"Starke Verben",outcome:"Правильно утворювати форми сильних дієслів у контексті.",className:"Морфологія",color:"blue"},
+  "past-verbs":{title:"Минулий час · A1",germanTitle:"Vergangenheit · A1",outcome:"Уживати Perfekt у повсякденному спілкуванні та впізнавати Präteritum дієслів sein і haben.",className:"Морфологія",color:"purple",level:"A1"},
+  "past-verbs-a2":{title:"Минулий час · A2",germanTitle:"Vergangenheit · A2",outcome:"Уживати Präteritum модальних дієслів і поширені форми для розповіді про життя поряд із Perfekt.",className:"Морфологія",color:"orange",level:"A2"},
+  "past-verbs-b1":{title:"Минулий час · B1",germanTitle:"Vergangenheit · B1",outcome:"Розрізняти Präteritum і Perfekt у розповідях рівня B1.",className:"Морфологія",color:"blue",level:"B1"},
+  perfekt:{title:"Минулий час Perfekt: haben і sein",germanTitle:"Das Perfekt: haben und sein",outcome:"Утворювати Perfekt із правильним haben або sein та Partizip II.",className:"Морфологія",color:"green"},
+  "present-practice":{title:"Теперішній час: практика",germanTitle:"Präsens üben",outcome:"Пригадувати форми теперішнього часу за контекстом і значенням.",className:"Морфологія",color:"green"},
+  koennen:{title:"Модальні дієслова",germanTitle:"Modalverben",outcome:"Уживати können, mögen і möchten у корисних реченнях.",className:"Граматика",color:"blue"},
+  haben:{title:"Мати, отримувати, потребувати",germanTitle:"Haben, bekommen, brauchen",outcome:"Розрізняти значення й форми haben, bekommen і brauchen.",className:"Граматика",color:"green"},
+  "word-order":{title:"Порядок слів",germanTitle:"Wortstellung",outcome:"Будувати розповідні й питальні речення з правильним порядком слів.",className:"Синтаксис",color:"blue"},
+  "separable-verbs":{title:"Дієслова з відокремлюваними префіксами",germanTitle:"Trennbare Verben",outcome:"Правильно розміщувати відокремлювані префікси в різних типах речень.",className:"Синтаксис",color:"purple"},
+  pronouns:{title:"Особові займенники",germanTitle:"Personalpronomen",outcome:"Добирати особові займенники за особою, числом і формою звертання.",className:"Лексика",color:"green"},
+  "personal-pronoun-cases":{title:"Особові займенники: Akkusativ і Dativ",germanTitle:"Personalpronomen: Akkusativ und Dativ",outcome:"Добирати особові займенники в Akkusativ і Dativ та розрізняти sie і Sie.",className:"Морфологія",color:"green",level:"A1"},
+  possessives:{title:"Присвійні займенники",germanTitle:"Possessivartikel",outcome:"Добирати основу за власником і правильне закінчення присвійного займенника.",className:"Морфологія",color:"orange"},
+  sein:{title:"Дієслово sein — бути",germanTitle:"Das Verb sein",outcome:"Пригадувати всі форми sein у теперішньому часі.",className:"Морфологія",color:"blue"},
+  frequency:{title:"Прислівники частотності",germanTitle:"Häufigkeitsadverbien",outcome:"Точно виражати частотність: від immer до nie.",className:"Лексика",color:"orange"},
+  "local-prepositions":{title:"Прийменники місця: Dativ і Akkusativ",germanTitle:"Wechselpräpositionen: Dativ und Akkusativ",outcome:"Добирати Dativ для місця та Akkusativ для напрямку руху.",className:"Граматика",color:"blue"},
+  "time-expressions":{title:"Часові вирази",germanTitle:"Zeitangaben",outcome:"Добирати часові вирази й називати час у розмові.",className:"Граматика",color:"purple"},
+  "time-worksheet-vocabulary":{title:"Пори року й розпорядок дня",germanTitle:"Jahreszeiten und Tagesablauf",outcome:"Уживати лексику про пори року та розпорядок дня в контексті.",className:"Лексика",color:"green"},
+  "everyday-vocabulary":{title:"Повсякденна лексика",germanTitle:"Alltagswortschatz",outcome:"Уживати поширені слова про щоденні справи, їжу та напої.",className:"Лексика",color:"orange"},
+  "travel-transport":{title:"Подорожі й транспорт",germanTitle:"Reisen und Verkehrsmittel",outcome:"Говорити німецькою про транспорт, маршрути й дії під час подорожі.",className:"Лексика",color:"orange"},
+  "giving-directions":{title:"Як пояснити дорогу",germanTitle:"Den Weg beschreiben",outcome:"Пояснювати прості маршрути й розташування знайомих місць у місті.",className:"Лексика",color:"blue",level:"A1"},
+  "dative-verbs":{title:"Дієслова з Dativ",germanTitle:"Verben mit Dativ",outcome:"Пригадувати 16 дієслів і вживати їхні форми теперішнього часу з додатками в Dativ.",className:"Лексика",color:"green",level:"A2"},
+  "es-gibt-leisure":{title:"Місто й дозвілля: es gibt",germanTitle:"Stadt und Freizeit: es gibt",outcome:"Описувати місця, заняття й можливості для дозвілля в місті.",className:"Граматика",color:"purple"}
 };
 const ukrainianPluralRules=new Intl.PluralRules("uk");
 function pluralForm(number,one,few,many){
@@ -87,7 +87,7 @@ const legacySequenceAliases={
 };
 
 function emptyState(){
-  return {version:STATE_VERSION,lessons:{},activeSession:null,activeSessionUpdatedAt:null,pendingCompletion:null,pendingCompletionUpdatedAt:null,pendingCompletions:{},resolvedCompletions:{},recentVariants:{},lastPasses:{},activityByDate:{},baseline:{lessons:{},activityByDate:{}},deviceContributions:{}};
+  return {version:STATE_VERSION,lessons:{},activeSession:null,activeSessionUpdatedAt:null,suspendedSessions:{},pendingCompletion:null,pendingCompletionUpdatedAt:null,pendingCompletions:{},resolvedCompletions:{},recentVariants:{},lastPasses:{},activityByDate:{},baseline:{lessons:{},activityByDate:{}},deviceContributions:{}};
 }
 
 function stableHash(value){
@@ -121,6 +121,11 @@ function normalizeState(value){
   const state=emptyState();
   Object.entries(value.lessons||{}).forEach(([lessonId,lesson])=>{state.lessons[lessonId]=normalizeLessonState(lesson)});
   state.activeSession=value.activeSession&&typeof value.activeSession==="object"?value.activeSession:null;
+  Object.entries(value.suspendedSessions||{}).forEach(([key,entry])=>{
+    if(entry&&typeof entry==="object"&&typeof entry.updatedAt==="string"){
+      state.suspendedSessions[key]={session:entry.session&&typeof entry.session==="object"?entry.session:null,updatedAt:entry.updatedAt};
+    }
+  });
   Object.entries(value.recentVariants||{}).forEach(([sequenceId,ids])=>{state.recentVariants[sequenceId]=uniqueStrings(ids).slice(-100)});
   Object.entries(value.lastPasses||{}).forEach(([sequenceId,lastPass])=>{
     if(lastPass&&typeof lastPass==="object"&&typeof lastPass.updatedAt==="string"){
@@ -231,12 +236,13 @@ function migrateLegacyState(){
 
 function loadState(){
   try{
-    const saved=JSON.parse(localStorage.getItem(stateStorageKey)||localStorage.getItem(previousStateStorageKey)||"null");
+    const raw=[stateStorageKey,...previousStateStorageKeys].map(key=>localStorage.getItem(key)).find(Boolean);
+    const saved=JSON.parse(raw||"null");
     if(Number(saved?.version)>STATE_VERSION){
       compatibilityError=`Збережений на пристрої прогрес має версію ${saved.version}, яку цей застосунок не може безпечно змінити. Оновіть застосунок перед навчанням.`;
       return emptyState();
     }
-    return saved?.version===STATE_VERSION?normalizeState(saved):migrateLegacyState();
+    return Number(saved?.version)>=2?normalizeState(saved):migrateLegacyState();
   }catch(error){
     console.error("Could not restore local learning state.",error);
     return emptyState();
@@ -360,6 +366,14 @@ function mergeState(local,disk){
   });
   const localUpdated=Date.parse(merged.activeSessionUpdatedAt||"")||0,diskUpdated=Date.parse(disk.activeSessionUpdatedAt||"")||0;
   if(diskUpdated>localUpdated){merged.activeSession=disk.activeSession;merged.activeSessionUpdatedAt=disk.activeSessionUpdatedAt}
+  Object.entries(disk.suspendedSessions||{}).forEach(([key,entry])=>{
+    const current=merged.suspendedSessions[key];
+    if(!current||Date.parse(entry.updatedAt)>Date.parse(current.updatedAt))merged.suspendedSessions[key]=entry;
+  });
+  const activeKey=merged.activeSession&&sessionKey(merged.activeSession.lessonId,merged.activeSession.sequenceId);
+  if(activeKey&&merged.suspendedSessions[activeKey]?.session){
+    merged.suspendedSessions[activeKey]={session:null,updatedAt:merged.activeSessionUpdatedAt||new Date().toISOString()};
+  }
   Object.entries(disk.pendingCompletions||{}).forEach(([id,completion])=>{
     const current=merged.pendingCompletions[id];
     if(!current||Date.parse(completion.completedAt||"")>Date.parse(current.completedAt||""))merged.pendingCompletions[id]=completion;
@@ -499,6 +513,7 @@ function decorateDefinitions(){
           id:card.id||`${targetId}:${type}:${stableHash(variantKey)}`,
           targetId,
           type,
+          explanation:card.explanation||cardExplanations[targetId],
           promptText:card.promptText||(card.answer?(card.prompt||card.word):card.translation),
           response:card.response||{mode:"text",scope:type==="sentence-build"?"sentence":type==="cloze"?"word":card.word.includes(" ")?"phrase":"word",accepted:explicitAnswers(card),caseSensitive:Boolean(card.caseSensitive),punctuationSensitive:Boolean(card.punctuationSensitive)}
         };
@@ -642,6 +657,9 @@ function recommendedStageIndex(lessonId){
     const resumed=definition.stages.findIndex(stage=>stage.id===active.sequenceId);
     if(resumed>=0)return resumed;
   }
+  const suspended=definition.stages.map((stage,stageIndex)=>({stageIndex,entry:suspendedEntry(lessonId,stage.id)}))
+    .filter(item=>item.entry).sort((a,b)=>Date.parse(b.entry.updatedAt)-Date.parse(a.entry.updatedAt))[0];
+  if(suspended)return suspended.stageIndex;
   const incomplete=definition.stages.findIndex(stage=>!stageIsComplete(lessonId,stage));
   if(incomplete>=0)return incomplete;
   const due=Date.parse(lessonState(lessonId).dueAt||"")<=Date.now();
@@ -677,6 +695,7 @@ function restoreSession(){
 
 function createSession(){
   const stage=activeStage();
+  discardSuspendedSession(activeDeckId,stage.id);
   deck=samplePass(activeDeckId,stage);
   index=0;
   completed=0;
@@ -707,8 +726,56 @@ function createSession(){
 }
 
 function startStageAttempt(forceNew=false){
-  if(!forceNew&&canResume(activeDeckId,activeStage()))restoreSession();
-  else createSession();
+  const stage=activeStage();
+  if(!forceNew&&!canResume(activeDeckId,stage)){
+    const suspended=takeSuspendedSession(activeDeckId,stage.id);
+    if(suspended){
+      const now=new Date().toISOString();
+      learningState.activeSession={...suspended,updatedAt:now};
+      learningState.activeSessionUpdatedAt=now;
+    }
+  }
+  if(!forceNew&&canResume(activeDeckId,stage)){
+    restoreSession();
+    saveState();
+  }else createSession();
+}
+
+function sessionKey(lessonId,sequenceId){return `${lessonId}::${sequenceId}`}
+
+function suspendedEntry(lessonId,sequenceId){
+  const entry=learningState.suspendedSessions[sessionKey(lessonId,sequenceId)];
+  return entry?.session?entry:null;
+}
+
+function sessionHasProgress(session){
+  return (Number(session.index)||0)>0||Object.keys(session.cardStatus||{}).length>0||Object.keys(session.cardInputs||{}).length>0||(session.retryQueue||[]).length>0;
+}
+
+function discardSuspendedSession(lessonId,sequenceId){
+  if(!suspendedEntry(lessonId,sequenceId))return;
+  learningState.suspendedSessions[sessionKey(lessonId,sequenceId)]={session:null,updatedAt:new Date().toISOString()};
+}
+
+function takeSuspendedSession(lessonId,sequenceId){
+  const session=suspendedEntry(lessonId,sequenceId)?.session;
+  if(session)discardSuspendedSession(lessonId,sequenceId);
+  return session||null;
+}
+
+// Park the current attempt so switching stages or lessons never discards answers.
+function suspendActiveSession(nextLessonId,nextStage){
+  const session=learningState.activeSession;
+  if(!session||session.lessonId===nextLessonId&&session.sequenceId===nextStage.id)return;
+  if(session.lessonId===activeDeckId&&session.sequenceId===activeDefinition()?.stages[activeStageIndex]?.id&&deck.length)persistPosition();
+  const now=new Date().toISOString();
+  if(sessionHasProgress(session))learningState.suspendedSessions[sessionKey(session.lessonId,session.sequenceId)]={session:{...session,updatedAt:now},updatedAt:now};
+  learningState.activeSession=null;
+  learningState.activeSessionUpdatedAt=now;
+}
+
+function lessonHasOpenAttempt(lessonId){
+  return learningState.activeSession?.lessonId===lessonId||deckDefinitions[lessonId].stages.some(stage=>suspendedEntry(lessonId,stage.id));
 }
 
 function persistPosition(){
@@ -723,7 +790,7 @@ function persistPosition(){
 
 function selectStage(stageIndex,forceNew=false,focusTarget="flashcard"){
   const stage=activeDefinition().stages[stageIndex];
-  if(!confirmSessionReplacement(activeDeckId,stage))return;
+  suspendActiveSession(activeDeckId,stage);
   activeStageIndex=stageIndex;
   startStageAttempt(forceNew);
   render(focusTarget);
@@ -733,22 +800,13 @@ function selectDeck(lessonId,stageId="",forceNew=false){
   const stages=deckDefinitions[lessonId].stages;
   const requested=stageId?stages.findIndex(stage=>stage.id===stageId):-1;
   const stageIndex=requested>=0?requested:recommendedStageIndex(lessonId);
-  if(!confirmSessionReplacement(lessonId,stages[stageIndex]))return false;
+  suspendActiveSession(lessonId,stages[stageIndex]);
   activeDeckId=lessonId;
   activeStageIndex=stageIndex;
   startStageAttempt(forceNew);
   $("deck-guide-disclosure").open=false;
   render("flashcard");
   return true;
-}
-
-function confirmSessionReplacement(lessonId,stage){
-  const session=learningState.activeSession;
-  if(!session||session.lessonId===lessonId&&session.sequenceId===stage.id)return true;
-  const hasProgress=(Number(session.index)||0)>0||Object.keys(session.cardStatus||{}).length>0||Object.keys(session.cardInputs||{}).length>0||(session.retryQueue||[]).length>0;
-  if(!hasProgress)return true;
-  const currentLesson=deckDefinitions[session.lessonId]?.title||"поточний урок";
-  return window.confirm(`Почати етап «${stage.title}»? Незавершений підхід в уроці «${currentLesson}» та чергу повторення помилок буде скасовано. Засвоєний матеріал залишиться збереженим.`);
 }
 
 function resumeInitialSession(){
@@ -776,7 +834,7 @@ function reconcileRuntimeState(){
     $("celebration").hidden=true;
     $("confetti").replaceChildren();
     celebrating=false;
-    if(!$("practice-view").classList.contains("hidden"))selectDeck(activeDeckId,"",true);
+    if(!$("practice-view").classList.contains("hidden"))selectDeck(activeDeckId);
   }
 }
 
@@ -905,8 +963,8 @@ function feedbackExplanation(card){
 
 function feedbackOutcome(card,wasCorrect){
   const answer=card.response.accepted[0];
-  if(wasCorrect)return {tone:"correct",title:`Правильно — ${answer}`,detail:"Ви пригадали потрібну відповідь."};
-  return {tone:"incorrect",title:`Не зовсім — ${answer}`,detail:"Порівняйте свою відповідь із виправленням нижче. Це завдання повернеться для повторення."};
+  if(wasCorrect)return {tone:"correct",title:`Правильно — ${answer}`,detail:""};
+  return {tone:"incorrect",title:`Не зовсім — ${answer}`,detail:feedbackExplanation(card)};
 }
 
 function locationScene(card){
@@ -1012,6 +1070,7 @@ function render(focusTarget=""){
     const outcome=feedbackOutcome(card,verified);
     $("feedback-title").textContent=outcome.title;
     $("feedback-detail").textContent=outcome.detail;
+    $("feedback-detail").hidden=!outcome.detail;
   }
   $("example-label").textContent=verificationMode&&revealed?example.label:"Приклад речення";
   $("answer-translation").textContent=verificationMode&&revealed?`Значення українською: ${card.translation}`:"";
@@ -1029,6 +1088,9 @@ function render(focusTarget=""){
   $("session-progress").parentElement.setAttribute("aria-valuemax",String(deck.length));
   $("session-progress").parentElement.setAttribute("aria-valuenow",String(passProgress));
   $("deck-label").textContent=definition.label;
+  $("deck-label-de").textContent=definition.catalog.germanTitle||"";
+  $("deck-label-de").title=definition.catalog.germanTitle||"";
+  $("deck-label-de").hidden=!definition.catalog.germanTitle;
   document.querySelector(".nav-count").textContent=String(deck.length);
   $("verification-label").textContent=inputLabel;
   $("verification-label").hidden=answerRevealed;
@@ -1052,8 +1114,6 @@ function render(focusTarget=""){
   $("check-button").disabled=!revealed;
   if(answerRevealed)renderCorrection($("verification-input").value,expected,card.response);else $("correction-text").replaceChildren();
   $("verification-feedback").hidden=feedbackVisible;
-  $("feedback-explanation").hidden=!answerRevealed;
-  $("feedback-explanation").textContent=answerRevealed?feedbackExplanation(card):"";
   updatePageTitle("practice");
   if(focusTarget)requestAnimationFrame(()=>{
     const element=$(focusTarget);
@@ -1072,6 +1132,32 @@ function lessonChapters(stages){
   },[]);
 }
 
+function stepButton(chapter,{stage,stageIndex},className){
+  const button=document.createElement("button"),done=stageIsComplete(activeDeckId,stage),current=stageIndex===activeStageIndex;
+  const paused=!current&&Boolean(suspendedEntry(activeDeckId,stage.id));
+  button.type="button";
+  button.className=`${className}${current?" current":""}${done?" done":""}${paused?" paused":""}`;
+  button.textContent=stage.phase||(stage.mode==="input"?"Практика":"Вивчення");
+  button.setAttribute("aria-current",current?"step":"false");
+  button.setAttribute("aria-label",`${chapter.name} · ${stage.title}${done?" (завершено)":""}${paused?" (незавершений підхід збережено)":""}`);
+  if(paused)button.title="Незавершений підхід збережено";
+  button.addEventListener("click",()=>{if(!current)selectStage(stageIndex)});
+  return button;
+}
+
+// Prefer the same kind of step (learn or practice) when moving between chapters.
+function selectChapter(chapterIndex){
+  const chapter=lessonChapters(activeDefinition().stages)[chapterIndex];
+  if(!chapter)return;
+  const mode=activeStage().mode,sameMode=chapter.steps.filter(step=>step.stage.mode===mode);
+  const step=sameMode.find(item=>suspendedEntry(activeDeckId,item.stage.id))
+    ||sameMode.find(item=>!stageIsComplete(activeDeckId,item.stage))
+    ||sameMode[0]
+    ||chapter.steps.find(item=>suspendedEntry(activeDeckId,item.stage.id))
+    ||chapter.steps[0];
+  if(step.stageIndex!==activeStageIndex)selectStage(step.stageIndex,false,"chapter-select");
+}
+
 function renderLessonPath(){
   const stages=activeDefinition().stages,chapters=lessonChapters(stages),current=activeStage();
   const doneCount=stages.filter(stage=>stageIsComplete(activeDeckId,stage)).length;
@@ -1082,6 +1168,22 @@ function renderLessonPath(){
   $("stage-objective").textContent=current.objective;
   $("lesson-step-count").textContent=`Завершено ${doneCount} з ${stages.length} етапів`;
   $("lesson-outline-count").textContent=counted(chapters.length,"розділ","розділи","розділів");
+  const chapter=chapters[activeChapterIndex],multiChapter=chapters.length>1,multiStep=chapter.steps.length>1;
+  $("chapter-picker").classList.toggle("interactive",multiChapter);
+  $("chapter-picker-chevron").hidden=!multiChapter;
+  $("chapter-select").hidden=!multiChapter;
+  if(multiChapter){
+    $("chapter-select").replaceChildren(...chapters.map((item,chapterIndex)=>{
+      const option=document.createElement("option"),done=item.steps.every(step=>stageIsComplete(activeDeckId,step.stage));
+      option.value=String(chapterIndex);
+      option.textContent=`${chapterIndex+1}. ${item.name}${done?" ✓":""}`;
+      return option;
+    }));
+    $("chapter-select").value=String(activeChapterIndex);
+  }
+  $("lesson-phase-label").hidden=multiStep;
+  $("phase-switch").hidden=!multiStep;
+  $("phase-switch").replaceChildren(...(multiStep?chapter.steps.map(step=>stepButton(chapter,step,"phase-option")):[]));
   $("lesson-steps").replaceChildren(...chapters.map((chapter,chapterIndex)=>{
     const item=document.createElement("li"),isComplete=chapter.steps.every(step=>stageIsComplete(activeDeckId,step.stage));
     item.className=`journey-chapter${chapterIndex===activeChapterIndex?" active":""}${isComplete?" complete":""}`;
@@ -1091,16 +1193,7 @@ function renderLessonPath(){
     const name=document.createElement("span");name.className="chapter-name";name.textContent=chapter.name;
     head.append(marker,name);
     const phases=document.createElement("div");phases.className="chapter-phases";
-    phases.append(...chapter.steps.map(({stage,stageIndex})=>{
-      const button=document.createElement("button"),done=stageIsComplete(activeDeckId,stage);
-      button.type="button";
-      button.className=`phase${stageIndex===activeStageIndex?" current":""}${done?" done":""}`;
-      button.textContent=stage.phase||(stage.mode==="input"?"Практика":"Вивчення");
-      button.setAttribute("aria-current",stageIndex===activeStageIndex?"step":"false");
-      button.setAttribute("aria-label",`${chapter.name} · ${stage.title}${done?" (завершено)":""}`);
-      button.addEventListener("click",()=>selectStage(stageIndex));
-      return button;
-    }));
+    phases.append(...chapter.steps.map(step=>stepButton(chapter,step,"phase")));
     item.append(head,phases);
     return item;
   }));
@@ -1285,7 +1378,7 @@ function showCompletion(stage,session,newMastery){
     completionPrimaryAction=()=>selectStage(activeStageIndex,true);
   }else if(nextStage){
     $("completion-primary").textContent=nextStage.mode==="input"?"Перейти до практики":"Наступний розділ";
-    completionPrimaryAction=()=>selectStage(nextIndex,true);
+    completionPrimaryAction=()=>selectStage(nextIndex);
   }else{
     $("completion-primary").textContent="До бібліотеки уроків";
     completionPrimaryAction=()=>showView("library");
@@ -1335,7 +1428,7 @@ function lessonStatus(lessonId){
   const allLearned=learnStages.every(stage=>stageIsComplete(lessonId,stage));
   const allMastered=practiceStages.length>0&&practiceStages.every(stage=>stageIsComplete(lessonId,stage));
   const hasTargetProgress=[...Object.values(lesson.learnedTargets),...Object.values(lesson.masteredTargets)].some(targets=>targets.length);
-  const hasProgress=lesson.completedLearn.length||lesson.masteredPractice.length||lesson.attempts||hasTargetProgress||learningState.activeSession?.lessonId===lessonId||hasPendingCompletionForLesson(lessonId);
+  const hasProgress=lesson.completedLearn.length||lesson.masteredPractice.length||lesson.attempts||hasTargetProgress||lessonHasOpenAttempt(lessonId)||hasPendingCompletionForLesson(lessonId);
   if(!hasProgress)return {key:"new",label:"Не розпочато"};
   if(allMastered&&Date.parse(lesson.dueAt||"")<=Date.now())return {key:"due",label:"Час повторити"};
   if(allMastered)return {key:"mastered",label:"Засвоєно"};
@@ -1345,12 +1438,19 @@ function lessonStatus(lessonId){
 
 function actionLabel(lessonId){
   const status=lessonStatus(lessonId);
-  if(learningState.activeSession?.lessonId===lessonId)return "Продовжити";
+  if(lessonHasOpenAttempt(lessonId))return "Продовжити";
   if(status.key==="due")return "Повторити зараз";
   if(status.key==="mastered")return "Повторити урок";
   if(status.key==="ready")return "Перейти до практики";
   if(status.key==="learning")return "Продовжити";
   return deckDefinitions[lessonId].stages[0].mode==="input"?"Почати практику":"Почати вивчення";
+}
+
+function germanTitleElement(definition,tag="p"){
+  if(!definition.catalog.germanTitle)return null;
+  const element=document.createElement(tag);
+  element.className="lesson-title-de";element.lang="de";element.textContent=definition.catalog.germanTitle;
+  return element;
 }
 
 function renderLibrary(){
@@ -1371,7 +1471,7 @@ function renderLibrary(){
     meta.append(sequences,level,classification);
     const button=document.createElement("button");button.type="button";button.className="primary-button";button.innerHTML=`<span>${actionLabel(lessonId)}</span><span aria-hidden="true">→</span>`;
     button.addEventListener("click",()=>{if(selectDeck(lessonId))showView("practice")});
-    article.append(top,title,outcome,meta,button);
+    article.append(...[top,title,germanTitleElement(definition),outcome,meta,button].filter(Boolean));
     return article;
   }));
 }
@@ -1415,7 +1515,7 @@ function reviewStage(lessonId){
 
 function reviewLesson(lessonId){
   const stage=reviewStage(lessonId);
-  if(selectDeck(lessonId,stage.id,true))showView("practice");
+  if(selectDeck(lessonId,stage.id))showView("practice");
 }
 
 function recommendedLesson(){
@@ -1445,7 +1545,7 @@ function renderProgress(){
     const definition=deckDefinitions[lessonId],lesson=lessonState(lessonId),status=lessonStatus(lessonId),accuracyValue=lessonAccuracy(lesson);
     const item=document.createElement("article");item.className="lesson-progress-card";
     const heading=document.createElement("div"),title=document.createElement("h4"),last=document.createElement("span");
-    title.textContent=definition.title;last.className="lesson-last-practice";last.textContent=`${status.label} · ${relativePracticeTime(lesson.lastPracticedAt)}`;heading.append(title,last);
+    title.textContent=definition.title;last.className="lesson-last-practice";last.textContent=`${status.label} · ${relativePracticeTime(lesson.lastPracticedAt)}`;heading.append(...[title,germanTitleElement(definition),last].filter(Boolean));
     const details=document.createElement("div");details.className="lesson-progress-details";
     const accuracy=document.createElement("strong"),accuracyLabel=document.createElement("span"),attempts=document.createElement("span");
     accuracy.textContent=accuracyValue===null?"—":`${accuracyValue}%`;accuracyLabel.textContent="точність перших відповідей";attempts.textContent=lesson.firstAttempts?counted(lesson.firstAttempts,"перша відповідь","перші відповіді","перших відповідей"):"Відповідей у практиці ще немає";details.append(accuracy,accuracyLabel,attempts);
@@ -1476,7 +1576,7 @@ function showView(view){
   window.scrollTo(0,0);
   updatePageTitle(view);
   if(view==="practice"){
-    if(!learningState.activeSession)selectDeck(activeDeckId,"",true);
+    if(!learningState.activeSession)selectDeck(activeDeckId);
     else render(verificationMode?"verification-input":"flashcard");
   }
   if(view==="library")renderLibrary();
@@ -1506,6 +1606,7 @@ $("verification-input").addEventListener("input",event=>{
 $("check-button").addEventListener("click",checkAnswer);
 $("continue-button").addEventListener("click",next);
 $("previous-button").addEventListener("click",previous);
+$("chapter-select").addEventListener("change",event=>selectChapter(Number(event.target.value)));
 $("lesson-library").addEventListener("click",()=>{showView("library");$("page-title").focus()});
 $("lesson-home").addEventListener("click",event=>{event.preventDefault();$("lesson-library").click()});
 $("new-practice-portion").addEventListener("click",()=>startNewPass());

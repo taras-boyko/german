@@ -70,6 +70,10 @@ input control when typed recall can assess the skill.
   order; never infer or autocorrect missing, extra, or misspelled content.
 - A wrong answer shows a compact token-level correction and explanation. It does not
   expose the answer before an attempt and does not count as correct after reveal.
+- Correct feedback states only the result and the answer; do not add generic praise.
+  Wrong-answer explanations name the rule that decides this answer (case, ending, stem
+  change, auxiliary, word position), not just its meaning. Plain vocabulary recall may
+  fall back to a meaning association.
 - Track first-attempt correctness separately from eventual completion. This keeps
   accuracy meaningful while allowing learners to recover from mistakes.
 
@@ -150,6 +154,9 @@ future passes provide contextual variety and retention checks.
 - Use Ukrainian for navigation, lesson names, outcomes, chapter and phase labels,
   instructions, feedback, completion, progress, and accessible control names.
   Keep German examples, exercise text, answers, and useful grammar terms in German.
+- Every lesson name carries its German title as a smaller secondary line (marked
+  `lang="de"`) wherever the lesson name is the heading: library, lesson header, and
+  progress list.
 - Use consistent terms: lesson = «урок», chapter = «розділ», sequence = «етап»,
   pass = «підхід», learn = «вивчення», practice = «практика».
 - Inflect Ukrainian count labels correctly. Localization must not change lesson,
@@ -169,7 +176,14 @@ future passes provide contextual variety and retention checks.
 - Keep lesson, chapter, phase, objective, card position, and completion visible.
 - Use the Focus room layout: one large centered card, a compact lesson header, and
   a direct return to the library. Hide global navigation and activity metrics while
-  studying; keep chapter navigation and new-pass controls in a collapsed lesson outline.
+  studying.
+- The lesson header lets the learner switch freely: a chapter picker when the lesson
+  has several chapters, and a step switch (Вивчення / Практика / Частина N) when the
+  chapter has several steps. Each step shows whether it is done or has a saved
+  unfinished attempt. The collapsed lesson outline keeps the full overview and the
+  new-pass control.
+- Leaving a step never discards its unfinished attempt: it is suspended and resumes
+  exactly where it stopped when the learner returns. Switching needs no confirmation.
 - Use one card workspace for all exercise types and one predictable keyboard flow.
 - Preserve position when switching screens. Explicitly starting a new attempt is the
   only action that resets order and response state.
@@ -195,7 +209,7 @@ Use one versioned logical progress model even if local and disk adapters differ:
 
 ```js
 {
-  version: 4,
+  version: 5,
   lessons: {
     [lessonId]: {
       completedLearn: ["sequence-id"],
@@ -217,6 +231,12 @@ Use one versioned logical progress model even if local and disk adapters differ:
     index: 0,
     retryQueue: ["card-id"],
     answered: {}
+  },
+  suspendedSessions: {
+    ["lessonId::sequenceId"]: {
+      session: {/* same shape as activeSession */} | null,
+      updatedAt: "ISO-8601 timestamp"
+    }
   },
   pendingCompletions: {
     ["stable-completion-id"]: {
@@ -268,8 +288,10 @@ Use one versioned logical progress model even if local and disk adapters differ:
 - Daily sampling state may expire; mastery, attempts, and history do not.
 - Persist recent variant history long enough to enforce shuffle-bag coverage and avoid
   serving the same subset on consecutive passes.
-- Switching to another sequence while a pass has responses or a retry queue requires an
-  explicit discard confirmation unless per-sequence suspended sessions are persisted.
+- Switching to another sequence suspends the current pass under its sequence key when
+  it has any progress. Resuming, finishing, or explicitly restarting that sequence
+  replaces the entry with a `null` tombstone so an older copy cannot revive it; merge
+  suspended entries per key by the newest `updatedAt`.
 
 ## 7. Content and change quality
 
