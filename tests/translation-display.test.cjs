@@ -9,7 +9,7 @@ function runtime(){
   function element(){
     let text="";
     return {
-      hidden:false,value:"",children:[],dataset:{},style:{},
+      hidden:false,value:"",children:[],dataset:{},style:{setProperty:()=>{}},
       get textContent(){return this.children.length?this.children.map(child=>child.textContent).join(""):text},
       set textContent(value){text=value;this.children=[]},
       classList:{toggle:()=>{},remove:()=>{}},

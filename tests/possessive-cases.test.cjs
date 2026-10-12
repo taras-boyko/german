@@ -115,8 +115,9 @@ function runtime(saved=new Map()){
   }
   function open(stageIndex){
     document.getElementById("nav-library").click();
-    const article=document.getElementById("section-grid").children.find(item=>
-      item.children.some(child=>child.textContent===app.definitions[lessonId].title));
+    const descendants=element=>element.children.flatMap(child=>[child,...descendants(child)]);
+    const article=descendants(document.getElementById("section-grid")).find(item=>item.tagName==="ARTICLE"&&
+      descendants(item).some(child=>child.tagName==="H4"&&child.textContent===app.definitions[lessonId].title));
     assert.ok(article,"lesson must be discoverable in the library");
     article.children.at(-1).click();
     if(stageIndex!==undefined){

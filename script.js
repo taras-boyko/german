@@ -1791,6 +1791,18 @@ const brauchenPracticeCards=withVerbParadigms([
   brauchenClozeCard("Ihr braucht eure Bücher.","Вам потрібні ваші книжки.","Ihr ___ eure Bücher. (brauchen)","braucht","потребуєте"),
   brauchenClozeCard("Sie brauchen einen Termin.","Їм потрібна зустріч.","Sie ___ einen Termin. (brauchen)","brauchen","потребують")
 ],[brauchenParadigm]);
+// Frequency adverbs on a 0–100 % scale from nie to immer; each card marks its own step.
+const frequencyScale=[
+  {word:"nie",percent:0},
+  {word:"fast nie",percent:10},
+  {word:"selten",percent:25},
+  {word:"manchmal",percent:40},
+  {word:"oft",percent:60},
+  {word:"meistens",percent:75},
+  {word:"fast immer",percent:90},
+  {word:"immer",percent:100}
+];
+const frequencyMark=word=>({scale:frequencyScale,active:frequencyScale.findIndex(step=>step.word===word)});
 const frequencyCards=[
   {word:"immer",translation:"завжди",category:"FREQUENCY ADVERB",example:"Ich trinke immer Kaffee.",exampleTranslation:"Я завжди п'ю каву."},
   {word:"fast immer",translation:"майже завжди",category:"FREQUENCY ADVERB",example:"Sie kommt fast immer pünktlich.",exampleTranslation:"Вона майже завжди приходить вчасно."},
@@ -1800,7 +1812,7 @@ const frequencyCards=[
   {word:"selten",translation:"рідко",category:"FREQUENCY ADVERB",example:"Sie fährt selten mit dem Taxi.",exampleTranslation:"Вона рідко їздить таксі."},
   {word:"fast nie",translation:"майже ніколи",category:"FREQUENCY ADVERB",example:"Du kommst fast nie zu spät.",exampleTranslation:"Ти майже ніколи не запізнюєшся."},
   {word:"nie",translation:"ніколи",category:"FREQUENCY ADVERB",example:"Wir essen nie Fleisch.",exampleTranslation:"Ми ніколи не їмо м'яса."}
-];
+].map(card=>({...card,frequency:frequencyMark(card.word)}));
 const frequencyPracticeCards=frequencyCards.map(card=>({...card}));
 const timeExpressionCards=[
   {word:"um",translation:"о (годині)",category:"PRÄPOSITION · ZEIT",example:"Der Deutschkurs beginnt um acht Uhr.",exampleTranslation:"Курс німецької починається о восьмій годині."},
@@ -1812,13 +1824,18 @@ const timeExpressionCards=[
   {word:"in der Nacht",translation:"уночі (конкретна ніч)",category:"PRÄPOSITION · NACHT",example:"In der Nacht hat es geschneit.",exampleTranslation:"Уночі випав сніг."},
   {word:"heute Nacht / letzte Nacht",translation:"цієї ночі / минулої ночі (без прийменника)",category:"ZEITAUSDRUCK · NACHT",example:"Letzte Nacht habe ich schlecht geschlafen.",exampleTranslation:"Минулої ночі я погано спав / спала."}
 ];
+// The analog clock reads its hands from the digital time, e.g. "3:15".
+const clockTime=digitalTime=>{
+  const [hour,minute]=digitalTime.split(":").map(Number);
+  return {hour,minute};
+};
 const spokenTimeCards=[
   {word:"fünf nach zehn",translation:"10:05",category:"UHRZEIT · GESPROCHEN",example:"Es ist fünf nach zehn.",exampleTranslation:"Зараз 10:05."},
   {word:"zehn vor sechs",translation:"5:50",category:"UHRZEIT · GESPROCHEN",example:"Es ist zehn vor sechs.",exampleTranslation:"Зараз 5:50."},
   {word:"Viertel nach drei",translation:"3:15",category:"UHRZEIT · GESPROCHEN",example:"Es ist Viertel nach drei.",exampleTranslation:"Зараз 3:15."},
   {word:"halb vier",translation:"3:30",category:"UHRZEIT · GESPROCHEN",example:"Es ist halb vier.",exampleTranslation:"Зараз 3:30 — половина до четвертої."},
   {word:"Viertel vor sieben",translation:"6:45",category:"UHRZEIT · GESPROCHEN",example:"Es ist Viertel vor sieben.",exampleTranslation:"Зараз 6:45."}
-];
+].map(card=>({...card,clock:clockTime(card.translation)}));
 const timeExpressionClozeCard=(word,translation,prompt,answer,answerTranslation)=>({word,translation,category:"ZEIT · LÜCKENTEXT",prompt,exampleTranslation:"Доповни речення правильною формою часу.",answer,answerTranslation,practiceType:"cloze"});
 const timeExpressionPracticeCards=[
   timeExpressionClozeCard("Der Kurs beginnt um neun Uhr.","Курс починається о дев'ятій годині.","Der Kurs beginnt ___ neun Uhr.","um","о (годині)"),
@@ -1831,7 +1848,7 @@ const timeExpressionPracticeCards=[
   timeExpressionClozeCard("In der Nacht hat es geschneit.","Уночі випав сніг.","___ Nacht hat es geschneit.","in der","уночі (конкретна ніч)"),
   timeExpressionClozeCard("Letzte Nacht habe ich schlecht geschlafen.","Минулої ночі я погано спав / спала.","___ Nacht habe ich schlecht geschlafen.","letzte","минулої (без прийменника)")
 ];
-const spokenTimePracticeCard=(spokenTime,digitalTime)=>({word:spokenTime,translation:digitalTime,category:"UHRZEIT · GESPROCHEN",prompt:`Es ist ${digitalTime} Uhr.`,exampleTranslation:"Напиши час розмовною німецькою.",answer:spokenTime,answerTranslation:digitalTime,practiceType:"cloze"});
+const spokenTimePracticeCard=(spokenTime,digitalTime)=>({word:spokenTime,translation:digitalTime,category:"UHRZEIT · GESPROCHEN",prompt:`Es ist ${digitalTime} Uhr.`,exampleTranslation:"Напиши час розмовною німецькою.",answer:spokenTime,answerTranslation:digitalTime,practiceType:"cloze",clock:clockTime(digitalTime)});
 const spokenTimePracticeCards=[
   spokenTimePracticeCard("fünf nach zehn","10:05"),
   spokenTimePracticeCard("zehn vor sechs","5:50"),
@@ -2261,6 +2278,26 @@ attachNouns(travelPhraseCards,{
   "die Fahrt":nounMeta("feminine","Fahrt"),
   "an der Haltestelle":nounMeta("feminine","Haltestelle")
 });
+// Pictures name files in assets/icons (Microsoft Fluent Emoji Flat, MIT). A word with no fitting picture gets none.
+function attachPictures(cards,pictures){
+  for(const card of cards){
+    const picture=pictures[card.word];
+    if(picture)card.picture=picture;
+  }
+}
+attachPictures(travelTransportCards,{
+  "der Bahnhof":"station","der Flughafen":"airplane-departure","die S-Bahn":"light-rail","das Taxi":"taxi",
+  "der Bus":"bus","der Zug":"high-speed-train","die Straßenbahn":"tram-car","die U-Bahn":"metro",
+  "das Flugzeug":"airplane","das Gleis":"railway-track","der Koffer":"luggage","die Tasche":"handbag",
+  "das Gepäck":"baggage-claim","die Haltestelle":"bus-stop"
+});
+attachPictures(travelPhraseCards,{
+  "der nächste Bahnhof":"station","mit dem Zug fahren":"high-speed-train",
+  "mit dem Flugzeug fliegen":"airplane","an der Haltestelle":"bus-stop"
+});
+attachPictures(travelActionCards,{
+  "anrufen":"telephone-receiver","einkaufen":"shopping-cart","fernsehen":"television"
+});
 attachNouns(directionLandmarkCards,{
   "an der Kreuzung":nounMeta("feminine","Kreuzung"),
   "in der Nähe von":nounMeta("feminine","Nähe"),
@@ -2296,6 +2333,40 @@ attachNouns(leisureActivityCards,{
 attachNouns(photoDescriptionCards,{
   "auf dem Foto":nounMeta("neuter","Foto"),
   "der Mensch / die Menschen":nounMeta("masculine","Mensch",{exampleWord:"",plural:"Menschen",pluralExampleWord:"Menschen"})
+});
+attachPictures(everydayVocabularyFoodCards,{
+  "der Kräutertee":"teacup-without-handle","die Süßigkeiten":"candy","der Brei":"bowl-with-spoon"
+});
+attachPictures(timeWorksheetVocabularyCards,{
+  "der Baum / die Bäume":"deciduous-tree","das Blatt / die Blätter":"leaf-fluttering-in-wind","die Kirche":"church",
+  "das Restaurant":"fork-and-knife-with-plate","der Weihnachtsmann":"santa-claus","blühen":"blossom",
+  "der Pilz / die Pilze":"mushroom","das Fitnessstudio":"person-lifting-weights","die Wärme":"sun",
+  "der Vogel / die Vögel":"bird"
+});
+attachPictures(directionInstructionCards,{
+  "geradeaus":"up-arrow","nach rechts":"right-arrow","nach links":"left-arrow"
+});
+attachPictures(directionLandmarkCards,{
+  "bis zur Ampel":"vertical-traffic-light","an der Ampel":"vertical-traffic-light"
+});
+attachPictures(esGibtPatternCards,{
+  "Es gibt einen Park.":"national-park","Es gibt eine Ausstellung.":"framed-picture",
+  "Es gibt ein Café.":"hot-beverage","Es gibt viele Cafés.":"hot-beverage"
+});
+attachPictures(leisurePlaceCards,{
+  "das Kino / die Kinos":"clapper-board","das Theater / die Theater":"performing-arts",
+  "das Museum / die Museen":"classical-building","das Café / die Cafés":"hot-beverage",
+  "die Ausstellung / die Ausstellungen":"framed-picture","die Disco / die Discos":"mirror-ball",
+  "das Schwimmbad / die Schwimmbäder":"person-swimming","das Konzert / die Konzerte":"musical-notes",
+  "die Kneipe / die Kneipen":"beer-mug","das Restaurant / die Restaurants":"fork-and-knife-with-plate",
+  "die Bar / die Bars":"cocktail-glass"
+});
+attachPictures(leisureActivityCards,{
+  "ins Kino gehen":"clapper-board","ein Konzert besuchen":"musical-notes",
+  "im Café Kaffee trinken":"hot-beverage","das Gebäck":"croissant","tanzen":"woman-dancing"
+});
+attachPictures(photoDescriptionCards,{
+  "auf dem Foto":"camera-with-flash","denken":"thinking-face","der Mensch / die Menschen":"bust-in-silhouette"
 });
 const separableVerbPatternCards=[
   {word:"Hauptsatz: Ich stehe früh auf.",translation:"Головне речення: префікс іде в кінець.",category:"TRENNBARE VERBEN · HAUPTSATZ",example:"aufstehen → ich stehe auf",exampleTranslation:"У головному реченні відмінюється лише основа, а префікс стоїть наприкінці.",structure:[mainClause("Ich","stehe","früh","auf")]},

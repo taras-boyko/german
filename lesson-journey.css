@@ -347,6 +347,11 @@
   color: var(--lesson-muted);
 }
 
+/* A wide table must not stretch the rule column, or the rule text beside it is clipped. */
+.deck-guide .guide-rule-text {
+  grid-template-columns: minmax(0, 1fr);
+}
+
 .deck-guide .guide-rule-formula {
   padding: 0;
   border: 0;
@@ -358,22 +363,27 @@
 .card-stage .card-body {
   margin: auto 0;
   padding-top: 30px;
+  container-type: inline-size;
 }
 
+/* --fit-chars is the longest run that cannot wrap; .6em per letter covers the widest long words in the course,
+   so a long headword shrinks to the card width instead of overflowing or breaking mid-word. */
 .card-stage #question-word {
+  --headword-size: 60px;
   margin: 0;
-  font: 600 60px/1.2 var(--lesson-font);
+  font: 600 var(--headword-size)/1.2 var(--lesson-font);
+  font-size: min(var(--headword-size), 100cqi / (var(--fit-chars, 1) * .6));
   letter-spacing: -.035em;
   overflow-wrap: anywhere;
   text-wrap: balance;
 }
 
 .card-stage .practice-card #question-word {
-  font-size: 44px;
+  --headword-size: 44px;
 }
 
 .card-stage .long-prompt #question-word {
-  font-size: 32px;
+  --headword-size: 32px;
   letter-spacing: -.02em;
 }
 
@@ -783,11 +793,11 @@
 
   .card-stage #question-word,
   .card-stage .practice-card #question-word {
-    font-size: 40px;
+    --headword-size: 40px;
   }
 
   .card-stage .long-prompt #question-word {
-    font-size: 28px;
+    --headword-size: 28px;
   }
 
   .card-stage .translation {
@@ -936,7 +946,8 @@
   background: var(--g);
 }
 
-.card-stage #question-word .headword-noun {
+.card-stage #question-word .headword-noun,
+.card-stage #question-word .text-run {
   white-space: nowrap;
 }
 
@@ -1012,6 +1023,7 @@
   width: 100%;
   max-width: 320px;
   margin: 18px auto 0;
+  container-type: inline-size;
 }
 
 .card-stage .card-paradigm figcaption,
@@ -1072,6 +1084,11 @@
 
 .case-strip.forms .case-tile-ending {
   color: var(--ink);
+}
+
+/* One size per strip, set by its longest form: a tile is a third of the strip minus gaps, border and air. */
+.card-stage .case-strip.forms .case-tile-ending {
+  font-size: min(17px, ((100cqi - 16px) / 3 - 12px) / (var(--fit-chars, 1) * .64));
 }
 
 .case-strip.forms .form-stem {
@@ -1235,6 +1252,205 @@
   font: 700 17px/1.25 var(--lesson-font, inherit);
 }
 
+/* Frequency: a 0–100 % bar; the eight labels alternate above and below so they fit on a phone. */
+.card-stage .card-frequency {
+  width: 100%;
+  max-width: 380px;
+  margin: 14px auto 0;
+}
+
+.card-stage .card-frequency figcaption,
+.card-stage .card-clock figcaption {
+  color: var(--lesson-accent);
+  font-size: 14px;
+  font-weight: 700;
+  text-align: center;
+}
+
+.card-stage .card-frequency figcaption {
+  margin-bottom: 8px;
+}
+
+.frequency-scale {
+  position: relative;
+  padding: 0 24px;
+}
+
+.frequency-scale.labelled {
+  padding-top: 26px;
+  padding-bottom: 26px;
+}
+
+.frequency-track {
+  position: relative;
+  height: 10px;
+  border-radius: 999px;
+  background: #ebe8f3;
+}
+
+.frequency-fill {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  width: var(--frequency);
+  border-radius: inherit;
+  background: linear-gradient(90deg, #d9d3ff, var(--lesson-accent));
+}
+
+.frequency-tick {
+  position: absolute;
+  top: 2px;
+  bottom: 2px;
+  left: var(--at);
+  width: 2px;
+  margin-left: -1px;
+  border-radius: 1px;
+  background: rgba(255, 255, 255, .9);
+}
+
+.frequency-marker {
+  position: absolute;
+  top: 50%;
+  left: var(--frequency);
+  width: 20px;
+  height: 20px;
+  margin: -10px 0 0 -10px;
+  border: 3px solid #fff;
+  border-radius: 50%;
+  background: var(--lesson-accent);
+  box-shadow: 0 1px 4px rgba(60, 40, 140, .35);
+}
+
+.frequency-steps {
+  position: absolute;
+  inset: 0 24px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.frequency-step {
+  position: absolute;
+  left: var(--at);
+  padding: 1px 5px;
+  border-radius: 6px;
+  color: var(--lesson-muted);
+  font-size: 12px;
+  font-weight: 600;
+  line-height: 16px;
+  white-space: nowrap;
+  transform: translateX(-50%);
+}
+
+.frequency-step:nth-child(odd) {
+  bottom: 0;
+}
+
+.frequency-step:nth-child(even) {
+  top: 0;
+}
+
+.frequency-step.active {
+  background: #efecff;
+  color: var(--lesson-accent);
+  font-weight: 800;
+}
+
+.frequency-ends {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 6px;
+  color: var(--lesson-muted);
+  font-size: 12px;
+  font-weight: 600;
+}
+
+/* Clock: the hands show the prompt time; the shaded sector is the span German counts (nach, vor, halb). */
+.card-stage .card-clock {
+  width: fit-content;
+  margin: 2px auto 10px;
+}
+
+.card-stage .card-clock svg {
+  display: block;
+  width: 132px;
+  height: auto;
+  margin: 0 auto;
+}
+
+.card-stage .card-clock figcaption {
+  margin-top: 4px;
+  white-space: nowrap;
+}
+
+/* Vocabulary picture: one flat icon above the word; it carries meaning only, never the German form. */
+.card-stage .card-picture {
+  width: fit-content;
+  margin: 2px auto 10px;
+}
+
+.card-stage .card-picture img {
+  display: block;
+  width: 96px;
+  height: 96px;
+  margin: 0 auto;
+  user-select: none;
+}
+
+.clock-ring {
+  fill: #fff;
+  stroke: #e1ddeb;
+  stroke-width: 3;
+}
+
+.clock-sector {
+  fill: #efecff;
+  stroke: var(--lesson-accent);
+  stroke-opacity: .45;
+  stroke-width: 1.2;
+}
+
+.clock-tick {
+  stroke: #b9b3c9;
+  stroke-linecap: round;
+  stroke-width: 1.6;
+}
+
+.clock-tick.major {
+  stroke: #5b5470;
+  stroke-width: 2.6;
+}
+
+.clock-number {
+  fill: #5b5470;
+  font: 700 11px var(--lesson-font, sans-serif);
+  text-anchor: middle;
+  dominant-baseline: central;
+  paint-order: stroke;
+  stroke: #fff;
+  stroke-width: 3.5px;
+  stroke-linejoin: round;
+}
+
+.clock-hand {
+  stroke-linecap: round;
+}
+
+.clock-hand-hour {
+  stroke: var(--ink, #252136);
+  stroke-width: 5;
+}
+
+.clock-hand-minute {
+  stroke: var(--lesson-accent);
+  stroke-width: 3.5;
+}
+
+.clock-center {
+  fill: var(--ink, #252136);
+}
+
 .grammar-table {
   width: 100%;
   border-collapse: separate;
@@ -1342,6 +1558,28 @@
     padding: 5px 9px;
   }
 
+  .frequency-scale {
+    padding: 0 20px;
+  }
+
+  .frequency-steps {
+    inset: 0 20px;
+  }
+
+  .frequency-step {
+    padding: 1px 3px;
+    font-size: 11px;
+  }
+
+  .card-stage .card-clock svg {
+    width: 116px;
+  }
+
+  .card-stage .card-picture img {
+    width: 76px;
+    height: 76px;
+  }
+
   .grammar-table {
     border-spacing: 3px;
     font-size: 14px;
@@ -1350,5 +1588,76 @@
   .grammar-table th,
   .grammar-table td {
     padding: 5px 3px;
+  }
+}
+
+/* Phone widths: the rule column is about 250px, so the comparison table tightens to fit beside its number. */
+@media (max-width: 420px) {
+  .guide-table {
+    border-spacing: 2px;
+    font-size: 13px;
+  }
+
+  .guide-table th[scope="col"],
+  .guide-table th[scope="row"] {
+    font-size: 12px;
+  }
+
+  .guide-table th,
+  .guide-table td {
+    padding: 4px 2px;
+  }
+}
+
+/* Narrow phones (320px): a long Ukrainian word in the title or card label must not run under the buttons beside it. */
+@media (max-width: 359px) {
+  .lesson-topbar {
+    gap: 8px;
+    padding-inline: 14px;
+  }
+
+  .lesson-identity h1 {
+    font-size: 16px;
+    overflow-wrap: anywhere;
+  }
+
+  .lesson-library-button {
+    gap: 4px;
+    padding-inline: 8px;
+    font-size: 14px;
+  }
+
+  .lesson-focus {
+    padding-inline: 14px;
+  }
+
+  .card-stage .flashcard {
+    padding-inline: 16px;
+  }
+
+  .card-stage .card-top {
+    gap: 4px;
+    font-size: 14px;
+  }
+
+  .card-stage #category-label {
+    min-width: 0;
+    overflow-wrap: anywhere;
+  }
+
+  .guide-toggle {
+    gap: 4px;
+    padding-inline: 2px;
+    font-size: 15px;
+  }
+
+  .card-stage .bookmark {
+    width: 40px;
+  }
+
+  /* The table also uses the empty space under the rule number (28px column + 10px gap). */
+  .deck-guide .guide-table {
+    max-width: calc(100% + 38px);
+    margin-left: -38px;
   }
 }

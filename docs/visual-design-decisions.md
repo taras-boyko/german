@@ -17,6 +17,9 @@ renderer, and piloting on one lesson first) live in the
 ## Current choices
 
 Chosen by the learner on 2026-10-12: **1A, 2A, 3C, 4C, 5A, 6A, 7A, 8A, 9A, 10C**.
+Component 11 was added for Phase 6. Its option **11A** is a provisional default: the
+learner was unavailable and asked for autonomous work, so the recommended option was
+built. Review it like any other choice.
 
 | # | Component | Choice | Visible | Status |
 |---|---|---|---|---|
@@ -25,16 +28,20 @@ Chosen by the learner on 2026-10-12: **1A, 2A, 3C, 4C, 5A, 6A, 7A, 8A, 9A, 10C**
 | 3 | [Paradigm mini-map](#3-paradigm-mini-map) | **C** — one-row strip for the current case | Learn; after Check | Rolled out (Phases 1–2) |
 | 4 | [Example focus](#4-focus-inside-the-example) | **C** — gender-linked colour + underlined ending | Learn; after Check | Rolled out (Phase 1) |
 | 5 | [Sentence structure](#5-sentence-structure) | **A** — position boxes | Learn; after Check | Rolled out (Phase 3) |
-| 6 | [Vocabulary picture](#6-pictures-for-concrete-words) | **A** — picture above the word | Learn; practice before Check | Planned, Phase 5 |
-| 7 | [Frequency](#7-frequency-scale) | **A** — 0–100 % bar | Learn; practice before Check | Planned, Phase 4 |
-| 8 | [Clock](#8-clock-for-time-expressions) | **A** — analog clock | Learn; practice before Check | Planned, Phase 4 |
+| 6 | [Vocabulary picture](#6-pictures-for-concrete-words) | **A** — picture above the word | Learn; practice before Check | Rolled out (Phase 5) |
+| 7 | [Frequency](#7-frequency-scale) | **A** — 0–100 % bar | Learn; practice before Check (German labels after Check) | Rolled out (Phase 4) |
+| 8 | [Clock](#8-clock-for-time-expressions) | **A** — analog clock | Learn; practice before Check (reading after Check) | Rolled out (Phase 4) |
 | 9 | [haben / sein](#9-haben-vs-sein-in-perfekt) | **A** — movement vs action icon | Learn; after Check | Rolled out (Phase 2) |
 | 10 | [Guide tables](#10-rule-tables-in-the-guide) | **C** — "what changes" table | Guide panel | Rolled out (Phases 1–2) |
+| 11 | [Library class map](#11-library-class-map) | **A** — groups by class with glyph tiles | Library | Rolled out (Phase 6), provisional |
 
 "Rolled out" means the design was approved after its pilot and now runs in every
 lesson listed under [Phase 1 coverage](#phase-1-coverage),
-[Phase 2 coverage](#phase-2-coverage) and
-[Phase 3 coverage](#phase-3-coverage). "Piloted" means the
+[Phase 2 coverage](#phase-2-coverage),
+[Phase 3 coverage](#phase-3-coverage),
+[Phase 4 coverage](#phase-4-coverage),
+[Phase 5 coverage](#phase-5-coverage) and
+[Phase 6 coverage](#phase-6-coverage). "Piloted" means the
 design runs in one pilot lesson and waits for the learner's review. "Planned" means
 nothing is built yet; the phase and pilot lesson are listed in [Rollout](#rollout).
 
@@ -279,7 +286,51 @@ not the German answer.
 **Source:** Microsoft Fluent Emoji Flat SVGs (MIT licence), stored in the repository
 with their licence file, never loaded from a CDN. If no picture fits a word, show
 none rather than a misleading one.
-**Status:** planned for Phase 5, piloted on travel-transport.
+**Status:** rolled out (Phase 5); see [Phase 5 coverage](#phase-5-coverage).
+
+**Phase 5 pilot.** 21 of the 37 travel-transport cards have a picture, on their learn
+card and in practice:
+
+| Card | Picture (`assets/icons/`) |
+|---|---|
+| der Bahnhof, der nächste Bahnhof | `station` — train front with a platform sign |
+| der Flughafen | `airplane-departure` |
+| die S-Bahn | `light-rail` |
+| das Taxi | `taxi` |
+| der Bus | `bus` |
+| der Zug, mit dem Zug fahren | `high-speed-train` — side view |
+| die Straßenbahn | `tram-car` |
+| die U-Bahn | `metro` |
+| das Flugzeug, mit dem Flugzeug fliegen | `airplane` |
+| das Gleis | `railway-track` |
+| der Koffer | `luggage` |
+| die Tasche | `handbag` |
+| das Gepäck | `baggage-claim` |
+| die Haltestelle, an der Haltestelle | `bus-stop` |
+| anrufen | `telephone-receiver` |
+| einkaufen | `shopping-cart` |
+| fernsehen | `television` |
+
+Details:
+
+- **No picture:** `der Bahnsteig`, because no icon shows a platform without looking
+  like the station or the track. Also none for directions and abstract words
+  (`nach Paris`, `die Fahrt`, `ca.`, `dort`, `neben` …) or for movement verbs
+  (`umsteigen`, `einsteigen`, `abfahren` …), where one icon cannot tell them apart.
+- **Same noun, same picture:** a phrase reuses its noun's picture (`der Bahnhof` and
+  `der nächste Bahnhof` both show the station). Across all lessons a picture means one
+  word or one noun, and a noun always shows the same picture (`das Restaurant` in
+  time-worksheet-vocabulary and es-gibt-leisure). Singular and plural count as one
+  noun (`Es gibt ein Café.` and `Es gibt viele Cafés.`).
+- **Shown before Check in practice:** every practice card with a picture shows its
+  meaning first — the Ukrainian word, or the translated sentence on gap cards — so the
+  picture repeats the prompt and reveals nothing.
+- **Size:** 96 px above the word on a computer, 76 px on a phone, as in the mock-up.
+- **Screen readers** skip the picture (`alt=""`), because the translation already
+  says what it shows.
+- **Files:** 17 SVGs of 1–3 KB in the pilot; 50 SVGs (0.5–20 KB, 142 KB in total)
+  after the rollout, in `assets/icons/`, with the MIT `LICENSE` next to them. A card
+  loads only its own picture. Each card names its file in the `picture` field.
 
 ## 7. Frequency scale
 
@@ -296,8 +347,24 @@ none rather than a misleading one.
 | C | Vertical ladder | Ranking is easy to remember | Repeats the whole list on every card |
 
 **Decision:** A — 0–100 % bar.
-**Status:** planned for Phase 4, piloted on frequency. Check label crowding on
-phones during the pilot.
+**Status:** rolled out (Phase 4); see [Phase 4 coverage](#phase-4-coverage).
+
+**Phase 4 pilot.** All 8 learn cards and all 8 practice cards in the frequency lesson
+show the bar. Details:
+
+- Each card stores the scale and its own step explicitly (`frequency`). Approximate
+  values: `nie` 0 %, `fast nie` 10 %, `selten` 25 %, `manchmal` 40 %, `oft` 60 %,
+  `meistens` 75 %, `fast immer` 90 %, `immer` 100 %. These show the order, not
+  exact statistics; change them if one feels wrong.
+- Learn cards and practice after Check: caption `manchmal · ≈ 40 %`, a marker on the
+  bar, and all eight words placed at their percent. Labels alternate below and above
+  the bar so they fit on a phone; the card's own word is highlighted.
+- Practice before Check: the answer is a German adverb, so the bar shows no German
+  words, only the marker, `≈ 40 % часу` and the `0 %` / `100 %` ends. The labels
+  appear after Check.
+- **Changed from the mock-up:** words are spaced by their percent instead of evenly,
+  and alternate above and below instead of sitting in one row, which crowded on
+  phones.
 
 ## 8. Clock for time expressions
 
@@ -315,7 +382,25 @@ not the phrase).
 | C | Digital time + word-by-word phrase map | Exact mapping; day/night icon | Less of a picture |
 
 **Decision:** A — analog clock.
-**Status:** planned for Phase 4, piloted on time-expressions.
+**Status:** rolled out (Phase 4); see [Phase 4 coverage](#phase-4-coverage).
+
+**Phase 4 pilot.** The 5 spoken-time learn cards and the 5 spoken-time practice cards
+show the clock above the headword or prompt. Details:
+
+- Each card stores its time explicitly (`clock: {hour, minute}`), taken from the
+  digital time (`3:15`). The hour hand moves between hours, so at `halb vier` it
+  sits halfway to 4.
+- Before Check the face shows only the hands, which repeat the prompt time. In the
+  gap-fill variant the prompt is `___`, so the clock is the only place the time is
+  given.
+- Learn cards and practice after Check: a shaded sector shows the span German
+  counts, with a Ukrainian reading underneath — `¼ години після 3`
+  (Viertel nach drei), `½ години до 4` (halb vier), `10 хв до 6`
+  (zehn vor sechs). Times like `3:25` read `5 хв до пів на 4` and `3:35`
+  `5 хв після пів на 4`; a full hour has no sector.
+- **Changed from the mock-up:** no `¼` mark inside the face, because it collided
+  with the hands and numerals; the reading underneath says it instead. The numerals
+  sit above the hands with a white outline so a hand never hides them.
 
 ## 9. haben vs sein in Perfekt
 
@@ -412,6 +497,45 @@ each row. The cells hold only vowels, so the table stays visible during practice
 
 These tables hold the answers, so they show on learn cards and after Check only.
 
+## 11. Library class map
+
+**Encodes:** what kind of knowledge a lesson trains, and where that kind sits on the
+course path: words → word forms → choosing a form by rule → word order.
+**Applies to:** the library screen, all lessons.
+**Visible:** library.
+
+![Library class map options](visual-design-options/11-library-classes.png)
+
+| Option | Design | Strength | Weakness |
+|---|---|---|---|
+| **A ✅** | Lessons grouped by class in course-path order. The group heading and every card carry a purple glyph tile drawn from the visual that class uses inside its lessons | The shape names the class and links the library to what you see in the lesson; colour stays reserved for gender | Groups differ in size (2 to 11 lessons) |
+| B | The same groups, each class in its own colour (tile and card edge) | Classes stand apart at a glance | Four extra hues sit close to der blue and das green and weaken the gender code |
+| C | A four-step course map with filter chips above one mixed grid | Compact; one tap shows one class | The grid stays mixed, so a card does not show its class |
+
+**Decision:** A — groups by class with glyph tiles. *Provisional:* chosen without the
+learner, who asked for autonomous work. To switch to B or C, follow
+[How to change a decision](#how-to-change-a-decision); the gallery keeps all three.
+
+| Class | Summary in the app | Glyph | Miniature of |
+|---|---|---|---|
+| Лексика | Слова та їхнє значення | Word card with a dot | Picture and gender-dot word card (1, 6) |
+| Морфологія | Форми слів: закінчення й відмінювання | Stem box + filled ending box | Stem + ending split and case strip (2, 3) |
+| Граматика | Вибір форми за правилом | Fork with the chosen branch filled | haben / sein choice and guide tables (9, 10) |
+| Синтаксис | Порядок слів у реченні | Three boxes, the second filled | Position boxes, verb in position 2 (5) |
+
+**In the app:** the four groups follow the order above. A group heading shows the
+glyph (44 px), the class name, its summary and the lesson count (`8 уроків`). A
+lesson card shows a small glyph, the Ukrainian and German titles, the outcome, the
+number of stages, the level, the status and the action button. The class name is not
+repeated on the card because the group heading shows it. The old per-lesson colours
+and text badges (`mein`, `Alltag`, `Bahn` …) are gone; the longer badges overflowed
+their tile on phones. Glyphs are hidden from screen readers; each group is labelled
+by its heading.
+**Data:** each lesson's `className` in the lesson catalog (`app.js`). The ordered
+`lessonClasses` list gives each class its glyph and summary. Lessons inside a group
+keep the course order. A lesson with an unknown class gets its own group after the
+four, without a glyph.
+
 ---
 
 ## Colour tokens
@@ -429,6 +553,30 @@ at least 4.5:1 contrast on white and on its tint.
 Defined in `lesson-journey.css` as `--g-m`, `--g-n`, `--g-f`, `--g-pl` and their
 `-bg` tints.
 
+## Text fit and fonts
+
+These rules keep every visual readable from a 320 px phone to a desktop.
+
+- **Long words shrink, never overflow.** The headword, the practice prompt and the
+  strip tiles know their longest run that cannot wrap (`--fit-chars`). The font size
+  is the smaller of the normal size and what fits that run into the card, so
+  `der Weihnachtsmann` or `die Schwimmbäder` shrinks a little instead of running past
+  the card edge or breaking mid-word. A strip uses one size for all its tiles.
+- **Slashes break between alternatives.** In `das Kino / die Kinos` or
+  `die Vase / auf den Tisch / ich / stelle`, a line may break only after a slash: an
+  alternative or a sentence-build chunk stays whole, and the slash stays with the
+  word before it. The copied text is unchanged.
+- **Guide tables fit beside the rule number.** On phones the table tightens its
+  spacing and, at 320 px, also uses the space under the rule number.
+- **320 px.** The lesson header and card label wrap long Ukrainian words instead of
+  running under the buttons. Labels keep at least 14 px and the lesson title 16 px.
+- **Fonts cover Cyrillic.** Space Grotesk and DM Sans have no Cyrillic letters, so
+  the browser used to draw Ukrainian headings in a fallback serif. Ukrainian
+  headings now use the system font; Space Grotesk stays on numbers and Latin text.
+
+A single-line answer field still scrolls a long sentence; after Check, the full
+sentence is shown in the feedback above it.
+
 ## Rollout
 
 Each phase is piloted on one lesson and reviewed before it reaches other lessons.
@@ -439,8 +587,9 @@ Each phase is piloted on one lesson and reviewed before it reaches other lessons
 | 1 | Gender colours, example focus, guide tables | 1, 4, 10 (+ 2, 3 for possessives) | possessive-cases | Rolled out |
 | 2 | Morphology: stem/ending, vowel change, paradigms, haben/sein | 2, 3, 9 (+ 10 for verbs) | strong-verbs; perfekt for 9 | Rolled out |
 | 3 | Sentence structure | 5 | separable-verbs | Rolled out |
-| 4 | Concept visuals | 7, 8 | frequency; time-expressions | Planned |
-| 5 | Vocabulary pictures | 6 | travel-transport | Planned |
+| 4 | Concept visuals | 7, 8 | frequency; time-expressions | Rolled out |
+| 5 | Vocabulary pictures | 6 | travel-transport | Rolled out |
+| 6 | Library by lesson class | 11 | — (one screen) | Rolled out, provisional |
 
 ### Phase 1 coverage
 
@@ -485,7 +634,66 @@ Position boxes (5) appear on learn cards and after Check on sentence builds.
 Other können cards (forms and gap fills) and the other Perfekt cards (haben or sein,
 participle forms) have no boxes: they practise a single form, not the sentence order.
 
-Lessons not listed keep their current look until a later phase reaches them.
+### Phase 4 coverage
+
+| Lesson | Frequency bar (7) | Clock (8) |
+|---|---|---|
+| frequency | All 8 learn and 8 practice cards | — |
+| time-expressions | — | 5 spoken-time learn cards and 5 spoken-time practice cards |
+
+The pilot already covers every card that has a frequency adverb or a clock time as its
+target, so the rollout adds no new lessons. Other lessons only use these words inside
+example sentences (`Im Sommer schwimmen wir oft.`), where the target is a different
+word. time-worksheet-vocabulary has no clock times. The `um` cards
+(`um neun Uhr`) have no clock: in the mixed um / am / im drill a clock that appears
+only on `um` cards would give away the answer before Check.
+
+### Phase 5 coverage
+
+Pictures (6) appear on learn cards and in practice, before and after Check. 62 of the
+110 cards in these lessons have one; the files are in `assets/icons/`.
+
+| Lesson | Cards with a picture (`file`) |
+|---|---|
+| travel-transport | 21 of 37 — see the [Phase 5 pilot table](#6-pictures-for-concrete-words) |
+| everyday-vocabulary | 3 of 9: der Kräutertee (`teacup-without-handle`), die Süßigkeiten (`candy`), der Brei (`bowl-with-spoon`) |
+| time-worksheet-vocabulary | 10 of 15: der Baum (`deciduous-tree`), das Blatt (`leaf-fluttering-in-wind`), die Kirche (`church`), das Restaurant (`fork-and-knife-with-plate`), der Weihnachtsmann (`santa-claus`), blühen (`blossom`), der Pilz (`mushroom`), das Fitnessstudio (`person-lifting-weights`), die Wärme (`sun`), der Vogel (`bird`) |
+| giving-directions | 5 of 13: geradeaus (`up-arrow`), nach rechts (`right-arrow`), nach links (`left-arrow`), bis zur Ampel and an der Ampel (`vertical-traffic-light`) |
+| es-gibt-leisure, `es gibt` cards | 4 of 5: Es gibt einen Park. (`national-park`), Es gibt eine Ausstellung. (`framed-picture`), Es gibt ein Café. and Es gibt viele Cafés. (`hot-beverage`) |
+| es-gibt-leisure, places | All 11: das Kino (`clapper-board`), das Theater (`performing-arts`), das Museum (`classical-building`), das Café (`hot-beverage`), die Ausstellung (`framed-picture`), die Disco (`mirror-ball`), das Schwimmbad (`person-swimming`), das Konzert (`musical-notes`), die Kneipe (`beer-mug`), das Restaurant (`fork-and-knife-with-plate`), die Bar (`cocktail-glass`) |
+| es-gibt-leisure, activities | 5 of 11: ins Kino gehen (`clapper-board`), ein Konzert besuchen (`musical-notes`), im Café Kaffee trinken (`hot-beverage`), das Gebäck (`croissant`), tanzen (`woman-dancing`) |
+| es-gibt-leisure, photo | 3 of 4: auf dem Foto (`camera-with-flash`), denken (`thinking-face`), der Mensch (`bust-in-silhouette`) |
+
+Cards without a picture, and why:
+
+- **No icon tells them apart:** `der Kaugummi` (no gum icon); `die Sekunde` and
+  `die Minute` (two clocks would look the same); `fallen` (a falling leaf would repeat
+  `das Blatt`); `zurück`, `wenden`, `abbiegen` (one arrow cannot show the
+  difference); `an der Kreuzung`, `die erste Straße links`, `über die Straße gehen`.
+- **Abstract words:** sequence and routine words (`zuerst`, `danach`, `anfangen` …),
+  `verbringen`, `genießen`, `besuchen`, `interessant`, `langweilig`, `denn`,
+  `ein paar`, `das ganze Jahr`, `etwas`, `in der Nähe von`, and the rule card
+  `Es gibt + Akkusativ`.
+- **Gap drills on grammar:** the 5 es-gibt practice cards ask for `gibt` or an
+  article, not for a word's meaning, so they have no picture.
+
+Long headwords such as `der Weihnachtsmann` and `die Schwimmbäder` used to run past
+the card edge on a 390 px phone screen, before and after Phase 5. They now shrink to
+fit; see [Text fit and fonts](#text-fit-and-fonts).
+
+Lessons not listed in a coverage table keep their current look until a later phase
+reaches them.
+
+### Phase 6 coverage
+
+The library is one screen, so Phase 6 had no pilot lesson. It groups all 26 lessons:
+
+| Class | Lessons |
+|---|---|
+| Лексика (8) | w-questions, pronouns, frequency, time-worksheet-vocabulary, everyday-vocabulary, travel-transport, giving-directions, dative-verbs |
+| Морфологія (11) | personal-pronoun-cases, possessives, possessive-cases, sein, conjugation, strong-verbs, past-verbs, past-verbs-a2, past-verbs-b1, perfekt, present-practice |
+| Граматика (5) | koennen, haben, local-prepositions, time-expressions, es-gibt-leisure |
+| Синтаксис (2) | word-order, separable-verbs |
 
 ## Decision log
 
@@ -498,6 +706,12 @@ Lessons not listed keep their current look until a later phase reaches them.
 | 2026-10-12 | Learner | Phase 2 pilot approved | Phase 2 rolled out to the lessons in [Phase 2 coverage](#phase-2-coverage) |
 | 2026-10-12 | — | Phase 3 piloted | Position boxes (5A) on separable-verbs, verb boxes in the accent purple instead of the mock-up's orange. Awaiting review |
 | 2026-10-12 | Learner | Phase 3 pilot approved | Phase 3 rolled out to the lessons in [Phase 3 coverage](#phase-3-coverage) |
+| 2026-10-12 | — | Phase 4 piloted | Frequency bar (7A) on frequency, German labels after Check in practice; analog clock (8A) on the time-expressions spoken-time stages, sector and reading after Check. Awaiting review |
+| 2026-10-12 | Learner | Phase 4 pilot approved | All Phase 4 choices confirmed (percent values, label layout, clock readings, no ¼ mark, placement); see [Phase 4 coverage](#phase-4-coverage) |
+| 2026-10-12 | — | Phase 5 piloted | Vocabulary pictures (6A) on 21 travel-transport cards, also shown in practice before Check; `der Bahnsteig` has none. Awaiting review |
+| 2026-10-12 | Learner | Phase 5 pilot approved | Phase 5 rolled out to the lessons in [Phase 5 coverage](#phase-5-coverage); a picture now means one word or noun across all lessons |
+| 2026-10-12 | Learner | Defects fixed | Long headwords, prompts and strips shrink to fit; slash texts break only between alternatives; guide tables and the lesson header fit at 320 px; Ukrainian headings no longer fall back to a serif. See [Text fit and fonts](#text-fit-and-fonts) |
+| 2026-10-12 | Provisional (learner unavailable) | 11A | Phase 6: library grouped by lesson class with glyph tiles; options B and C stay in the gallery. See [Phase 6 coverage](#phase-6-coverage) |
 
 ## Review notes
 

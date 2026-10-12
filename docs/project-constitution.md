@@ -69,7 +69,13 @@ input control when typed recall can assess the skill.
      { role: "middle", text: "um sieben Uhr" }, { role: "end", text: "auf" }]
     // A subordinate clause uses link / middle / end: weil · ich früh · aufstehe.
     // A yes/no question starts with the verb: Kannst · du mir bitte · helfen.
-  ]
+  ],
+  frequency: {                                     // frequency adverbs: the whole scale and this card's step
+    scale: [{ word: "nie", percent: 0 }, /* … */ { word: "immer", percent: 100 }],
+    active: 4                                      // index of the card's own adverb
+  },
+  clock: { hour: 3, minute: 15 },                  // spoken time: the time on the analog clock
+  picture: "bus"                                   // concrete word: assets/icons/bus.svg above the word
 }
 ```
 
@@ -197,6 +203,9 @@ future passes provide contextual variety and retention checks.
   pass = «підхід», learn = «вивчення», practice = «практика».
 - Inflect Ukrainian count labels correctly. Localization must not change lesson,
   sequence, target, or variant IDs, accepted answers, sampling, or saved progress.
+- Every font must contain the letters it sets. The brand faces (Space Grotesk,
+  DM Sans) have no Cyrillic, so Ukrainian text uses the system UI font; Space Grotesk
+  is kept for numbers and Latin-only text.
 
 ### Library
 
@@ -204,6 +213,15 @@ future passes provide contextual variety and retention checks.
   hardcode them in markup.
 - Show title, concise outcome, level, chapter/sequence count, and status:
   **Not started**, **Learning**, **Ready to practice**, **Mastered**, or **Due**.
+- Group lessons by lesson class (`className`) in course-path order: **Лексика**
+  (words and meaning) → **Морфологія** (word forms) → **Граматика** (choosing a form
+  by rule) → **Синтаксис** (word order). Each group heading names the class, gives a
+  one-line summary and counts its lessons; within a group, lessons keep the course
+  order. Every lesson belongs to exactly one class.
+- A class is marked by a glyph shape in the accent colour, never by a colour of its
+  own, because colour is reserved for gender. Each glyph is a miniature of the visual
+  that class uses in its lessons. Glyphs are hidden from screen readers; the group
+  heading names the class.
 - The primary action resumes an in-progress sequence or starts the recommended next
   sequence. Preserve a direct way to open any chapter.
 
@@ -252,7 +270,8 @@ future passes provide contextual variety and retention checks.
   every coloured element also shows its article, column label, or Ukrainian gender
   name, and coloured text keeps at least 4.5:1 contrast.
 - Visual metadata (`scene`, `cue`, `practiceSupport`, `noun`, `answerParts`,
-  `paradigm`, `auxiliary`, `structure`, guide `table`) is authored explicitly in lesson data. Never derive it
+  `paradigm`, `auxiliary`, `structure`, `frequency`, `clock`, `picture`, guide `table`) is
+  authored explicitly in lesson data. Never derive it
   from IDs, labels, translations, or lesson names. A lesson builder may read it from
   the card's own authored German forms (the compact verb notation `f[ä]hr|st`, a
   Perfekt form `ist geblieben`) or from an explicit field such as a pronoun card's
@@ -310,8 +329,37 @@ future passes provide contextual variety and retention checks.
   visual: learn cards and after Check only. Within a lesson, every word-order rule
   card and every sentence build in a word-order sequence carries a `structure`;
   cards that practise a single form do not.
+- A frequency bar (`frequency`) places the card's adverb on a 0–100 % bar. The marker
+  and the approximate percent (`≈ 40 % часу`) are a meaning visual and show before
+  Check. The German adverbs along the bar are the answer set, so in practice they
+  appear only after Check; learn cards show them, with the card's own word
+  highlighted and marked with `aria-current`. The values show order, not statistics.
+- An analog clock (`clock`) shows the card's time above the headword or prompt. The
+  hands only repeat the prompt time, so they are a meaning visual and show before
+  Check. The shaded span German counts (from the hour, from or to the half hour, or
+  to the next hour) and its Ukrainian reading (`¼ години після 3`, `½ години до 4`,
+  `10 хв до 6`) explain the answer, so they appear on learn cards and after Check.
+  The hour hand moves between hours, and the clock's accessible name gives the
+  digital time.
+- A vocabulary picture (`picture`) shows a concrete word's meaning above the headword
+  or prompt. It names an icon in `assets/icons/` (Microsoft Fluent Emoji Flat, MIT,
+  with its `LICENSE` beside the icons); icons are stored in the repository, never
+  loaded from a CDN. It is a meaning visual and shows before Check only where the
+  prompt already gives the meaning. Screen readers skip it (`alt=""`) because the
+  translation says the same. A word without a fitting picture gets none rather than a
+  misleading one, and a phrase built on a noun reuses that noun's picture. Across all
+  lessons a picture means one word or one noun (singular and plural count as the same
+  noun), and a noun always shows the same picture. A card has either a scene or a
+  picture, never both.
 - Pilot a new visual component on one lesson and review it before extending it to
   other lessons.
+- Text never overflows the card or breaks inside a word. A headword, prompt or strip
+  shrinks to fit its longest unbreakable run. Slash-separated alternatives
+  (`das Kino / die Kinos`) and sentence-build chunks wrap only after a slash and stay
+  whole; the slash stays with the word before it, and the text itself is unchanged.
+  Every screen fits a 320 px phone without horizontal scrolling. On narrow screens
+  spacing tightens first; text may shrink, but labels keep at least 14 px and the
+  lesson title 16 px.
 
 ### Progress
 
@@ -434,7 +482,11 @@ Use one versioned logical progress model even if local and disk adapters differ:
   yes/no question; or `link`, `middle`, `end`),
   each clause has a verb part, and the fields joined with spaces (clauses with `, `)
   equal a sentence-build answer without its final punctuation, or appear in the
-  learn card's headword or example. Guide-table rows have one cell
+  learn card's headword or example. A `frequency` scale is ordered by percent from 0
+  to 100 and its active step is the card's own adverb; a `clock` time equals the
+  card's digital time. A `picture` names an existing file in `assets/icons/`, every
+  icon there is used, each picture belongs to one word or one noun across the course,
+  and a practice card with a picture shows its meaning before Check. Guide-table rows have one cell
   per column and highlights point at existing cells.
 - A new target is incomplete without enough variants to keep successive learn and
   practice passes meaningfully different, except for documented closed-set cases.
@@ -442,7 +494,8 @@ Use one versioned logical progress model even if local and disk adapters differ:
   persistence mechanisms rather than lesson-specific branches.
 - Validate every changed lesson in both learn and practice modes, including shuffle,
   resume, wrong/correct feedback, retry behavior, completion splash, screen
-  navigation, and persisted restoration.
+  navigation, and persisted restoration. Check changed screens at 320 px, a typical
+  phone (390 px) and desktop width for horizontal overflow.
 - When implementation and The Constitution differ, treat the difference as product
   debt: do not copy the inconsistency into new code. Either align the implementation
   or update this contract deliberately in the same change.

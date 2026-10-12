@@ -19,7 +19,7 @@ function runtime(){
       this.hidden=false;
       this.value="";
       this.dataset={};
-      this.style={setProperty:()=>{}};
+      this.style={properties:{},setProperty(name,value){this.properties[name]=String(value)}};
       this.attributes={};
       this.className="";
       this.innerHTML="";
@@ -41,6 +41,7 @@ function runtime(){
     appendChild(child){this.append(child)}
     replaceChildren(...children){this.text="";this.children=[...children]}
     setAttribute(name,value){this.attributes[name]=String(value)}
+    addEventListener(){}
     querySelectorAll(){return []}
   }
   const document={
@@ -63,7 +64,8 @@ function runtime(){
     renderCorrection=()=>{};
     updatePageTitle=()=>{};
     globalThis.runtime={
-      definitions:deckDefinitions,variantsForStage,sceneArt,genderLabels,standaloneOccurrence,
+      definitions:deckDefinitions,variantsForStage,sceneArt,genderLabels,standaloneOccurrence,slashRuns,
+      lessonCatalog,lessonClasses,lessonClassGlyphs,renderLibrary,
       scenes:localPrepositionScenes,
       renderCard(lessonId,stageIndex,card,status=""){
         activeDeckId=lessonId;
@@ -619,6 +621,185 @@ test("position boxes label a verb-first question, keep the infinitive at the end
   ]);
 });
 
+// Concept visuals (Phase 4 pilot): the frequency bar on the frequency lesson, the clock on spoken clock times.
+const conceptCoverage={
+  frequency:{covered:()=>true,count:32},
+  clock:{covered:(lessonId,stage)=>lessonId==="time-expressions"&&stage.id.startsWith("spoken-time-"),count:15}
+};
+const pictureCoverage={lessons:["travel-transport","everyday-vocabulary","time-worksheet-vocabulary","giving-directions","es-gibt-leisure"],count:241};
+
+function stageVariants(app,lessonId,stageId){
+  const stageIndex=app.definitions[lessonId].stages.findIndex(stage=>stage.id===stageId);
+  assert.ok(stageIndex>=0,stageId);
+  return {stageIndex,variants:app.variantsForStage(app.definitions[lessonId].stages[stageIndex])};
+}
+
+test("frequency and clock data are explicit, valid and cover exactly the pilot cards",()=>{
+  const {app}=runtime();
+  const counts={frequency:0,clock:0};
+  for(const [lessonId,definition] of Object.entries(app.definitions)){
+    for(const stage of definition.stages){
+      for(const card of app.variantsForStage(stage)){
+        const label=`${stage.id}: ${card.id}`;
+        assert.equal(Boolean(card.frequency),lessonId==="frequency",label);
+        assert.equal(Boolean(card.clock),conceptCoverage.clock.covered(lessonId,stage),label);
+        if(card.frequency){
+          counts.frequency+=1;
+          const {scale,active}=card.frequency,percents=Array.from(scale,step=>step.percent);
+          assert.deepEqual(Array.from(scale,step=>step.word),["nie","fast nie","selten","manchmal","oft","meistens","fast immer","immer"],label);
+          assert.equal(percents[0],0,label);
+          assert.equal(percents.at(-1),100,label);
+          assert.ok(percents.every((percent,index)=>!index||percent>percents[index-1]),`${label}: ascending`);
+          assert.equal(scale[active].word,card.word,label);
+          assert.ok(card.response.accepted.includes(card.word)||stage.mode!=="input"||card.type==="cloze",label);
+        }
+        if(card.clock){
+          counts.clock+=1;
+          const {hour,minute}=card.clock;
+          assert.ok(Number.isInteger(hour)&&hour>=1&&hour<=12,label);
+          assert.ok(Number.isInteger(minute)&&minute>=0&&minute<60,label);
+          assert.equal(`${hour}:${String(minute).padStart(2,"0")}`,card.translation,label);
+        }
+      }
+    }
+  }
+  assert.deepEqual(counts,{frequency:conceptCoverage.frequency.count,clock:conceptCoverage.clock.count});
+});
+
+test("the frequency bar names every step on learn cards and shows only the percent before Check",()=>{
+  const {app,elements}=runtime();
+  const steps=()=>descendants(elements.get("card-frequency")).filter(node=>node.tagName==="LI");
+  const {card,stageIndex}=findCard(app,"frequency",item=>item.word==="manchmal");
+  app.renderCard("frequency",stageIndex,card);
+  const figure=elements.get("card-frequency");
+  assert.equal(figure.hidden,false);
+  assert.equal(figure.children[0].textContent,"manchmal · ≈ 40 %");
+  assert.deepEqual(steps().map(item=>item.textContent),["nie","fast nie","selten","manchmal","oft","meistens","fast immer","immer"]);
+  assert.deepEqual(steps().filter(item=>item.classList.contains("active")).map(item=>item.textContent),["manchmal"]);
+  assert.equal(steps()[3].attributes["aria-current"],"true");
+  const track=descendants(figure).find(node=>node.className==="frequency-track");
+  assert.equal(track.attributes["aria-hidden"],"true");
+
+  const practice=stageVariants(app,"frequency","frequency-scale-recall");
+  for(const variant of practice.variants){
+    app.renderCard("frequency",practice.stageIndex,variant);
+    const label=variant.id,active=variant.frequency.scale[variant.frequency.active];
+    assert.equal(figure.hidden,false,label);
+    assert.equal(figure.children[0].textContent,`≈ ${active.percent} % часу`,label);
+    assert.equal(steps().length,0,label);
+    for(const step of variant.frequency.scale)assert.equal(standaloneCount(figure.textContent,step.word),0,`${label}: ${step.word}`);
+    app.renderCard("frequency",practice.stageIndex,variant,"correct");
+    assert.equal(figure.children[0].textContent,`${active.word} · ≈ ${active.percent} %`,label);
+    assert.equal(steps().length,8,label);
+  }
+});
+
+test("the clock shows the prompt time before Check and the span German counts after it",()=>{
+  const {app,elements}=runtime();
+  const figure=()=>elements.get("card-clock");
+  const svg=()=>figure().children[0].innerHTML;
+  const readings={"fünf nach zehn":"5 хв після 10","zehn vor sechs":"10 хв до 6","Viertel nach drei":"¼ години після 3","halb vier":"½ години до 4","Viertel vor sieben":"¼ години до 7"};
+  const learn=stageVariants(app,"time-expressions","spoken-time-learn");
+  assert.deepEqual(Object.fromEntries(learn.variants.map(card=>{
+    app.renderCard("time-expressions",learn.stageIndex,card);
+    assert.match(svg(),/class="clock-sector"/,card.word);
+    return [card.word,figure().children[1].textContent];
+  })),readings);
+
+  const practice=stageVariants(app,"time-expressions","spoken-time-practice");
+  const quarter=practice.variants.find(card=>card.word==="Viertel nach drei");
+  app.renderCard("time-expressions",practice.stageIndex,quarter);
+  assert.equal(figure().hidden,false);
+  assert.equal(figure().children.length,1);
+  assert.doesNotMatch(svg(),/clock-sector/);
+  assert.match(svg(),/aria-label="Годинник показує 3:15"/);
+  assert.match(svg(),/class="clock-hand clock-hand-minute" x1="60" y1="60" x2="104" y2="60"/);
+  app.renderCard("time-expressions",practice.stageIndex,quarter,"correct");
+  assert.match(svg(),/class="clock-sector" d="M60 60L60 7A53 53 0 0 1 113 60Z"/);
+  assert.match(svg(),/aria-label="Годинник показує 3:15: ¼ години після 3"/);
+  assert.equal(figure().children[1].textContent,"¼ години після 3");
+
+  const before=practice.variants.find(card=>card.word==="zehn vor sechs");
+  app.renderCard("time-expressions",practice.stageIndex,before,"revealed");
+  assert.match(svg(),/class="clock-sector" d="M60 60L14.1 33.5A53 53 0 0 1 60 7Z"/);
+
+  const generic=[[3,0,"рівно 3"],[3,25,"5 хв до пів на 4"],[3,35,"5 хв після пів на 4"],[12,45,"¼ години до 1"],[11,20,"20 хв після 11"]];
+  for(const [hour,minute,text] of generic){
+    app.renderCard("time-expressions",learn.stageIndex,{...learn.variants[0],clock:{hour,minute}});
+    assert.equal(figure().children[1].textContent,text,`${hour}:${minute}`);
+    assert.equal(/clock-sector/.test(svg()),minute>0,`${hour}:${minute}`);
+  }
+});
+
+test("vocabulary pictures are explicit, vendored, safe and mean one word or noun across the course",()=>{
+  const {app}=runtime();
+  const {existsSync,readdirSync}=require("node:fs");
+  const iconDir=join(__dirname,"../assets/icons");
+  const cards=Object.entries(app.definitions).flatMap(([lessonId,definition])=>
+    definition.stages.flatMap(stage=>app.variantsForStage(stage).map(card=>({lessonId,stage,card}))));
+  const singularOf=new Map(cards.filter(({card})=>card.noun?.plural).map(({card})=>[card.noun.plural.word,card.noun.word]));
+  const nounKey=card=>card.noun&&(singularOf.get(card.noun.word)??card.noun.word);
+  const used=new Set(),meaningByPicture=new Map(),pictureByNoun=new Map();
+  let count=0;
+  for(const {lessonId,stage,card} of cards){
+    const label=`${stage.id}: ${card.id}`;
+    assert.ok(!(card.picture&&card.scene),`${label}: one illustration per card`);
+    if(!card.picture)continue;
+    count+=1;
+    used.add(card.picture);
+    assert.ok(pictureCoverage.lessons.includes(lessonId),label);
+    assert.match(card.picture,/^[a-z0-9]+(?:-[a-z0-9]+)*$/,label);
+    assert.ok(existsSync(join(iconDir,`${card.picture}.svg`)),label);
+    const meaning=meaningByPicture.get(card.picture);
+    assert.ok(!meaning||meaning.word===card.word||(meaning.noun&&meaning.noun===nounKey(card)),`${label}: ${card.picture} also shows ${meaning?.word}`);
+    meaningByPicture.set(card.picture,{word:card.word,noun:nounKey(card)});
+    if(card.noun){
+      const picture=pictureByNoun.get(nounKey(card));
+      assert.ok(!picture||picture===card.picture,`${label}: ${nounKey(card)} also shows ${picture}`);
+      pictureByNoun.set(nounKey(card),card.picture);
+    }
+  }
+  assert.equal(count,pictureCoverage.count);
+  const files=readdirSync(iconDir).filter(name=>name.endsWith(".svg")).sort();
+  assert.deepEqual(files,[...used].map(name=>`${name}.svg`).sort());
+  for(const name of files){
+    const svg=readFileSync(join(iconDir,name),"utf8");
+    assert.match(svg,/^<svg [^>]*viewBox="0 0 32 32"/,name);
+    assert.doesNotMatch(svg,/<script|<foreignObject|\son[a-z]+=|href="(?!#)/i,name);
+  }
+  const licence=readFileSync(join(iconDir,"LICENSE"),"utf8");
+  assert.match(licence,/MIT License/);
+  assert.match(licence,/Copyright \(c\) Microsoft Corporation/);
+});
+
+test("the vocabulary picture shows the meaning on learn cards and in practice before Check",()=>{
+  const {app,elements}=runtime();
+  const figure=()=>elements.get("card-picture");
+  const learn=stageVariants(app,"travel-transport","travel-transport-words-learn");
+  const bus=learn.variants.find(card=>card.word==="der Bus");
+  app.renderCard("travel-transport",learn.stageIndex,bus);
+  assert.equal(figure().hidden,false);
+  assert.equal(figure().children.length,1);
+  const image=figure().children[0];
+  assert.equal(image.tagName,"IMG");
+  assert.deepEqual({...image.attributes},{src:"assets/icons/bus.svg",alt:"",width:"96",height:"96",draggable:"false"});
+  app.renderCard("travel-transport",learn.stageIndex,bus);
+  assert.equal(figure().children[0],image,"the same picture is not rebuilt");
+
+  const platform=learn.variants.find(card=>card.word==="der Bahnsteig");
+  app.renderCard("travel-transport",learn.stageIndex,platform);
+  assert.equal(figure().hidden,true);
+  assert.equal(figure().children.length,0);
+
+  const practice=stageVariants(app,"travel-transport","travel-actions-recall");
+  const call=practice.variants.find(card=>card.word==="anrufen");
+  for(const status of ["","correct","revealed"]){
+    app.renderCard("travel-transport",practice.stageIndex,call,status);
+    assert.equal(figure().hidden,false,status);
+    assert.equal(figure().children[0].attributes.src,"assets/icons/telephone-receiver.svg",status);
+  }
+});
+
 test("answer visuals stay hidden in practice until Check while meaning visuals stay available",()=>{
   const {app,elements}=runtime();
   for(const [lessonId,definition] of Object.entries(app.definitions)){
@@ -637,8 +818,20 @@ test("answer visuals stay hidden in practice until Check while meaning visuals s
         const nounInAnswer=card.response.accepted.some(answer=>nounWords.some(word=>standaloneCount(answer,word)>0));
         assert.equal(elements.get("noun-gender").hidden,!card.noun||(nounInAnswer&&!card.noun.givenInPractice),label);
         assert.equal(elements.get("card-illustration").hidden,!card.scene,label);
+        assert.equal(elements.get("card-frequency").hidden,!card.frequency,label);
+        assert.equal(descendants(elements.get("card-frequency")).some(node=>node.tagName==="OL"),false,label);
+        assert.equal(elements.get("card-clock").hidden,!card.clock,label);
+        assert.equal(elements.get("card-clock").children.length,card.clock?1:0,label);
+        const clockArt=card.clock?elements.get("card-clock").children[0].innerHTML:"";
+        assert.doesNotMatch(clockArt,/clock-sector/,label);
+        assert.equal(elements.get("card-picture").hidden,!card.picture,label);
+        assert.equal(elements.get("card-picture").children.length,card.picture?1:0,label);
+        if(card.picture){
+          const meaningShown=elements.get("question-word").textContent.includes(card.translation)||Boolean(card.support&&elements.get("prompt-support").textContent===card.support);
+          assert.ok(meaningShown,`${label}: the prompt gives the meaning`);
+        }
         assert.equal(elements.get("w-badge").textContent,card.cue||"",label);
-        const visible=`${elements.get("noun-gender").textContent} ${card.practiceSupport?elements.get("prompt-support").textContent:""}`;
+        const visible=`${elements.get("noun-gender").textContent} ${card.practiceSupport?elements.get("prompt-support").textContent:""} ${elements.get("card-frequency").textContent} ${clockArt}`;
         for(const answer of card.response.accepted){
           assert.equal(app.standaloneOccurrence(visible,answer.replace(/[?!.,]+$/,"")),null,`${label}: ${answer}`);
         }
@@ -647,6 +840,9 @@ test("answer visuals stay hidden in practice until Check while meaning visuals s
           assert.equal(elements.get("card-paradigm").hidden,!card.paradigm,`${label}: ${status}`);
           assert.equal(elements.get("card-auxiliary").hidden,!card.auxiliary,`${label}: ${status}`);
           assert.equal(elements.get("card-structure").hidden,!card.structure,`${label}: ${status}`);
+          assert.equal(descendants(elements.get("card-frequency")).some(node=>node.tagName==="OL"),Boolean(card.frequency),`${label}: ${status}`);
+          assert.equal(elements.get("card-clock").children.length,card.clock?2:0,`${label}: ${status}`);
+          assert.equal(elements.get("card-picture").hidden,!card.picture,`${label}: ${status}`);
           assert.equal(elements.get("noun-gender").hidden,!card.noun,`${label}: ${status}`);
           assert.equal(elements.get("example").textContent.length>0,true,`${label}: ${status}`);
         }
@@ -659,7 +855,7 @@ test("lessons without visual metadata render no visuals",()=>{
   const {app,elements}=runtime();
   const card=app.variantsForStage(app.definitions.pronouns.stages[0])[0];
   app.renderCard("pronouns",0,card);
-  for(const id of ["card-illustration","noun-gender","card-paradigm","card-auxiliary","card-structure","w-badge"])assert.equal(elements.get(id).hidden,true,id);
+  for(const id of ["card-illustration","card-clock","card-picture","noun-gender","card-frequency","card-paradigm","card-auxiliary","card-structure","w-badge"])assert.equal(elements.get(id).hidden,true,id);
   assert.equal(elements.get("question-word").textContent,card.word);
   assert.equal(elements.get("example").children.length,0);
   assert.equal(elements.get("example").textContent,card.example||card.word);
@@ -739,7 +935,7 @@ test("guide tables are well formed across lessons",()=>{
 
 test("the shared visual renderer has no lesson-specific branches",()=>{
   const names=["answerVisualsShown","sceneArt","renderCardScene","formSegments","formNodes","nounEntries","nounPhrase","nounLineShown","headwordNoun","genderDot",
-    "renderNounGender","grammarTable","endingLabel","renderCardParadigm","renderCardAuxiliary","renderCardStructure","renderCardVisuals","renderStudyHeadword","exampleFocus","textSpan","renderExample","practiceSupport"];
+    "renderNounGender","grammarTable","endingLabel","renderCardParadigm","renderCardAuxiliary","renderCardStructure","renderCardFrequency","clockReading","clockPoint","clockLine","renderCardClock","renderCardPicture","renderCardVisuals","renderStudyHeadword","exampleFocus","textSpan","renderExample","practiceSupport"];
   for(const name of names){
     const start=source.indexOf(`function ${name}(`);
     assert.ok(start>=0,name);
@@ -748,4 +944,95 @@ test("the shared visual renderer has no lesson-specific branches",()=>{
     assert.doesNotMatch(body,/activeDeckId|deckDefinitions|local-prepositions|possessive/,name);
   }
   assert.doesNotMatch(source,/locationScene|renderLocationIllustration/);
+});
+
+test("long headwords and prompts expose their longest unbreakable run",()=>{
+  const {app,elements}=runtime();
+  const single=findCard(app,"travel-transport",item=>item.word==="der Bahnhof");
+  app.renderCard("travel-transport",single.stageIndex,single.card);
+  const headword=elements.get("question-word");
+  assert.equal(headword.style.properties["--fit-chars"],String("der Bahnhof".length+1));
+
+  const pair=findCard(app,"es-gibt-leisure",item=>item.word==="das Kino / die Kinos");
+  app.renderCard("es-gibt-leisure",pair.stageIndex,pair.card);
+  const groups=headword.children.filter(child=>child.className==="headword-noun");
+  assert.equal(groups[0].textContent,"das Kino /");
+  assert.equal(groups[1].textContent,"die Kinos");
+  assert.equal(headword.textContent,"das Kino / die Kinos");
+  assert.equal(headword.style.properties["--fit-chars"],String("das Kino /".length+1));
+
+  const phrase=findCard(app,"travel-transport",item=>item.word==="mit dem Zug fahren");
+  app.renderCard("travel-transport",phrase.stageIndex,phrase.card);
+  assert.equal(headword.style.properties["--fit-chars"],"6");
+
+  const sentence=findCard(app,"word-order",item=>item.type==="sentence-build"&&item.promptText?.includes(" / "));
+  app.renderCard("word-order",sentence.stageIndex,sentence.card,"");
+  const runs=descendants(headword).filter(child=>child.className==="text-run");
+  assert.ok(runs.length>1);
+  assert.ok(runs.every(run=>!run.textContent.startsWith("/")));
+  assert.ok(headword.textContent.endsWith(sentence.card.promptText.split(": ").at(-1)));
+  assert.ok(Number(headword.style.properties["--fit-chars"])>=Math.max(...runs.map(run=>run.textContent.length)));
+});
+
+test("slash texts keep their words and never let a line start with the slash",()=>{
+  const {app}=runtime();
+  const text=runs=>[...runs.nodes].map(node=>node.textContent).join("");
+  const marked=runs=>[...runs.nodes].filter(node=>node.className==="text-run").map(node=>node.textContent);
+
+  const chunks=app.slashRuns("Ich lerne / heute / in der Bibliothek",true);
+  assert.equal(text(chunks),"Ich lerne / heute / in der Bibliothek");
+  assert.deepEqual(marked(chunks),["Ich lerne /","heute /","in der Bibliothek"]);
+  assert.equal(chunks.chars,"in der Bibliothek".length);
+
+  const alternatives=app.slashRuns("я зробив домашнє завдання / я виконав домашнє завдання",true);
+  assert.equal(text(alternatives),"я зробив домашнє завдання / я виконав домашнє завдання");
+  assert.deepEqual(marked(alternatives),["завдання /","завдання"]);
+  assert.equal(alternatives.chars,"завдання /".length);
+
+  const words=app.slashRuns("heute / morgen");
+  assert.deepEqual(marked(words),["heute /","morgen"]);
+  assert.equal(text(words),"heute / morgen");
+
+  assert.deepEqual({...app.slashRuns("der Weihnachtsmann")},{nodes:null,chars:"Weihnachtsmann".length});
+});
+
+test("the library groups every lesson by class in course-path order",()=>{
+  const {app,elements}=runtime();
+  const classNames=[...app.lessonClasses].map(lessonClass=>lessonClass.name);
+  assert.deepEqual(classNames,["Лексика","Морфологія","Граматика","Синтаксис"]);
+  for(const lessonClass of app.lessonClasses){
+    assert.ok(app.lessonClassGlyphs[lessonClass.glyph],lessonClass.name);
+    assert.ok(lessonClass.summary,lessonClass.name);
+  }
+  for(const [lessonId,catalog] of Object.entries(app.lessonCatalog)){
+    assert.ok(classNames.includes(catalog.className),lessonId);
+    assert.equal(catalog.color,undefined,lessonId);
+  }
+
+  app.renderLibrary();
+  const groups=[...elements.get("section-grid").children];
+  assert.deepEqual(groups.map(group=>group.className),Array(4).fill("library-group"));
+  const expected=classNames.map(name=>Object.keys(app.definitions).filter(lessonId=>app.definitions[lessonId].catalog.className===name));
+  groups.forEach((group,groupIndex)=>{
+    const [header,grid]=group.children;
+    const [glyph,text,count]=header.children;
+    const heading=text.children[0];
+    assert.equal(heading.tagName,"H3");
+    assert.equal(heading.textContent,classNames[groupIndex]);
+    assert.equal(group.attributes["aria-labelledby"],heading.id);
+    assert.equal(glyph.attributes["aria-hidden"],"true");
+    assert.equal(glyph.dataset.glyph,app.lessonClasses[groupIndex].glyph);
+    assert.match(glyph.innerHTML,/^<svg viewBox="0 0 24 24" focusable="false">/);
+    assert.match(count.textContent,new RegExp(`^${expected[groupIndex].length} урок`));
+    assert.deepEqual([...grid.children].map(article=>descendants(article).find(child=>child.tagName==="H4").textContent),
+      expected[groupIndex].map(lessonId=>app.definitions[lessonId].title));
+    for(const article of grid.children){
+      const parts=descendants(article);
+      assert.equal(parts.find(child=>child.className==="class-glyph").attributes["aria-hidden"],"true");
+      assert.ok(parts.some(child=>child.className==="section-outcome"&&child.textContent));
+      assert.ok(parts.some(child=>child.className.startsWith("status-badge ")&&child.textContent));
+      assert.equal(article.children.at(-1).tagName,"BUTTON");
+    }
+  });
+  assert.equal(expected.flat().length,Object.keys(app.definitions).length);
 });

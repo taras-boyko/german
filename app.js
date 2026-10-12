@@ -10,32 +10,46 @@ const writerStorageKey="german-learning-writer-id";
 const historyEndpoint="/api/lesson-history";
 const $=id=>document.getElementById(id);
 const lessonCatalog={
-  "w-questions":{title:"Питальні слова",germanTitle:"W-Fragen",outcome:"Добирати потрібне питальне слово й ставити запитання німецькою.",className:"Лексика",color:"purple"},
-  conjugation:{title:"Відмінювання дієслів",germanTitle:"Verbkonjugation",outcome:"Уживати правильні закінчення теперішнього часу й дотримуватися правил правопису.",className:"Морфологія",color:"orange"},
-  "strong-verbs":{title:"Сильні дієслова",germanTitle:"Starke Verben",outcome:"Правильно утворювати форми сильних дієслів у контексті.",className:"Морфологія",color:"blue"},
-  "past-verbs":{title:"Минулий час · A1",germanTitle:"Vergangenheit · A1",outcome:"Уживати Perfekt у повсякденному спілкуванні та впізнавати Präteritum дієслів sein і haben.",className:"Морфологія",color:"purple",level:"A1"},
-  "past-verbs-a2":{title:"Минулий час · A2",germanTitle:"Vergangenheit · A2",outcome:"Уживати Präteritum модальних дієслів і поширені форми для розповіді про життя поряд із Perfekt.",className:"Морфологія",color:"orange",level:"A2"},
-  "past-verbs-b1":{title:"Минулий час · B1",germanTitle:"Vergangenheit · B1",outcome:"Розрізняти Präteritum і Perfekt у розповідях рівня B1.",className:"Морфологія",color:"blue",level:"B1"},
-  perfekt:{title:"Минулий час Perfekt: haben і sein",germanTitle:"Das Perfekt: haben und sein",outcome:"Утворювати Perfekt із правильним haben або sein та Partizip II.",className:"Морфологія",color:"green"},
-  "present-practice":{title:"Теперішній час: практика",germanTitle:"Präsens üben",outcome:"Пригадувати форми теперішнього часу за контекстом і значенням.",className:"Морфологія",color:"green"},
-  koennen:{title:"Модальні дієслова",germanTitle:"Modalverben",outcome:"Уживати können, mögen і möchten у корисних реченнях.",className:"Граматика",color:"blue"},
-  haben:{title:"Мати, отримувати, потребувати",germanTitle:"Haben, bekommen, brauchen",outcome:"Розрізняти значення й форми haben, bekommen і brauchen.",className:"Граматика",color:"green"},
-  "word-order":{title:"Порядок слів",germanTitle:"Wortstellung",outcome:"Будувати розповідні й питальні речення з правильним порядком слів.",className:"Синтаксис",color:"blue"},
-  "separable-verbs":{title:"Дієслова з відокремлюваними префіксами",germanTitle:"Trennbare Verben",outcome:"Правильно розміщувати відокремлювані префікси в різних типах речень.",className:"Синтаксис",color:"purple"},
-  pronouns:{title:"Особові займенники",germanTitle:"Personalpronomen",outcome:"Добирати особові займенники за особою, числом і формою звертання.",className:"Лексика",color:"green"},
-  "personal-pronoun-cases":{title:"Особові займенники: Akkusativ і Dativ",germanTitle:"Personalpronomen: Akkusativ und Dativ",outcome:"Добирати особові займенники в Akkusativ і Dativ та розрізняти sie і Sie.",className:"Морфологія",color:"green",level:"A1"},
-  possessives:{title:"Присвійні займенники",germanTitle:"Possessivartikel",outcome:"Добирати основу за власником і правильне закінчення присвійного займенника.",className:"Морфологія",color:"orange"},
-  "possessive-cases":{title:"Присвійні артиклі: Akkusativ і Dativ",germanTitle:"Possessivartikel: Akkusativ und Dativ",outcome:"Уживати присвійні артиклі в обох відмінках за родом і числом іменника, включно з euer та ввічливим Ihr.",className:"Морфологія",color:"orange",level:"A1"},
-  sein:{title:"Дієслово sein — бути",germanTitle:"Das Verb sein",outcome:"Пригадувати всі форми sein у теперішньому часі.",className:"Морфологія",color:"blue"},
-  frequency:{title:"Прислівники частотності",germanTitle:"Häufigkeitsadverbien",outcome:"Точно виражати частотність: від immer до nie.",className:"Лексика",color:"orange"},
-  "local-prepositions":{title:"Прийменники місця: Dativ і Akkusativ",germanTitle:"Wechselpräpositionen: Dativ und Akkusativ",outcome:"Добирати Dativ для місця та Akkusativ для напрямку руху.",className:"Граматика",color:"blue"},
-  "time-expressions":{title:"Часові вирази",germanTitle:"Zeitangaben",outcome:"Добирати часові вирази й називати час у розмові.",className:"Граматика",color:"purple"},
-  "time-worksheet-vocabulary":{title:"Пори року й розпорядок дня",germanTitle:"Jahreszeiten und Tagesablauf",outcome:"Уживати лексику про пори року та розпорядок дня в контексті.",className:"Лексика",color:"green"},
-  "everyday-vocabulary":{title:"Повсякденна лексика",germanTitle:"Alltagswortschatz",outcome:"Уживати поширені слова про щоденні справи, їжу та напої.",className:"Лексика",color:"orange"},
-  "travel-transport":{title:"Подорожі й транспорт",germanTitle:"Reisen und Verkehrsmittel",outcome:"Говорити німецькою про транспорт, маршрути й дії під час подорожі.",className:"Лексика",color:"orange"},
-  "giving-directions":{title:"Як пояснити дорогу",germanTitle:"Den Weg beschreiben",outcome:"Пояснювати прості маршрути й розташування знайомих місць у місті.",className:"Лексика",color:"blue",level:"A1"},
-  "dative-verbs":{title:"Дієслова з Dativ",germanTitle:"Verben mit Dativ",outcome:"Пригадувати 16 дієслів і вживати їхні форми теперішнього часу з додатками в Dativ.",className:"Лексика",color:"green",level:"A2"},
-  "es-gibt-leisure":{title:"Місто й дозвілля: es gibt",germanTitle:"Stadt und Freizeit: es gibt",outcome:"Описувати місця, заняття й можливості для дозвілля в місті.",className:"Граматика",color:"purple"}
+  "w-questions":{title:"Питальні слова",germanTitle:"W-Fragen",outcome:"Добирати потрібне питальне слово й ставити запитання німецькою.",className:"Лексика"},
+  conjugation:{title:"Відмінювання дієслів",germanTitle:"Verbkonjugation",outcome:"Уживати правильні закінчення теперішнього часу й дотримуватися правил правопису.",className:"Морфологія"},
+  "strong-verbs":{title:"Сильні дієслова",germanTitle:"Starke Verben",outcome:"Правильно утворювати форми сильних дієслів у контексті.",className:"Морфологія"},
+  "past-verbs":{title:"Минулий час · A1",germanTitle:"Vergangenheit · A1",outcome:"Уживати Perfekt у повсякденному спілкуванні та впізнавати Präteritum дієслів sein і haben.",className:"Морфологія",level:"A1"},
+  "past-verbs-a2":{title:"Минулий час · A2",germanTitle:"Vergangenheit · A2",outcome:"Уживати Präteritum модальних дієслів і поширені форми для розповіді про життя поряд із Perfekt.",className:"Морфологія",level:"A2"},
+  "past-verbs-b1":{title:"Минулий час · B1",germanTitle:"Vergangenheit · B1",outcome:"Розрізняти Präteritum і Perfekt у розповідях рівня B1.",className:"Морфологія",level:"B1"},
+  perfekt:{title:"Минулий час Perfekt: haben і sein",germanTitle:"Das Perfekt: haben und sein",outcome:"Утворювати Perfekt із правильним haben або sein та Partizip II.",className:"Морфологія"},
+  "present-practice":{title:"Теперішній час: практика",germanTitle:"Präsens üben",outcome:"Пригадувати форми теперішнього часу за контекстом і значенням.",className:"Морфологія"},
+  koennen:{title:"Модальні дієслова",germanTitle:"Modalverben",outcome:"Уживати können, mögen і möchten у корисних реченнях.",className:"Граматика"},
+  haben:{title:"Мати, отримувати, потребувати",germanTitle:"Haben, bekommen, brauchen",outcome:"Розрізняти значення й форми haben, bekommen і brauchen.",className:"Граматика"},
+  "word-order":{title:"Порядок слів",germanTitle:"Wortstellung",outcome:"Будувати розповідні й питальні речення з правильним порядком слів.",className:"Синтаксис"},
+  "separable-verbs":{title:"Дієслова з відокремлюваними префіксами",germanTitle:"Trennbare Verben",outcome:"Правильно розміщувати відокремлювані префікси в різних типах речень.",className:"Синтаксис"},
+  pronouns:{title:"Особові займенники",germanTitle:"Personalpronomen",outcome:"Добирати особові займенники за особою, числом і формою звертання.",className:"Лексика"},
+  "personal-pronoun-cases":{title:"Особові займенники: Akkusativ і Dativ",germanTitle:"Personalpronomen: Akkusativ und Dativ",outcome:"Добирати особові займенники в Akkusativ і Dativ та розрізняти sie і Sie.",className:"Морфологія",level:"A1"},
+  possessives:{title:"Присвійні займенники",germanTitle:"Possessivartikel",outcome:"Добирати основу за власником і правильне закінчення присвійного займенника.",className:"Морфологія"},
+  "possessive-cases":{title:"Присвійні артиклі: Akkusativ і Dativ",germanTitle:"Possessivartikel: Akkusativ und Dativ",outcome:"Уживати присвійні артиклі в обох відмінках за родом і числом іменника, включно з euer та ввічливим Ihr.",className:"Морфологія",level:"A1"},
+  sein:{title:"Дієслово sein — бути",germanTitle:"Das Verb sein",outcome:"Пригадувати всі форми sein у теперішньому часі.",className:"Морфологія"},
+  frequency:{title:"Прислівники частотності",germanTitle:"Häufigkeitsadverbien",outcome:"Точно виражати частотність: від immer до nie.",className:"Лексика"},
+  "local-prepositions":{title:"Прийменники місця: Dativ і Akkusativ",germanTitle:"Wechselpräpositionen: Dativ und Akkusativ",outcome:"Добирати Dativ для місця та Akkusativ для напрямку руху.",className:"Граматика"},
+  "time-expressions":{title:"Часові вирази",germanTitle:"Zeitangaben",outcome:"Добирати часові вирази й називати час у розмові.",className:"Граматика"},
+  "time-worksheet-vocabulary":{title:"Пори року й розпорядок дня",germanTitle:"Jahreszeiten und Tagesablauf",outcome:"Уживати лексику про пори року та розпорядок дня в контексті.",className:"Лексика"},
+  "everyday-vocabulary":{title:"Повсякденна лексика",germanTitle:"Alltagswortschatz",outcome:"Уживати поширені слова про щоденні справи, їжу та напої.",className:"Лексика"},
+  "travel-transport":{title:"Подорожі й транспорт",germanTitle:"Reisen und Verkehrsmittel",outcome:"Говорити німецькою про транспорт, маршрути й дії під час подорожі.",className:"Лексика"},
+  "giving-directions":{title:"Як пояснити дорогу",germanTitle:"Den Weg beschreiben",outcome:"Пояснювати прості маршрути й розташування знайомих місць у місті.",className:"Лексика",level:"A1"},
+  "dative-verbs":{title:"Дієслова з Dativ",germanTitle:"Verben mit Dativ",outcome:"Пригадувати 16 дієслів і вживати їхні форми теперішнього часу з додатками в Dativ.",className:"Лексика",level:"A2"},
+  "es-gibt-leisure":{title:"Місто й дозвілля: es gibt",germanTitle:"Stadt und Freizeit: es gibt",outcome:"Описувати місця, заняття й можливості для дозвілля в місті.",className:"Граматика"}
+};
+// Library groups follow the course path: words → forms → rule-based choice → sentence order.
+const lessonClasses=[
+  {name:"Лексика",glyph:"lexicon",summary:"Слова та їхнє значення"},
+  {name:"Морфологія",glyph:"morphology",summary:"Форми слів: закінчення й відмінювання"},
+  {name:"Граматика",glyph:"grammar",summary:"Вибір форми за правилом"},
+  {name:"Синтаксис",glyph:"syntax",summary:"Порядок слів у реченні"}
+];
+// Each glyph is a miniature of the visual that class uses inside its lessons.
+const lessonClassGlyphs={
+  lexicon:'<rect x="3" y="4.5" width="18" height="15" rx="3"/><circle cx="8" cy="10" r="1.9" fill="currentColor" stroke="none"/><path d="M12.5 10h4.5M7 15h10"/>',
+  morphology:'<rect x="2.5" y="7" width="12" height="10" rx="2.2"/><rect x="15.5" y="7" width="6" height="10" rx="2.2" fill="currentColor"/>',
+  grammar:'<path d="M12 21v-6.5M12 14.5 6.5 8.5M12 14.5l5.5-6"/><circle cx="6" cy="6" r="2.4"/><circle cx="18" cy="6" r="2.4" fill="currentColor"/>',
+  syntax:'<rect x="1.8" y="7.5" width="5.6" height="9" rx="1.6"/><rect x="9.2" y="7.5" width="5.6" height="9" rx="1.6" fill="currentColor"/><rect x="16.6" y="7.5" width="5.6" height="9" rx="1.6"/>'
 };
 const ukrainianPluralRules=new Intl.PluralRules("uk");
 function pluralForm(number,one,few,many){
@@ -498,7 +512,7 @@ function explicitAnswers(card){
 function decorateDefinitions(){
   Object.entries(deckDefinitions).forEach(([lessonId,definition])=>{
     definition.id=lessonId;
-    definition.catalog=lessonCatalog[lessonId]||{title:definition.title,outcome:definition.tip,className:"Практика",color:"purple"};
+    definition.catalog=lessonCatalog[lessonId]||{title:definition.title,outcome:definition.tip,className:"Практика"};
     definition.title=definition.catalog.title;
     definition.label=definition.catalog.title;
     definition.stages.forEach(stage=>{
@@ -936,16 +950,21 @@ function practicePromptParts(prompt){
 
 function renderPracticePrompt(card){
   const prompt=$("question-word"),parts=practicePromptParts(card.promptText);
+  // The instruction line has its own small size, so only the target words decide the fit.
+  const target=slashRuns(parts?parts.target:card.promptText,card.type==="sentence-build");
+  setFitChars(prompt,target.chars);
   if(!parts){
-    prompt.textContent=card.promptText;
+    if(target.nodes)prompt.replaceChildren(...target.nodes);
+    else prompt.textContent=card.promptText;
     return;
   }
-  const instruction=document.createElement("span"),target=document.createElement("span");
+  const instruction=document.createElement("span"),targetElement=document.createElement("span");
   instruction.className="practice-prompt-instruction";
   instruction.textContent=parts.instruction;
-  target.className="practice-prompt-target";
-  target.textContent=parts.target;
-  prompt.replaceChildren(instruction,target);
+  targetElement.className="practice-prompt-target";
+  if(target.nodes)targetElement.replaceChildren(...target.nodes);
+  else targetElement.textContent=parts.target;
+  prompt.replaceChildren(instruction,targetElement);
 }
 
 function feedbackExample(card){
@@ -1113,6 +1132,7 @@ function renderCardParadigm(card){
   const row=paradigm.rows[paradigm.active.row],caption=document.createElement("figcaption"),strip=document.createElement("ol");
   caption.textContent=[row.title||row.label,paradigm.title].filter(Boolean).join(" · ");
   strip.className=paradigm.forms?"case-strip forms":"case-strip";
+  if(paradigm.forms)setFitChars(strip,Math.max(...row.cells.map(cell=>`${cell.stem}${cell.ending||""}`.length)));
   strip.append(...row.cells.map((cell,columnIndex)=>{
     const column=paradigm.columns[columnIndex],tile=document.createElement("li"),ending=document.createElement("span"),label=document.createElement("span");
     const active=columnIndex===paradigm.active.column;
@@ -1201,9 +1221,122 @@ function renderCardStructure(card){
   figure.replaceChildren(caption,sentence);
 }
 
+// How often as a point on a 0–100 % bar. The bar shows meaning, so it stays in practice; the German words wait for Check.
+function renderCardFrequency(card){
+  const figure=$("card-frequency"),frequency=card.frequency;
+  figure.hidden=!frequency;
+  if(!frequency){figure.replaceChildren();return}
+  const labelled=answerVisualsShown(),active=frequency.scale[frequency.active],percent=`≈ ${active.percent} %`;
+  const caption=document.createElement("figcaption"),scale=document.createElement("div"),track=document.createElement("div"),fill=document.createElement("span"),marker=document.createElement("span");
+  if(labelled){
+    const word=textSpan(active.word,"frequency-word");
+    word.lang="de";
+    caption.append(word,document.createTextNode(` · ${percent}`));
+  }else caption.textContent=`${percent} часу`;
+  scale.className=`frequency-scale${labelled?" labelled":""}`;
+  scale.style.setProperty("--frequency",`${active.percent}%`);
+  track.className="frequency-track";
+  track.setAttribute("aria-hidden","true");
+  fill.className="frequency-fill";
+  marker.className="frequency-marker";
+  track.append(fill,...frequency.scale.filter(step=>step.percent>0&&step.percent<100).map(step=>{
+    const tick=document.createElement("span");
+    tick.className="frequency-tick";
+    tick.style.setProperty("--at",`${step.percent}%`);
+    return tick;
+  }),marker);
+  scale.append(track);
+  if(labelled){
+    const steps=document.createElement("ol");
+    steps.className="frequency-steps";
+    steps.lang="de";
+    steps.append(...frequency.scale.map((step,stepIndex)=>{
+      const item=document.createElement("li");
+      item.className=`frequency-step${stepIndex===frequency.active?" active":""}`;
+      item.style.setProperty("--at",`${step.percent}%`);
+      item.textContent=step.word;
+      if(stepIndex===frequency.active)item.setAttribute("aria-current","true");
+      return item;
+    }));
+    scale.append(steps);
+  }else{
+    const ends=document.createElement("div");
+    ends.className="frequency-ends";
+    ends.setAttribute("aria-hidden","true");
+    ends.append(textSpan("0 %"),textSpan("100 %"));
+    scale.append(ends);
+  }
+  figure.replaceChildren(caption,scale);
+}
+
+// German counts minutes from the full hour or from halb; the counted span becomes the shaded sector.
+function clockReading({hour,minute}){
+  const current=hour%12||12,next=current%12+1;
+  const span=(from,to,count,text)=>({from,to,text:`${count===15?"¼ години":count===30?"½ години":`${count} хв`} ${text}`});
+  if(!minute)return {from:0,to:0,text:`рівно ${current}`};
+  if(minute<=20)return span(0,minute,minute,`після ${current}`);
+  if(minute<30)return span(minute,30,30-minute,`до пів на ${next}`);
+  if(minute===30)return span(0,30,30,`до ${next}`);
+  if(minute<40)return span(30,minute,minute-30,`після пів на ${next}`);
+  return span(minute,60,60-minute,`до ${next}`);
+}
+
+// A point on the 120 × 120 clock face, measured in minutes clockwise from 12.
+function clockPoint(minutes,radius){
+  const angle=minutes/30*Math.PI;
+  return [60+radius*Math.sin(angle),60-radius*Math.cos(angle)].map(value=>+value.toFixed(2));
+}
+
+function clockLine(className,minutes,inner,outer){
+  const [x1,y1]=clockPoint(minutes,inner),[x2,y2]=clockPoint(minutes,outer);
+  return `<line class="${className}" x1="${x1}" y1="${y1}" x2="${x2}" y2="${y2}"/>`;
+}
+
+// The prompt time as an analog clock. The hands show meaning; the counted sector and its reading wait for Check.
+function renderCardClock(card){
+  const figure=$("card-clock"),clock=card.clock;
+  figure.hidden=!clock;
+  if(!clock){figure.replaceChildren();return}
+  const explained=answerVisualsShown(),reading=clockReading(clock),time=`${clock.hour}:${String(clock.minute).padStart(2,"0")}`;
+  const face=document.createElement("div"),radius=53,[fromX,fromY]=clockPoint(reading.from,radius),[toX,toY]=clockPoint(reading.to,radius);
+  const sector=explained&&reading.to>reading.from?`<path class="clock-sector" d="M60 60L${fromX} ${fromY}A${radius} ${radius} 0 ${reading.to-reading.from>30?1:0} 1 ${toX} ${toY}Z"/>`:"";
+  const ticks=Array.from({length:12},(_,hour)=>clockLine(`clock-tick${hour%3?"":" major"}`,hour*5,hour%3?48:45,53)).join("");
+  const numbers=[12,3,6,9].map(number=>{
+    const [x,y]=clockPoint(number%12*5,37);
+    return `<text class="clock-number" x="${x}" y="${y}">${number}</text>`;
+  }).join("");
+  const hands=clockLine("clock-hand clock-hand-hour",clock.hour%12*5+clock.minute/12,0,28)+clockLine("clock-hand clock-hand-minute",clock.minute,0,44);
+  face.className="clock-face";
+  face.innerHTML=`<svg viewBox="0 0 120 120" role="img" aria-label="Годинник показує ${time}${explained?`: ${reading.text}`:""}" focusable="false"><circle class="clock-ring" cx="60" cy="60" r="56"/>${sector}${ticks}${hands}${numbers}<circle class="clock-center" cx="60" cy="60" r="3.5"/></svg>`;
+  if(!explained){figure.replaceChildren(face);return}
+  const caption=document.createElement("figcaption");
+  caption.textContent=reading.text;
+  figure.replaceChildren(face,caption);
+}
+
+// A picture shows what a concrete word means, not its German form, so it stays visible before Check.
+// The translation already says the same, so the image is decorative for screen readers.
+function renderCardPicture(card){
+  const figure=$("card-picture");
+  figure.hidden=!card.picture;
+  if(!card.picture){figure.dataset.picture="";figure.replaceChildren();return}
+  if(figure.dataset.picture===card.picture&&figure.children.length)return;
+  const image=document.createElement("img");
+  image.setAttribute("src",`assets/icons/${card.picture}.svg`);
+  image.setAttribute("alt","");
+  image.setAttribute("width","96");
+  image.setAttribute("height","96");
+  image.setAttribute("draggable","false");
+  figure.dataset.picture=card.picture;
+  figure.replaceChildren(image);
+}
+
 function renderCardVisuals(card){
   renderCardScene(card);
+  renderCardClock(card);
+  renderCardPicture(card);
   renderNounGender(card);
+  renderCardFrequency(card);
   renderCardParadigm(card);
   renderCardAuxiliary(card);
   renderCardStructure(card);
@@ -1211,19 +1344,59 @@ function renderCardVisuals(card){
 
 // The answer form is split inside the headword; any surrounding words (pronoun, separable prefix) stay muted.
 function renderStudyHeadword(card){
-  const headword=$("question-word"),parts=card.answerParts;
+  const headword=$("question-word"),parts=card.answerParts,runs=slashRuns(card.word);
   const occurrence=parts&&standaloneOccurrence(card.word,`${parts.stem}${parts.ending}`);
   if(occurrence){
     const before=card.word.slice(0,occurrence.start),after=card.word.slice(occurrence.end);
-    headword.replaceChildren(...[before&&textSpan(before,"form-context"),...formNodes(parts,card.noun?.gender),after&&textSpan(after,"form-context")].filter(Boolean));
+    const beforeRuns=slashRuns(before),context=before&&textSpan(beforeRuns.nodes?"":before,"form-context");
+    if(beforeRuns.nodes)context.append(...beforeRuns.nodes);
+    headword.replaceChildren(...[context,...formNodes(parts,card.noun?.gender),after&&textSpan(after,"form-context")].filter(Boolean));
   }
-  else if(headwordNoun(card))headword.replaceChildren(...nounEntries(card.noun).flatMap((entry,entryIndex)=>{
-    const group=textSpan("","headword-noun");
-    group.lang="de";
-    group.append(genderDot(entry.gender),textSpan(nounPhrase(entry)));
-    return entryIndex?[textSpan(" / "),group]:[group];
-  }));
+  else if(headwordNoun(card)){
+    const entries=nounEntries(card.noun);
+    // The "/" stays inside the first group, so a wrapped pair never starts a line with it or leaves it alone.
+    const units=entries.map((entry,entryIndex)=>`${nounPhrase(entry)}${entryIndex<entries.length-1?" /":""}`);
+    headword.replaceChildren(...entries.flatMap((entry,entryIndex)=>{
+      const group=textSpan("","headword-noun");
+      group.lang="de";
+      group.append(genderDot(entry.gender),textSpan(units[entryIndex]));
+      return entryIndex?[textSpan(" "),group]:[group];
+    }));
+    setFitChars(headword,Math.max(...units.map(unit=>unit.length+1)));
+    return;
+  }
+  else if(runs.nodes)headword.replaceChildren(...runs.nodes);
   else headword.textContent=card.word;
+  setFitChars(headword,runs.chars);
+}
+
+// The longest run of characters that cannot wrap; CSS shrinks the text until that run fits the card.
+function fitChars(text){
+  return Math.max(1,...String(text).split(/\s+/).map(word=>word.length));
+}
+
+// A chunk plus its trailing " /" longer than this is a translation fragment, not a sentence-building chunk.
+const maxChunkLength=20;
+
+// " / " separates sentence chunks or alternatives. A sentence-building chunk stays whole; otherwise the "/" stays
+// with the word before it, so a wrapped line never starts with "/" and a chunk is never split.
+function slashRuns(text,chunks=false){
+  const segments=text.split(" / ");
+  if(segments.length<2)return {nodes:null,chars:fitChars(text)};
+  const suffix=segmentIndex=>segmentIndex<segments.length-1?" /":"";
+  const whole=chunks&&segments.every((segment,segmentIndex)=>`${segment}${suffix(segmentIndex)}`.length<=maxChunkLength);
+  const nodes=[],runs=[];
+  segments.forEach((segment,segmentIndex)=>{
+    const cut=whole?0:segment.lastIndexOf(" ")+1,run=`${segment.slice(cut)}${suffix(segmentIndex)}`;
+    if(segmentIndex)nodes.push(textSpan(" "));
+    if(cut)nodes.push(textSpan(segment.slice(0,cut)));
+    if(run){nodes.push(textSpan(run,"text-run"));runs.push(run)}
+  });
+  return {nodes,chars:Math.max(fitChars(text),...runs.map(run=>run.length))};
+}
+
+function setFitChars(element,chars){
+  element.style.setProperty("--fit-chars",String(chars));
 }
 
 // Each focus mark carries its own tone, so a plural form is marked in the plural colour and an auxiliary in its own.
@@ -1682,26 +1855,64 @@ function germanTitleElement(definition,tag="p"){
   return element;
 }
 
+function classGlyph(lessonClass){
+  const glyph=document.createElement("span");
+  glyph.className="class-glyph";glyph.setAttribute("aria-hidden","true");
+  if(lessonClassGlyphs[lessonClass.glyph]){
+    glyph.dataset.glyph=lessonClass.glyph;
+    glyph.innerHTML=`<svg viewBox="0 0 24 24" focusable="false">${lessonClassGlyphs[lessonClass.glyph]}</svg>`;
+  }
+  return glyph;
+}
+
+function libraryGroups(){
+  const groups=new Map(lessonClasses.map(lessonClass=>[lessonClass.name,{lessonClass,lessonIds:[]}]));
+  for(const [lessonId,definition] of Object.entries(deckDefinitions)){
+    const name=definition.catalog.className;
+    if(!groups.has(name))groups.set(name,{lessonClass:{name,glyph:null,summary:""},lessonIds:[]});
+    groups.get(name).lessonIds.push(lessonId);
+  }
+  return [...groups.values()].filter(group=>group.lessonIds.length);
+}
+
+function libraryCard(lessonId,lessonClass){
+  const definition=deckDefinitions[lessonId],status=lessonStatus(lessonId),catalog=definition.catalog;
+  const article=document.createElement("article");article.className="library-section featured";
+  const top=document.createElement("div");top.className="section-card-top";
+  const heading=document.createElement("div");heading.className="section-heading";
+  const title=document.createElement("h4");title.textContent=definition.title;
+  heading.append(...[title,germanTitleElement(definition)].filter(Boolean));
+  top.append(classGlyph(lessonClass),heading);
+  const outcome=document.createElement("p");outcome.className="section-outcome";outcome.textContent=catalog.outcome;
+  const footer=document.createElement("div");footer.className="section-footer";
+  const meta=document.createElement("div");meta.className="section-meta";
+  const sequences=document.createElement("span");sequences.textContent=counted(definition.stages.length,"етап","етапи","етапів");
+  const level=document.createElement("span");level.textContent=catalog.level||"A1";
+  meta.append(sequences,level);
+  const badge=document.createElement("span");badge.className=`status-badge ${status.key}`;badge.textContent=status.label;
+  footer.append(meta,badge);
+  const button=document.createElement("button");button.type="button";button.className="primary-button";button.innerHTML=`<span>${actionLabel(lessonId)}</span><span aria-hidden="true">→</span>`;
+  button.addEventListener("click",()=>{if(selectDeck(lessonId))showView("practice")});
+  article.append(top,outcome,footer,button);
+  return article;
+}
+
 function renderLibrary(){
   $("library-total").textContent=counted(Object.keys(deckDefinitions).length,"урок","уроки","уроків");
-  $("section-grid").replaceChildren(...Object.entries(deckDefinitions).map(([lessonId,definition])=>{
-    const status=lessonStatus(lessonId),catalog=definition.catalog;
-    const article=document.createElement("article");article.className="library-section featured";
-    const top=document.createElement("div");top.className="section-card-top";
-    const icon=document.createElement("span");icon.className=`section-icon ${catalog.color}`;icon.textContent=definition.badge;
-    const badge=document.createElement("span");badge.className=`status-badge ${status.key}`;badge.textContent=status.label;
-    top.append(icon,badge);
-    const title=document.createElement("h3");title.textContent=definition.title;
-    const outcome=document.createElement("p");outcome.textContent=catalog.outcome;
-    const meta=document.createElement("div");meta.className="section-meta";
-    const sequences=document.createElement("span");sequences.textContent=counted(definition.stages.length,"етап","етапи","етапів");
-    const classification=document.createElement("span");classification.textContent=catalog.className;
-    const level=document.createElement("span");level.textContent=catalog.level||"A1";
-    meta.append(sequences,level,classification);
-    const button=document.createElement("button");button.type="button";button.className="primary-button";button.innerHTML=`<span>${actionLabel(lessonId)}</span><span aria-hidden="true">→</span>`;
-    button.addEventListener("click",()=>{if(selectDeck(lessonId))showView("practice")});
-    article.append(...[top,title,germanTitleElement(definition),outcome,meta,button].filter(Boolean));
-    return article;
+  $("section-grid").replaceChildren(...libraryGroups().map(({lessonClass,lessonIds},index)=>{
+    const group=document.createElement("section");group.className="library-group";
+    const headingId=`library-group-${index+1}`;group.setAttribute("aria-labelledby",headingId);
+    const header=document.createElement("div");header.className="library-group-header";
+    const text=document.createElement("div");
+    const heading=document.createElement("h3");heading.id=headingId;heading.textContent=lessonClass.name;
+    text.append(heading);
+    if(lessonClass.summary){const summary=document.createElement("p");summary.textContent=lessonClass.summary;text.append(summary)}
+    const count=document.createElement("span");count.className="library-group-count";count.textContent=counted(lessonIds.length,"урок","уроки","уроків");
+    header.append(classGlyph(lessonClass),text,count);
+    const grid=document.createElement("div");grid.className="section-grid";
+    grid.append(...lessonIds.map(lessonId=>libraryCard(lessonId,lessonClass)));
+    group.append(header,grid);
+    return group;
   }));
 }
 
