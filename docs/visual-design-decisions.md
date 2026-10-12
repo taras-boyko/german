@@ -8,11 +8,11 @@ Use this page to review the choices after practising with them, and to change th
 Every option stays documented, with its screenshot, so a decision can be reversed
 without redesigning from scratch.
 
-The product rules that apply to every component (Menschen gender colours, colour
-never the only signal, when a visual may appear, explicit metadata, one shared
-renderer, and piloting on one lesson first) live in the
-[Project Constitution](project-constitution.md#visual-language). This page records
-*which design* implements those rules.
+The design rules every component follows (the colour roles, colour never the only
+signal, active versus inactive items, when a visual may appear, giveaways, explicit
+metadata, one shared renderer, text fit, and piloting on one lesson first) live in
+the [Project Constitution](project-constitution.md#visual-language). This page
+records the options, the reasons for each choice, and how each one was rolled out.
 
 ## Current choices
 
@@ -591,6 +591,11 @@ Each phase is piloted on one lesson and reviewed before it reaches other lessons
 | 5 | Vocabulary pictures | 6 | travel-transport | Rolled out |
 | 6 | Library by lesson class | 11 | — (one screen) | Rolled out, provisional |
 
+Every phase was checked with the test suite, screenshots on a 320 px and a 390 px
+phone and on desktop, an overflow sweep, and a before/after comparison of all lesson
+data. Reduced motion, keyboard-only use and a screen reader were not checked phase by
+phase. Check them before treating the rollout as final.
+
 ### Phase 1 coverage
 
 | Lesson | Gender line and example focus (1, 4) | Stem + ending, case strip (2, 3) | Guide table (10) |
@@ -695,6 +700,31 @@ The library is one screen, so Phase 6 had no pilot lesson. It groups all 26 less
 | Граматика (5) | koennen, haben, local-prepositions, time-expressions, es-gibt-leisure |
 | Синтаксис (2) | word-order, separable-verbs |
 
+## Ideas not built
+
+The first review proposed more visuals than the eleven components above. The design
+gallery narrowed the work to these components, so the ideas below were never built.
+Each needs gallery options, a choice and a pilot before it is added.
+
+| Idea | Where it would help | Note |
+|---|---|---|
+| Past-forms timeline: Infinitiv → Präteritum → Partizip II with the vowel changes marked | past-verbs, perfekt | |
+| Stiefel (boot) outline around du and er/sie/es, the persons whose vowel changes | strong-verbs | The changed vowel is already marked in amber |
+| A glyph for each question word | w-questions | |
+| Person pictograms | pronouns, personal-pronoun-cases | |
+| A mini route for directions | giving-directions | The direction words already have arrow pictures |
+| Meaning icons for modal verbs and for haben / bekommen / brauchen | koennen, haben | |
+| Giver → thing → receiver arrow | dative-verbs | |
+| A colour for each case | case lessons | Conflicts with the one-meaning-per-colour rule |
+| um ⊂ am ⊂ im scope picture | time-expressions | |
+| Time, cause, manner and place colours in the middle field | word-order | Conflicts with the one-box middle field |
+| Sentence-build chunks as tiles instead of slash-separated text | word-order, separable-verbs | |
+| Link between a separable prefix and its verb; slot feedback for a misplaced chunk | separable-verbs, sentence builds | |
+| Plural suffix highlight (`-e`, `-er`, `-n`, `-s`, umlaut) | noun plurals | |
+| Feedback that compares the typed answer with the correct one by stem and ending | all form drills | |
+
+An idea marked as a conflict also needs a change to the Constitution.
+
 ## Decision log
 
 | Date | By | Choices | Notes |
@@ -712,6 +742,7 @@ The library is one screen, so Phase 6 had no pilot lesson. It groups all 26 less
 | 2026-10-12 | Learner | Phase 5 pilot approved | Phase 5 rolled out to the lessons in [Phase 5 coverage](#phase-5-coverage); a picture now means one word or noun across all lessons |
 | 2026-10-12 | Learner | Defects fixed | Long headwords, prompts and strips shrink to fit; slash texts break only between alternatives; guide tables and the lesson header fit at 320 px; Ukrainian headings no longer fall back to a serif. See [Text fit and fonts](#text-fit-and-fonts) |
 | 2026-10-12 | Provisional (learner unavailable) | 11A | Phase 6: library grouped by lesson class with glyph tiles; options B and C stay in the gallery. See [Phase 6 coverage](#phase-6-coverage) |
+| 2026-10-12 | Learner | Design rules recorded | The colour roles, active versus inactive items, decorative parts, reduced motion, giveaways and each component's details moved into the Constitution. The ideas that were never built are listed in [Ideas not built](#ideas-not-built) |
 
 ## Review notes
 

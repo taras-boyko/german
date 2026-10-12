@@ -261,14 +261,41 @@ future passes provide contextual variety and retention checks.
 
 - Visuals serve recall, not decoration: each one encodes a meaning or a grammatical
   decision (gender, case, position, motion) that the learner has to make.
-- The chosen design for each visual component, the alternatives that were rejected,
-  and the process for changing a choice are recorded in
+- This section states the design rules every visual follows. The options that were
+  considered, their screenshots, the reasons for each choice, and the process for
+  changing a choice are recorded in
   [Visual design decisions](visual-design-decisions.md). Change a component's design
   there and here in the same change.
 - Gender colours follow the Menschen convention in every lesson: **der** blue,
   **das** green, **die** red, **Plural** yellow. Colour is never the only signal:
   every coloured element also shows its article, column label, or Ukrainian gender
   name, and coloured text keeps at least 4.5:1 contrast.
+- Each colour has one meaning across the app. Use the tokens in `lesson-journey.css`;
+  each gender colour also has a light tint (`-bg`) for filled tiles:
+
+  | Colour | Token | Meaning |
+  |---|---|---|
+  | Blue `#2459b8` | `--g-m` | der (masculine) |
+  | Green `#167a4c` | `--g-n` | das (neuter) |
+  | Red `#b73232` | `--g-f` | die (feminine) |
+  | Dark yellow `#8a6200` | `--g-pl` | Plural |
+  | Purple `#6554d9` | `--lesson-accent` | The app accent, and everything without a gender: verb endings, person and pronoun strips, verb boxes, haben, class glyphs |
+  | Orange `#a34d00` | `--aux-sein` | sein in the haben/sein panel |
+  | Amber background `#fff2c2` | `--vowel-bg` | A changed stem vowel |
+
+  Do not add a hue for a new meaning (per lesson, per class, per case); use shape,
+  position, or a label instead.
+- The active item of a set (a strip tile, a haben/sein row, a frequency step) is
+  outlined and tinted and marked with `aria-current`. The other items are never
+  faded: they stay on white with a light border, so their text keeps 4.5:1 contrast.
+- Decorative parts (gender dots, glyphs, the frequency track) are hidden from screen
+  readers. A visual whose meaning is not in the nearby text has an accessible name;
+  the clock, for example, names the digital time.
+- Visuals are static. Other motion (screen transitions, the completion celebration)
+  stops when the system asks for reduced motion.
+- A visual must not give the answer away just by appearing. In a mixed drill, a
+  visual that only one kind of answer would get (a clock only on the `um` cards of an
+  um / am / im drill) is left out.
 - Visual metadata (`scene`, `cue`, `practiceSupport`, `noun`, `answerParts`,
   `paradigm`, `auxiliary`, `structure`, `frequency`, `clock`, `picture`, guide `table`) is
   authored explicitly in lesson data. Never derive it
@@ -290,27 +317,36 @@ future passes provide contextual variety and retention checks.
   `das Kino / die Kinos`), each headword entry carries its own gender dot and the noun
   line shows only the Ukrainian gender names, so the noun is not repeated.
 - **Decision visuals** contain the answer and appear only on learn cards or after
-  Check: the stem/ending split of the answer, the case strip (the endings of the
-  answer's paradigm row, with the answer's tile highlighted), and the highlighted
-  answer and noun in the example sentence. Each highlighted example word uses its own
-  gender, so a plural form such as `Bäumen` is highlighted in the plural colour.
-- Verb forms use the same split. A changed stem vowel (`answerParts.vowel`) is marked
+  Check: the stem/ending split of the answer (a muted stem and the ending in the
+  noun's gender colour), the case strip (the endings of the answer's paradigm row in
+  the order der · das · die · Plural, `—` where a form has no ending, with the
+  answer's tile filled and outlined in its gender colour), and the highlighted answer
+  and noun in the example sentence, where the answer's ending is also underlined as a
+  second signal. Each highlighted example word uses its own gender, so a plural form
+  such as `Bäumen` is highlighted in the plural colour.
+- Verb forms use the same split, with the ending in the accent colour because a verb
+  has no gender. A changed stem vowel (`answerParts.vowel`) is marked
   with an amber background in the headword, the strip, and the example, so the change
   is shown by both colour and shape. When the headword holds more than the form (the
   pronoun in `du fährst`, the separable prefix in `fängt an`), the other words stay
   muted. A conjugation strip (`paradigm.forms`) shows all six persons' whole forms
-  with the answer's person highlighted. Its caption names the verb and, when the verb
-  is not regular, what is special (`a → ä`, `додаткове e`, `du -t замість -st`,
+  in two rows of three (singular, then plural) with the answer's person
+  highlighted. Its caption names the verb and, when the verb is not regular, what is
+  special (`a → ä`, `додаткове e`, `du -t замість -st`,
   `du, er/sie/es без b`, `ich = er/sie/es`). The amber vowel marks only a vowel change
   (a caption `x → y`), exactly where the stem differs from the `wir` stem; other
   irregularities are named in the caption, not marked in the form.
 - A personal-pronoun strip shows the card's person in Nom., Akk. and Dat. (caption
   `er (він) · Personalpronomen`) with the case the card asks for highlighted. Its
   tiles use the accent colour: the person, not a noun's gender, chooses the form.
-- Perfekt cards name their auxiliary (`auxiliary`). The haben/sein panel shows both
-  choices with an icon and a one-line rule (sein: movement A → B or change of state;
-  haben: action with an object or no movement) and highlights the card's choice, also
-  marked with `aria-current`. The auxiliary form in the example is highlighted in the
+- Perfekt cards name their auxiliary (`auxiliary`). The haben/sein panel (caption
+  `Perfekt · haben чи sein`) shows both choices with an icon and a one-line rule:
+  sein, in orange, is a dashed path from a dot to an arrow (`рух A → B або зміна
+  стану`); haben, in the accent purple, is a box resting on a line (`дія з об’єктом /
+  без руху`). It highlights the card's choice, also marked with `aria-current`. Only
+  cards where the auxiliary is part of the decision carry `auxiliary` (Perfekt
+  frames, haben-or-sein drills, past-verb cards); a drill of the participle alone
+  does not. The auxiliary form in the example is highlighted in the
   same tone; a formula such as `haben + gemacht` highlights the infinitive. The panel
   is a decision visual: learn cards and after Check only. Past-verb cards take the
   auxiliary from their Perfekt form; a verb with both (`hat/ist geschwommen`) gets no
@@ -324,7 +360,9 @@ future passes provide contextual variety and retention checks.
   separable prefix); noun parts of a verb phrase (`Ski` in `Ski fahren`) and words
   after `sein` (`da`, `groß`) stay in `Середина`. Both verb parts (the conjugated
   verb and the end) use the accent outline and tint, the middle box is dashed, and
-  empty fields are left out.
+  empty fields are left out. The middle field is always one box, never split into
+  time, cause, manner and place. A question word fills `Поз. 1`. A Perfekt frame card
+  shows both the haben/sein panel and the boxes.
   Clauses sit side by side and wrap on narrow screens. The boxes are a decision
   visual: learn cards and after Check only. Within a lesson, every word-order rule
   card and every sentence build in a word-order sequence carries a `structure`;
@@ -333,14 +371,19 @@ future passes provide contextual variety and retention checks.
   and the approximate percent (`≈ 40 % часу`) are a meaning visual and show before
   Check. The German adverbs along the bar are the answer set, so in practice they
   appear only after Check; learn cards show them, with the card's own word
-  highlighted and marked with `aria-current`. The values show order, not statistics.
+  highlighted and marked with `aria-current`. Before Check the bar shows only the
+  marker, `≈ N % часу` and its `0 %` and `100 %` ends. The values are fixed for every
+  lesson (nie 0, fast nie 10, selten 25, manchmal 40, oft 60, meistens 75, fast immer
+  90, immer 100); they show order, not statistics. The words sit at their percent and
+  alternate above and below the bar so neighbours do not collide.
 - An analog clock (`clock`) shows the card's time above the headword or prompt. The
   hands only repeat the prompt time, so they are a meaning visual and show before
   Check. The shaded span German counts (from the hour, from or to the half hour, or
   to the next hour) and its Ukrainian reading (`¼ години після 3`, `½ години до 4`,
   `10 хв до 6`) explain the answer, so they appear on learn cards and after Check.
-  The hour hand moves between hours, and the clock's accessible name gives the
-  digital time.
+  A full hour has no shaded span. The hour hand moves between hours, the numerals
+  stay readable above the hands, and the clock's accessible name gives the digital
+  time.
 - A vocabulary picture (`picture`) shows a concrete word's meaning above the headword
   or prompt. It names an icon in `assets/icons/` (Microsoft Fluent Emoji Flat, MIT,
   with its `LICENSE` beside the icons); icons are stored in the repository, never
