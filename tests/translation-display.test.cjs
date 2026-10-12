@@ -36,7 +36,7 @@ function runtime(){
   vm.runInContext(`${source.slice(0,bindings)}
     renderLessonPath=()=>{};
     renderDeckGuide=()=>{};
-    renderLocationIllustration=()=>{};
+    renderCardVisuals=()=>{};
     renderCorrection=()=>{};
     updatePageTitle=()=>{};
     globalThis.runtime={

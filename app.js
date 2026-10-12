@@ -972,32 +972,14 @@ function feedbackOutcome(card,wasCorrect){
   return {tone:"incorrect",title:`Не зовсім — ${answer}`,detail:feedbackExplanation(card)};
 }
 
-function locationScene(card){
-  if(activeDeckId!=="local-prepositions")return null;
-  const id=card.targetId;
-  const motion=id.includes("accusative")||["local-contrast-vase","local-contrast-picture","local-contrast-key","local-contrast-sofa"].includes(id);
-  if(id.includes("schublade"))return {kind:"drawer",motion};
-  if(id.includes("wand")||id.includes("picture"))return {kind:"wall",motion};
-  if(id==="local-dative-auf-tisch")return {kind:"newspaper",motion};
-  if(id.includes("tisch")||id.includes("vase"))return {kind:"table",motion};
-  if(id.includes("bett"))return {kind:"bed",motion};
-  if(id.includes("stuhl"))return {kind:"chair",motion};
-  if(id.includes("vor-haus"))return {kind:"house-front",motion};
-  if(id.includes("hinter-haus"))return {kind:"house-behind",motion};
-  if(id.includes("studentin"))return {kind:"people",motion};
-  if(id.includes("fenster"))return {kind:"windows",motion};
-  if(id.includes("key"))return {kind:"bag",motion};
-  if(id.includes("sofa"))return {kind:"sofa",motion};
-  return null;
+const genderLabels={masculine:"чоловічий рід",neuter:"середній рід",feminine:"жіночий рід",plural:"множина"};
+
+// Visuals that contain the answer stay hidden in practice until Check.
+function answerVisualsShown(){
+  return !verificationMode||verified||answerRevealed;
 }
 
-function renderLocationIllustration(card){
-  const figure=$("location-illustration"),art=$("location-illustration-art"),scene=locationScene(card);
-  if(!scene){
-    figure.hidden=true;
-    $("flashcard").classList.remove("illustrated-card");
-    return;
-  }
+function sceneArt(scene){
   const arrow=(path,head)=>scene.motion?`<path d="${path}" class="scene-arrow"/><path d="${head}" class="scene-arrow-head"/>`:"";
   const scenes={
     drawer:`<ellipse cx="120" cy="111" rx="75" ry="7" class="scene-shadow"/><rect x="55" y="24" width="130" height="78" rx="12" class="scene-cabinet"/><rect x="68" y="61" width="104" height="33" rx="7" class="scene-drawer"/><path d="M108 72h24" class="scene-line"/><g transform="rotate(-7 120 71)"><rect x="91" y="57" width="51" height="25" rx="4" class="scene-book"/><path d="M99 57v25" class="scene-detail"/></g>${arrow("M34 41c22-8 39-1 56 18","M80 52l12 8-14 3")}`,
@@ -1013,33 +995,283 @@ function renderLocationIllustration(card){
     bag:`<ellipse cx="121" cy="111" rx="62" ry="7" class="scene-shadow"/><path d="M71 56h99l-9 52H80z" class="scene-bag"/><path d="M99 56c0-28 43-28 43 0" class="scene-handle"/><g transform="rotate(-18 122 77)"><circle cx="116" cy="76" r="9" class="scene-key-ring"/><path d="M124 76h27m-9 0v7m7-7v5" class="scene-key"/></g>${arrow("M47 46c17-8 35-4 49 10","M86 49l12 8-13 4")}`,
     sofa:`<ellipse cx="121" cy="111" rx="83" ry="7" class="scene-shadow"/><path d="M47 63h148v44H47z" class="scene-sofa"/><path d="M60 50h122c10 0 18 8 18 18H42c0-10 8-18 18-18z" class="scene-cushion"/><path d="M65 67v40m110-40v40" class="scene-line"/><circle cx="120" cy="31" r="13" class="scene-person-one"/><path d="M99 68c2-22 10-34 21-34s19 12 21 34" class="scene-person-one"/><path d="M102 58L88 78m50-20 14 20" class="scene-line"/>${arrow("M33 35c19-10 39-7 61 5","M83 33l13 8-14 5")}`
   };
-  art.innerHTML=`<title>Ілюстрація просторового розташування</title><rect width="240" height="128" rx="18" class="scene-background"/>${scenes[scene.kind]}`;
-  figure.hidden=false;
-  $("flashcard").classList.add("illustrated-card");
+  return scenes[scene.kind]||"";
+}
+
+function renderCardScene(card){
+  const art=card.scene?sceneArt(card.scene):"";
+  $("card-illustration").hidden=!art;
+  $("flashcard").classList.toggle("illustrated-card",Boolean(art));
+  if(art)$("card-illustration-art").innerHTML=`<title>Ілюстрація просторового розташування</title><rect width="240" height="128" rx="18" class="scene-background"/>${art}`;
+}
+
+// Splits a form into stem, changed vowel and ending pieces, skipping empty pieces.
+function formSegments(parts){
+  const {stem,ending="",vowel}=parts;
+  const pieces=vowel?[[stem.slice(0,vowel.start),"stem"],[stem.slice(vowel.start,vowel.end),"vowel"],[stem.slice(vowel.end),"stem"]]:[[stem,"stem"]];
+  return [...pieces,[ending,"ending"]].filter(([text])=>text).map(([text,part])=>({text,part}));
+}
+
+function formNodes(parts,gender=""){
+  if(!parts.ending&&!parts.vowel)return [textSpan(parts.stem)];
+  const classes={stem:"form-stem",vowel:"form-vowel",ending:`form-ending${gender?` gender-${gender}`:""}`};
+  return formSegments(parts).map(segment=>textSpan(segment.text,classes[segment.part]));
+}
+
+function nounEntries(noun){
+  const entries=[{article:noun.article,word:noun.word,gender:noun.gender}];
+  if(noun.plural)entries.push({article:noun.plural.article||"die",word:noun.plural.word,gender:"plural"});
+  return entries;
+}
+
+function nounPhrase(entry){
+  return `${entry.article} ${entry.word}`;
+}
+
+// Before Check the noun line appears only when the prompt already gives the noun or no answer contains it.
+function nounLineShown(card){
+  const noun=card.noun;
+  if(!noun)return false;
+  if(answerVisualsShown()||noun.givenInPractice)return true;
+  const words=[...nounEntries(noun).map(entry=>entry.word),noun.exampleWord,noun.plural?.exampleWord].filter(Boolean);
+  return !card.response.accepted.some(answer=>words.some(word=>standaloneOccurrence(answer,word)));
+}
+
+// A learn card whose headword is exactly the noun (e.g. "der Baum / die Bäume") carries the dots itself.
+function headwordNoun(card){
+  return !verificationMode&&Boolean(card.noun)&&card.word===nounEntries(card.noun).map(nounPhrase).join(" / ");
+}
+
+function genderDot(gender){
+  const dot=document.createElement("span");
+  dot.className=`gender-dot gender-${gender}`;
+  dot.setAttribute("aria-hidden","true");
+  return dot;
+}
+
+function renderNounGender(card){
+  const line=$("noun-gender"),shown=nounLineShown(card);
+  line.hidden=!shown;
+  if(!shown){line.replaceChildren();return}
+  const labelsOnly=headwordNoun(card);
+  line.classList.toggle("labels-only",labelsOnly);
+  line.replaceChildren(...nounEntries(card.noun).flatMap((entry,entryIndex)=>{
+    const label=textSpan(genderLabels[entry.gender],`noun-gender-label gender-${entry.gender}`);
+    const nodes=labelsOnly?[label]:[genderDot(entry.gender),Object.assign(textSpan(nounPhrase(entry),"noun-gender-word"),{lang:"de"}),label];
+    if(!entryIndex)return nodes;
+    const separator=textSpan("/","noun-gender-separator");
+    separator.setAttribute("aria-hidden","true");
+    return [separator,...nodes];
+  }));
+}
+
+function grammarTable(table,variant){
+  const element=document.createElement("table"),head=document.createElement("tr");
+  const highlighted=(row,column)=>(table.highlights||[]).some(cell=>cell.row===row&&cell.column===column);
+  element.className=`grammar-table ${variant}`;
+  head.append(document.createElement("td"),...table.columns.map(column=>{
+    const cell=document.createElement("th");
+    cell.setAttribute("scope","col");
+    cell.className=column.gender?`gender-${column.gender}`:"";
+    cell.textContent=column.label;
+    return cell;
+  }));
+  element.append(head,...table.rows.map((row,rowIndex)=>{
+    const line=document.createElement("tr"),label=document.createElement("th");
+    label.setAttribute("scope","row");
+    // A row may carry its own gender, e.g. er / sie / es in a pronoun table.
+    if(row.gender)label.append(genderDot(row.gender));
+    if(row.title){
+      const abbreviation=document.createElement("abbr");
+      abbreviation.title=row.title;
+      abbreviation.textContent=row.label;
+      label.append(abbreviation);
+    }else label.append(textSpan(row.label));
+    line.append(label,...row.cells.map((value,columnIndex)=>{
+      const cell=document.createElement("td"),gender=row.gender||table.columns[columnIndex].gender,changed=highlighted(rowIndex,columnIndex);
+      cell.className=[gender?`gender-${gender}`:"",changed?"changed":"",value==="—"?"empty":""].filter(Boolean).join(" ");
+      const content=changed?document.createElement("mark"):cell;
+      if(typeof value==="string")content.textContent=value;
+      else content.append(...formNodes(value,gender));
+      if(changed)cell.append(content);
+      return cell;
+    }));
+    return line;
+  }));
+  return element;
+}
+
+function endingLabel(cell){
+  return cell.ending?`-${cell.ending}`:"—";
+}
+
+// Shows only the active row as a strip: endings for case paradigms, full forms for person paradigms.
+function renderCardParadigm(card){
+  const figure=$("card-paradigm"),paradigm=card.paradigm,shown=Boolean(paradigm)&&answerVisualsShown();
+  figure.hidden=!shown;
+  if(!shown){figure.replaceChildren();return}
+  const row=paradigm.rows[paradigm.active.row],caption=document.createElement("figcaption"),strip=document.createElement("ol");
+  caption.textContent=[row.title||row.label,paradigm.title].filter(Boolean).join(" · ");
+  strip.className=paradigm.forms?"case-strip forms":"case-strip";
+  strip.append(...row.cells.map((cell,columnIndex)=>{
+    const column=paradigm.columns[columnIndex],tile=document.createElement("li"),ending=document.createElement("span"),label=document.createElement("span");
+    const active=columnIndex===paradigm.active.column;
+    tile.className=["case-tile",column.gender?`gender-${column.gender}`:"",active?"active":""].filter(Boolean).join(" ");
+    ending.className="case-tile-ending";
+    ending.lang="de";
+    if(paradigm.forms)ending.append(...formNodes(cell,column.gender));
+    else ending.textContent=endingLabel(cell);
+    label.className="case-tile-label";
+    label.lang="de";
+    label.textContent=column.label;
+    tile.append(ending,label);
+    if(active)tile.setAttribute("aria-current","true");
+    return tile;
+  }));
+  figure.replaceChildren(caption,strip);
+}
+
+const auxiliaryChoices=[
+  {verb:"sein",text:"рух A → B або зміна стану",icon:'<svg viewBox="0 0 44 30" focusable="false"><circle cx="6" cy="22" r="4" fill="currentColor"/><path d="M10 22C18 6 28 6 34 14" fill="none" stroke="currentColor" stroke-width="2.5" stroke-dasharray="4 3"/><path d="M36 4l4 10h-8z" fill="currentColor"/></svg>'},
+  {verb:"haben",text:"дія з об’єктом / без руху",icon:'<svg viewBox="0 0 44 30" focusable="false"><rect x="14" y="6" width="16" height="16" rx="3" fill="currentColor"/><path d="M6 26h32" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/></svg>'}
+];
+
+// The haben / sein decision as a picture: both rows stay readable, the card's choice is marked.
+function renderCardAuxiliary(card){
+  const figure=$("card-auxiliary"),auxiliary=card.auxiliary,shown=Boolean(auxiliary)&&answerVisualsShown();
+  figure.hidden=!shown;
+  if(!shown){figure.replaceChildren();return}
+  const caption=document.createElement("figcaption"),list=document.createElement("ul");
+  caption.textContent="Perfekt · haben чи sein";
+  list.className="auxiliary-choices";
+  list.append(...auxiliaryChoices.map(choice=>{
+    const item=document.createElement("li"),icon=document.createElement("span"),text=document.createElement("span"),verb=textSpan(choice.verb,"auxiliary-verb");
+    const active=choice.verb===auxiliary.verb;
+    item.className=`auxiliary-choice aux-${choice.verb}${active?" active":""}`;
+    if(active)item.setAttribute("aria-current","true");
+    icon.className="auxiliary-icon";
+    icon.setAttribute("aria-hidden","true");
+    icon.innerHTML=choice.icon;
+    verb.lang="de";
+    text.className="auxiliary-text";
+    text.append(verb,textSpan(choice.text,"auxiliary-rule"));
+    item.append(icon,text);
+    return item;
+  }));
+  figure.replaceChildren(caption,list);
+}
+
+const structureLabels={
+  first:["Поз. 1","Позиція 1"],
+  verb:["Дієсл. 2","Відмінюване дієслово на 2-му місці"],
+  middle:["Середина","Середина речення"],
+  end:["Кінець","Кінець речення"],
+  link:["Сполучник","Сполучник підрядного речення"]
+};
+const verbFirstLabel=["Дієсл. 1","Відмінюване дієслово на 1-му місці"];
+const verbPartRoles=new Set(["verb","end"]);
+
+// Word order as position boxes, one row per clause; both verb parts share the accent, the middle is dashed.
+function renderCardStructure(card){
+  const figure=$("card-structure"),structure=card.structure,shown=Boolean(structure)&&answerVisualsShown();
+  figure.hidden=!shown;
+  if(!shown){figure.replaceChildren();return}
+  const caption=document.createElement("figcaption"),sentence=document.createElement("div");
+  caption.textContent="Порядок слів";
+  sentence.className="structure-sentence";
+  sentence.append(...structure.flatMap((clause,clauseIndex)=>{
+    const list=document.createElement("ol");
+    list.className="structure-clause";
+    list.append(...clause.map((slot,slotIndex)=>{
+      const item=document.createElement("li"),text=textSpan(slot.text,"structure-text"),label=document.createElement("abbr");
+      const [short,title]=slot.role==="verb"&&slotIndex===0?verbFirstLabel:structureLabels[slot.role];
+      item.className=`structure-slot slot-${slot.role}${verbPartRoles.has(slot.role)?" verb-part":""}`;
+      text.lang="de";
+      label.className="structure-label";
+      label.title=title;
+      label.textContent=short;
+      item.append(text,label);
+      return item;
+    }));
+    if(!clauseIndex)return [list];
+    const comma=textSpan(",","structure-comma");
+    comma.setAttribute("aria-hidden","true");
+    return [comma,list];
+  }));
+  figure.replaceChildren(caption,sentence);
+}
+
+function renderCardVisuals(card){
+  renderCardScene(card);
+  renderNounGender(card);
+  renderCardParadigm(card);
+  renderCardAuxiliary(card);
+  renderCardStructure(card);
+}
+
+// The answer form is split inside the headword; any surrounding words (pronoun, separable prefix) stay muted.
+function renderStudyHeadword(card){
+  const headword=$("question-word"),parts=card.answerParts;
+  const occurrence=parts&&standaloneOccurrence(card.word,`${parts.stem}${parts.ending}`);
+  if(occurrence){
+    const before=card.word.slice(0,occurrence.start),after=card.word.slice(occurrence.end);
+    headword.replaceChildren(...[before&&textSpan(before,"form-context"),...formNodes(parts,card.noun?.gender),after&&textSpan(after,"form-context")].filter(Boolean));
+  }
+  else if(headwordNoun(card))headword.replaceChildren(...nounEntries(card.noun).flatMap((entry,entryIndex)=>{
+    const group=textSpan("","headword-noun");
+    group.lang="de";
+    group.append(genderDot(entry.gender),textSpan(nounPhrase(entry)));
+    return entryIndex?[textSpan(" / "),group]:[group];
+  }));
+  else headword.textContent=card.word;
+}
+
+// Each focus mark carries its own tone, so a plural form is marked in the plural colour and an auxiliary in its own.
+function exampleFocus(text,card){
+  const marks=[],noun=card.noun,parts=card.answerParts,auxiliary=card.auxiliary;
+  const add=(word,tone,form={})=>{
+    const occurrence=word&&standaloneOccurrence(text,word);
+    if(!occurrence||marks.some(mark=>occurrence.start<mark.end&&mark.start<occurrence.end))return false;
+    marks.push({...occurrence,...form,tone});
+    return true;
+  };
+  if(parts)add(`${parts.stem}${parts.ending}`,noun?`gender-${noun.gender}`:"",{ending:parts.ending,vowel:parts.vowel});
+  if(noun){
+    add(noun.exampleWord,`gender-${noun.gender}`);
+    add(noun.plural?.exampleWord,"gender-plural");
+  }
+  // The practice sentence holds the conjugated form; the learn formula ("haben + gemacht") holds the infinitive.
+  if(auxiliary&&!add(auxiliary.form,`aux-${auxiliary.verb}`))add(auxiliary.verb,`aux-${auxiliary.verb}`);
+  return marks.sort((left,right)=>left.start-right.start);
+}
+
+function textSpan(text,className=""){
+  const span=document.createElement("span");
+  if(className)span.className=className;
+  span.textContent=text;
+  return span;
+}
+
+function renderExample(text,card){
+  const example=$("example"),marks=exampleFocus(text,card);
+  if(!marks.length){example.textContent=text;return}
+  const nodes=[];
+  let cursor=0;
+  for(const mark of marks){
+    if(mark.start>cursor)nodes.push(textSpan(text.slice(cursor,mark.start)));
+    const word=text.slice(mark.start,mark.end),focus=textSpan("",`example-focus${mark.tone?` ${mark.tone}`:""}`);
+    const classes={stem:"",vowel:"example-vowel",ending:"example-ending"};
+    if(mark.ending||mark.vowel)focus.append(...formSegments({stem:word.slice(0,word.length-(mark.ending||"").length),ending:mark.ending,vowel:mark.vowel}).map(segment=>textSpan(segment.text,classes[segment.part])));
+    else focus.textContent=word;
+    nodes.push(focus);
+    cursor=mark.end;
+  }
+  if(cursor<text.length)nodes.push(textSpan(text.slice(cursor)));
+  example.replaceChildren(...nodes);
 }
 
 function practiceSupport(card){
-  if(activeDeckId!=="local-prepositions")return {label:"Контекст",text:card.support||""};
-  const scene=locationScene(card);
-  if(!scene)return {label:"Підказка за значенням",text:card.translation||""};
-  const baseNouns={
-    drawer:"die Schublade",
-    wall:"die Wand",
-    newspaper:"der Tisch",
-    table:"der Tisch",
-    bed:"das Bett",
-    chair:"der Stuhl",
-    "house-front":"das Haus",
-    "house-behind":"das Haus",
-    people:"die Studentin",
-    windows:"die Fenster (Plural)",
-    bag:"die Tasche",
-    sofa:"das Sofa"
-  };
-  return {
-    label:`${scene.motion?"Wohin?":"Wo?"} · значення й іменник`,
-    text:`${card.translation} · ${baseNouns[scene.kind]}`
-  };
+  return card.practiceSupport||{label:"Контекст",text:card.support||""};
 }
 
 function render(focusTarget=""){
@@ -1058,9 +1290,9 @@ function render(focusTarget=""){
   }
   renderLessonPath();
   renderDeckGuide(card);
-  renderLocationIllustration(card);
+  renderCardVisuals(card);
   if(verificationMode)renderPracticePrompt(card);
-  else $("question-word").textContent=card.word;
+  else renderStudyHeadword(card);
   $("translation").textContent=verificationMode?(revealed?"Ваша відповідь німецькою":inputLabel):meaningTranslation;
   $("translation").hidden=verificationMode||!separateMeaning;
   $("prompt-support").dataset.label=support.label;
@@ -1070,9 +1302,8 @@ function render(focusTarget=""){
   $("original-question").hidden=true;
   const category=verificationMode&&!revealed?(stage.categoryBeforeCheck||card.category):card.category;
   $("category-label").textContent=`${categoryLabel(category)} · ${exerciseLabels[card.type]}`;
-  const location=locationScene(card);
-  $("w-badge").textContent=location?(location.motion?"Wohin?":"Wo?"):"";
-  $("w-badge").hidden=!location;
+  $("w-badge").textContent=card.cue||"";
+  $("w-badge").hidden=!card.cue;
   $("feedback-outcome").hidden=!feedbackVisible;
   $("feedback-outcome").className=`feedback-outcome ${verified?"correct":"incorrect"}`;
   if(feedbackVisible){
@@ -1084,7 +1315,7 @@ function render(focusTarget=""){
   $("example-label").textContent=verificationMode&&revealed?example.label:"Приклад речення";
   $("answer-translation").textContent=feedbackVisible&&separateMeaning?`Значення українською: ${meaningTranslation}`:"";
   $("answer-translation").hidden=!feedbackVisible||!separateMeaning;
-  $("example").textContent=verificationMode&&revealed?example.text:(card.example||card.word);
+  renderExample(verificationMode&&revealed?example.text:(card.example||card.word),card);
   $("example-translation").textContent=exampleTranslation;
   $("example-translation").hidden=!translationKey(exampleTranslation);
   $("feedback-context").open=!verificationMode||answerRevealed;
@@ -1199,11 +1430,20 @@ function renderDeckGuide(card){
     }
     return text;
   };
+  // A table leaks when a cell alone, or read together with its column or row header, forms an answer.
+  const safeGuideTable=table=>{
+    const cellText=cell=>typeof cell==="string"?cell:`${cell.stem}${cell.ending}`;
+    const texts=[...table.columns.map(column=>column.label),table.note||"",...table.rows.flatMap(row=>[row.label,row.title||"",...row.cells.flatMap((cell,columnIndex)=>{
+      const text=cellText(cell);
+      return [text,`${table.columns[columnIndex].label} ${text}`,`${row.label} ${text}`];
+    })])];
+    return texts.every(text=>safeGuideText(text)===text)?table:null;
+  };
   const rules=guide.rules.map(rule=>{
     if(typeof rule==="string")return safeGuideText(rule)||null;
     const title=safeGuideText(rule.title);
     if(!title)return null;
-    return {...rule,title,detail:safeGuideText(rule.detail),formula:rule.formula?safeGuideText(rule.formula):""};
+    return {...rule,title,detail:safeGuideText(rule.detail),formula:rule.formula?safeGuideText(rule.formula):"",table:rule.table&&safeGuideTable(rule.table)};
   }).filter(Boolean);
   const intro=safeGuideText(guide.intro);
   $("deck-guide-intro").textContent=intro;
@@ -1222,6 +1462,10 @@ function renderDeckGuide(card){
       detail.className="guide-rule-detail";detail.textContent=rule.detail;
       text.append(title,detail);
       if(rule.formula){const formula=document.createElement("span");formula.className="guide-rule-formula";formula.textContent=rule.formula;text.append(formula)}
+      if(rule.table){
+        text.append(grammarTable(rule.table,"guide-table"));
+        if(rule.table.note){const note=document.createElement("span");note.className="guide-table-note";note.textContent=rule.table.note;text.append(note)}
+      }
     }
     item.append(number,text);
     return item;

@@ -43,9 +43,37 @@ input control when typed recall can assess the skill.
     punctuationSensitive: false
   },
   explanation: "...",
-  translation: "..."
+  translation: "...",
+
+  // Optional visual metadata (see "Visual language"); always authored explicitly.
+  scene: { kind: "table", motion: false },        // picture from the shared scene library
+  cue: "Wo?",                                      // short question badge
+  practiceSupport: { label: "...", text: "..." },  // labelled practice context, never the answer
+  noun: { article: "der", word: "Bruder", gender: "masculine", exampleWord: "Bruder" },
+  // Optional noun fields: plural: { article: "die", word: "Brüder", exampleWord: "Brüdern" }
+  // adds a plural entry; givenInPractice: true marks a noun the practice prompt already
+  // gives (for example the place in a preposition gap); exampleWord: "" omits the focus.
+  answerParts: { stem: "mein", ending: "en" },     // joins to the canonical answer
+  // A stem-vowel change adds vowel: { start, end } (stem indices), e.g.
+  // { stem: "fähr", ending: "st", vowel: { start: 1, end: 2 } } for "fährst".
+  paradigm: {                                      // full paradigm; the card shows the active row
+    title: "...",
+    columns: [{ label: "der", gender: "masculine" }],
+    rows: [{ label: "Akk.", title: "Akkusativ", cells: [{ stem: "mein", ending: "en" }] }],
+    active: { row: 0, column: 0 }                  // cell that equals the answer
+    // forms: true shows whole forms per person (ich ... sie/Sie) instead of endings.
+  },
+  auxiliary: { verb: "sein", form: "ist" },        // Perfekt: haben or sein and its form
+  structure: [                                     // word order: one list of fields per clause
+    [{ role: "first", text: "Ich" }, { role: "verb", text: "stehe" },
+     { role: "middle", text: "um sieben Uhr" }, { role: "end", text: "auf" }]
+    // A subordinate clause uses link / middle / end: weil · ich früh · aufstehe.
+    // A yes/no question starts with the verb: Kannst · du mir bitte · helfen.
+  ]
 }
 ```
+
+`gender` is one of `masculine`, `neuter`, `feminine`, or `plural`.
 
 - `recall`: meaning or communicative cue -> German word or phrase.
 - `cloze`: contextual sentence with one assessable gap -> missing form. When the
@@ -90,7 +118,8 @@ input control when typed recall can assess the skill.
 
 1. Show the chapter objective and optional collapsed rule guide.
 2. Shuffle cards when the sequence starts. Keep the order stable while navigating.
-3. Present the target, translation, and one natural example without requiring input.
+3. Present the target, translation, one natural example, and any authored visuals
+   without requiring input.
 4. Persist the current position so an interrupted sequence can resume.
 5. After the last card, show the completion splash with **Practice now** as the
    primary action.
@@ -199,6 +228,90 @@ future passes provide contextual variety and retention checks.
   only action that resets order and response state.
 - Guides are optional, concise, collapsed by default, and available without leaving
   the card. They must not obscure the prompt or contain the answer during practice.
+  A rule may add a compact formula or a `table` (`columns`, `rows` with `cells`, and
+  optional `highlights` and `note`). Tables show endings, stem vowels, or short forms
+  on neutral cells under gender-coloured or person column headers (or rows with an
+  optional `gender` dot, for example `er`/`sie`/`es`, or an optional `title` naming
+  the row's verbs), highlight only the cells listed in `highlights`, and
+  use the one-line `note` to say in words what changes. A table whose cells, cells
+  read with their row or column header, or note contain an accepted answer is hidden
+  in practice until Check, like any other leaking guide text. Tables whose cells are
+  the lesson's answers (for example a pronoun or conjugation paradigm) therefore
+  appear on learn cards and after Check only.
+
+### Visual language
+
+- Visuals serve recall, not decoration: each one encodes a meaning or a grammatical
+  decision (gender, case, position, motion) that the learner has to make.
+- The chosen design for each visual component, the alternatives that were rejected,
+  and the process for changing a choice are recorded in
+  [Visual design decisions](visual-design-decisions.md). Change a component's design
+  there and here in the same change.
+- Gender colours follow the Menschen convention in every lesson: **der** blue,
+  **das** green, **die** red, **Plural** yellow. Colour is never the only signal:
+  every coloured element also shows its article, column label, or Ukrainian gender
+  name, and coloured text keeps at least 4.5:1 contrast.
+- Visual metadata (`scene`, `cue`, `practiceSupport`, `noun`, `answerParts`,
+  `paradigm`, `auxiliary`, `structure`, guide `table`) is authored explicitly in lesson data. Never derive it
+  from IDs, labels, translations, or lesson names. A lesson builder may read it from
+  the card's own authored German forms (the compact verb notation `f[ä]hr|st`, a
+  Perfekt form `ist geblieben`) or from an explicit field such as a pronoun card's
+  `person`. A card without metadata renders without visuals.
+- One shared renderer draws every visual for every lesson; do not add lesson-specific
+  visual branches. Add new picture kinds to the shared scene library.
+- **Meaning visuals** may appear before Check because they show what the prompt
+  means, not which form answers it: scene pictures, the Wo?/Wohin? cue, and the noun
+  gender line (a gender-coloured dot, the article and noun, and the Ukrainian gender
+  name; a noun with a plural shows both entries). They must never contain an accepted
+  answer as a standalone word. In practice the noun line therefore appears only when
+  no accepted answer contains the noun or its example forms, or when the prompt
+  already gives the noun (`givenInPractice`); vocabulary recall of a noun shows it
+  after Check.
+- On learn cards whose headword is exactly the article and noun (`der Bahnhof`,
+  `das Kino / die Kinos`), each headword entry carries its own gender dot and the noun
+  line shows only the Ukrainian gender names, so the noun is not repeated.
+- **Decision visuals** contain the answer and appear only on learn cards or after
+  Check: the stem/ending split of the answer, the case strip (the endings of the
+  answer's paradigm row, with the answer's tile highlighted), and the highlighted
+  answer and noun in the example sentence. Each highlighted example word uses its own
+  gender, so a plural form such as `Bäumen` is highlighted in the plural colour.
+- Verb forms use the same split. A changed stem vowel (`answerParts.vowel`) is marked
+  with an amber background in the headword, the strip, and the example, so the change
+  is shown by both colour and shape. When the headword holds more than the form (the
+  pronoun in `du fährst`, the separable prefix in `fängt an`), the other words stay
+  muted. A conjugation strip (`paradigm.forms`) shows all six persons' whole forms
+  with the answer's person highlighted. Its caption names the verb and, when the verb
+  is not regular, what is special (`a → ä`, `додаткове e`, `du -t замість -st`,
+  `du, er/sie/es без b`, `ich = er/sie/es`). The amber vowel marks only a vowel change
+  (a caption `x → y`), exactly where the stem differs from the `wir` stem; other
+  irregularities are named in the caption, not marked in the form.
+- A personal-pronoun strip shows the card's person in Nom., Akk. and Dat. (caption
+  `er (він) · Personalpronomen`) with the case the card asks for highlighted. Its
+  tiles use the accent colour: the person, not a noun's gender, chooses the form.
+- Perfekt cards name their auxiliary (`auxiliary`). The haben/sein panel shows both
+  choices with an icon and a one-line rule (sein: movement A → B or change of state;
+  haben: action with an object or no movement) and highlights the card's choice, also
+  marked with `aria-current`. The auxiliary form in the example is highlighted in the
+  same tone; a formula such as `haben + gemacht` highlights the infinitive. The panel
+  is a decision visual: learn cards and after Check only. Past-verb cards take the
+  auxiliary from their Perfekt form; a verb with both (`hat/ist geschwommen`) gets no
+  panel. Only a present-tense auxiliary form in a Perfekt example is highlighted; a
+  Präteritum example (`Als Kind durfte ich …`) keeps the panel and highlights
+  nothing.
+- Sentence structure (`structure`) is drawn as position boxes with a label under each
+  box: `Поз. 1` · `Дієсл. 2` · `Середина` · `Кінець`, and `Сполучник` for a
+  subordinate clause, whose verb stands in `Кінець`. A verb in the first box is
+  labelled `Дієсл. 1`. `Кінець` holds verb parts only (infinitive, participle,
+  separable prefix); noun parts of a verb phrase (`Ski` in `Ski fahren`) and words
+  after `sein` (`da`, `groß`) stay in `Середина`. Both verb parts (the conjugated
+  verb and the end) use the accent outline and tint, the middle box is dashed, and
+  empty fields are left out.
+  Clauses sit side by side and wrap on narrow screens. The boxes are a decision
+  visual: learn cards and after Check only. Within a lesson, every word-order rule
+  card and every sentence build in a word-order sequence carries a `structure`;
+  cards that practise a single form do not.
+- Pilot a new visual component on one lesson and review it before extending it to
+  other lessons.
 
 ### Progress
 
@@ -308,6 +421,21 @@ Use one versioned logical progress model even if local and disk adapters differ:
 - German must be natural, level-appropriate, and consistent with the stated rule.
   Ukrainian support text should clarify meaning without leaking the answer.
 - Examples should vary person and context while avoiding unnecessary new vocabulary.
+- Visual metadata must agree with the card: `answerParts` joins to the canonical
+  answer, the paradigm's active cell equals it and sits in the noun's gender column
+  (or, in a conjugation strip, the answer's person column; in a pronoun strip, the
+  card's person row and case column), a `vowel` range lies inside the stem and covers
+  the changed vowel, an `auxiliary` form is a present form of its verb and, when the
+  sentence is in Perfekt, occurs exactly once in it,
+  the example contains the answer, `noun.exampleWord`, and `noun.plural.exampleWord`
+  exactly once each, the noun's article matches its gender, and a headword written as
+  article and noun matches the authored noun entries. A `structure` lists its fields
+  in sentence order (`first`, `verb`, `middle`, `end`; `verb`, `middle`, `end` for a
+  yes/no question; or `link`, `middle`, `end`),
+  each clause has a verb part, and the fields joined with spaces (clauses with `, `)
+  equal a sentence-build answer without its final punctuation, or appear in the
+  learn card's headword or example. Guide-table rows have one cell
+  per column and highlights point at existing cells.
 - A new target is incomplete without enough variants to keep successive learn and
   practice passes meaningfully different, except for documented closed-set cases.
 - New lessons must use the shared sequence, shuffle, evaluation, completion, and

@@ -28,7 +28,7 @@ function runtime(saved=new Map()){
       this.className="";
       this.hidden=false;
       this.value="";
-      this.textContent="";
+      this.text="";
       this.style={setProperty:()=>{}};
       this.classList={
         contains:name=>this.className.split(/\s+/).includes(name),
@@ -41,9 +41,11 @@ function runtime(saved=new Map()){
         }
       };
     }
+    get textContent(){return this.text+this.children.map(child=>child.textContent).join("")}
+    set textContent(value){this.text=value==null?"":String(value);this.children=[]}
     append(...children){this.children.push(...children.flatMap(child=>child.tagName==="#DOCUMENT-FRAGMENT"?child.children:[child]))}
     appendChild(child){this.append(child)}
-    replaceChildren(...children){this.children=[];this.append(...children)}
+    replaceChildren(...children){this.text="";this.children=[];this.append(...children)}
     setAttribute(name,value){this.attributes[name]=value}
     addEventListener(name,listener){this.listeners[name]=listener}
     focus(){document.activeElement=this}
@@ -158,7 +160,13 @@ test("the complete case/gender paradigm has five explicit natural variants per t
 
 test("the guide reproduces all three reference rows and explains special forms and plural nouns",()=>{
   const guide=lesson.guide.rules;
-  assert.ok(guide.some(rule=>rule.formula==="Nominativ: — · — · -e · -e"));
+  const table=guide.find(rule=>rule.table)?.table;
+  assert.deepEqual(table.columns.map(column=>column.label),["der","das","die","Plural"]);
+  assert.deepEqual(table.rows.map(row=>[row.title,...row.cells]),[
+    ["Nominativ","—","—","-e","-e"],
+    ["Akkusativ","-en","—","-e","-e"],
+    ["Dativ","-em","-em","-er","-en"]
+  ]);
   assert.ok(guide.some(rule=>rule.formula==="Dativ: -em · -em · -er · -en"));
   assert.ok(guide.some(rule=>rule.formula==="Akkusativ: -en · — · -e · -e"));
   const text=JSON.stringify(guide);

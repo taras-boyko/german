@@ -20,280 +20,305 @@ const pronounCards=[
   {word:"ihr",translation:"ви",category:"PERSONAL PRONOUN",example:"Ihr seid sehr nett.",exampleTranslation:"Ви дуже милі."},
   {word:"Sie",translation:"Ви (ввічливо)",category:"PERSONAL PRONOUN",targetId:"pronoun-formal-sie",example:"Wie heißen Sie?",exampleTranslation:"Як Вас звати?",caseSensitive:true}
 ];
-const personalPronounAccusativeCards=[
+// Nine persons × Nom. / Akk. / Dat.; the strip shows the card's person and marks its case.
+const personalPronounPersons=[
+  ["ich","ich (я)","ich mich mir"],
+  ["du","du (ти)","du dich dir"],
+  ["er","er (він)","er ihn ihm"],
+  ["she","sie (вона)","sie sie ihr"],
+  ["es","es (воно)","es es ihm"],
+  ["wir","wir (ми)","wir uns uns"],
+  ["ihr","ihr (ви)","ihr euch euch"],
+  ["they","sie (вони)","sie sie ihnen"],
+  ["formal","Sie (Ви)","Sie Sie Ihnen"]
+];
+const personalPronounParadigm={
+  title:"Personalpronomen",forms:true,columns:["Nom.","Akk.","Dat."].map(label=>({label})),
+  rows:personalPronounPersons.map(([,title,forms])=>({label:title.split(" ")[0],title,cells:forms.split(" ").map(stem=>({stem,ending:""}))}))
+};
+// Each card names its person; the call names the case column.
+function withPronounCase(caseLabel,cards){
+  const column=personalPronounParadigm.columns.findIndex(({label})=>label===caseLabel);
+  return cards.map(card=>{
+    const row=personalPronounPersons.findIndex(([key])=>key===card.person);
+    if(row<0||column<1)throw new Error(`Unknown pronoun person or case: ${card.id}`);
+    return {...card,answerParts:personalPronounParadigm.rows[row].cells[column],paradigm:{...personalPronounParadigm,active:{row,column}}};
+  });
+}
+const personalPronounAccusativeCards=withPronounCase("Akk.",[
   {
-    id:"pronoun-accusative-ich-recall",targetId:"pronoun-accusative-ich",type:"recall",word:"mich",translation:"мене · Akkusativ від ich",promptText:"Akkusativ: ich (я)",
+    id:"pronoun-accusative-ich-recall",targetId:"pronoun-accusative-ich",person:"ich",type:"recall",word:"mich",translation:"мене · Akkusativ від ich",promptText:"Akkusativ: ich (я)",
     example:"Meine Schwester besucht mich.",exampleTranslation:"Моя сестра відвідує мене.",explanation:"Besuchen вимагає Akkusativ: ich → mich.",category:"PERSONALPRONOMEN · AKKUSATIV",practiceVariants:false,
     response:{mode:"text",scope:"word",accepted:["mich"],caseSensitive:false,punctuationSensitive:false}
   },
   {
-    id:"pronoun-accusative-ich-see",targetId:"pronoun-accusative-ich",type:"cloze",word:"mich",example:"Paul sieht mich heute.",translation:"Пауль бачить мене сьогодні.",studyTranslation:"ich → mich · мене",promptText:"Paul sieht ___ heute.",support:"Заміни ich (я).",
+    id:"pronoun-accusative-ich-see",targetId:"pronoun-accusative-ich",person:"ich",type:"cloze",word:"mich",example:"Paul sieht mich heute.",translation:"Пауль бачить мене сьогодні.",studyTranslation:"ich → mich · мене",promptText:"Paul sieht ___ heute.",support:"Заміни ich (я).",
     explanation:"Sehen вимагає Akkusativ: ich → mich.",category:"PERSONALPRONOMEN · AKKUSATIV",practiceVariants:false,
     response:{mode:"text",scope:"word",accepted:["mich"],caseSensitive:false,punctuationSensitive:false}
   },
   {
-    id:"pronoun-accusative-ich-call",targetId:"pronoun-accusative-ich",type:"cloze",word:"mich",example:"Rufst du mich morgen an?",translation:"Ти зателефонуєш мені завтра?",studyTranslation:"ich → mich · мене",promptText:"Rufst du ___ morgen an?",support:"Заміни ich (я).",
+    id:"pronoun-accusative-ich-call",targetId:"pronoun-accusative-ich",person:"ich",type:"cloze",word:"mich",example:"Rufst du mich morgen an?",translation:"Ти зателефонуєш мені завтра?",studyTranslation:"ich → mich · мене",promptText:"Rufst du ___ morgen an?",support:"Заміни ich (я).",
     explanation:"Anrufen вимагає Akkusativ, хоча українською кажемо «телефонувати кому»: ich → mich.",category:"PERSONALPRONOMEN · AKKUSATIV",practiceVariants:false,
     response:{mode:"text",scope:"word",accepted:["mich"],caseSensitive:false,punctuationSensitive:false}
   },
   {
-    id:"pronoun-accusative-du-recall",targetId:"pronoun-accusative-du",type:"recall",word:"dich",translation:"тебе · Akkusativ від du",promptText:"Akkusativ: du (ти)",
+    id:"pronoun-accusative-du-recall",targetId:"pronoun-accusative-du",person:"du",type:"recall",word:"dich",translation:"тебе · Akkusativ від du",promptText:"Akkusativ: du (ти)",
     example:"Ich besuche dich am Abend.",exampleTranslation:"Я відвідаю тебе ввечері.",explanation:"Besuchen вимагає Akkusativ: du → dich.",category:"PERSONALPRONOMEN · AKKUSATIV",practiceVariants:false,
     response:{mode:"text",scope:"word",accepted:["dich"],caseSensitive:false,punctuationSensitive:false}
   },
   {
-    id:"pronoun-accusative-du-hear",targetId:"pronoun-accusative-du",type:"cloze",word:"dich",example:"Ich höre dich nicht.",translation:"Я тебе не чую.",studyTranslation:"du → dich · тебе",promptText:"Ich höre ___ nicht.",support:"Заміни du (ти).",
+    id:"pronoun-accusative-du-hear",targetId:"pronoun-accusative-du",person:"du",type:"cloze",word:"dich",example:"Ich höre dich nicht.",translation:"Я тебе не чую.",studyTranslation:"du → dich · тебе",promptText:"Ich höre ___ nicht.",support:"Заміни du (ти).",
     explanation:"Hören вимагає Akkusativ: du → dich.",category:"PERSONALPRONOMEN · AKKUSATIV",practiceVariants:false,
     response:{mode:"text",scope:"word",accepted:["dich"],caseSensitive:false,punctuationSensitive:false}
   },
   {
-    id:"pronoun-accusative-du-for",targetId:"pronoun-accusative-du",type:"cloze",word:"dich",example:"Ist das Geschenk für dich?",translation:"Цей подарунок для тебе?",studyTranslation:"du → dich · тебе",promptText:"Ist das Geschenk für ___?",support:"Заміни du (ти).",
+    id:"pronoun-accusative-du-for",targetId:"pronoun-accusative-du",person:"du",type:"cloze",word:"dich",example:"Ist das Geschenk für dich?",translation:"Цей подарунок для тебе?",studyTranslation:"du → dich · тебе",promptText:"Ist das Geschenk für ___?",support:"Заміни du (ти).",
     explanation:"Für завжди вимагає Akkusativ: du → dich.",category:"PERSONALPRONOMEN · AKKUSATIV",practiceVariants:false,
     response:{mode:"text",scope:"word",accepted:["dich"],caseSensitive:false,punctuationSensitive:false}
   },
   {
-    id:"pronoun-accusative-er-recall",targetId:"pronoun-accusative-er",type:"recall",word:"ihn",translation:"його · Akkusativ від er",promptText:"Akkusativ: er (він)",
+    id:"pronoun-accusative-er-recall",targetId:"pronoun-accusative-er",person:"er",type:"recall",word:"ihn",translation:"його · Akkusativ від er",promptText:"Akkusativ: er (він)",
     example:"Ich kenne ihn gut.",exampleTranslation:"Я добре його знаю.",explanation:"Kennen вимагає Akkusativ: er → ihn.",category:"PERSONALPRONOMEN · AKKUSATIV",practiceVariants:false,
     response:{mode:"text",scope:"word",accepted:["ihn"],caseSensitive:false,punctuationSensitive:false}
   },
   {
-    id:"pronoun-accusative-er-see",targetId:"pronoun-accusative-er",type:"cloze",word:"ihn",example:"Wir sehen ihn im Park.",translation:"Ми бачимо його в парку.",studyTranslation:"er → ihn · його",promptText:"Wir sehen ___ im Park.",support:"Заміни er (він).",
+    id:"pronoun-accusative-er-see",targetId:"pronoun-accusative-er",person:"er",type:"cloze",word:"ihn",example:"Wir sehen ihn im Park.",translation:"Ми бачимо його в парку.",studyTranslation:"er → ihn · його",promptText:"Wir sehen ___ im Park.",support:"Заміни er (він).",
     explanation:"Sehen вимагає Akkusativ: er → ihn, а не ihm.",category:"PERSONALPRONOMEN · AKKUSATIV",practiceVariants:false,
     response:{mode:"text",scope:"word",accepted:["ihn"],caseSensitive:false,punctuationSensitive:false}
   },
   {
-    id:"pronoun-accusative-er-call",targetId:"pronoun-accusative-er",type:"cloze",word:"ihn",example:"Rufst du ihn heute an?",translation:"Ти зателефонуєш йому сьогодні?",studyTranslation:"er → ihn · його",promptText:"Rufst du ___ heute an?",support:"Заміни er (він).",
+    id:"pronoun-accusative-er-call",targetId:"pronoun-accusative-er",person:"er",type:"cloze",word:"ihn",example:"Rufst du ihn heute an?",translation:"Ти зателефонуєш йому сьогодні?",studyTranslation:"er → ihn · його",promptText:"Rufst du ___ heute an?",support:"Заміни er (він).",
     explanation:"Anrufen вимагає Akkusativ: er → ihn. Український відмінок не завжди збігається з німецьким.",category:"PERSONALPRONOMEN · AKKUSATIV",practiceVariants:false,
     response:{mode:"text",scope:"word",accepted:["ihn"],caseSensitive:false,punctuationSensitive:false}
   },
   {
-    id:"pronoun-accusative-she-recall",targetId:"pronoun-accusative-she",type:"recall",word:"sie",translation:"її · Akkusativ від sie (вона)",promptText:"Akkusativ: sie (вона)",
+    id:"pronoun-accusative-she-recall",targetId:"pronoun-accusative-she",person:"she",type:"recall",word:"sie",translation:"її · Akkusativ від sie (вона)",promptText:"Akkusativ: sie (вона)",
     example:"Wir besuchen sie heute.",exampleTranslation:"Ми відвідаємо її сьогодні.",explanation:"Sie (вона) в Akkusativ залишається sie. Усередині речення це мала літера, на відміну від ввічливого Sie.",category:"PERSONALPRONOMEN · AKKUSATIV",practiceVariants:false,
     response:{mode:"text",scope:"word",accepted:["sie"],caseSensitive:true,punctuationSensitive:false}
   },
   {
-    id:"pronoun-accusative-she-know",targetId:"pronoun-accusative-she",type:"cloze",word:"sie",example:"Ich kenne sie gut.",translation:"Я добре її знаю.",studyTranslation:"sie (вона) → sie · її",promptText:"Ich kenne ___ gut.",support:"Заміни sie (вона). Зверни увагу на регістр.",
+    id:"pronoun-accusative-she-know",targetId:"pronoun-accusative-she",person:"she",type:"cloze",word:"sie",example:"Ich kenne sie gut.",translation:"Я добре її знаю.",studyTranslation:"sie (вона) → sie · її",promptText:"Ich kenne ___ gut.",support:"Заміни sie (вона). Зверни увагу на регістр.",
     explanation:"Kennen вимагає Akkusativ: sie (вона) → sie, а не ihr.",category:"PERSONALPRONOMEN · AKKUSATIV",practiceVariants:false,
     response:{mode:"text",scope:"word",accepted:["sie"],caseSensitive:true,punctuationSensitive:false}
   },
   {
-    id:"pronoun-accusative-she-for",targetId:"pronoun-accusative-she",type:"cloze",word:"sie",example:"Ist der Tee für sie?",translation:"Цей чай для неї?",studyTranslation:"sie (вона) → sie · її",promptText:"Ist der Tee für ___?",support:"Заміни sie (вона). Зверни увагу на регістр.",
+    id:"pronoun-accusative-she-for",targetId:"pronoun-accusative-she",person:"she",type:"cloze",word:"sie",example:"Ist der Tee für sie?",translation:"Цей чай для неї?",studyTranslation:"sie (вона) → sie · її",promptText:"Ist der Tee für ___?",support:"Заміни sie (вона). Зверни увагу на регістр.",
     explanation:"Für вимагає Akkusativ: sie (вона) → sie. Ввічливе «Ви» писали б Sie.",category:"PERSONALPRONOMEN · AKKUSATIV",practiceVariants:false,
     response:{mode:"text",scope:"word",accepted:["sie"],caseSensitive:true,punctuationSensitive:false}
   },
   {
-    id:"pronoun-accusative-es-recall",targetId:"pronoun-accusative-es",type:"recall",word:"es",translation:"його · Akkusativ від es (воно, середній рід)",promptText:"Akkusativ: es (воно)",
+    id:"pronoun-accusative-es-recall",targetId:"pronoun-accusative-es",person:"es",type:"recall",word:"es",translation:"його · Akkusativ від es (воно, середній рід)",promptText:"Akkusativ: es (воно)",
     example:"Das Baby schläft. Ich sehe es.",exampleTranslation:"Немовля спить. Я його бачу.",explanation:"Es в Akkusativ не змінюється. Займенник узгоджується з німецьким родом: das Baby → es.",category:"PERSONALPRONOMEN · AKKUSATIV",practiceVariants:false,
     response:{mode:"text",scope:"word",accepted:["es"],caseSensitive:false,punctuationSensitive:false}
   },
   {
-    id:"pronoun-accusative-es-see",targetId:"pronoun-accusative-es",type:"cloze",word:"es",example:"Die Mutter sieht es.",translation:"Мама бачить його (немовля).",studyTranslation:"es → es · його (середній рід)",promptText:"Die Mutter sieht ___.",support:"Заміни es: das Baby (немовля, середній рід).",
+    id:"pronoun-accusative-es-see",targetId:"pronoun-accusative-es",person:"es",type:"cloze",word:"es",example:"Die Mutter sieht es.",translation:"Мама бачить його (немовля).",studyTranslation:"es → es · його (середній рід)",promptText:"Die Mutter sieht ___.",support:"Заміни es: das Baby (немовля, середній рід).",
     explanation:"Sehen вимагає Akkusativ: es → es, а не ihm.",category:"PERSONALPRONOMEN · AKKUSATIV",practiceVariants:false,
     response:{mode:"text",scope:"word",accepted:["es"],caseSensitive:false,punctuationSensitive:false}
   },
   {
-    id:"pronoun-accusative-es-photo",targetId:"pronoun-accusative-es",type:"cloze",word:"es",example:"Fotografierst du es?",translation:"Ти фотографуєш його (немовля)?",studyTranslation:"es → es · його (середній рід)",promptText:"Fotografierst du ___?",support:"Заміни es: das Baby (немовля, середній рід).",
+    id:"pronoun-accusative-es-photo",targetId:"pronoun-accusative-es",person:"es",type:"cloze",word:"es",example:"Fotografierst du es?",translation:"Ти фотографуєш його (немовля)?",studyTranslation:"es → es · його (середній рід)",promptText:"Fotografierst du ___?",support:"Заміни es: das Baby (немовля, середній рід).",
     explanation:"Fotografieren вимагає Akkusativ: es → es.",category:"PERSONALPRONOMEN · AKKUSATIV",practiceVariants:false,
     response:{mode:"text",scope:"word",accepted:["es"],caseSensitive:false,punctuationSensitive:false}
   },
   {
-    id:"pronoun-accusative-wir-recall",targetId:"pronoun-accusative-wir",type:"recall",word:"uns",translation:"нас · Akkusativ від wir",promptText:"Akkusativ: wir (ми)",
+    id:"pronoun-accusative-wir-recall",targetId:"pronoun-accusative-wir",person:"wir",type:"recall",word:"uns",translation:"нас · Akkusativ від wir",promptText:"Akkusativ: wir (ми)",
     example:"Unsere Freunde besuchen uns.",exampleTranslation:"Наші друзі відвідують нас.",explanation:"Besuchen вимагає Akkusativ: wir → uns.",category:"PERSONALPRONOMEN · AKKUSATIV",practiceVariants:false,
     response:{mode:"text",scope:"word",accepted:["uns"],caseSensitive:false,punctuationSensitive:false}
   },
   {
-    id:"pronoun-accusative-wir-hear",targetId:"pronoun-accusative-wir",type:"cloze",word:"uns",example:"Der Lehrer hört uns.",translation:"Учитель чує нас.",studyTranslation:"wir → uns · нас",promptText:"Der Lehrer hört ___.",support:"Заміни wir (ми).",
+    id:"pronoun-accusative-wir-hear",targetId:"pronoun-accusative-wir",person:"wir",type:"cloze",word:"uns",example:"Der Lehrer hört uns.",translation:"Учитель чує нас.",studyTranslation:"wir → uns · нас",promptText:"Der Lehrer hört ___.",support:"Заміни wir (ми).",
     explanation:"Hören вимагає Akkusativ: wir → uns. Uns має однакову форму в Akkusativ і Dativ.",category:"PERSONALPRONOMEN · AKKUSATIV",practiceVariants:false,
     response:{mode:"text",scope:"word",accepted:["uns"],caseSensitive:false,punctuationSensitive:false}
   },
   {
-    id:"pronoun-accusative-wir-for",targetId:"pronoun-accusative-wir",type:"cloze",word:"uns",example:"Ist der Kuchen für uns?",translation:"Цей пиріг для нас?",studyTranslation:"wir → uns · нас",promptText:"Ist der Kuchen für ___?",support:"Заміни wir (ми).",
+    id:"pronoun-accusative-wir-for",targetId:"pronoun-accusative-wir",person:"wir",type:"cloze",word:"uns",example:"Ist der Kuchen für uns?",translation:"Цей пиріг для нас?",studyTranslation:"wir → uns · нас",promptText:"Ist der Kuchen für ___?",support:"Заміни wir (ми).",
     explanation:"Für вимагає Akkusativ: wir → uns.",category:"PERSONALPRONOMEN · AKKUSATIV",practiceVariants:false,
     response:{mode:"text",scope:"word",accepted:["uns"],caseSensitive:false,punctuationSensitive:false}
   },
   {
-    id:"pronoun-accusative-ihr-recall",targetId:"pronoun-accusative-ihr",type:"recall",word:"euch",translation:"вас · Akkusativ від ihr (ви, неформально, множина)",promptText:"Akkusativ: ihr (ви, неформально, кілька людей)",
+    id:"pronoun-accusative-ihr-recall",targetId:"pronoun-accusative-ihr",person:"ihr",type:"recall",word:"euch",translation:"вас · Akkusativ від ihr (ви, неформально, множина)",promptText:"Akkusativ: ihr (ви, неформально, кілька людей)",
     example:"Ich besuche euch morgen.",exampleTranslation:"Я відвідаю вас завтра.",explanation:"Besuchen вимагає Akkusativ: ihr → euch. Це неформальне звертання до кількох людей.",category:"PERSONALPRONOMEN · AKKUSATIV",practiceVariants:false,
     response:{mode:"text",scope:"word",accepted:["euch"],caseSensitive:false,punctuationSensitive:false}
   },
   {
-    id:"pronoun-accusative-ihr-see",targetId:"pronoun-accusative-ihr",type:"cloze",word:"euch",example:"Wir sehen euch am Bahnhof.",translation:"Ми бачимо вас на вокзалі.",studyTranslation:"ihr → euch · вас (неформально, множина)",promptText:"Wir sehen ___ am Bahnhof.",support:"Заміни ihr (ви, неформально, кілька людей).",
+    id:"pronoun-accusative-ihr-see",targetId:"pronoun-accusative-ihr",person:"ihr",type:"cloze",word:"euch",example:"Wir sehen euch am Bahnhof.",translation:"Ми бачимо вас на вокзалі.",studyTranslation:"ihr → euch · вас (неформально, множина)",promptText:"Wir sehen ___ am Bahnhof.",support:"Заміни ihr (ви, неформально, кілька людей).",
     explanation:"Sehen вимагає Akkusativ: ihr → euch.",category:"PERSONALPRONOMEN · AKKUSATIV",practiceVariants:false,
     response:{mode:"text",scope:"word",accepted:["euch"],caseSensitive:false,punctuationSensitive:false}
   },
   {
-    id:"pronoun-accusative-ihr-call",targetId:"pronoun-accusative-ihr",type:"cloze",word:"euch",example:"Ruft Anna euch heute an?",translation:"Анна зателефонує вам сьогодні?",studyTranslation:"ihr → euch · вас (неформально, множина)",promptText:"Ruft Anna ___ heute an?",support:"Заміни ihr (ви, неформально, кілька людей).",
+    id:"pronoun-accusative-ihr-call",targetId:"pronoun-accusative-ihr",person:"ihr",type:"cloze",word:"euch",example:"Ruft Anna euch heute an?",translation:"Анна зателефонує вам сьогодні?",studyTranslation:"ihr → euch · вас (неформально, множина)",promptText:"Ruft Anna ___ heute an?",support:"Заміни ihr (ви, неформально, кілька людей).",
     explanation:"Anrufen вимагає Akkusativ: ihr → euch.",category:"PERSONALPRONOMEN · AKKUSATIV",practiceVariants:false,
     response:{mode:"text",scope:"word",accepted:["euch"],caseSensitive:false,punctuationSensitive:false}
   },
   {
-    id:"pronoun-accusative-they-recall",targetId:"pronoun-accusative-they",type:"recall",word:"sie",translation:"їх · Akkusativ від sie (вони)",promptText:"Akkusativ: sie (вони)",
+    id:"pronoun-accusative-they-recall",targetId:"pronoun-accusative-they",person:"they",type:"recall",word:"sie",translation:"їх · Akkusativ від sie (вони)",promptText:"Akkusativ: sie (вони)",
     example:"Ich kenne sie schon.",exampleTranslation:"Я їх уже знаю.",explanation:"Sie (вони) в Akkusativ залишається sie. Усередині речення пишемо малу літеру.",category:"PERSONALPRONOMEN · AKKUSATIV",practiceVariants:false,
     response:{mode:"text",scope:"word",accepted:["sie"],caseSensitive:true,punctuationSensitive:false}
   },
   {
-    id:"pronoun-accusative-they-visit",targetId:"pronoun-accusative-they",type:"cloze",word:"sie",example:"Wir besuchen sie am Sonntag.",translation:"Ми відвідаємо їх у неділю.",studyTranslation:"sie (вони) → sie · їх",promptText:"Wir besuchen ___ am Sonntag.",support:"Заміни sie (вони). Зверни увагу на регістр.",
+    id:"pronoun-accusative-they-visit",targetId:"pronoun-accusative-they",person:"they",type:"cloze",word:"sie",example:"Wir besuchen sie am Sonntag.",translation:"Ми відвідаємо їх у неділю.",studyTranslation:"sie (вони) → sie · їх",promptText:"Wir besuchen ___ am Sonntag.",support:"Заміни sie (вони). Зверни увагу на регістр.",
     explanation:"Besuchen вимагає Akkusativ: sie (вони) → sie, а не ihnen.",category:"PERSONALPRONOMEN · AKKUSATIV",practiceVariants:false,
     response:{mode:"text",scope:"word",accepted:["sie"],caseSensitive:true,punctuationSensitive:false}
   },
   {
-    id:"pronoun-accusative-they-for",targetId:"pronoun-accusative-they",type:"cloze",word:"sie",example:"Sind die Bücher für sie?",translation:"Ці книжки для них?",studyTranslation:"sie (вони) → sie · їх",promptText:"Sind die Bücher für ___?",support:"Заміни sie (вони). Зверни увагу на регістр.",
+    id:"pronoun-accusative-they-for",targetId:"pronoun-accusative-they",person:"they",type:"cloze",word:"sie",example:"Sind die Bücher für sie?",translation:"Ці книжки для них?",studyTranslation:"sie (вони) → sie · їх",promptText:"Sind die Bücher für ___?",support:"Заміни sie (вони). Зверни увагу на регістр.",
     explanation:"Für вимагає Akkusativ: sie (вони) → sie. Ввічливе «Ви» писали б Sie.",category:"PERSONALPRONOMEN · AKKUSATIV",practiceVariants:false,
     response:{mode:"text",scope:"word",accepted:["sie"],caseSensitive:true,punctuationSensitive:false}
   },
   {
-    id:"pronoun-accusative-formal-recall",targetId:"pronoun-accusative-formal",type:"recall",word:"Sie",translation:"Вас · Akkusativ від Sie (Ви, ввічливо)",promptText:"Akkusativ: Sie (Ви, ввічливо)",
+    id:"pronoun-accusative-formal-recall",targetId:"pronoun-accusative-formal",person:"formal",type:"recall",word:"Sie",translation:"Вас · Akkusativ від Sie (Ви, ввічливо)",promptText:"Akkusativ: Sie (Ви, ввічливо)",
     example:"Ich besuche Sie morgen.",exampleTranslation:"Я відвідаю Вас завтра.",explanation:"Ввічливе Sie в Akkusativ залишається Sie й завжди пишеться з великої літери.",category:"PERSONALPRONOMEN · AKKUSATIV",practiceVariants:false,
     response:{mode:"text",scope:"word",accepted:["Sie"],caseSensitive:true,punctuationSensitive:false}
   },
   {
-    id:"pronoun-accusative-formal-hear",targetId:"pronoun-accusative-formal",type:"cloze",word:"Sie",example:"Ich höre Sie nicht.",translation:"Я Вас не чую.",studyTranslation:"Sie → Sie · Вас (ввічливо)",promptText:"Ich höre ___ nicht.",support:"Заміни Sie (Ви, ввічливо). Зверни увагу на регістр.",
+    id:"pronoun-accusative-formal-hear",targetId:"pronoun-accusative-formal",person:"formal",type:"cloze",word:"Sie",example:"Ich höre Sie nicht.",translation:"Я Вас не чую.",studyTranslation:"Sie → Sie · Вас (ввічливо)",promptText:"Ich höre ___ nicht.",support:"Заміни Sie (Ви, ввічливо). Зверни увагу на регістр.",
     explanation:"Hören вимагає Akkusativ: Sie → Sie. Мала літера sie означала б «її» або «їх».",category:"PERSONALPRONOMEN · AKKUSATIV",practiceVariants:false,
     response:{mode:"text",scope:"word",accepted:["Sie"],caseSensitive:true,punctuationSensitive:false}
   },
   {
-    id:"pronoun-accusative-formal-for",targetId:"pronoun-accusative-formal",type:"cloze",word:"Sie",example:"Ist der Brief für Sie?",translation:"Цей лист для Вас?",studyTranslation:"Sie → Sie · Вас (ввічливо)",promptText:"Ist der Brief für ___?",support:"Заміни Sie (Ви, ввічливо). Зверни увагу на регістр.",
+    id:"pronoun-accusative-formal-for",targetId:"pronoun-accusative-formal",person:"formal",type:"cloze",word:"Sie",example:"Ist der Brief für Sie?",translation:"Цей лист для Вас?",studyTranslation:"Sie → Sie · Вас (ввічливо)",promptText:"Ist der Brief für ___?",support:"Заміни Sie (Ви, ввічливо). Зверни увагу на регістр.",
     explanation:"Für вимагає Akkusativ: ввічливе Sie пишемо з великої літери.",category:"PERSONALPRONOMEN · AKKUSATIV",practiceVariants:false,
     response:{mode:"text",scope:"word",accepted:["Sie"],caseSensitive:true,punctuationSensitive:false}
   }
-];
-const personalPronounDativeCards=[
+]);
+const personalPronounDativeCards=withPronounCase("Dat.",[
   {
-    id:"pronoun-dative-ich-recall",targetId:"pronoun-dative-ich",type:"recall",word:"mir",translation:"мені · Dativ від ich",promptText:"Dativ: ich (я)",
+    id:"pronoun-dative-ich-recall",targetId:"pronoun-dative-ich",person:"ich",type:"recall",word:"mir",translation:"мені · Dativ від ich",promptText:"Dativ: ich (я)",
     example:"Meine Schwester hilft mir.",exampleTranslation:"Моя сестра допомагає мені.",explanation:"Helfen вимагає Dativ: ich → mir.",category:"PERSONALPRONOMEN · DATIV",practiceVariants:false,
     response:{mode:"text",scope:"word",accepted:["mir"],caseSensitive:false,punctuationSensitive:false}
   },
   {
-    id:"pronoun-dative-ich-give",targetId:"pronoun-dative-ich",type:"cloze",word:"mir",example:"Paul gibt mir das Buch.",translation:"Пауль дає мені книжку.",studyTranslation:"ich → mir · мені",promptText:"Paul gibt ___ das Buch.",support:"Заміни ich (я): одержувач книжки.",
+    id:"pronoun-dative-ich-give",targetId:"pronoun-dative-ich",person:"ich",type:"cloze",word:"mir",example:"Paul gibt mir das Buch.",translation:"Пауль дає мені книжку.",studyTranslation:"ich → mir · мені",promptText:"Paul gibt ___ das Buch.",support:"Заміни ich (я): одержувач книжки.",
     explanation:"Одержувач із geben стоїть у Dativ: ich → mir. Das Buch — предмет, який передають, в Akkusativ.",category:"PERSONALPRONOMEN · DATIV",practiceVariants:false,
     response:{mode:"text",scope:"word",accepted:["mir"],caseSensitive:false,punctuationSensitive:false}
   },
   {
-    id:"pronoun-dative-ich-with",targetId:"pronoun-dative-ich",type:"cloze",word:"mir",example:"Kommst du mit mir?",translation:"Ти підеш зі мною?",studyTranslation:"ich → mir · мені",promptText:"Kommst du mit ___?",support:"Заміни ich (я).",
+    id:"pronoun-dative-ich-with",targetId:"pronoun-dative-ich",person:"ich",type:"cloze",word:"mir",example:"Kommst du mit mir?",translation:"Ти підеш зі мною?",studyTranslation:"ich → mir · мені",promptText:"Kommst du mit ___?",support:"Заміни ich (я).",
     explanation:"Mit завжди вимагає Dativ: ich → mir. Українською тут уживаємо орудний відмінок «зі мною».",category:"PERSONALPRONOMEN · DATIV",practiceVariants:false,
     response:{mode:"text",scope:"word",accepted:["mir"],caseSensitive:false,punctuationSensitive:false}
   },
   {
-    id:"pronoun-dative-du-recall",targetId:"pronoun-dative-du",type:"recall",word:"dir",translation:"тобі · Dativ від du",promptText:"Dativ: du (ти)",
+    id:"pronoun-dative-du-recall",targetId:"pronoun-dative-du",person:"du",type:"recall",word:"dir",translation:"тобі · Dativ від du",promptText:"Dativ: du (ти)",
     example:"Ich helfe dir gern.",exampleTranslation:"Я охоче допомагаю тобі.",explanation:"Helfen вимагає Dativ: du → dir.",category:"PERSONALPRONOMEN · DATIV",practiceVariants:false,
     response:{mode:"text",scope:"word",accepted:["dir"],caseSensitive:false,punctuationSensitive:false}
   },
   {
-    id:"pronoun-dative-du-thank",targetId:"pronoun-dative-du",type:"cloze",word:"dir",example:"Wir danken dir.",translation:"Ми дякуємо тобі.",studyTranslation:"du → dir · тобі",promptText:"Wir danken ___.",support:"Заміни du (ти).",
+    id:"pronoun-dative-du-thank",targetId:"pronoun-dative-du",person:"du",type:"cloze",word:"dir",example:"Wir danken dir.",translation:"Ми дякуємо тобі.",studyTranslation:"du → dir · тобі",promptText:"Wir danken ___.",support:"Заміни du (ти).",
     explanation:"Danken вимагає Dativ: du → dir.",category:"PERSONALPRONOMEN · DATIV",practiceVariants:false,
     response:{mode:"text",scope:"word",accepted:["dir"],caseSensitive:false,punctuationSensitive:false}
   },
   {
-    id:"pronoun-dative-du-with",targetId:"pronoun-dative-du",type:"cloze",word:"dir",example:"Darf ich mit dir lernen?",translation:"Можна мені вчитися з тобою?",studyTranslation:"du → dir · тобі",promptText:"Darf ich mit ___ lernen?",support:"Заміни du (ти).",
+    id:"pronoun-dative-du-with",targetId:"pronoun-dative-du",person:"du",type:"cloze",word:"dir",example:"Darf ich mit dir lernen?",translation:"Можна мені вчитися з тобою?",studyTranslation:"du → dir · тобі",promptText:"Darf ich mit ___ lernen?",support:"Заміни du (ти).",
     explanation:"Mit вимагає Dativ: du → dir, а не dich.",category:"PERSONALPRONOMEN · DATIV",practiceVariants:false,
     response:{mode:"text",scope:"word",accepted:["dir"],caseSensitive:false,punctuationSensitive:false}
   },
   {
-    id:"pronoun-dative-er-recall",targetId:"pronoun-dative-er",type:"recall",word:"ihm",translation:"йому · Dativ від er",promptText:"Dativ: er (він)",
+    id:"pronoun-dative-er-recall",targetId:"pronoun-dative-er",person:"er",type:"recall",word:"ihm",translation:"йому · Dativ від er",promptText:"Dativ: er (він)",
     example:"Ich helfe ihm heute.",exampleTranslation:"Я допомагаю йому сьогодні.",explanation:"Helfen вимагає Dativ: er → ihm.",category:"PERSONALPRONOMEN · DATIV",practiceVariants:false,
     response:{mode:"text",scope:"word",accepted:["ihm"],caseSensitive:false,punctuationSensitive:false}
   },
   {
-    id:"pronoun-dative-er-give",targetId:"pronoun-dative-er",type:"cloze",word:"ihm",example:"Anna gibt ihm den Schlüssel.",translation:"Анна дає йому ключ.",studyTranslation:"er → ihm · йому",promptText:"Anna gibt ___ den Schlüssel.",support:"Заміни er (він): одержувач ключа.",
+    id:"pronoun-dative-er-give",targetId:"pronoun-dative-er",person:"er",type:"cloze",word:"ihm",example:"Anna gibt ihm den Schlüssel.",translation:"Анна дає йому ключ.",studyTranslation:"er → ihm · йому",promptText:"Anna gibt ___ den Schlüssel.",support:"Заміни er (він): одержувач ключа.",
     explanation:"Одержувач із geben стоїть у Dativ: er → ihm, а не ihn.",category:"PERSONALPRONOMEN · DATIV",practiceVariants:false,
     response:{mode:"text",scope:"word",accepted:["ihm"],caseSensitive:false,punctuationSensitive:false}
   },
   {
-    id:"pronoun-dative-er-with",targetId:"pronoun-dative-er",type:"cloze",word:"ihm",example:"Sprichst du mit ihm?",translation:"Ти розмовляєш з ним?",studyTranslation:"er → ihm · йому",promptText:"Sprichst du mit ___?",support:"Заміни er (він).",
+    id:"pronoun-dative-er-with",targetId:"pronoun-dative-er",person:"er",type:"cloze",word:"ihm",example:"Sprichst du mit ihm?",translation:"Ти розмовляєш з ним?",studyTranslation:"er → ihm · йому",promptText:"Sprichst du mit ___?",support:"Заміни er (він).",
     explanation:"Mit вимагає Dativ: er → ihm.",category:"PERSONALPRONOMEN · DATIV",practiceVariants:false,
     response:{mode:"text",scope:"word",accepted:["ihm"],caseSensitive:false,punctuationSensitive:false}
   },
   {
-    id:"pronoun-dative-she-recall",targetId:"pronoun-dative-she",type:"recall",word:"ihr",translation:"їй · Dativ від sie (вона)",promptText:"Dativ: sie (вона)",
+    id:"pronoun-dative-she-recall",targetId:"pronoun-dative-she",person:"she",type:"recall",word:"ihr",translation:"їй · Dativ від sie (вона)",promptText:"Dativ: sie (вона)",
     example:"Ich helfe ihr gern.",exampleTranslation:"Я охоче допомагаю їй.",explanation:"Helfen вимагає Dativ: sie (вона) → ihr. Не плутай з ihr у Nominativ («ви», неформально).",category:"PERSONALPRONOMEN · DATIV",practiceVariants:false,
     response:{mode:"text",scope:"word",accepted:["ihr"],caseSensitive:false,punctuationSensitive:false}
   },
   {
-    id:"pronoun-dative-she-thank",targetId:"pronoun-dative-she",type:"cloze",word:"ihr",example:"Wir danken ihr.",translation:"Ми дякуємо їй.",studyTranslation:"sie (вона) → ihr · їй",promptText:"Wir danken ___.",support:"Заміни sie (вона).",
+    id:"pronoun-dative-she-thank",targetId:"pronoun-dative-she",person:"she",type:"cloze",word:"ihr",example:"Wir danken ihr.",translation:"Ми дякуємо їй.",studyTranslation:"sie (вона) → ihr · їй",promptText:"Wir danken ___.",support:"Заміни sie (вона).",
     explanation:"Danken вимагає Dativ: sie (вона) → ihr, а не sie.",category:"PERSONALPRONOMEN · DATIV",practiceVariants:false,
     response:{mode:"text",scope:"word",accepted:["ihr"],caseSensitive:false,punctuationSensitive:false}
   },
   {
-    id:"pronoun-dative-she-with",targetId:"pronoun-dative-she",type:"cloze",word:"ihr",example:"Gehst du mit ihr ins Kino?",translation:"Ти йдеш з нею в кіно?",studyTranslation:"sie (вона) → ihr · їй",promptText:"Gehst du mit ___ ins Kino?",support:"Заміни sie (вона).",
+    id:"pronoun-dative-she-with",targetId:"pronoun-dative-she",person:"she",type:"cloze",word:"ihr",example:"Gehst du mit ihr ins Kino?",translation:"Ти йдеш з нею в кіно?",studyTranslation:"sie (вона) → ihr · їй",promptText:"Gehst du mit ___ ins Kino?",support:"Заміни sie (вона).",
     explanation:"Mit вимагає Dativ: sie (вона) → ihr.",category:"PERSONALPRONOMEN · DATIV",practiceVariants:false,
     response:{mode:"text",scope:"word",accepted:["ihr"],caseSensitive:false,punctuationSensitive:false}
   },
   {
-    id:"pronoun-dative-es-recall",targetId:"pronoun-dative-es",type:"recall",word:"ihm",translation:"йому · Dativ від es (воно, середній рід)",promptText:"Dativ: es (воно)",
+    id:"pronoun-dative-es-recall",targetId:"pronoun-dative-es",person:"es",type:"recall",word:"ihm",translation:"йому · Dativ від es (воно, середній рід)",promptText:"Dativ: es (воно)",
     example:"Das Baby weint. Die Mutter gibt ihm Milch.",exampleTranslation:"Немовля плаче. Мама дає йому молоко.",explanation:"Одержувач із geben стоїть у Dativ: es → ihm. Er і es мають однакову форму Dativ.",category:"PERSONALPRONOMEN · DATIV",practiceVariants:false,
     response:{mode:"text",scope:"word",accepted:["ihm"],caseSensitive:false,punctuationSensitive:false}
   },
   {
-    id:"pronoun-dative-es-help",targetId:"pronoun-dative-es",type:"cloze",word:"ihm",example:"Der Vater hilft ihm.",translation:"Тато допомагає йому (дитині).",studyTranslation:"es → ihm · йому (середній рід)",promptText:"Der Vater hilft ___.",support:"Заміни es: das Kind (дитина, середній рід).",
+    id:"pronoun-dative-es-help",targetId:"pronoun-dative-es",person:"es",type:"cloze",word:"ihm",example:"Der Vater hilft ihm.",translation:"Тато допомагає йому (дитині).",studyTranslation:"es → ihm · йому (середній рід)",promptText:"Der Vater hilft ___.",support:"Заміни es: das Kind (дитина, середній рід).",
     explanation:"Helfen вимагає Dativ: es → ihm. Рід визначає німецький іменник das Kind.",category:"PERSONALPRONOMEN · DATIV",practiceVariants:false,
     response:{mode:"text",scope:"word",accepted:["ihm"],caseSensitive:false,punctuationSensitive:false}
   },
   {
-    id:"pronoun-dative-es-with",targetId:"pronoun-dative-es",type:"cloze",word:"ihm",example:"Spielst du mit ihm?",translation:"Ти граєшся з ним (немовлям)?",studyTranslation:"es → ihm · йому (середній рід)",promptText:"Spielst du mit ___?",support:"Заміни es: das Baby (немовля, середній рід).",
+    id:"pronoun-dative-es-with",targetId:"pronoun-dative-es",person:"es",type:"cloze",word:"ihm",example:"Spielst du mit ihm?",translation:"Ти граєшся з ним (немовлям)?",studyTranslation:"es → ihm · йому (середній рід)",promptText:"Spielst du mit ___?",support:"Заміни es: das Baby (немовля, середній рід).",
     explanation:"Mit вимагає Dativ: es → ihm, а не es.",category:"PERSONALPRONOMEN · DATIV",practiceVariants:false,
     response:{mode:"text",scope:"word",accepted:["ihm"],caseSensitive:false,punctuationSensitive:false}
   },
   {
-    id:"pronoun-dative-wir-recall",targetId:"pronoun-dative-wir",type:"recall",word:"uns",translation:"нам · Dativ від wir",promptText:"Dativ: wir (ми)",
+    id:"pronoun-dative-wir-recall",targetId:"pronoun-dative-wir",person:"wir",type:"recall",word:"uns",translation:"нам · Dativ від wir",promptText:"Dativ: wir (ми)",
     example:"Unsere Freunde helfen uns.",exampleTranslation:"Наші друзі допомагають нам.",explanation:"Helfen вимагає Dativ: wir → uns. Форма збігається з Akkusativ.",category:"PERSONALPRONOMEN · DATIV",practiceVariants:false,
     response:{mode:"text",scope:"word",accepted:["uns"],caseSensitive:false,punctuationSensitive:false}
   },
   {
-    id:"pronoun-dative-wir-give",targetId:"pronoun-dative-wir",type:"cloze",word:"uns",example:"Der Lehrer gibt uns die Bücher.",translation:"Учитель дає нам книжки.",studyTranslation:"wir → uns · нам",promptText:"Der Lehrer gibt ___ die Bücher.",support:"Заміни wir (ми): одержувачі книжок.",
+    id:"pronoun-dative-wir-give",targetId:"pronoun-dative-wir",person:"wir",type:"cloze",word:"uns",example:"Der Lehrer gibt uns die Bücher.",translation:"Учитель дає нам книжки.",studyTranslation:"wir → uns · нам",promptText:"Der Lehrer gibt ___ die Bücher.",support:"Заміни wir (ми): одержувачі книжок.",
     explanation:"Одержувачі з geben стоять у Dativ: wir → uns.",category:"PERSONALPRONOMEN · DATIV",practiceVariants:false,
     response:{mode:"text",scope:"word",accepted:["uns"],caseSensitive:false,punctuationSensitive:false}
   },
   {
-    id:"pronoun-dative-wir-with",targetId:"pronoun-dative-wir",type:"cloze",word:"uns",example:"Lernst du mit uns?",translation:"Ти вчишся з нами?",studyTranslation:"wir → uns · нам",promptText:"Lernst du mit ___?",support:"Заміни wir (ми).",
+    id:"pronoun-dative-wir-with",targetId:"pronoun-dative-wir",person:"wir",type:"cloze",word:"uns",example:"Lernst du mit uns?",translation:"Ти вчишся з нами?",studyTranslation:"wir → uns · нам",promptText:"Lernst du mit ___?",support:"Заміни wir (ми).",
     explanation:"Mit вимагає Dativ: wir → uns.",category:"PERSONALPRONOMEN · DATIV",practiceVariants:false,
     response:{mode:"text",scope:"word",accepted:["uns"],caseSensitive:false,punctuationSensitive:false}
   },
   {
-    id:"pronoun-dative-ihr-recall",targetId:"pronoun-dative-ihr",type:"recall",word:"euch",translation:"вам · Dativ від ihr (ви, неформально, множина)",promptText:"Dativ: ihr (ви, неформально, кілька людей)",
+    id:"pronoun-dative-ihr-recall",targetId:"pronoun-dative-ihr",person:"ihr",type:"recall",word:"euch",translation:"вам · Dativ від ihr (ви, неформально, множина)",promptText:"Dativ: ihr (ви, неформально, кілька людей)",
     example:"Ich helfe euch morgen.",exampleTranslation:"Я допоможу вам завтра.",explanation:"Helfen вимагає Dativ: ihr → euch. Форма збігається з Akkusativ.",category:"PERSONALPRONOMEN · DATIV",practiceVariants:false,
     response:{mode:"text",scope:"word",accepted:["euch"],caseSensitive:false,punctuationSensitive:false}
   },
   {
-    id:"pronoun-dative-ihr-thank",targetId:"pronoun-dative-ihr",type:"cloze",word:"euch",example:"Wir danken euch.",translation:"Ми дякуємо вам.",studyTranslation:"ihr → euch · вам (неформально, множина)",promptText:"Wir danken ___.",support:"Заміни ihr (ви, неформально, кілька людей).",
+    id:"pronoun-dative-ihr-thank",targetId:"pronoun-dative-ihr",person:"ihr",type:"cloze",word:"euch",example:"Wir danken euch.",translation:"Ми дякуємо вам.",studyTranslation:"ihr → euch · вам (неформально, множина)",promptText:"Wir danken ___.",support:"Заміни ihr (ви, неформально, кілька людей).",
     explanation:"Danken вимагає Dativ: ihr → euch.",category:"PERSONALPRONOMEN · DATIV",practiceVariants:false,
     response:{mode:"text",scope:"word",accepted:["euch"],caseSensitive:false,punctuationSensitive:false}
   },
   {
-    id:"pronoun-dative-ihr-with",targetId:"pronoun-dative-ihr",type:"cloze",word:"euch",example:"Darf ich mit euch kommen?",translation:"Можна мені піти з вами?",studyTranslation:"ihr → euch · вам (неформально, множина)",promptText:"Darf ich mit ___ kommen?",support:"Заміни ihr (ви, неформально, кілька людей).",
+    id:"pronoun-dative-ihr-with",targetId:"pronoun-dative-ihr",person:"ihr",type:"cloze",word:"euch",example:"Darf ich mit euch kommen?",translation:"Можна мені піти з вами?",studyTranslation:"ihr → euch · вам (неформально, множина)",promptText:"Darf ich mit ___ kommen?",support:"Заміни ihr (ви, неформально, кілька людей).",
     explanation:"Mit вимагає Dativ: ihr → euch.",category:"PERSONALPRONOMEN · DATIV",practiceVariants:false,
     response:{mode:"text",scope:"word",accepted:["euch"],caseSensitive:false,punctuationSensitive:false}
   },
   {
-    id:"pronoun-dative-they-recall",targetId:"pronoun-dative-they",type:"recall",word:"ihnen",translation:"їм · Dativ від sie (вони)",promptText:"Dativ: sie (вони)",
+    id:"pronoun-dative-they-recall",targetId:"pronoun-dative-they",person:"they",type:"recall",word:"ihnen",translation:"їм · Dativ від sie (вони)",promptText:"Dativ: sie (вони)",
     example:"Ich helfe ihnen heute.",exampleTranslation:"Я допомагаю їм сьогодні.",explanation:"Helfen вимагає Dativ: sie (вони) → ihnen. Мала літера відрізняє їх від ввічливого «Ви».",category:"PERSONALPRONOMEN · DATIV",practiceVariants:false,
     response:{mode:"text",scope:"word",accepted:["ihnen"],caseSensitive:true,punctuationSensitive:false}
   },
   {
-    id:"pronoun-dative-they-give",targetId:"pronoun-dative-they",type:"cloze",word:"ihnen",example:"Anna gibt ihnen die Karten.",translation:"Анна дає їм квитки.",studyTranslation:"sie (вони) → ihnen · їм",promptText:"Anna gibt ___ die Karten.",support:"Заміни sie (вони): одержувачі квитків. Зверни увагу на регістр.",
+    id:"pronoun-dative-they-give",targetId:"pronoun-dative-they",person:"they",type:"cloze",word:"ihnen",example:"Anna gibt ihnen die Karten.",translation:"Анна дає їм квитки.",studyTranslation:"sie (вони) → ihnen · їм",promptText:"Anna gibt ___ die Karten.",support:"Заміни sie (вони): одержувачі квитків. Зверни увагу на регістр.",
     explanation:"Одержувачі з geben стоять у Dativ: sie (вони) → ihnen, з малої літери.",category:"PERSONALPRONOMEN · DATIV",practiceVariants:false,
     response:{mode:"text",scope:"word",accepted:["ihnen"],caseSensitive:true,punctuationSensitive:false}
   },
   {
-    id:"pronoun-dative-they-with",targetId:"pronoun-dative-they",type:"cloze",word:"ihnen",example:"Fährst du mit ihnen nach Berlin?",translation:"Ти їдеш з ними до Берліна?",studyTranslation:"sie (вони) → ihnen · їм",promptText:"Fährst du mit ___ nach Berlin?",support:"Заміни sie (вони). Зверни увагу на регістр.",
+    id:"pronoun-dative-they-with",targetId:"pronoun-dative-they",person:"they",type:"cloze",word:"ihnen",example:"Fährst du mit ihnen nach Berlin?",translation:"Ти їдеш з ними до Берліна?",studyTranslation:"sie (вони) → ihnen · їм",promptText:"Fährst du mit ___ nach Berlin?",support:"Заміни sie (вони). Зверни увагу на регістр.",
     explanation:"Mit вимагає Dativ: sie (вони) → ihnen. Ihnen з великої літери означало б ввічливе «Вам».",category:"PERSONALPRONOMEN · DATIV",practiceVariants:false,
     response:{mode:"text",scope:"word",accepted:["ihnen"],caseSensitive:true,punctuationSensitive:false}
   },
   {
-    id:"pronoun-dative-formal-recall",targetId:"pronoun-dative-formal",type:"recall",word:"Ihnen",translation:"Вам · Dativ від Sie (Ви, ввічливо)",promptText:"Dativ: Sie (Ви, ввічливо)",
+    id:"pronoun-dative-formal-recall",targetId:"pronoun-dative-formal",person:"formal",type:"recall",word:"Ihnen",translation:"Вам · Dativ від Sie (Ви, ввічливо)",promptText:"Dativ: Sie (Ви, ввічливо)",
     example:"Ich helfe Ihnen gern.",exampleTranslation:"Я охоче допомагаю Вам.",explanation:"Ввічливе Sie у Dativ стає Ihnen. Велика літера обов'язкова навіть усередині речення.",category:"PERSONALPRONOMEN · DATIV",practiceVariants:false,
     response:{mode:"text",scope:"word",accepted:["Ihnen"],caseSensitive:true,punctuationSensitive:false}
   },
   {
-    id:"pronoun-dative-formal-thank",targetId:"pronoun-dative-formal",type:"cloze",word:"Ihnen",example:"Wir danken Ihnen.",translation:"Ми дякуємо Вам.",studyTranslation:"Sie → Ihnen · Вам (ввічливо)",promptText:"Wir danken ___.",support:"Заміни Sie (Ви, ввічливо). Зверни увагу на регістр.",
+    id:"pronoun-dative-formal-thank",targetId:"pronoun-dative-formal",person:"formal",type:"cloze",word:"Ihnen",example:"Wir danken Ihnen.",translation:"Ми дякуємо Вам.",studyTranslation:"Sie → Ihnen · Вам (ввічливо)",promptText:"Wir danken ___.",support:"Заміни Sie (Ви, ввічливо). Зверни увагу на регістр.",
     explanation:"Danken вимагає Dativ: Sie → Ihnen. Ihnen з великої літери — ввічливе звертання.",category:"PERSONALPRONOMEN · DATIV",practiceVariants:false,
     response:{mode:"text",scope:"word",accepted:["Ihnen"],caseSensitive:true,punctuationSensitive:false}
   },
   {
-    id:"pronoun-dative-formal-with",targetId:"pronoun-dative-formal",type:"cloze",word:"Ihnen",example:"Darf ich mit Ihnen sprechen?",translation:"Можна мені поговорити з Вами?",studyTranslation:"Sie → Ihnen · Вам (ввічливо)",promptText:"Darf ich mit ___ sprechen?",support:"Заміни Sie (Ви, ввічливо). Зверни увагу на регістр.",
+    id:"pronoun-dative-formal-with",targetId:"pronoun-dative-formal",person:"formal",type:"cloze",word:"Ihnen",example:"Darf ich mit Ihnen sprechen?",translation:"Можна мені поговорити з Вами?",studyTranslation:"Sie → Ihnen · Вам (ввічливо)",promptText:"Darf ich mit ___ sprechen?",support:"Заміни Sie (Ви, ввічливо). Зверни увагу на регістр.",
     explanation:"Mit вимагає Dativ: Sie → Ihnen, а не Sie. Зберігай велику літеру у ввічливому звертанні.",category:"PERSONALPRONOMEN · DATIV",practiceVariants:false,
     response:{mode:"text",scope:"word",accepted:["Ihnen"],caseSensitive:true,punctuationSensitive:false}
   }
-];
+]);
 const personalPronounCaseCards=[...personalPronounAccusativeCards,...personalPronounDativeCards];
 const personalPronounMixedPrompts={
   "pronoun-accusative-ich-recall":{promptText:"Meine Schwester besucht ___.",support:"Заміни ich (я)."},
@@ -657,37 +682,210 @@ const possessiveDativeCards=[
     response:{mode:"text",scope:"word",accepted:["Ihren"],caseSensitive:true,punctuationSensitive:false}
   }
 ];
+// Explicit grammar metadata for the shared card visuals (Constitution §2, "Visual language").
+const genderColumns=[
+  {label:"der",gender:"masculine"},{label:"das",gender:"neuter"},
+  {label:"die",gender:"feminine"},{label:"Plural",gender:"plural"}
+];
+const genderArticles={masculine:"der",neuter:"das",feminine:"die",plural:"die"};
+// Definite articles in genderColumns order, shared by the guide tables.
+const definiteArticles={nominative:["der","das","die","die"],accusative:["den","das","die","die"],dative:["dem","dem","der","den"]};
+const nominativeArticleRow={label:"Nom.",title:"Nominativ",cells:definiteArticles.nominative};
+// Gender is always authored here, never parsed from the headword. exampleWord defaults to the word;
+// pass exampleWord:"" when the example uses a different form.
+function nounMeta(gender,word,{exampleWord=word,plural="",pluralExampleWord="",givenInPractice=false}={}){
+  return {
+    article:genderArticles[gender],word,gender,
+    ...(exampleWord?{exampleWord}:{}),
+    ...(plural?{plural:{article:"die",word:plural,...(pluralExampleWord?{exampleWord:pluralExampleWord}:{})}}:{}),
+    ...(givenInPractice?{givenInPractice:true}:{})
+  };
+}
+function attachNouns(cards,nouns,key=card=>card.word){
+  for(const card of cards){
+    const noun=nouns[key(card)];
+    if(noun)card.noun=noun;
+  }
+}
+const possessiveEndings={
+  nominative:{masculine:"",neuter:"",feminine:"e",plural:"e"},
+  accusative:{masculine:"en",neuter:"",feminine:"e",plural:"e"},
+  dative:{masculine:"em",neuter:"em",feminine:"er",plural:"en"}
+};
+const possessiveCaseRows=[
+  {grammarCase:"nominative",label:"Nom.",title:"Nominativ"},
+  {grammarCase:"accusative",label:"Akk.",title:"Akkusativ"},
+  {grammarCase:"dative",label:"Dat.",title:"Dativ"}
+];
+const possessiveTargets={
+  "possessive-accusative-masculine":{grammarCase:"accusative",gender:"masculine"},
+  "possessive-accusative-neuter":{grammarCase:"accusative",gender:"neuter"},
+  "possessive-accusative-feminine":{grammarCase:"accusative",gender:"feminine"},
+  "possessive-accusative-plural":{grammarCase:"accusative",gender:"plural"},
+  "possessive-dative-masculine":{grammarCase:"dative",gender:"masculine"},
+  "possessive-dative-neuter":{grammarCase:"dative",gender:"neuter"},
+  "possessive-dative-feminine":{grammarCase:"dative",gender:"feminine"},
+  "possessive-dative-plural":{grammarCase:"dative",gender:"plural"}
+};
+// [owner stem, noun, noun as written in the example when it differs]
+const possessiveCardNouns={
+  "possessive-accusative-masculine-brother":["mein","Bruder"],
+  "possessive-accusative-masculine-key":["dein","Schlüssel"],
+  "possessive-accusative-masculine-her-father":["ihr","Vater"],
+  "possessive-accusative-masculine-your-dog":["euer","Hund"],
+  "possessive-accusative-masculine-formal-passport":["Ihr","Pass"],
+  "possessive-accusative-neuter-our-car":["unser","Auto"],
+  "possessive-accusative-neuter-his-book":["sein","Buch"],
+  "possessive-accusative-neuter-their-child":["ihr","Kind"],
+  "possessive-accusative-neuter-your-house":["euer","Haus"],
+  "possessive-accusative-neuter-formal-ticket":["Ihr","Ticket"],
+  "possessive-accusative-feminine-my-bag":["mein","Tasche"],
+  "possessive-accusative-feminine-his-sister":["sein","Schwester"],
+  "possessive-accusative-feminine-her-mother":["ihr","Mutter"],
+  "possessive-accusative-feminine-your-apartment":["euer","Wohnung"],
+  "possessive-accusative-feminine-formal-address":["Ihr","Adresse"],
+  "possessive-accusative-plural-your-shoes":["dein","Schuhe"],
+  "possessive-accusative-plural-our-friends":["unser","Freunde"],
+  "possessive-accusative-plural-their-children":["ihr","Kinder"],
+  "possessive-accusative-plural-your-parents":["euer","Eltern"],
+  "possessive-accusative-plural-formal-bags":["Ihr","Taschen"],
+  "possessive-dative-masculine-brother":["mein","Bruder"],
+  "possessive-dative-masculine-your-father":["dein","Vater"],
+  "possessive-dative-masculine-her-father":["ihr","Vater"],
+  "possessive-dative-masculine-your-dog":["euer","Hund"],
+  "possessive-dative-masculine-formal-husband":["Ihr","Mann"],
+  "possessive-dative-neuter-our-car":["unser","Auto"],
+  "possessive-dative-neuter-his-child":["sein","Kind"],
+  "possessive-dative-neuter-their-child":["ihr","Kind"],
+  "possessive-dative-neuter-your-house":["euer","Haus"],
+  "possessive-dative-neuter-formal-car":["Ihr","Auto"],
+  "possessive-dative-feminine-my-sister":["mein","Schwester"],
+  "possessive-dative-feminine-his-mother":["sein","Mutter"],
+  "possessive-dative-feminine-her-bag":["ihr","Tasche"],
+  "possessive-dative-feminine-your-apartment":["euer","Wohnung"],
+  "possessive-dative-feminine-formal-daughter":["Ihr","Tochter"],
+  "possessive-dative-plural-your-friends":["dein","Freunde","Freunden"],
+  "possessive-dative-plural-our-children":["unser","Kinder","Kindern"],
+  "possessive-dative-plural-their-cars":["ihr","Autos"],
+  "possessive-dative-plural-your-parents":["euer","Eltern"],
+  "possessive-dative-plural-formal-children":["Ihr","Kinder","Kindern"]
+};
+function possessiveParts(owner,ending){
+  // euer drops its inner e before an ending: eure, euren, eurem.
+  return {stem:ending&&owner==="euer"?"eur":owner,ending};
+}
+function possessiveVisuals(owner,grammarCase,gender,noun,exampleWord=noun){
+  return {
+    noun:nounMeta(gender,noun,{exampleWord}),
+    answerParts:possessiveParts(owner,possessiveEndings[grammarCase][gender]),
+    paradigm:{
+      title:`${owner} + закінчення`,
+      columns:genderColumns,
+      rows:possessiveCaseRows.map(row=>({label:row.label,title:row.title,cells:genderColumns.map(column=>possessiveParts(owner,possessiveEndings[row.grammarCase][column.gender]))})),
+      active:{row:possessiveCaseRows.findIndex(row=>row.grammarCase===grammarCase),column:genderColumns.findIndex(column=>column.gender===gender)}
+    }
+  };
+}
+for(const card of [...possessiveAccusativeCards,...possessiveDativeCards]){
+  const {grammarCase,gender}=possessiveTargets[card.targetId];
+  const [owner,noun,exampleWord=noun]=possessiveCardNouns[card.id];
+  Object.assign(card,possessiveVisuals(owner,grammarCase,gender,noun,exampleWord));
+}
+// Nominativ possessives: [owner stem, noun, gender] keyed by the headword.
+const possessiveNominativeNouns={
+  mein:["mein","Bruder","masculine"],dein:["dein","Buch","neuter"],sein:["sein","Auto","neuter"],
+  unser:["unser","Kurs","masculine"],euer:["euer","Haus","neuter"],Ihr:["Ihr","Name","masculine"],
+  meine:["mein","Mutter","feminine"],deine:["dein","Freunde","plural"],
+  unsere:["unser","Wohnung","feminine"],Ihre:["Ihr","Kinder","plural"]
+};
+for(const card of possessivePronounCards){
+  const nominative=possessiveNominativeNouns[card.word];
+  if(nominative){
+    const [owner,noun,gender]=nominative;
+    Object.assign(card,possessiveVisuals(owner,"nominative",gender,noun));
+  }
+}
+// "ihr / ihre" accepts both forms, so it shows only the noun, not one answer split.
+attachNouns(possessivePronounCards,{
+  "possessive-her":nounMeta("feminine","Tasche"),
+  "possessive-their":nounMeta("plural","Kinder")
+},card=>card.targetId);
 const possessiveCaseCards=[...possessiveAccusativeCards,...possessiveDativeCards];
 const possessiveMixedCards=possessiveCaseCards.map(card=>({...card,category:"POSSESSIVE ENDING"}));
-const seinCards=[
+// Marker notation: "f[ä]hr|st" marks the changed vowel in brackets and the ending after |.
+function verbForm(notation){
+  const [marked,ending=""]=notation.split("|");
+  const stem=marked.replace(/[[\]]/g,""),start=marked.indexOf("[");
+  return start<0?{stem,ending}:{stem,ending,vowel:{start,end:marked.indexOf("]")-1}};
+}
+const verbPersons=["ich","du","er/sie/es","wir","ihr","sie/Sie"];
+// Six present-tense forms from ich to sie/Sie; change names what to notice, e.g. "a → ä".
+function verbParadigm(verb,notation,change=""){
+  return {verb,change,forms:notation.split(" ").map(verbForm)};
+}
+function withVerbParadigm(card,{verb,change,forms},person){
+  return {
+    ...card,
+    answerParts:forms[person],
+    paradigm:{title:[verb,change].filter(Boolean).join(" · "),forms:true,columns:verbPersons.map(label=>({label})),rows:[{label:"Präs.",title:"Präsens",cells:forms}],active:{row:0,column:person}}
+  };
+}
+// Cards run ich → sie/Sie, six per paradigm, unless persons gives each card's person index.
+function withVerbParadigms(cards,paradigms,persons=cards.map((card,index)=>index%verbPersons.length)){
+  return cards.map((card,index)=>withVerbParadigm(card,paradigms[Math.floor(index/verbPersons.length)],persons[index]));
+}
+const seinCards=withVerbParadigms([
   {word:"ich bin",translation:"я є / я знаходжусь",category:"VERB SEIN",example:"Ich bin müde.",exampleTranslation:"Я втомлений."},
   {word:"du bist",translation:"ти є / ти знаходишся",category:"VERB SEIN",example:"Du bist sehr nett.",exampleTranslation:"Ти дуже милий."},
   {word:"er / sie / es ist",translation:"він / вона / воно є",category:"VERB SEIN",example:"Sie ist meine Schwester.",exampleTranslation:"Вона моя сестра."},
   {word:"wir sind",translation:"ми є / ми знаходимося",category:"VERB SEIN",example:"Wir sind zu Hause.",exampleTranslation:"Ми вдома."},
   {word:"ihr seid",translation:"ви є / ви знаходитеся",category:"VERB SEIN",example:"Ihr seid heute spät.",exampleTranslation:"Ви сьогодні запізнилися."},
   {word:"sie / Sie sind",translation:"вони є / Ви є",category:"VERB SEIN",example:"Sie sind aus Deutschland.",exampleTranslation:"Вони з Німеччини."}
-];
+],[verbParadigm("sein","bin| bist| ist| sind| seid| sind|")]);
+const weakVerbParadigms={
+  machen:verbParadigm("machen","mach|e mach|st mach|t mach|en mach|t mach|en"),
+  arbeiten:verbParadigm("arbeiten","arbeit|e arbeit|est arbeit|et arbeit|en arbeit|et arbeit|en","додаткове e"),
+  atmen:verbParadigm("atmen","atm|e atm|est atm|et atm|en atm|et atm|en","додаткове e"),
+  landen:verbParadigm("landen","land|e land|est land|et land|en land|et land|en","додаткове e"),
+  rechnen:verbParadigm("rechnen","rechn|e rechn|est rechn|et rechn|en rechn|et rechn|en","додаткове e"),
+  heissen:verbParadigm("heißen","heiß|e heiß|t heiß|t heiß|en heiß|t heiß|en","du -t замість -st"),
+  tanzen:verbParadigm("tanzen","tanz|e tanz|t tanz|t tanz|en tanz|t tanz|en","du -t замість -st"),
+  uebersetzen:verbParadigm("übersetzen","übersetz|e übersetz|t übersetz|t übersetz|en übersetz|t übersetz|en","du -t замість -st")
+};
+// machen and arbeiten run through all six persons; each later card shows its own verb with the active person.
 const conjugationCards=[
-  {word:"ich mache",translation:"я роблю",category:"WEAK VERB · MACHEN",example:"Ich mache heute die Hausaufgaben.",exampleTranslation:"Я сьогодні роблю домашнє завдання."},
-  {word:"du machst",translation:"ти робиш",category:"WEAK VERB · MACHEN",example:"Du machst das sehr gut.",exampleTranslation:"Ти робиш це дуже добре."},
-  {word:"er / sie / es macht",translation:"він / вона / воно робить",category:"WEAK VERB · MACHEN",example:"Sie macht jeden Morgen Sport.",exampleTranslation:"Вона щоранку займається спортом."},
-  {word:"wir machen",translation:"ми робимо",category:"WEAK VERB · MACHEN",example:"Wir machen eine Pause.",exampleTranslation:"Ми робимо перерву."},
-  {word:"ihr macht",translation:"ви робите",category:"WEAK VERB · MACHEN",example:"Ihr macht eine gute Arbeit.",exampleTranslation:"Ви робите гарну роботу."},
-  {word:"sie / Sie machen",translation:"вони / Ви робите",category:"WEAK VERB · MACHEN",example:"Sie machen die Übung zusammen.",exampleTranslation:"Вони роблять вправу разом."},
-  {word:"ich arbeite",translation:"я працюю",category:"WEAK VERB · ARBEITEN",example:"Ich arbeite in einem Hotel.",exampleTranslation:"Я працюю в готелі."},
-  {word:"du arbeitest",translation:"ти працюєш",category:"WEAK VERB · ARBEITEN",example:"Du arbeitest heute lange.",exampleTranslation:"Ти сьогодні працюєш довго."},
-  {word:"er / sie / es arbeitet",translation:"він / вона / воно працює",category:"WEAK VERB · ARBEITEN",example:"Er arbeitet im Büro.",exampleTranslation:"Він працює в офісі."},
-  {word:"wir arbeiten",translation:"ми працюємо",category:"WEAK VERB · ARBEITEN",example:"Wir arbeiten jeden Tag.",exampleTranslation:"Ми працюємо щодня."},
-  {word:"ihr arbeitet",translation:"ви працюєте",category:"WEAK VERB · ARBEITEN",example:"Ihr arbeitet sehr schnell.",exampleTranslation:"Ви працюєте дуже швидко."},
-  {word:"sie / Sie arbeiten",translation:"вони / Ви працюють / працюєте",category:"WEAK VERB · ARBEITEN",example:"Sie arbeiten in Berlin.",exampleTranslation:"Вони працюють у Берліні."},
-  {word:"du atmest",translation:"ти дихаєш",category:"EXTRA -E · ATMEN",example:"Du atmest tief ein.",exampleTranslation:"Ти глибоко вдихаєш."},
-  {word:"er / sie / es landet",translation:"він / вона / воно приземляється",category:"EXTRA -E · LANDEN",example:"Das Flugzeug landet um acht Uhr.",exampleTranslation:"Літак приземляється о восьмій."},
-  {word:"ihr rechnet",translation:"ви рахуєте",category:"EXTRA -E · RECHNEN",example:"Ihr rechnet die Aufgabe.",exampleTranslation:"Ви рахуєте завдання."},
-  {word:"du heißt",translation:"тебе звати",category:"SIBILANT STEM · HEISSEN",example:"Wie heißt du?",exampleTranslation:"Як тебе звати?"},
-  {word:"du tanzt",translation:"ти танцюєш",category:"SIBILANT STEM · TANZEN",example:"Du tanzt sehr gut.",exampleTranslation:"Ти дуже добре танцюєш."},
-  {word:"du übersetzt",translation:"ти перекладаєш",category:"SIBILANT STEM · ÜBERSETZEN",example:"Du übersetzt den Text.",exampleTranslation:"Ти перекладаєш текст."}
+  ...withVerbParadigms([
+    {word:"ich mache",translation:"я роблю",category:"WEAK VERB · MACHEN",example:"Ich mache heute die Hausaufgaben.",exampleTranslation:"Я сьогодні роблю домашнє завдання."},
+    {word:"du machst",translation:"ти робиш",category:"WEAK VERB · MACHEN",example:"Du machst das sehr gut.",exampleTranslation:"Ти робиш це дуже добре."},
+    {word:"er / sie / es macht",translation:"він / вона / воно робить",category:"WEAK VERB · MACHEN",example:"Sie macht jeden Morgen Sport.",exampleTranslation:"Вона щоранку займається спортом."},
+    {word:"wir machen",translation:"ми робимо",category:"WEAK VERB · MACHEN",example:"Wir machen eine Pause.",exampleTranslation:"Ми робимо перерву."},
+    {word:"ihr macht",translation:"ви робите",category:"WEAK VERB · MACHEN",example:"Ihr macht eine gute Arbeit.",exampleTranslation:"Ви робите гарну роботу."},
+    {word:"sie / Sie machen",translation:"вони / Ви робите",category:"WEAK VERB · MACHEN",example:"Sie machen die Übung zusammen.",exampleTranslation:"Вони роблять вправу разом."},
+    {word:"ich arbeite",translation:"я працюю",category:"WEAK VERB · ARBEITEN",example:"Ich arbeite in einem Hotel.",exampleTranslation:"Я працюю в готелі."},
+    {word:"du arbeitest",translation:"ти працюєш",category:"WEAK VERB · ARBEITEN",example:"Du arbeitest heute lange.",exampleTranslation:"Ти сьогодні працюєш довго."},
+    {word:"er / sie / es arbeitet",translation:"він / вона / воно працює",category:"WEAK VERB · ARBEITEN",example:"Er arbeitet im Büro.",exampleTranslation:"Він працює в офісі."},
+    {word:"wir arbeiten",translation:"ми працюємо",category:"WEAK VERB · ARBEITEN",example:"Wir arbeiten jeden Tag.",exampleTranslation:"Ми працюємо щодня."},
+    {word:"ihr arbeitet",translation:"ви працюєте",category:"WEAK VERB · ARBEITEN",example:"Ihr arbeitet sehr schnell.",exampleTranslation:"Ви працюєте дуже швидко."},
+    {word:"sie / Sie arbeiten",translation:"вони / Ви працюють / працюєте",category:"WEAK VERB · ARBEITEN",example:"Sie arbeiten in Berlin.",exampleTranslation:"Вони працюють у Берліні."}
+  ],[weakVerbParadigms.machen,weakVerbParadigms.arbeiten]),
+  withVerbParadigm({word:"du atmest",translation:"ти дихаєш",category:"EXTRA -E · ATMEN",example:"Du atmest tief ein.",exampleTranslation:"Ти глибоко вдихаєш."},weakVerbParadigms.atmen,1),
+  withVerbParadigm({word:"er / sie / es landet",translation:"він / вона / воно приземляється",category:"EXTRA -E · LANDEN",example:"Das Flugzeug landet um acht Uhr.",exampleTranslation:"Літак приземляється о восьмій."},weakVerbParadigms.landen,2),
+  withVerbParadigm({word:"ihr rechnet",translation:"ви рахуєте",category:"EXTRA -E · RECHNEN",example:"Ihr rechnet die Aufgabe.",exampleTranslation:"Ви рахуєте завдання."},weakVerbParadigms.rechnen,4),
+  withVerbParadigm({word:"du heißt",translation:"тебе звати",category:"SIBILANT STEM · HEISSEN",example:"Wie heißt du?",exampleTranslation:"Як тебе звати?"},weakVerbParadigms.heissen,1),
+  withVerbParadigm({word:"du tanzt",translation:"ти танцюєш",category:"SIBILANT STEM · TANZEN",example:"Du tanzt sehr gut.",exampleTranslation:"Ти дуже добре танцюєш."},weakVerbParadigms.tanzen,1),
+  withVerbParadigm({word:"du übersetzt",translation:"ти перекладаєш",category:"SIBILANT STEM · ÜBERSETZEN",example:"Du übersetzt den Text.",exampleTranslation:"Ти перекладаєш текст."},weakVerbParadigms.uebersetzen,1)
 ];
-const strongVerbFormCards=[
+// Same verb order as the learn and practice cards: six persons per verb.
+const strongVerbParadigms=[
+  ["sprechen","sprech|e spr[i]ch|st spr[i]ch|t sprech|en sprech|t sprech|en","e → i"],
+  ["fahren","fahr|e f[ä]hr|st f[ä]hr|t fahr|en fahr|t fahr|en","a → ä"],
+  ["treffen","treff|e tr[i]ff|st tr[i]ff|t treff|en treff|t treff|en","e → i"],
+  ["lesen","les|e l[ie]s|t l[ie]s|t les|en les|t les|en","e → ie"],
+  ["essen","ess|e [i]ss|t [i]ss|t ess|en ess|t ess|en","e → i"],
+  ["wissen","w[ei]ß| w[ei]ß|t w[ei]ß| wiss|en wiss|t wiss|en","i → ei"],
+  ["anfangen","fang|e f[ä]ng|st f[ä]ng|t fang|en fang|t fang|en","a → ä"]
+].map(entry=>verbParadigm(...entry));
+const strongVerbFormCards=withVerbParadigms([
   {word:"ich spreche",translation:"я говорю / розмовляю",category:"STRONG VERB · SPRECHEN",example:"Ich spreche jeden Tag Deutsch.",exampleTranslation:"Я щодня говорю німецькою."},
   {word:"du sprichst",translation:"ти говориш / розмовляєш",category:"STRONG VERB · SPRECHEN",example:"Du sprichst sehr gut Deutsch.",exampleTranslation:"Ти дуже добре говориш німецькою."},
   {word:"er / sie / es spricht",translation:"він говорить / вона говорить / воно говорить",category:"STRONG VERB · SPRECHEN",example:"Sie spricht mit ihrer Lehrerin.",exampleTranslation:"Вона розмовляє зі своєю вчителькою."},
@@ -730,9 +928,9 @@ const strongVerbFormCards=[
   {word:"wir fangen an",translation:"ми починаємо",category:"STRONG VERB · ANFANGEN",example:"Wir fangen jetzt mit der Übung an.",exampleTranslation:"Ми зараз починаємо вправу."},
   {word:"ihr fangt an",translation:"ви починаєте",category:"STRONG VERB · ANFANGEN",example:"Ihr fangt den Deutschkurs morgen an.",exampleTranslation:"Ви починаєте курс німецької завтра."},
   {word:"sie / Sie fangen an",translation:"вони починають / Ви починаєте",category:"STRONG VERB · ANFANGEN",example:"Sie fangen am Montag mit dem neuen Projekt an.",exampleTranslation:"Вони починають новий проєкт у понеділок."}
-];
+],strongVerbParadigms);
 const strongVerbClozeCard=(word,translation,prompt,answer,answerTranslation)=>({word,translation,category:"STRONG VERB · LÜCKENTEXT",prompt,exampleTranslation:"Доповни речення правильною формою дієслова.",answer,answerTranslation,practiceType:"cloze"});
-const strongVerbPracticeCards=[
+const strongVerbPracticeCards=withVerbParadigms([
   strongVerbClozeCard("Ich spreche oft mit meiner Schwester.","Я часто розмовляю зі своєю сестрою.","Ich ___ oft mit meiner Schwester. (sprechen)","spreche","розмовляю"),
   strongVerbClozeCard("Du sprichst mit dem Lehrer.","Ти розмовляєш з учителем.","Du ___ mit dem Lehrer. (sprechen)","sprichst","розмовляєш"),
   strongVerbClozeCard("Meine Freundin spricht sehr gut Deutsch.","Моя подруга дуже добре говорить німецькою.","Meine Freundin ___ sehr gut Deutsch. (sprechen)","spricht","говорить"),
@@ -775,8 +973,19 @@ const strongVerbPracticeCards=[
   strongVerbClozeCard("Wir fangen jetzt mit der Übung an.","Ми зараз починаємо вправу.","Wir ___ jetzt mit der Übung ___. (anfangen)","fangen / an","починаємо"),
   strongVerbClozeCard("Ihr fangt den Deutschkurs morgen an.","Ви починаєте курс німецької завтра.","Ihr ___ den Deutschkurs morgen ___. (anfangen)","fangt / an","починаєте"),
   strongVerbClozeCard("Sie fangen am Montag mit dem neuen Projekt an.","Вони починають новий проєкт у понеділок.","Sie ___ am Montag mit dem neuen Projekt ___. (anfangen)","fangen / an","починають")
-];
+],strongVerbParadigms);
 const strongVerbCards=[...strongVerbFormCards,...strongVerbPracticeCards];
+const perfectAuxiliaries={hat:"haben",ist:"sein"};
+const auxiliaryPresentForms={haben:["habe","hast","hat","haben","habt"],sein:["bin","bist","ist","sind","seid"]};
+// "hat gemacht" → haben. The form is the one the example uses when the example is in Perfekt.
+// "hat/ist geschwommen" allows both auxiliaries, so the card gets no haben/sein panel.
+function withPerfectAuxiliary(card,perfect){
+  const [first,...rest]=perfect.split(" "),verb=perfectAuxiliaries[first];
+  if(!verb)return card;
+  const words=(card.example||"").toLowerCase().split(/[^\p{L}]+/u);
+  const form=words.includes(rest[rest.length-1].toLowerCase())&&auxiliaryPresentForms[verb].find(item=>words.includes(item));
+  return {...card,auxiliary:{verb,form:form||first}};
+}
 const pastVerbLegacyA1SourceCards=[
   {word:"beginnen (beginnt) · begann · hat begonnen",translation:"починати",category:"VERB FORMS · BEGINNEN",example:"Der Kurs hat um neun Uhr begonnen.",exampleTranslation:"Курс почався о дев'ятій годині."},
   {word:"bleiben (bleibt) · blieb · ist geblieben",translation:"залишатися",category:"VERB FORMS · BLEIBEN",example:"Ich bin zu Hause geblieben.",exampleTranslation:"Я залишився вдома."},
@@ -801,7 +1010,7 @@ const a1PreteriteVerbs=new Set(["haben","sein"]);
 const pastVerbLegacyA1FormCards=pastVerbLegacyA1SourceCards.map(card=>{
   const [infinitiveAndPresent,,perfect]=card.word.split(" · ");
   const infinitive=infinitiveAndPresent.split(" ")[0];
-  return a1PreteriteVerbs.has(infinitive)?card:{...card,word:`${infinitiveAndPresent} · ${perfect}`};
+  return withPerfectAuxiliary(a1PreteriteVerbs.has(infinitive)?card:{...card,word:`${infinitiveAndPresent} · ${perfect}`},perfect);
 });
 const pastVerbLegacyA1PracticeCards=pastVerbLegacyA1FormCards.map(card=>{
   const [infinitiveAndPresent,...forms]=card.word.split(" · ");
@@ -809,14 +1018,14 @@ const pastVerbLegacyA1PracticeCards=pastVerbLegacyA1FormCards.map(card=>{
   const includesPreterite=a1PreteriteVerbs.has(infinitive);
   const [preterite,perfect]=includesPreterite?forms:[null,forms[0]];
   const answer=includesPreterite?`${preterite} / ${perfect}`:perfect;
-  return {word:infinitiveAndPresent,translation:card.translation,category:"PAST VERB FORMS · RECALL",prompt:includesPreterite?`Schreibe Präteritum und Perfekt von ${infinitive}.`:`Schreibe Perfekt von ${infinitive}.`,example:card.example,exampleTranslation:card.exampleTranslation,answer,answerTranslation:answer,practiceType:"cloze"};
+  return withPerfectAuxiliary({word:infinitiveAndPresent,translation:card.translation,category:"PAST VERB FORMS · RECALL",prompt:includesPreterite?`Schreibe Präteritum und Perfekt von ${infinitive}.`:`Schreibe Perfekt von ${infinitive}.`,example:card.example,exampleTranslation:card.exampleTranslation,answer,answerTranslation:answer,practiceType:"cloze"},perfect);
 });
 function createPastVerbLevelCards(level,entries,{includePreterite=()=>true}={}){
   const formCards=entries.map(([id,infinitive,present,preterite,perfect,translation,example,exampleTranslation])=>{
     const perfectForms=Array.isArray(perfect)?perfect:[perfect];
     const showsPreterite=includePreterite({id,infinitive,present,preterite,perfect:perfectForms,translation});
     const word=showsPreterite?`${infinitive} (${present}) · ${preterite} · ${perfectForms[0]}`:`${infinitive} (${present}) · ${perfectForms[0]}`;
-    return {
+    return withPerfectAuxiliary({
       id:`past-verbs-${level}-${id}-learn`,
       targetId:`past-verb-${level}-${id}`,
       type:"recall",
@@ -829,13 +1038,13 @@ function createPastVerbLevelCards(level,entries,{includePreterite=()=>true}={}){
       explanation:showsPreterite?`Präteritum: ${preterite}. Perfekt: ${perfectForms[0]}.`:`Perfekt: ${perfectForms[0]}.`,
       response:{mode:"text",scope:"phrase",accepted:[word],caseSensitive:false,punctuationSensitive:false},
       practiceVariants:false
-    };
+    },perfectForms[0]);
   });
   const practiceCards=entries.map(([id,infinitive,present,preterite,perfect,translation,example,exampleTranslation])=>{
     const perfectForms=Array.isArray(perfect)?perfect:[perfect];
     const showsPreterite=includePreterite({id,infinitive,present,preterite,perfect:perfectForms,translation});
     const answer=showsPreterite?`${preterite} / ${perfectForms[0]}`:perfectForms[0];
-    return {
+    return withPerfectAuxiliary({
       id:`past-verbs-${level}-${id}-practice`,
       targetId:`past-verb-${level}-${id}`,
       type:"cloze",
@@ -850,7 +1059,7 @@ function createPastVerbLevelCards(level,entries,{includePreterite=()=>true}={}){
       answer,
       answerTranslation:answer,
       practiceVariants:false
-    };
+    },perfectForms[0]);
   });
   return {formCards,practiceCards,cards:[...formCards,...practiceCards]};
 }
@@ -949,9 +1158,16 @@ const pastVerbB1=createPastVerbLevelCards("b1",pastVerbB1Entries);
 const pastVerbA1FormCards=[...pastVerbLegacyA1FormCards,...pastVerbA1Additional.formCards];
 const pastVerbA1PracticeCards=[...pastVerbLegacyA1PracticeCards,...pastVerbA1Additional.practiceCards];
 const pastVerbA1Cards=[...pastVerbA1FormCards,...pastVerbA1PracticeCards];
+// Position boxes (card.structure): one list of fields per clause, in sentence order; empty fields are left out.
+const sentenceClause=fields=>fields.filter(([,text])=>text).map(([role,text])=>({role,text}));
+const mainClause=(first,verb,middle="",end="")=>sentenceClause([["first",first],["verb",verb],["middle",middle],["end",end]]);
+const subordinateClause=(link,middle,end)=>sentenceClause([["link",link],["middle",middle],["end",end]]);
+const verbFirstClause=(verb,middle="",end="")=>sentenceClause([["verb",verb],["middle",middle],["end",end]]);
 const perfektFrameCards=[
   {
     id:"perfekt-frame-hausaufgaben",targetId:"perfekt-frame-haben",type:"sentence-build",
+    auxiliary:{verb:"haben",form:"habe"},
+    structure:[mainClause("Ich","habe","gestern die Hausaufgaben","gemacht")],
     word:"Ich habe gestern die Hausaufgaben gemacht.",translation:"Я вчора зробив / зробила домашнє завдання.",category:"PERFEKT · SATZRAHMEN",
     promptText:"Я вчора зробив / зробила домашнє завдання.",
     example:"haben + gemacht",exampleTranslation:"Відмінюване haben стоїть на другому місці, Partizip II — у кінці.",
@@ -960,6 +1176,8 @@ const perfektFrameCards=[
   },
   {
     id:"perfekt-frame-abholen",targetId:"perfekt-frame-haben",type:"sentence-build",
+    auxiliary:{verb:"haben",form:"habe"},
+    structure:[mainClause("Ich","habe","meine Tochter von der Schule","abgeholt")],
     word:"Ich habe meine Tochter von der Schule abgeholt.",translation:"Я забрав / забрала доньку зі школи.",category:"PERFEKT · SATZRAHMEN",
     promptText:"Я забрав / забрала доньку зі школи.",
     example:"habe + abgeholt",exampleTranslation:"У відокремлюваному дієслові ge стоїть між префіксом і основою.",
@@ -968,6 +1186,8 @@ const perfektFrameCards=[
   },
   {
     id:"perfekt-frame-schreiben",targetId:"perfekt-frame-haben",type:"sentence-build",
+    auxiliary:{verb:"haben",form:"hat"},
+    structure:[mainClause("Sie","hat","eine E-Mail","geschrieben")],
     word:"Sie hat eine E-Mail geschrieben.",translation:"Вона написала електронного листа.",category:"PERFEKT · SATZRAHMEN",
     promptText:"Вона написала електронного листа.",
     example:"hat + geschrieben",exampleTranslation:"Неправильний Partizip II потрібно запам’ятати разом з інфінітивом.",
@@ -976,6 +1196,8 @@ const perfektFrameCards=[
   },
   {
     id:"perfekt-frame-fahren",targetId:"perfekt-frame-sein",type:"sentence-build",
+    auxiliary:{verb:"sein",form:"sind"},
+    structure:[mainClause("Wir","sind","nach Berlin","gefahren")],
     word:"Wir sind nach Berlin gefahren.",translation:"Ми поїхали до Берліна.",category:"PERFEKT · SATZRAHMEN",
     promptText:"Ми поїхали до Берліна.",
     example:"sein + gefahren",exampleTranslation:"Рух до іншого місця зазвичай утворює Perfekt із sein.",
@@ -984,6 +1206,8 @@ const perfektFrameCards=[
   },
   {
     id:"perfekt-frame-ankommen",targetId:"perfekt-frame-sein",type:"sentence-build",
+    auxiliary:{verb:"sein",form:"ist"},
+    structure:[mainClause("Der Bus","ist","spät","angekommen")],
     word:"Der Bus ist spät angekommen.",translation:"Автобус прибув пізно.",category:"PERFEKT · SATZRAHMEN",
     promptText:"Автобус прибув пізно.",
     example:"ist + angekommen",exampleTranslation:"Ankommen описує прибуття й утворює Perfekt із sein.",
@@ -992,6 +1216,8 @@ const perfektFrameCards=[
   },
   {
     id:"perfekt-frame-bleiben",targetId:"perfekt-frame-sein",type:"sentence-build",
+    auxiliary:{verb:"sein",form:"ist"},
+    structure:[mainClause("Er","ist","zu Hause","geblieben")],
     word:"Er ist zu Hause geblieben.",translation:"Він залишився вдома.",category:"PERFEKT · SATZRAHMEN",
     promptText:"Він залишився вдома.",
     example:"ist + geblieben",exampleTranslation:"Bleiben належить до поширених дієслів, що утворюють Perfekt із sein.",
@@ -1002,6 +1228,7 @@ const perfektFrameCards=[
 const perfektAuxiliaryCards=[
   {
     id:"perfekt-auxiliary-object-brief",targetId:"perfekt-auxiliary-haben-object",type:"cloze",
+    auxiliary:{verb:"haben",form:"habe"},
     word:"Ich habe einen Brief geschrieben.",translation:"Я написав / написала листа.",category:"PERFEKT · HABEN ODER SEIN",
     promptText:"Ich ___ einen Brief geschrieben.",support:"У реченні є прямий додаток: einen Brief.",
     example:"Ich habe einen Brief geschrieben.",exampleTranslation:"Прямий додаток зазвичай вимагає haben.",
@@ -1010,6 +1237,7 @@ const perfektAuxiliaryCards=[
   },
   {
     id:"perfekt-auxiliary-object-door",targetId:"perfekt-auxiliary-haben-object",type:"cloze",
+    auxiliary:{verb:"haben",form:"hat"},
     word:"Sie hat die Tür geöffnet.",translation:"Вона відчинила двері.",category:"PERFEKT · HABEN ODER SEIN",
     promptText:"Sie ___ die Tür geöffnet.",support:"У реченні є прямий додаток: die Tür.",
     example:"Sie hat die Tür geöffnet.",exampleTranslation:"Прямий додаток зазвичай вимагає haben.",
@@ -1018,6 +1246,7 @@ const perfektAuxiliaryCards=[
   },
   {
     id:"perfekt-auxiliary-object-film",targetId:"perfekt-auxiliary-haben-object",type:"cloze",
+    auxiliary:{verb:"haben",form:"habt"},
     word:"Ihr habt den Film gesehen.",translation:"Ви подивилися фільм.",category:"PERFEKT · HABEN ODER SEIN",
     promptText:"Ihr ___ den Film gesehen.",support:"У реченні є прямий додаток: den Film.",
     example:"Ihr habt den Film gesehen.",exampleTranslation:"Прямий додаток зазвичай вимагає haben.",
@@ -1026,6 +1255,7 @@ const perfektAuxiliaryCards=[
   },
   {
     id:"perfekt-auxiliary-activity-work",targetId:"perfekt-auxiliary-haben-activity",type:"cloze",
+    auxiliary:{verb:"haben",form:"habe"},
     word:"Ich habe gestern gearbeitet.",translation:"Я вчора працював / працювала.",category:"PERFEKT · HABEN ODER SEIN",
     promptText:"Ich ___ gestern gearbeitet.",support:"Це просто дія, без переміщення до іншого місця.",
     example:"Ich habe gestern gearbeitet.",exampleTranslation:"Звичайна діяльність утворює Perfekt із haben.",
@@ -1034,6 +1264,7 @@ const perfektAuxiliaryCards=[
   },
   {
     id:"perfekt-auxiliary-activity-speak",targetId:"perfekt-auxiliary-haben-activity",type:"cloze",
+    auxiliary:{verb:"haben",form:"haben"},
     word:"Wir haben lange gesprochen.",translation:"Ми довго розмовляли.",category:"PERFEKT · HABEN ODER SEIN",
     promptText:"Wir ___ lange gesprochen.",support:"Це діяльність, а не зміна місця.",
     example:"Wir haben lange gesprochen.",exampleTranslation:"Звичайна діяльність утворює Perfekt із haben.",
@@ -1042,6 +1273,7 @@ const perfektAuxiliaryCards=[
   },
   {
     id:"perfekt-auxiliary-activity-sleep",targetId:"perfekt-auxiliary-haben-activity",type:"cloze",
+    auxiliary:{verb:"haben",form:"hast"},
     word:"Du hast gut geschlafen.",translation:"Ти добре спав / спала.",category:"PERFEKT · HABEN ODER SEIN",
     promptText:"Du ___ gut geschlafen.",support:"Це стан або діяльність без переміщення.",
     example:"Du hast gut geschlafen.",exampleTranslation:"Сон утворює Perfekt із haben.",
@@ -1050,6 +1282,7 @@ const perfektAuxiliaryCards=[
   },
   {
     id:"perfekt-auxiliary-movement-berlin",targetId:"perfekt-auxiliary-sein-movement",type:"cloze",
+    auxiliary:{verb:"sein",form:"ist"},
     word:"Er ist nach Berlin gefahren.",translation:"Він поїхав до Берліна.",category:"PERFEKT · HABEN ODER SEIN",
     promptText:"Er ___ nach Berlin gefahren.",support:"Підмет перемістився до іншого місця: nach Berlin.",
     example:"Er ist nach Berlin gefahren.",exampleTranslation:"Переміщення до іншого місця зазвичай вимагає sein.",
@@ -1058,6 +1291,7 @@ const perfektAuxiliaryCards=[
   },
   {
     id:"perfekt-auxiliary-movement-arrive",targetId:"perfekt-auxiliary-sein-movement",type:"cloze",
+    auxiliary:{verb:"sein",form:"sind"},
     word:"Wir sind spät angekommen.",translation:"Ми прибули пізно.",category:"PERFEKT · HABEN ODER SEIN",
     promptText:"Wir ___ spät angekommen.",support:"Дієслово означає прибуття.",
     example:"Wir sind spät angekommen.",exampleTranslation:"Прибуття утворює Perfekt із sein.",
@@ -1066,6 +1300,7 @@ const perfektAuxiliaryCards=[
   },
   {
     id:"perfekt-auxiliary-movement-home",targetId:"perfekt-auxiliary-sein-movement",type:"cloze",
+    auxiliary:{verb:"sein",form:"seid"},
     word:"Ihr seid nach Hause gegangen.",translation:"Ви пішли додому.",category:"PERFEKT · HABEN ODER SEIN",
     promptText:"Ihr ___ nach Hause gegangen.",support:"Підмет перемістився додому.",
     example:"Ihr seid nach Hause gegangen.",exampleTranslation:"Переміщення до іншого місця зазвичай вимагає sein.",
@@ -1074,6 +1309,7 @@ const perfektAuxiliaryCards=[
   },
   {
     id:"perfekt-auxiliary-state-asleep",targetId:"perfekt-auxiliary-sein-state",type:"cloze",
+    auxiliary:{verb:"sein",form:"ist"},
     word:"Das Kind ist eingeschlafen.",translation:"Дитина заснула.",category:"PERFEKT · HABEN ODER SEIN",
     promptText:"Das Kind ___ eingeschlafen.",support:"Відбулася зміна стану: дитина не спала, а потім заснула.",
     example:"Das Kind ist eingeschlafen.",exampleTranslation:"Зміна стану утворює Perfekt із sein.",
@@ -1082,6 +1318,7 @@ const perfektAuxiliaryCards=[
   },
   {
     id:"perfekt-auxiliary-state-awake",targetId:"perfekt-auxiliary-sein-state",type:"cloze",
+    auxiliary:{verb:"sein",form:"ist"},
     word:"Meine Schwester ist aufgewacht.",translation:"Моя сестра прокинулася.",category:"PERFEKT · HABEN ODER SEIN",
     promptText:"Meine Schwester ___ aufgewacht.",support:"Відбулася зміна стану: від сну до пробудження.",
     example:"Meine Schwester ist aufgewacht.",exampleTranslation:"Зміна стану утворює Perfekt із sein.",
@@ -1090,6 +1327,7 @@ const perfektAuxiliaryCards=[
   },
   {
     id:"perfekt-auxiliary-state-become",targetId:"perfekt-auxiliary-sein-state",type:"cloze",
+    auxiliary:{verb:"sein",form:"ist"},
     word:"Der Mann ist krank geworden.",translation:"Чоловік захворів.",category:"PERFEKT · HABEN ODER SEIN",
     promptText:"Der Mann ___ krank geworden.",support:"Стан змінився: здоровий → хворий.",
     example:"Der Mann ist krank geworden.",exampleTranslation:"Зміна стану утворює Perfekt із sein.",
@@ -1371,41 +1609,45 @@ presentPracticeCards.forEach(card=>{
 });
 const modalClozeCard=(word,translation,prompt,answer,answerTranslation)=>({word,translation,category:"KÖNNEN · LÜCKENTEXT",prompt,example:prompt,exampleTranslation:"Доповни речення правильною формою können.",answer,answerTranslation,practiceVariants:false});
 const modalSentenceCard=(word,translation,prompt,category="KÖNNEN · SATZBILDUNG")=>({word,translation,category,prompt,exampleTranslation:"Напиши повну відповідь німецькою.",answer:word,answerTranslation:translation,practiceType:"sentence"});
+const modalOrderSentenceCard=(word,translation,prompt,structure)=>({...modalSentenceCard(word,translation,prompt),structure});
 const modalVerbClozeCard=(verb,word,translation,prompt,answer,answerTranslation)=>({word,translation,category:`MODALVERB · ${verb.toUpperCase()} · LÜCKENTEXT`,prompt,example:prompt,exampleTranslation:`Доповни речення правильною формою ${verb}.`,answer,answerTranslation,practiceVariants:false});
-const koennenFormCards=[
+const koennenParadigm=verbParadigm("können","k[a]nn| k[a]nn|st k[a]nn| könn|en könn|t könn|en","ö → a");
+const koennenFormCards=withVerbParadigms([
   {word:"ich kann",translation:"я можу / вмію",category:"MODALVERB · KÖNNEN",example:"Ich kann sehr gut malen.",exampleTranslation:"Я можу дуже добре малювати."},
   {word:"du kannst",translation:"ти можеш / вмієш",category:"MODALVERB · KÖNNEN",example:"Du kannst im Sommer schwimmen.",exampleTranslation:"Ти можеш плавати влітку."},
   {word:"er / sie / es kann",translation:"він / вона / воно може",category:"MODALVERB · KÖNNEN",example:"Sie kann gut Schach spielen.",exampleTranslation:"Вона може добре грати в шахи."},
   {word:"wir können",translation:"ми можемо / вміємо",category:"MODALVERB · KÖNNEN",example:"Wir können im Winter Ski fahren.",exampleTranslation:"Ми можемо кататися на лижах узимку."},
   {word:"ihr könnt",translation:"ви можете / вмієте",category:"MODALVERB · KÖNNEN",example:"Ihr könnt zusammen Rad fahren.",exampleTranslation:"Ви можете разом кататися на велосипеді."},
   {word:"sie / Sie können",translation:"вони можуть / Ви можете",category:"MODALVERB · KÖNNEN",example:"Sie können gut Gitarre spielen.",exampleTranslation:"Вони можуть добре грати на гітарі."}
-];
-const moegenFormCards=[
+],[koennenParadigm]);
+const moegenParadigm=verbParadigm("mögen","m[a]g| m[a]g|st m[a]g| mög|en mög|t mög|en","ö → a");
+const moegenFormCards=withVerbParadigms([
   {word:"ich mag",translation:"я люблю / мені подобається",category:"MODALVERB · MÖGEN",example:"Ich mag Kaffee.",exampleTranslation:"Я люблю каву."},
   {word:"du magst",translation:"ти любиш / тобі подобається",category:"MODALVERB · MÖGEN",example:"Du magst deutsche Musik.",exampleTranslation:"Тобі подобається німецька музика."},
   {word:"er / sie / es mag",translation:"він / вона / воно любить",category:"MODALVERB · MÖGEN",example:"Sie mag Schokolade.",exampleTranslation:"Вона любить шоколад."},
   {word:"wir mögen",translation:"ми любимо / нам подобається",category:"MODALVERB · MÖGEN",example:"Wir mögen Pizza.",exampleTranslation:"Ми любимо піцу."},
   {word:"ihr mögt",translation:"ви любите / вам подобається",category:"MODALVERB · MÖGEN",example:"Ihr mögt Bücher.",exampleTranslation:"Вам подобаються книжки."},
   {word:"sie / Sie mögen",translation:"вони люблять / Ви любите",category:"MODALVERB · MÖGEN",example:"Sie mögen den Film.",exampleTranslation:"Їм подобається фільм."}
-];
-const moechtenFormCards=[
+],[moegenParadigm]);
+const moechtenParadigm=verbParadigm("möchten","möcht|e möcht|est möcht|e möcht|en möcht|et möcht|en","ich = er/sie/es");
+const moechtenFormCards=withVerbParadigms([
   {word:"ich möchte",translation:"я хотів би / хотіла б",category:"MODALVERB · MÖCHTEN",example:"Ich möchte einen Tee.",exampleTranslation:"Я хотів би / хотіла б чай."},
   {word:"du möchtest",translation:"ти хотів би / хотіла б",category:"MODALVERB · MÖCHTEN",example:"Du möchtest nach Hause gehen.",exampleTranslation:"Ти хотів би / хотіла б піти додому."},
   {word:"er / sie / es möchte",translation:"він / вона / воно хотів би / хотіла б",category:"MODALVERB · MÖCHTEN",example:"Sie möchte Deutsch lernen.",exampleTranslation:"Вона хотіла б вивчати німецьку."},
   {word:"wir möchten",translation:"ми хотіли б",category:"MODALVERB · MÖCHTEN",example:"Wir möchten etwas essen.",exampleTranslation:"Ми хотіли б щось поїсти."},
   {word:"ihr möchtet",translation:"ви хотіли б",category:"MODALVERB · MÖCHTEN",example:"Ihr möchtet ins Kino gehen.",exampleTranslation:"Ви хотіли б піти в кіно."},
   {word:"sie / Sie möchten",translation:"вони хотіли б / Ви хотіли б",category:"MODALVERB · MÖCHTEN",example:"Sie möchten bezahlen.",exampleTranslation:"Вони хотіли б заплатити."}
-];
+],[moechtenParadigm]);
 const moegenMoechtenComparisonCards=[
   {word:"Ich mag Kaffee.",translation:"Мені подобається кава.",category:"MODALVERBEN · MÖGEN ODER MÖCHTEN",example:"mögen = мати вподобання",exampleTranslation:"Mögen описує те, що вам загалом подобається."},
   {word:"Ich möchte einen Kaffee.",translation:"Я хотів би / хотіла б каву.",category:"MODALVERBEN · MÖGEN ODER MÖCHTEN",example:"möchten = ввічливе бажання",exampleTranslation:"Möchten висловлює ввічливе бажання або замовлення."},
   {word:"mögen → möchten",translation:"möchten — форма Konjunktiv II від mögen",category:"MODALVERBEN · ЗВ'ЯЗОК",example:"Ich mag Kaffee. / Ich möchte einen Kaffee.",exampleTranslation:"Möchten походить від mögen, але в сучасній мові зазвичай означає «хотів би / хотіла б»."}
 ];
 const koennenWordOrderCards=[
-  {word:"Ich kann heute mit dem Auto zur Arbeit fahren.",translation:"Я можу сьогодні їхати на роботу машиною.",category:"KÖNNEN · AUSSAGESATZ",example:"Subjekt + können + heute + ... + Infinitiv am Ende",exampleTranslation:"Після können основне дієслово стоїть в інфінітиві в кінці речення."},
-  {word:"Heute kann ich mit dem Auto zur Arbeit fahren.",translation:"Сьогодні я можу їхати на роботу машиною.",category:"KÖNNEN · AUSSAGESATZ",example:"Temporal + können + Subjekt + ... + Infinitiv am Ende",exampleTranslation:"Якщо час стоїть першим, відмінюване können залишається на другому місці."},
-  {word:"Kann ich heute mit dem Auto zur Arbeit fahren?",translation:"Чи можу я сьогодні їхати на роботу машиною?",category:"KÖNNEN · JA/NEIN-FRAGE",example:"Können + Subjekt + ... + Infinitiv am Ende",exampleTranslation:"У питанні без питального слова können стоїть першим."},
-  {word:"Wohin kannst du mit dem Auto fahren?",translation:"Куди ти можеш поїхати машиною?",category:"KÖNNEN · W-FRAGE",example:"W-Frage + können + Subjekt + ... + Infinitiv am Ende",exampleTranslation:"Питальне слово стоїть першим, а können - другим."}
+  {word:"Ich kann heute mit dem Auto zur Arbeit fahren.",translation:"Я можу сьогодні їхати на роботу машиною.",category:"KÖNNEN · AUSSAGESATZ",example:"Subjekt + können + heute + ... + Infinitiv am Ende",exampleTranslation:"Після können основне дієслово стоїть в інфінітиві в кінці речення.",structure:[mainClause("Ich","kann","heute mit dem Auto zur Arbeit","fahren")]},
+  {word:"Heute kann ich mit dem Auto zur Arbeit fahren.",translation:"Сьогодні я можу їхати на роботу машиною.",category:"KÖNNEN · AUSSAGESATZ",example:"Temporal + können + Subjekt + ... + Infinitiv am Ende",exampleTranslation:"Якщо час стоїть першим, відмінюване können залишається на другому місці.",structure:[mainClause("Heute","kann","ich mit dem Auto zur Arbeit","fahren")]},
+  {word:"Kann ich heute mit dem Auto zur Arbeit fahren?",translation:"Чи можу я сьогодні їхати на роботу машиною?",category:"KÖNNEN · JA/NEIN-FRAGE",example:"Können + Subjekt + ... + Infinitiv am Ende",exampleTranslation:"У питанні без питального слова können стоїть першим.",structure:[verbFirstClause("Kann","ich heute mit dem Auto zur Arbeit","fahren")]},
+  {word:"Wohin kannst du mit dem Auto fahren?",translation:"Куди ти можеш поїхати машиною?",category:"KÖNNEN · W-FRAGE",example:"W-Frage + können + Subjekt + ... + Infinitiv am Ende",exampleTranslation:"Питальне слово стоїть першим, а können - другим.",structure:[mainClause("Wohin","kannst","du mit dem Auto","fahren")]}
 ];
 const koennenPracticeCards=[
   modalClozeCard("Ich kann sehr gut malen.","Я можу дуже добре малювати.","Ich ___ sehr gut malen.","kann","можу"),
@@ -1433,17 +1675,17 @@ const koennenPracticeCards=[
   modalClozeCard("Kann dein Kind schon lesen?","Твоя дитина вже вміє читати?","___ dein Kind schon lesen?","kann","може"),
   modalClozeCard("Meine Tante kann vier Fremdsprachen sprechen.","Моя тітка може говорити чотирма іноземними мовами.","Meine Tante ___ vier Fremdsprachen sprechen.","kann","може"),
   modalClozeCard("Ich kann noch nicht so gut Deutsch sprechen.","Я ще не можу так добре говорити німецькою.","Ich ___ noch nicht so gut Deutsch sprechen.","kann","можу"),
-  modalSentenceCard("Ich kann immer gut malen.","Я завжди можу добре малювати.","gut / malen / ich / können / immer.","KÖNNEN · SATZBILDUNG"),
-  modalSentenceCard("Du kannst im Sommer immer gerne schwimmen.","Ти завжди можеш охоче плавати влітку.","gerne / können / du / im Sommer / schwimmen / immer.","KÖNNEN · SATZBILDUNG"),
-  modalSentenceCard("Ich kann selten spazieren gehen.","Я рідко можу гуляти.","ich / gehen / spazieren / selten / können.","KÖNNEN · SATZBILDUNG"),
-  modalSentenceCard("Wir können im Winter oft Ski fahren.","Ми часто можемо кататися на лижах узимку.","wir / im Winter / fahren / Ski / oft / können.","KÖNNEN · SATZBILDUNG"),
-  modalSentenceCard("Ihr könnt manchmal zusammen Rad fahren.","Ви можете іноді разом кататися на велосипедах.","zusammen / können / ihr / Rad fahren / manchmal.","KÖNNEN · SATZBILDUNG"),
-  modalSentenceCard("Sie können gut Gitarre spielen.","Вони можуть добре грати на гітарі.","Gitarre spielen / gut / können / sie (Pl.).","KÖNNEN · SATZBILDUNG"),
-  modalSentenceCard("Meine Oma kann oft Kuchen backen.","Моя бабуся може часто пекти пироги.","backen / oft / meine Oma / Kuchen / können.","KÖNNEN · SATZBILDUNG"),
-  modalSentenceCard("Am Abend kann ich immer meine Freunde treffen.","Увечері я завжди можу зустрічатися з друзями.","am Abend / ich / treffen / immer / meine Freunde / können.","KÖNNEN · SATZBILDUNG"),
-  modalSentenceCard("Meine Brüder können manchmal Romane lesen.","Мої брати можуть іноді читати романи.","lesen / meine Brüder / manchmal / können / Romane.","KÖNNEN · SATZBILDUNG"),
-  modalSentenceCard("Mein Opa kann oft im Internet surfen.","Мій дідусь може часто сидіти в інтернеті.","surfen / mein Opa / können / oft / im Internet.","KÖNNEN · SATZBILDUNG"),
-  modalSentenceCard("Mein Mann kann nie gut fotografieren.","Мій чоловік ніколи не може добре фотографувати.","nie / mein Mann / können / gut / fotografieren.","KÖNNEN · SATZBILDUNG"),
+  modalOrderSentenceCard("Ich kann immer gut malen.","Я завжди можу добре малювати.","gut / malen / ich / können / immer.",[mainClause("Ich","kann","immer gut","malen")]),
+  modalOrderSentenceCard("Du kannst im Sommer immer gerne schwimmen.","Ти завжди можеш охоче плавати влітку.","gerne / können / du / im Sommer / schwimmen / immer.",[mainClause("Du","kannst","im Sommer immer gerne","schwimmen")]),
+  modalOrderSentenceCard("Ich kann selten spazieren gehen.","Я рідко можу гуляти.","ich / gehen / spazieren / selten / können.",[mainClause("Ich","kann","selten","spazieren gehen")]),
+  modalOrderSentenceCard("Wir können im Winter oft Ski fahren.","Ми часто можемо кататися на лижах узимку.","wir / im Winter / fahren / Ski / oft / können.",[mainClause("Wir","können","im Winter oft Ski","fahren")]),
+  modalOrderSentenceCard("Ihr könnt manchmal zusammen Rad fahren.","Ви можете іноді разом кататися на велосипедах.","zusammen / können / ihr / Rad fahren / manchmal.",[mainClause("Ihr","könnt","manchmal zusammen Rad","fahren")]),
+  modalOrderSentenceCard("Sie können gut Gitarre spielen.","Вони можуть добре грати на гітарі.","Gitarre spielen / gut / können / sie (Pl.).",[mainClause("Sie","können","gut Gitarre","spielen")]),
+  modalOrderSentenceCard("Meine Oma kann oft Kuchen backen.","Моя бабуся може часто пекти пироги.","backen / oft / meine Oma / Kuchen / können.",[mainClause("Meine Oma","kann","oft Kuchen","backen")]),
+  modalOrderSentenceCard("Am Abend kann ich immer meine Freunde treffen.","Увечері я завжди можу зустрічатися з друзями.","am Abend / ich / treffen / immer / meine Freunde / können.",[mainClause("Am Abend","kann","ich immer meine Freunde","treffen")]),
+  modalOrderSentenceCard("Meine Brüder können manchmal Romane lesen.","Мої брати можуть іноді читати романи.","lesen / meine Brüder / manchmal / können / Romane.",[mainClause("Meine Brüder","können","manchmal Romane","lesen")]),
+  modalOrderSentenceCard("Mein Opa kann oft im Internet surfen.","Мій дідусь може часто сидіти в інтернеті.","surfen / mein Opa / können / oft / im Internet.",[mainClause("Mein Opa","kann","oft im Internet","surfen")]),
+  modalOrderSentenceCard("Mein Mann kann nie gut fotografieren.","Мій чоловік ніколи не може добре фотографувати.","nie / mein Mann / können / gut / fotografieren.",[mainClause("Mein Mann","kann","nie gut","fotografieren")]),
   modalClozeCard("Kannst du mit uns spazieren gehen?","Чи можеш ти піти з нами гуляти?","Lisa: ___ du mit uns spazieren gehen?","kannst","можеш"),
   modalClozeCard("Ich kann leider nicht.","Я, на жаль, не можу.","Paul: Ich ___ leider nicht.","kann","можу"),
   modalClozeCard("Kannst du heute Abend mit uns Schach spielen?","Чи можеш ти сьогодні ввечері пограти з нами в шахи?","Lisa: ___ du heute Abend mit uns Schach spielen?","kannst","можеш"),
@@ -1456,16 +1698,16 @@ const koennenPracticeCards=[
   modalClozeCard("Ich kann am Samstag eine Pause vom Lernen machen.","Я можу зробити перерву в навчанні в суботу.","Paul: Ich ___ am Samstag eine Pause vom Lernen machen.","kann","можу"),
   modalClozeCard("Dann können wir spazieren gehen.","Тоді ми можемо піти гуляти.","Paul: Dann ___ wir spazieren gehen.","können","можемо"),
   modalClozeCard("Das können wir machen!","Ми можемо це зробити!","Lisa: Das ___ wir machen!","können","можемо"),
-  modalSentenceCard("Mein Bruder kann super Gitarre spielen.","Мій брат чудово грає на гітарі.","Мій брат круто грає на гітарі."),
-  modalSentenceCard("Meine Schwester kann wunderbar singen.","Моя сестра може чудово співати.","Моя сестра може чудово співати."),
-  modalSentenceCard("Deine Oma kann einen Kuchen backen.","Твоя бабуся може спекти пиріг.","Твоя бабуся може спекти пиріг."),
-  modalSentenceCard("Kannst du schwimmen?","Ти вмієш плавати?","Ти вмієш плавати?"),
-  modalSentenceCard("Seine Tochter kann schön malen.","Його донька вміє гарно малювати.","Його донька вміє гарно малювати."),
-  modalSentenceCard("Manchmal kann ich ein Buch lesen.","Іноді я можу читати книжку.","Іноді я можу читати книжку."),
-  modalSentenceCard("Ich kann nicht so gut kochen.","Я не дуже добре вмію готувати.","Я не дуже добре готую."),
-  modalSentenceCard("Meine Oma kann manchmal im Internet surfen.","Моя бабуся іноді може сидіти в інтернеті.","Моя бабуся іноді сидить в інтернеті."),
-  modalSentenceCard("Kannst du mir bitte helfen?","Ти можеш мені, будь ласка, допомогти?","Ти можеш будь ласка допомогти?"),
-  modalSentenceCard("Meine Mutter kann nicht so gut Schach spielen.","Моя мама не дуже добре може грати в шахи.","Моя мама не дуже може грати в шахи."),
+  modalOrderSentenceCard("Mein Bruder kann super Gitarre spielen.","Мій брат чудово грає на гітарі.","Мій брат круто грає на гітарі.",[mainClause("Mein Bruder","kann","super Gitarre","spielen")]),
+  modalOrderSentenceCard("Meine Schwester kann wunderbar singen.","Моя сестра може чудово співати.","Моя сестра може чудово співати.",[mainClause("Meine Schwester","kann","wunderbar","singen")]),
+  modalOrderSentenceCard("Deine Oma kann einen Kuchen backen.","Твоя бабуся може спекти пиріг.","Твоя бабуся може спекти пиріг.",[mainClause("Deine Oma","kann","einen Kuchen","backen")]),
+  modalOrderSentenceCard("Kannst du schwimmen?","Ти вмієш плавати?","Ти вмієш плавати?",[verbFirstClause("Kannst","du","schwimmen")]),
+  modalOrderSentenceCard("Seine Tochter kann schön malen.","Його донька вміє гарно малювати.","Його донька вміє гарно малювати.",[mainClause("Seine Tochter","kann","schön","malen")]),
+  modalOrderSentenceCard("Manchmal kann ich ein Buch lesen.","Іноді я можу читати книжку.","Іноді я можу читати книжку.",[mainClause("Manchmal","kann","ich ein Buch","lesen")]),
+  modalOrderSentenceCard("Ich kann nicht so gut kochen.","Я не дуже добре вмію готувати.","Я не дуже добре готую.",[mainClause("Ich","kann","nicht so gut","kochen")]),
+  modalOrderSentenceCard("Meine Oma kann manchmal im Internet surfen.","Моя бабуся іноді може сидіти в інтернеті.","Моя бабуся іноді сидить в інтернеті.",[mainClause("Meine Oma","kann","manchmal im Internet","surfen")]),
+  modalOrderSentenceCard("Kannst du mir bitte helfen?","Ти можеш мені, будь ласка, допомогти?","Ти можеш будь ласка допомогти?",[verbFirstClause("Kannst","du mir bitte","helfen")]),
+  modalOrderSentenceCard("Meine Mutter kann nicht so gut Schach spielen.","Моя мама не дуже добре може грати в шахи.","Моя мама не дуже може грати в шахи.",[mainClause("Meine Mutter","kann","nicht so gut Schach","spielen")]),
   modalSentenceCard("Ich kann manchmal am Abend ein Buch lesen.","Я можу іноді ввечері читати книжку.","Ich lese manchmal am Abend ein Buch.","KÖNNEN · UMSCHREIBEN"),
   modalSentenceCard("Du kannst oft deine Freunde im Café treffen.","Ти можеш часто зустрічати друзів у кафе.","Du triffst oft deine Freunde im Café.","KÖNNEN · UMSCHREIBEN"),
   modalSentenceCard("Wir können auch im Kurs Deutsch sprechen.","Ми також можемо говорити німецькою на курсі.","Wir sprechen auch Deutsch im Kurs.","KÖNNEN · UMSCHREIBEN"),
@@ -1495,57 +1737,60 @@ const koennenPracticeCards=[
   modalSentenceCard("Ich treffe oft meine Freunde am Wochenende.","Я часто зустрічаюся з друзями на вихідних.","Ich kann oft meine Freunde am Wochenende treffen.","OHNE MODALVERB"),
   modalSentenceCard("Wir sprechen oft am Abend lange zusammen.","Ми часто довго розмовляємо разом увечері.","Wir können oft am Abend zusammen lange sprechen.","OHNE MODALVERB")
 ];
-const habenFormCards=[
+const habenParadigm=verbParadigm("haben","hab|e ha|st ha|t hab|en hab|t hab|en","du, er/sie/es без b");
+const habenFormCards=withVerbParadigms([
   {word:"ich habe",translation:"я маю / у мене є",category:"VERB · HABEN",example:"Ich habe heute Zeit.",exampleTranslation:"Я сьогодні маю час."},
   {word:"du hast",translation:"ти маєш / у тебе є",category:"VERB · HABEN",example:"Du hast einen Bruder.",exampleTranslation:"У тебе є брат."},
   {word:"er / sie / es hat",translation:"він / вона / воно має",category:"VERB · HABEN",example:"Sie hat eine neue Tasche.",exampleTranslation:"У неї є нова сумка."},
   {word:"wir haben",translation:"ми маємо / у нас є",category:"VERB · HABEN",example:"Wir haben ein großes Haus.",exampleTranslation:"У нас є великий будинок."},
   {word:"ihr habt",translation:"ви маєте / у вас є",category:"VERB · HABEN",example:"Ihr habt viele Fragen.",exampleTranslation:"У вас багато запитань."},
   {word:"sie / Sie haben",translation:"вони мають / Ви маєте",category:"VERB · HABEN",example:"Sie haben heute Unterricht.",exampleTranslation:"У них / Вас сьогодні урок."}
-];
+],[habenParadigm]);
 const habenClozeCard=(word,translation,prompt,answer,answerTranslation)=>({word,translation,category:"HABEN · LÜCKENTEXT",prompt,exampleTranslation:"Доповни речення правильною формою дієслова haben.",answer,answerTranslation,practiceType:"cloze"});
-const habenPracticeCards=[
+const habenPracticeCards=withVerbParadigms([
   habenClozeCard("Ich habe einen Hund.","У мене є собака.","Ich ___ einen Hund. (haben)","habe","маю"),
   habenClozeCard("Du hast heute Zeit.","Ти маєш час сьогодні.","Du ___ heute Zeit. (haben)","hast","маєш"),
   habenClozeCard("Meine Schwester hat eine neue Tasche.","У моєї сестри є нова сумка.","Meine Schwester ___ eine neue Tasche. (haben)","hat","має"),
   habenClozeCard("Wir haben morgen eine Prüfung.","У нас завтра іспит.","Wir ___ morgen eine Prüfung. (haben)","haben","маємо"),
   habenClozeCard("Ihr habt viele Fragen.","У вас багато запитань.","Ihr ___ viele Fragen. (haben)","habt","маєте"),
   habenClozeCard("Sie haben ein großes Haus.","У них є великий будинок.","Sie ___ ein großes Haus. (haben)","haben","мають")
-];
-const bekommenFormCards=[
+],[habenParadigm]);
+const bekommenParadigm=verbParadigm("bekommen","bekomm|e bekomm|st bekomm|t bekomm|en bekomm|t bekomm|en");
+const bekommenFormCards=withVerbParadigms([
   {word:"ich bekomme",translation:"я отримую",category:"VERB · BEKOMMEN",example:"Ich bekomme eine E-Mail.",exampleTranslation:"Я отримую електронний лист."},
   {word:"du bekommst",translation:"ти отримуєш",category:"VERB · BEKOMMEN",example:"Du bekommst heute Besuch.",exampleTranslation:"Ти сьогодні приймаєш гостей."},
   {word:"er / sie / es bekommt",translation:"він / вона / воно отримує",category:"VERB · BEKOMMEN",example:"Sie bekommt ein Geschenk.",exampleTranslation:"Вона отримує подарунок."},
   {word:"wir bekommen",translation:"ми отримуємо",category:"VERB · BEKOMMEN",example:"Wir bekommen morgen Geld.",exampleTranslation:"Ми отримаємо гроші завтра."},
   {word:"ihr bekommt",translation:"ви отримуєте",category:"VERB · BEKOMMEN",example:"Ihr bekommt die Tickets.",exampleTranslation:"Ви отримуєте квитки."},
   {word:"sie / Sie bekommen",translation:"вони / Ви отримують / отримуєте",category:"VERB · BEKOMMEN",example:"Sie bekommen eine Antwort.",exampleTranslation:"Вони отримують відповідь."}
-];
+],[bekommenParadigm]);
 const bekommenClozeCard=(word,translation,prompt,answer,answerTranslation)=>({word,translation,category:"BEKOMMEN · LÜCKENTEXT",prompt,exampleTranslation:"Доповни речення правильною формою дієслова bekommen.",answer,answerTranslation,practiceType:"cloze"});
-const bekommenPracticeCards=[
+const bekommenPracticeCards=withVerbParadigms([
   bekommenClozeCard("Ich bekomme eine E-Mail.","Я отримую електронний лист.","Ich ___ eine E-Mail. (bekommen)","bekomme","отримую"),
   bekommenClozeCard("Du bekommst heute Besuch.","Ти сьогодні приймаєш гостей.","Du ___ heute Besuch. (bekommen)","bekommst","отримуєш"),
   bekommenClozeCard("Meine Schwester bekommt ein Geschenk.","Моя сестра отримує подарунок.","Meine Schwester ___ ein Geschenk. (bekommen)","bekommt","отримує"),
   bekommenClozeCard("Wir bekommen morgen Geld.","Ми отримаємо гроші завтра.","Wir ___ morgen Geld. (bekommen)","bekommen","отримуємо"),
   bekommenClozeCard("Ihr bekommt die Tickets.","Ви отримуєте квитки.","Ihr ___ die Tickets. (bekommen)","bekommt","отримуєте"),
   bekommenClozeCard("Sie bekommen eine Antwort.","Вони отримують відповідь.","Sie ___ eine Antwort. (bekommen)","bekommen","отримують")
-];
-const brauchenFormCards=[
+],[bekommenParadigm]);
+const brauchenParadigm=verbParadigm("brauchen","brauch|e brauch|st brauch|t brauch|en brauch|t brauch|en");
+const brauchenFormCards=withVerbParadigms([
   {word:"ich brauche",translation:"я потребую",category:"VERB · BRAUCHEN",example:"Ich brauche Hilfe.",exampleTranslation:"Мені потрібна допомога."},
   {word:"du brauchst",translation:"ти потребуєш",category:"VERB · BRAUCHEN",example:"Du brauchst eine Pause.",exampleTranslation:"Тобі потрібна перерва."},
   {word:"er / sie / es braucht",translation:"він / вона / воно потребує",category:"VERB · BRAUCHEN",example:"Er braucht eine neue Brille.",exampleTranslation:"Йому потрібні нові окуляри."},
   {word:"wir brauchen",translation:"ми потребуємо",category:"VERB · BRAUCHEN",example:"Wir brauchen mehr Zeit.",exampleTranslation:"Нам потрібно більше часу."},
   {word:"ihr braucht",translation:"ви потребуєте",category:"VERB · BRAUCHEN",example:"Ihr braucht eure Bücher.",exampleTranslation:"Вам потрібні ваші книжки."},
   {word:"sie / Sie brauchen",translation:"вони / Ви потребують / потребуєте",category:"VERB · BRAUCHEN",example:"Sie brauchen einen Termin.",exampleTranslation:"Їм потрібна зустріч."}
-];
+],[brauchenParadigm]);
 const brauchenClozeCard=(word,translation,prompt,answer,answerTranslation)=>({word,translation,category:"BRAUCHEN · LÜCKENTEXT",prompt,exampleTranslation:"Доповни речення правильною формою дієслова brauchen.",answer,answerTranslation,practiceType:"cloze"});
-const brauchenPracticeCards=[
+const brauchenPracticeCards=withVerbParadigms([
   brauchenClozeCard("Ich brauche Hilfe.","Мені потрібна допомога.","Ich ___ Hilfe. (brauchen)","brauche","потребую"),
   brauchenClozeCard("Du brauchst eine Pause.","Тобі потрібна перерва.","Du ___ eine Pause. (brauchen)","brauchst","потребуєш"),
   brauchenClozeCard("Er braucht eine neue Brille.","Йому потрібні нові окуляри.","Er ___ eine neue Brille. (brauchen)","braucht","потребує"),
   brauchenClozeCard("Wir brauchen mehr Zeit.","Нам потрібно більше часу.","Wir ___ mehr Zeit. (brauchen)","brauchen","потребуємо"),
   brauchenClozeCard("Ihr braucht eure Bücher.","Вам потрібні ваші книжки.","Ihr ___ eure Bücher. (brauchen)","braucht","потребуєте"),
   brauchenClozeCard("Sie brauchen einen Termin.","Їм потрібна зустріч.","Sie ___ einen Termin. (brauchen)","brauchen","потребують")
-];
+],[brauchenParadigm]);
 const frequencyCards=[
   {word:"immer",translation:"завжди",category:"FREQUENCY ADVERB",example:"Ich trinke immer Kaffee.",exampleTranslation:"Я завжди п'ю каву."},
   {word:"fast immer",translation:"майже завжди",category:"FREQUENCY ADVERB",example:"Sie kommt fast immer pünktlich.",exampleTranslation:"Вона майже завжди приходить вчасно."},
@@ -1611,75 +1856,75 @@ const timeWorksheetVocabularyCards=[
   {word:"verbringen",translation:"проводити (час)",category:"ZEIT-ARBEITSBLATT · WORTSCHATZ",example:"Im Sommer verbringen wir zusammen Urlaub.",exampleTranslation:"Улітку ми разом проводимо відпустку."},
   {word:"genießen",translation:"насолоджуватися",category:"ZEIT-ARBEITSBLATT · WORTSCHATZ",example:"Im Frühling genieße ich jeden Morgen Kaffee.",exampleTranslation:"Навесні я щоранку насолоджуюся кавою."}
 ];
-const wordOrderSentenceCard=(word,translation,prompt,category="WORTFOLGE · SATZBILDUNG")=>({word,translation,category,prompt,example:prompt,exampleTranslation:"Розстав слова в правильному порядку та напиши повне німецьке речення.",answer:word,answerTranslation:translation,practiceType:"sentence"});
+const wordOrderSentenceCard=(word,translation,prompt,structure,category="WORTFOLGE · SATZBILDUNG")=>({word,translation,category,prompt,example:prompt,exampleTranslation:"Розстав слова в правильному порядку та напиши повне німецьке речення.",answer:word,answerTranslation:translation,practiceType:"sentence",structure});
 const wordOrderStatementCards=[
-  {word:"Der Mann ist da.",translation:"Чоловік тут.",category:"WORTFOLGE · AUSSAGESATZ",example:"Subjekt + Verb + weitere Informationen",exampleTranslation:"У прямому розповідному реченні підмет стоїть першим, а відмінюване дієслово - другим."},
-  {word:"Das Arbeitszimmer ist groß.",translation:"Кабінет великий.",category:"WORTFOLGE · AUSSAGESATZ",example:"Subjekt + Verb + Ergänzung",exampleTranslation:"Навіть із прикметником відмінюване дієслово залишається на другому місці."},
-  {word:"Ich fahre heute mit dem Bus nach Hause.",translation:"Я сьогодні їду автобусом додому.",category:"WORTFOLGE · AUSSAGESATZ",example:"Subjekt + Verb + Temporal + Modal + Lokal",exampleTranslation:"Після дієслова інформація часто йде в порядку час - спосіб - місце."}
+  {word:"Der Mann ist da.",translation:"Чоловік тут.",category:"WORTFOLGE · AUSSAGESATZ",example:"Subjekt + Verb + weitere Informationen",exampleTranslation:"У прямому розповідному реченні підмет стоїть першим, а відмінюване дієслово - другим.",structure:[mainClause("Der Mann","ist","da")]},
+  {word:"Das Arbeitszimmer ist groß.",translation:"Кабінет великий.",category:"WORTFOLGE · AUSSAGESATZ",example:"Subjekt + Verb + Ergänzung",exampleTranslation:"Навіть із прикметником відмінюване дієслово залишається на другому місці.",structure:[mainClause("Das Arbeitszimmer","ist","groß")]},
+  {word:"Ich fahre heute mit dem Bus nach Hause.",translation:"Я сьогодні їду автобусом додому.",category:"WORTFOLGE · AUSSAGESATZ",example:"Subjekt + Verb + Temporal + Modal + Lokal",exampleTranslation:"Після дієслова інформація часто йде в порядку час - спосіб - місце.",structure:[mainClause("Ich","fahre","heute mit dem Bus nach Hause")]}
 ];
 const wordOrderTeKaMoLoCards=[
-  {word:"Ich fahre heute wegen des Regens mit dem Bus zur Arbeit.",translation:"Я сьогодні їду автобусом на роботу через дощ.",category:"WORTFOLGE · TE-KA-MO-LO",example:"Subjekt + Verb + Temporal + Kausal + Modal + Lokal",exampleTranslation:"У середині речення обставини зазвичай стоять у порядку TE-KA-MO-LO: час - причина - спосіб - місце."},
-  {word:"Wir lernen heute wegen der Prüfung zusammen in der Bibliothek.",translation:"Ми сьогодні вчимося разом у бібліотеці через іспит.",category:"WORTFOLGE · TE-KA-MO-LO",example:"Subjekt + Verb + Temporal + Kausal + Modal + Lokal",exampleTranslation:"TE = wann?, KA = warum?, MO = wie?, LO = wo?/wohin?."}
+  {word:"Ich fahre heute wegen des Regens mit dem Bus zur Arbeit.",translation:"Я сьогодні їду автобусом на роботу через дощ.",category:"WORTFOLGE · TE-KA-MO-LO",example:"Subjekt + Verb + Temporal + Kausal + Modal + Lokal",exampleTranslation:"У середині речення обставини зазвичай стоять у порядку TE-KA-MO-LO: час - причина - спосіб - місце.",structure:[mainClause("Ich","fahre","heute wegen des Regens mit dem Bus zur Arbeit")]},
+  {word:"Wir lernen heute wegen der Prüfung zusammen in der Bibliothek.",translation:"Ми сьогодні вчимося разом у бібліотеці через іспит.",category:"WORTFOLGE · TE-KA-MO-LO",example:"Subjekt + Verb + Temporal + Kausal + Modal + Lokal",exampleTranslation:"TE = wann?, KA = warum?, MO = wie?, LO = wo?/wohin?.",structure:[mainClause("Wir","lernen","heute wegen der Prüfung zusammen in der Bibliothek")]}
 ];
 const wordOrderInversionCards=[
-  {word:"Heute fahre ich mit dem Bus nach Hause.",translation:"Сьогодні я їду автобусом додому.",category:"WORTFOLGE · INVERSION",example:"Temporal + Verb + Subjekt + Modal + Lokal",exampleTranslation:"Якщо час стоїть першим, дієслово все одно посідає другу позицію, а підмет іде після нього."},
-  {word:"Am Abend ist mein Bruder frei.",translation:"Увечері мій брат вільний.",category:"WORTFOLGE · INVERSION",example:"Temporal + Verb + Subjekt + Ergänzung",exampleTranslation:"Початкове слово або фраза змінює місце підмета, але не місце дієслова."},
-  {word:"Jetzt haben wir ein neues Auto.",translation:"Тепер у нас є нова машина.",category:"WORTFOLGE · INVERSION",example:"Temporal + Verb + Subjekt + Objekt",exampleTranslation:"У стверджувальному реченні відмінюване дієслово завжди на другому місці."}
+  {word:"Heute fahre ich mit dem Bus nach Hause.",translation:"Сьогодні я їду автобусом додому.",category:"WORTFOLGE · INVERSION",example:"Temporal + Verb + Subjekt + Modal + Lokal",exampleTranslation:"Якщо час стоїть першим, дієслово все одно посідає другу позицію, а підмет іде після нього.",structure:[mainClause("Heute","fahre","ich mit dem Bus nach Hause")]},
+  {word:"Am Abend ist mein Bruder frei.",translation:"Увечері мій брат вільний.",category:"WORTFOLGE · INVERSION",example:"Temporal + Verb + Subjekt + Ergänzung",exampleTranslation:"Початкове слово або фраза змінює місце підмета, але не місце дієслова.",structure:[mainClause("Am Abend","ist","mein Bruder frei")]},
+  {word:"Jetzt haben wir ein neues Auto.",translation:"Тепер у нас є нова машина.",category:"WORTFOLGE · INVERSION",example:"Temporal + Verb + Subjekt + Objekt",exampleTranslation:"У стверджувальному реченні відмінюване дієслово завжди на другому місці.",structure:[mainClause("Jetzt","haben","wir ein neues Auto")]}
 ];
 const wordOrderQuestionCards=[
-  {word:"Fährst du heute mit dem Bus nach Hause?",translation:"Ти сьогодні їдеш автобусом додому?",category:"WORTFOLGE · JA/NEIN-FRAGE",example:"Verb + Subjekt + weitere Informationen",exampleTranslation:"У питанні без питального слова відмінюване дієслово стоїть на першому місці."},
-  {word:"Warum fährst du heute mit dem Bus nach Hause?",translation:"Чому ти сьогодні їдеш автобусом додому?",category:"WORTFOLGE · W-FRAGE",example:"Fragewort + Verb + Subjekt + weitere Informationen",exampleTranslation:"У W-Frage питальне слово стоїть першим, а відмінюване дієслово - другим."},
-  {word:"Wo ist dein Handy?",translation:"Де твій телефон?",category:"WORTFOLGE · W-FRAGE",example:"Fragewort + Verb + Subjekt",exampleTranslation:"Після питального слова одразу ставте відмінюване дієслово."}
+  {word:"Fährst du heute mit dem Bus nach Hause?",translation:"Ти сьогодні їдеш автобусом додому?",category:"WORTFOLGE · JA/NEIN-FRAGE",example:"Verb + Subjekt + weitere Informationen",exampleTranslation:"У питанні без питального слова відмінюване дієслово стоїть на першому місці.",structure:[verbFirstClause("Fährst","du heute mit dem Bus nach Hause")]},
+  {word:"Warum fährst du heute mit dem Bus nach Hause?",translation:"Чому ти сьогодні їдеш автобусом додому?",category:"WORTFOLGE · W-FRAGE",example:"Fragewort + Verb + Subjekt + weitere Informationen",exampleTranslation:"У W-Frage питальне слово стоїть першим, а відмінюване дієслово - другим.",structure:[mainClause("Warum","fährst","du heute mit dem Bus nach Hause")]},
+  {word:"Wo ist dein Handy?",translation:"Де твій телефон?",category:"WORTFOLGE · W-FRAGE",example:"Fragewort + Verb + Subjekt",exampleTranslation:"Після питального слова одразу ставте відмінюване дієслово.",structure:[mainClause("Wo","ist","dein Handy")]}
 ];
 const wordOrderModalCards=[
-  {word:"Ich mag am Morgen Kaffee trinken.",translation:"Я люблю вранці пити каву.",category:"WORTFOLGE · MODALVERB",example:"Subjekt (P1) + Modalverb (P2) + Temporal + Objekt + Verb am Ende",exampleTranslation:"У розповідному реченні підмет стоїть першим, відмінюване модальне дієслово - другим, а інфінітив - у кінці."},
-  {word:"Am Morgen mag ich Kaffee trinken.",translation:"Вранці я люблю пити каву.",category:"WORTFOLGE · MODALVERB",example:"Temporal + Modalverb (P2) + Subjekt (P3) + Objekt + Verb am Ende",exampleTranslation:"Якщо обставина часу стоїть першою, модальне дієслово все одно залишається на другому місці."},
-  {word:"Magst du am Morgen Kaffee trinken?",translation:"Ти любиш вранці пити каву?",category:"WORTFOLGE · MODALVERB · JA/NEIN",example:"Modalverb (P1) + Subjekt (P2) + Temporal + Objekt + Verb am Ende",exampleTranslation:"У питанні без питального слова модальне дієслово відкриває речення, а інфінітив залишається в кінці."},
-  {word:"Was magst du am Morgen trinken?",translation:"Що ти любиш пити вранці?",category:"WORTFOLGE · MODALVERB · W-FRAGE",example:"Fragewort + Modalverb (P2) + Subjekt (P3) + Temporal + Verb am Ende",exampleTranslation:"У W-Frage питальне слово стоїть першим, модальне дієслово - другим, а інфінітив - у кінці."}
+  {word:"Ich mag am Morgen Kaffee trinken.",translation:"Я люблю вранці пити каву.",category:"WORTFOLGE · MODALVERB",example:"Subjekt (P1) + Modalverb (P2) + Temporal + Objekt + Verb am Ende",exampleTranslation:"У розповідному реченні підмет стоїть першим, відмінюване модальне дієслово - другим, а інфінітив - у кінці.",structure:[mainClause("Ich","mag","am Morgen Kaffee","trinken")]},
+  {word:"Am Morgen mag ich Kaffee trinken.",translation:"Вранці я люблю пити каву.",category:"WORTFOLGE · MODALVERB",example:"Temporal + Modalverb (P2) + Subjekt (P3) + Objekt + Verb am Ende",exampleTranslation:"Якщо обставина часу стоїть першою, модальне дієслово все одно залишається на другому місці.",structure:[mainClause("Am Morgen","mag","ich Kaffee","trinken")]},
+  {word:"Magst du am Morgen Kaffee trinken?",translation:"Ти любиш вранці пити каву?",category:"WORTFOLGE · MODALVERB · JA/NEIN",example:"Modalverb (P1) + Subjekt (P2) + Temporal + Objekt + Verb am Ende",exampleTranslation:"У питанні без питального слова модальне дієслово відкриває речення, а інфінітив залишається в кінці.",structure:[verbFirstClause("Magst","du am Morgen Kaffee","trinken")]},
+  {word:"Was magst du am Morgen trinken?",translation:"Що ти любиш пити вранці?",category:"WORTFOLGE · MODALVERB · W-FRAGE",example:"Fragewort + Modalverb (P2) + Subjekt (P3) + Temporal + Verb am Ende",exampleTranslation:"У W-Frage питальне слово стоїть першим, модальне дієслово - другим, а інфінітив - у кінці.",structure:[mainClause("Was","magst","du am Morgen","trinken")]}
 ];
 const wordOrderStatementPracticeCards=[
-  wordOrderSentenceCard("Der Mann ist da.","Чоловік тут.","da / der Mann / sein."),
-  wordOrderSentenceCard("Das Arbeitszimmer ist groß.","Кабінет великий.","sein / groß / das Arbeitszimmer."),
-  wordOrderSentenceCard("Ich fahre heute mit dem Bus nach Hause.","Я сьогодні їду автобусом додому.","heute / ich / mit dem Bus / nach Hause / fahren."),
-  wordOrderSentenceCard("Meine Schwester ist schon Studentin.","Моя сестра вже студентка.","schon / meine Schwester / Studentin / sein.")
+  wordOrderSentenceCard("Der Mann ist da.","Чоловік тут.","da / der Mann / sein.",[mainClause("Der Mann","ist","da")]),
+  wordOrderSentenceCard("Das Arbeitszimmer ist groß.","Кабінет великий.","sein / groß / das Arbeitszimmer.",[mainClause("Das Arbeitszimmer","ist","groß")]),
+  wordOrderSentenceCard("Ich fahre heute mit dem Bus nach Hause.","Я сьогодні їду автобусом додому.","heute / ich / mit dem Bus / nach Hause / fahren.",[mainClause("Ich","fahre","heute mit dem Bus nach Hause")]),
+  wordOrderSentenceCard("Meine Schwester ist schon Studentin.","Моя сестра вже студентка.","schon / meine Schwester / Studentin / sein.",[mainClause("Meine Schwester","ist","schon Studentin")])
 ];
 const wordOrderTeKaMoLoPracticeCards=[
-  wordOrderSentenceCard("Ich fahre heute wegen des Regens mit dem Bus zur Arbeit.","Я сьогодні їду автобусом на роботу через дощ.","heute / zur Arbeit / ich / wegen des Regens / mit dem Bus / fahren.","WORTFOLGE · TE-KA-MO-LO"),
-  wordOrderSentenceCard("Wir lernen heute wegen der Prüfung zusammen in der Bibliothek.","Ми сьогодні вчимося разом у бібліотеці через іспит.","in der Bibliothek / zusammen / heute / wir / wegen der Prüfung / lernen.","WORTFOLGE · TE-KA-MO-LO")
+  wordOrderSentenceCard("Ich fahre heute wegen des Regens mit dem Bus zur Arbeit.","Я сьогодні їду автобусом на роботу через дощ.","heute / zur Arbeit / ich / wegen des Regens / mit dem Bus / fahren.",[mainClause("Ich","fahre","heute wegen des Regens mit dem Bus zur Arbeit")],"WORTFOLGE · TE-KA-MO-LO"),
+  wordOrderSentenceCard("Wir lernen heute wegen der Prüfung zusammen in der Bibliothek.","Ми сьогодні вчимося разом у бібліотеці через іспит.","in der Bibliothek / zusammen / heute / wir / wegen der Prüfung / lernen.",[mainClause("Wir","lernen","heute wegen der Prüfung zusammen in der Bibliothek")],"WORTFOLGE · TE-KA-MO-LO")
 ];
 const wordOrderInversionPracticeCards=[
-  wordOrderSentenceCard("Heute fahre ich mit dem Bus nach Hause.","Сьогодні я їду автобусом додому.","ich / heute / mit dem Bus / nach Hause / fahren."),
-  wordOrderSentenceCard("Am Abend ist mein Bruder frei.","Увечері мій брат вільний.","frei / mein Bruder / sein / am Abend."),
-  wordOrderSentenceCard("Morgen ist die Mutter zu Hause.","Завтра мама вдома.","die Mutter / morgen / zu Hause / sein."),
-  wordOrderSentenceCard("Jetzt haben wir ein neues Auto.","Тепер у нас є нова машина.","ein neues Auto / jetzt / wir / haben.")
+  wordOrderSentenceCard("Heute fahre ich mit dem Bus nach Hause.","Сьогодні я їду автобусом додому.","ich / heute / mit dem Bus / nach Hause / fahren.",[mainClause("Heute","fahre","ich mit dem Bus nach Hause")]),
+  wordOrderSentenceCard("Am Abend ist mein Bruder frei.","Увечері мій брат вільний.","frei / mein Bruder / sein / am Abend.",[mainClause("Am Abend","ist","mein Bruder frei")]),
+  wordOrderSentenceCard("Morgen ist die Mutter zu Hause.","Завтра мама вдома.","die Mutter / morgen / zu Hause / sein.",[mainClause("Morgen","ist","die Mutter zu Hause")]),
+  wordOrderSentenceCard("Jetzt haben wir ein neues Auto.","Тепер у нас є нова машина.","ein neues Auto / jetzt / wir / haben.",[mainClause("Jetzt","haben","wir ein neues Auto")])
 ];
 const wordOrderQuestionPracticeCards=[
-  wordOrderSentenceCard("Fährst du heute mit dem Bus nach Hause?","Ти сьогодні їдеш автобусом додому?","du / heute / mit dem Bus / nach Hause / fahren?","WORTFOLGE · FRAGEBILDUNG"),
-  wordOrderSentenceCard("Ist der Mann da?","Чоловік тут?","da / der Mann / sein?","WORTFOLGE · FRAGEBILDUNG"),
-  wordOrderSentenceCard("Warum fährst du heute mit dem Bus nach Hause?","Чому ти сьогодні їдеш автобусом додому?","warum / du / heute / mit dem Bus / nach Hause / fahren?","WORTFOLGE · W-FRAGE"),
-  wordOrderSentenceCard("Wo ist dein Handy?","Де твій телефон?","dein Handy / wo / sein?","WORTFOLGE · W-FRAGE"),
-  wordOrderSentenceCard("Wann ist er zu Hause?","Коли він удома?","er / zu Hause / wann / sein?","WORTFOLGE · W-FRAGE"),
-  wordOrderSentenceCard("Wie geht es dir?","Як у тебе справи?","es / dir / wie / gehen?","WORTFOLGE · W-FRAGE")
+  wordOrderSentenceCard("Fährst du heute mit dem Bus nach Hause?","Ти сьогодні їдеш автобусом додому?","du / heute / mit dem Bus / nach Hause / fahren?",[verbFirstClause("Fährst","du heute mit dem Bus nach Hause")],"WORTFOLGE · FRAGEBILDUNG"),
+  wordOrderSentenceCard("Ist der Mann da?","Чоловік тут?","da / der Mann / sein?",[verbFirstClause("Ist","der Mann da")],"WORTFOLGE · FRAGEBILDUNG"),
+  wordOrderSentenceCard("Warum fährst du heute mit dem Bus nach Hause?","Чому ти сьогодні їдеш автобусом додому?","warum / du / heute / mit dem Bus / nach Hause / fahren?",[mainClause("Warum","fährst","du heute mit dem Bus nach Hause")],"WORTFOLGE · W-FRAGE"),
+  wordOrderSentenceCard("Wo ist dein Handy?","Де твій телефон?","dein Handy / wo / sein?",[mainClause("Wo","ist","dein Handy")],"WORTFOLGE · W-FRAGE"),
+  wordOrderSentenceCard("Wann ist er zu Hause?","Коли він удома?","er / zu Hause / wann / sein?",[mainClause("Wann","ist","er zu Hause")],"WORTFOLGE · W-FRAGE"),
+  wordOrderSentenceCard("Wie geht es dir?","Як у тебе справи?","es / dir / wie / gehen?",[mainClause("Wie","geht","es dir")],"WORTFOLGE · W-FRAGE")
 ];
 const wordOrderModalPracticeCards=[
-  wordOrderSentenceCard("Ich mag am Morgen Kaffee trinken.","Я люблю вранці пити каву.","am Morgen / ich / Kaffee / trinken / mag.","WORTFOLGE · MODALVERB"),
-  wordOrderSentenceCard("Am Morgen mag ich Kaffee trinken.","Вранці я люблю пити каву.","Kaffee / am Morgen / trinken / ich / mag.","WORTFOLGE · MODALVERB"),
-  wordOrderSentenceCard("Magst du am Morgen Kaffee trinken?","Ти любиш вранці пити каву?","am Morgen / trinken / du / Kaffee / magst?","WORTFOLGE · MODALVERB · JA/NEIN"),
-  wordOrderSentenceCard("Was magst du am Morgen trinken?","Що ти любиш пити вранці?","am Morgen / trinken / du / was / magst?","WORTFOLGE · MODALVERB · W-FRAGE"),
-  wordOrderSentenceCard("Ich möchte am Abend einen Tee trinken.","Я хотів би / хотіла б увечері випити чаю.","am Abend / einen Tee / ich / trinken / möchte.","WORTFOLGE · MODALVERB"),
-  wordOrderSentenceCard("Wann kannst du Deutsch lernen?","Коли ти можеш вивчати німецьку?","Deutsch / du / wann / lernen / kannst?","WORTFOLGE · MODALVERB · W-FRAGE")
+  wordOrderSentenceCard("Ich mag am Morgen Kaffee trinken.","Я люблю вранці пити каву.","am Morgen / ich / Kaffee / trinken / mag.",[mainClause("Ich","mag","am Morgen Kaffee","trinken")],"WORTFOLGE · MODALVERB"),
+  wordOrderSentenceCard("Am Morgen mag ich Kaffee trinken.","Вранці я люблю пити каву.","Kaffee / am Morgen / trinken / ich / mag.",[mainClause("Am Morgen","mag","ich Kaffee","trinken")],"WORTFOLGE · MODALVERB"),
+  wordOrderSentenceCard("Magst du am Morgen Kaffee trinken?","Ти любиш вранці пити каву?","am Morgen / trinken / du / Kaffee / magst?",[verbFirstClause("Magst","du am Morgen Kaffee","trinken")],"WORTFOLGE · MODALVERB · JA/NEIN"),
+  wordOrderSentenceCard("Was magst du am Morgen trinken?","Що ти любиш пити вранці?","am Morgen / trinken / du / was / magst?",[mainClause("Was","magst","du am Morgen","trinken")],"WORTFOLGE · MODALVERB · W-FRAGE"),
+  wordOrderSentenceCard("Ich möchte am Abend einen Tee trinken.","Я хотів би / хотіла б увечері випити чаю.","am Abend / einen Tee / ich / trinken / möchte.",[mainClause("Ich","möchte","am Abend einen Tee","trinken")],"WORTFOLGE · MODALVERB"),
+  wordOrderSentenceCard("Wann kannst du Deutsch lernen?","Коли ти можеш вивчати німецьку?","Deutsch / du / wann / lernen / kannst?",[mainClause("Wann","kannst","du Deutsch","lernen")],"WORTFOLGE · MODALVERB · W-FRAGE")
 ];
 const separableVerbCards=[
-  {word:"aufstehen",translation:"вставати",category:"TRENNBARES VERB · AUF",example:"Ich stehe um sieben Uhr auf.",exampleTranslation:"Я встаю о сьомій годині."},
-  {word:"anrufen",translation:"телефонувати",category:"TRENNBARES VERB · AN",example:"Ich rufe dich später an.",exampleTranslation:"Я подзвоню тобі пізніше."},
-  {word:"einkaufen",translation:"робити покупки",category:"TRENNBARES VERB · EIN",example:"Wir kaufen heute im Supermarkt ein.",exampleTranslation:"Ми сьогодні робимо покупки в супермаркеті."},
-  {word:"abfahren",translation:"відправлятися",category:"TRENNBARES VERB · AB",example:"Der Zug fährt um neun Uhr ab.",exampleTranslation:"Потяг відправляється о дев'ятій годині."},
-  {word:"ankommen",translation:"прибувати",category:"TRENNBARES VERB · AN",example:"Der Bus kommt in fünf Minuten an.",exampleTranslation:"Автобус прибуде через п'ять хвилин."},
-  {word:"abholen",translation:"забирати / зустрічати",category:"TRENNBARES VERB · AB",example:"Ich hole meine Freundin vom Bahnhof ab.",exampleTranslation:"Я зустрічаю подругу на вокзалі."},
-  {word:"aussteigen",translation:"виходити (з транспорту)",category:"TRENNBARES VERB · AUS",example:"Wir steigen am Alexanderplatz aus.",exampleTranslation:"Ми виходимо на Александерплац."},
-  {word:"umsteigen",translation:"пересідати",category:"TRENNBARES VERB · UM",example:"Sie steigen in München um.",exampleTranslation:"Вони пересаджуються в Мюнхені."},
-  {word:"mitbringen",translation:"приносити із собою",category:"TRENNBARES VERB · MIT",example:"Ich bringe meine Tasche mit.",exampleTranslation:"Я беру із собою сумку."},
-  {word:"fernsehen",translation:"дивитися телевізор",category:"TRENNBARES VERB · FERN",example:"Er sieht am Abend fern.",exampleTranslation:"Він дивиться телевізор увечері."}
+  {word:"aufstehen",translation:"вставати",category:"TRENNBARES VERB · AUF",example:"Ich stehe um sieben Uhr auf.",exampleTranslation:"Я встаю о сьомій годині.",structure:[mainClause("Ich","stehe","um sieben Uhr","auf")]},
+  {word:"anrufen",translation:"телефонувати",category:"TRENNBARES VERB · AN",example:"Ich rufe dich später an.",exampleTranslation:"Я подзвоню тобі пізніше.",structure:[mainClause("Ich","rufe","dich später","an")]},
+  {word:"einkaufen",translation:"робити покупки",category:"TRENNBARES VERB · EIN",example:"Wir kaufen heute im Supermarkt ein.",exampleTranslation:"Ми сьогодні робимо покупки в супермаркеті.",structure:[mainClause("Wir","kaufen","heute im Supermarkt","ein")]},
+  {word:"abfahren",translation:"відправлятися",category:"TRENNBARES VERB · AB",example:"Der Zug fährt um neun Uhr ab.",exampleTranslation:"Потяг відправляється о дев'ятій годині.",structure:[mainClause("Der Zug","fährt","um neun Uhr","ab")]},
+  {word:"ankommen",translation:"прибувати",category:"TRENNBARES VERB · AN",example:"Der Bus kommt in fünf Minuten an.",exampleTranslation:"Автобус прибуде через п'ять хвилин.",structure:[mainClause("Der Bus","kommt","in fünf Minuten","an")]},
+  {word:"abholen",translation:"забирати / зустрічати",category:"TRENNBARES VERB · AB",example:"Ich hole meine Freundin vom Bahnhof ab.",exampleTranslation:"Я зустрічаю подругу на вокзалі.",structure:[mainClause("Ich","hole","meine Freundin vom Bahnhof","ab")]},
+  {word:"aussteigen",translation:"виходити (з транспорту)",category:"TRENNBARES VERB · AUS",example:"Wir steigen am Alexanderplatz aus.",exampleTranslation:"Ми виходимо на Александерплац.",structure:[mainClause("Wir","steigen","am Alexanderplatz","aus")]},
+  {word:"umsteigen",translation:"пересідати",category:"TRENNBARES VERB · UM",example:"Sie steigen in München um.",exampleTranslation:"Вони пересаджуються в Мюнхені.",structure:[mainClause("Sie","steigen","in München","um")]},
+  {word:"mitbringen",translation:"приносити із собою",category:"TRENNBARES VERB · MIT",example:"Ich bringe meine Tasche mit.",exampleTranslation:"Я беру із собою сумку.",structure:[mainClause("Ich","bringe","meine Tasche","mit")]},
+  {word:"fernsehen",translation:"дивитися телевізор",category:"TRENNBARES VERB · FERN",example:"Er sieht am Abend fern.",exampleTranslation:"Він дивиться телевізор увечері.",structure:[mainClause("Er","sieht","am Abend","fern")]}
 ];
 const everydayVocabularyRoutineCards=[
   {word:"zuerst",translation:"спочатку",category:"ALLTAG · ABLAUF",example:"Zuerst lese ich den Text.",exampleTranslation:"Спочатку я читаю текст."},
@@ -1983,47 +2228,116 @@ const photoDescriptionCards=[
   {word:"der Mensch / die Menschen",translation:"людина / люди",category:"FOTOBESCHREIBUNG · PERSON",example:"Die Menschen stehen vor dem Museum.",exampleTranslation:"Люди стоять перед музеєм."},
   {word:"etwas",translation:"щось",category:"FOTOBESCHREIBUNG · PRONOMEN",example:"Die Frau sucht etwas in ihrer Tasche.",exampleTranslation:"Жінка шукає щось у своїй сумці."}
 ];
+// Explicit noun metadata for the shared gender visuals (Constitution §2, "Visual language").
+attachNouns(timeWorksheetVocabularyCards,{
+  "der Baum / die Bäume":nounMeta("masculine","Baum",{exampleWord:"",plural:"Bäume",pluralExampleWord:"Bäumen"}),
+  "das Blatt / die Blätter":nounMeta("neuter","Blatt",{exampleWord:"",plural:"Blätter",pluralExampleWord:"Blätter"}),
+  "die Kirche":nounMeta("feminine","Kirche"),
+  "das Restaurant":nounMeta("neuter","Restaurant"),
+  "der Weihnachtsmann":nounMeta("masculine","Weihnachtsmann"),
+  "die Sekunde":nounMeta("feminine","Sekunde",{exampleWord:""}),
+  "die Minute":nounMeta("feminine","Minute"),
+  "der Pilz / die Pilze":nounMeta("masculine","Pilz",{exampleWord:"",plural:"Pilze",pluralExampleWord:"Pilze"}),
+  "das Fitnessstudio":nounMeta("neuter","Fitnessstudio"),
+  "die Wärme":nounMeta("feminine","Wärme"),
+  "der Vogel / die Vögel":nounMeta("masculine","Vogel",{exampleWord:"",plural:"Vögel",pluralExampleWord:"Vögel"})
+});
+attachNouns(everydayVocabularyFoodCards,{
+  "der Kräutertee":nounMeta("masculine","Kräutertee"),
+  "die Süßigkeiten":nounMeta("plural","Süßigkeiten"),
+  "der Kaugummi":nounMeta("masculine","Kaugummi"),
+  "der Brei":nounMeta("masculine","Brei")
+});
+attachNouns(travelTransportCards,Object.fromEntries([
+  ["masculine","Bahnhof"],["masculine","Flughafen"],["feminine","S-Bahn"],["neuter","Taxi"],["masculine","Bus"],
+  ["masculine","Zug"],["feminine","Straßenbahn"],["feminine","U-Bahn"],["neuter","Flugzeug"],["neuter","Gleis"],
+  ["masculine","Bahnsteig"],["masculine","Koffer"],["feminine","Tasche"],["neuter","Gepäck"],["feminine","Haltestelle"]
+].map(([gender,word])=>[`${genderArticles[gender]} ${word}`,nounMeta(gender,word)])));
+attachNouns(travelPhraseCards,{
+  "der nächste Bahnhof":nounMeta("masculine","Bahnhof"),
+  "mit dem Zug fahren":nounMeta("masculine","Zug"),
+  "mit dem Flugzeug fliegen":nounMeta("neuter","Flugzeug"),
+  "zu meiner Freundin":nounMeta("feminine","Freundin"),
+  "die Fahrt":nounMeta("feminine","Fahrt"),
+  "an der Haltestelle":nounMeta("feminine","Haltestelle")
+});
+attachNouns(directionLandmarkCards,{
+  "an der Kreuzung":nounMeta("feminine","Kreuzung"),
+  "in der Nähe von":nounMeta("feminine","Nähe"),
+  "bis zur Ampel":nounMeta("feminine","Ampel"),
+  "an der Ampel":nounMeta("feminine","Ampel"),
+  "die erste Straße links":nounMeta("feminine","Straße"),
+  "über die Straße gehen":nounMeta("feminine","Straße")
+});
+attachNouns(esGibtPatternCards,{
+  "Es gibt einen Park.":nounMeta("masculine","Park"),
+  "Es gibt eine Ausstellung.":nounMeta("feminine","Ausstellung"),
+  "Es gibt ein Café.":nounMeta("neuter","Café"),
+  "Es gibt viele Cafés.":nounMeta("plural","Cafés")
+});
+attachNouns(esGibtPracticeCards,{
+  "Im Zentrum gibt es einen Park.":nounMeta("masculine","Park"),
+  "Heute gibt es eine Ausstellung.":nounMeta("feminine","Ausstellung"),
+  "Neben dem Museum gibt es ein Café.":nounMeta("neuter","Café"),
+  "In der Stadt gibt es viele Restaurants.":nounMeta("plural","Restaurants")
+});
+attachNouns(leisurePlaceCards,Object.fromEntries([
+  ["neuter","Kino","Kinos"],["neuter","Theater","Theater"],["neuter","Museum","Museen"],["neuter","Café","Cafés"],
+  ["feminine","Ausstellung","Ausstellungen"],["feminine","Disco","Discos"],["neuter","Schwimmbad","Schwimmbäder"],
+  ["neuter","Konzert","Konzerte"],["feminine","Kneipe","Kneipen"],["neuter","Restaurant","Restaurants"],["feminine","Bar","Bars"]
+].map(([gender,word,plural])=>[`${genderArticles[gender]} ${word} / die ${plural}`,nounMeta(gender,word,{plural})])));
+attachNouns(leisureActivityCards,{
+  "ins Kino gehen":nounMeta("neuter","Kino"),
+  "ein Konzert besuchen":nounMeta("neuter","Konzert"),
+  "im Café Kaffee trinken":nounMeta("neuter","Café"),
+  "das Gebäck":nounMeta("neuter","Gebäck"),
+  "das ganze Jahr":nounMeta("neuter","Jahr")
+});
+attachNouns(photoDescriptionCards,{
+  "auf dem Foto":nounMeta("neuter","Foto"),
+  "der Mensch / die Menschen":nounMeta("masculine","Mensch",{exampleWord:"",plural:"Menschen",pluralExampleWord:"Menschen"})
+});
 const separableVerbPatternCards=[
-  {word:"Hauptsatz: Ich stehe früh auf.",translation:"Головне речення: префікс іде в кінець.",category:"TRENNBARE VERBEN · HAUPTSATZ",example:"aufstehen → ich stehe auf",exampleTranslation:"У головному реченні відмінюється лише основа, а префікс стоїть наприкінці."},
-  {word:"..., weil ich früh aufstehe.",translation:"Підрядне речення: дієслово не розділяється.",category:"TRENNBARE VERBEN · NEBENSATZ",example:"weil ich früh aufstehe",exampleTranslation:"У підрядному реченні відмінювана форма з префіксом стоїть разом у кінці."},
-  {word:"Ich kann früh aufstehen.",translation:"З модальним дієсловом інфінітив не розділяється.",category:"TRENNBARE VERBEN · MODALVERB",example:"kann + aufstehen",exampleTranslation:"Відмінюване модальне дієслово стоїть на другому місці, а повний інфінітив — у кінці."},
-  {word:"Ich verstehe die Aufgabe.",translation:"Невідокремлюване дієслово: префікс не відділяється.",category:"NICHT TRENNBAR · VER-",example:"verstehen → ich verstehe",exampleTranslation:"Префікси be-, emp-, ent-, er-, ge-, miss-, ver-, zer- зазвичай не відокремлюються."}
+  {word:"Hauptsatz: Ich stehe früh auf.",translation:"Головне речення: префікс іде в кінець.",category:"TRENNBARE VERBEN · HAUPTSATZ",example:"aufstehen → ich stehe auf",exampleTranslation:"У головному реченні відмінюється лише основа, а префікс стоїть наприкінці.",structure:[mainClause("Ich","stehe","früh","auf")]},
+  {word:"..., weil ich früh aufstehe.",translation:"Підрядне речення: дієслово не розділяється.",category:"TRENNBARE VERBEN · NEBENSATZ",example:"weil ich früh aufstehe",exampleTranslation:"У підрядному реченні відмінювана форма з префіксом стоїть разом у кінці.",structure:[subordinateClause("weil","ich früh","aufstehe")]},
+  {word:"Ich kann früh aufstehen.",translation:"З модальним дієсловом інфінітив не розділяється.",category:"TRENNBARE VERBEN · MODALVERB",example:"kann + aufstehen",exampleTranslation:"Відмінюване модальне дієслово стоїть на другому місці, а повний інфінітив — у кінці.",structure:[mainClause("Ich","kann","früh","aufstehen")]},
+  {word:"Ich verstehe die Aufgabe.",translation:"Невідокремлюване дієслово: префікс не відділяється.",category:"NICHT TRENNBAR · VER-",example:"verstehen → ich verstehe",exampleTranslation:"Префікси be-, emp-, ent-, er-, ge-, miss-, ver-, zer- зазвичай не відокремлюються.",structure:[mainClause("Ich","verstehe","die Aufgabe")]}
 ];
-const separableVerbSentenceCard=(word,translation,prompt,category="TRENNBARE VERBEN · SATZBILDUNG")=>wordOrderSentenceCard(word,translation,prompt,category);
+const separableVerbSentenceCard=(word,translation,prompt,structure,category="TRENNBARE VERBEN · SATZBILDUNG")=>wordOrderSentenceCard(word,translation,prompt,structure,category);
 const separableVerbStatementPracticeCards=[
-  separableVerbSentenceCard("Ich stehe um sieben Uhr auf.","Я встаю о сьомій годині.","ich / um sieben Uhr / aufstehen."),
-  separableVerbSentenceCard("Ich rufe dich später an.","Я подзвоню тобі пізніше.","ich / dich / später / anrufen."),
-  separableVerbSentenceCard("Wir kaufen heute im Supermarkt ein.","Ми сьогодні робимо покупки в супермаркеті.","wir / heute / im Supermarkt / einkaufen."),
-  separableVerbSentenceCard("Der Zug fährt um neun Uhr ab.","Потяг відправляється о дев'ятій годині.","der Zug / um neun Uhr / abfahren."),
-  separableVerbSentenceCard("Wir steigen am Alexanderplatz aus.","Ми виходимо на Александерплац.","wir / am Alexanderplatz / aussteigen."),
-  separableVerbSentenceCard("Ich hole meine Freundin vom Bahnhof ab.","Я зустрічаю подругу на вокзалі.","ich / meine Freundin / vom Bahnhof / abholen."),
-  separableVerbSentenceCard("Sie steigen in München um.","Вони пересаджуються в Мюнхені.","sie / in München / umsteigen."),
-  separableVerbSentenceCard("Ich bringe meine Tasche mit.","Я беру із собою сумку.","ich / meine Tasche / mitbringen.")
+  separableVerbSentenceCard("Ich stehe um sieben Uhr auf.","Я встаю о сьомій годині.","ich / um sieben Uhr / aufstehen.",[mainClause("Ich","stehe","um sieben Uhr","auf")]),
+  separableVerbSentenceCard("Ich rufe dich später an.","Я подзвоню тобі пізніше.","ich / dich / später / anrufen.",[mainClause("Ich","rufe","dich später","an")]),
+  separableVerbSentenceCard("Wir kaufen heute im Supermarkt ein.","Ми сьогодні робимо покупки в супермаркеті.","wir / heute / im Supermarkt / einkaufen.",[mainClause("Wir","kaufen","heute im Supermarkt","ein")]),
+  separableVerbSentenceCard("Der Zug fährt um neun Uhr ab.","Потяг відправляється о дев'ятій годині.","der Zug / um neun Uhr / abfahren.",[mainClause("Der Zug","fährt","um neun Uhr","ab")]),
+  separableVerbSentenceCard("Wir steigen am Alexanderplatz aus.","Ми виходимо на Александерплац.","wir / am Alexanderplatz / aussteigen.",[mainClause("Wir","steigen","am Alexanderplatz","aus")]),
+  separableVerbSentenceCard("Ich hole meine Freundin vom Bahnhof ab.","Я зустрічаю подругу на вокзалі.","ich / meine Freundin / vom Bahnhof / abholen.",[mainClause("Ich","hole","meine Freundin vom Bahnhof","ab")]),
+  separableVerbSentenceCard("Sie steigen in München um.","Вони пересаджуються в Мюнхені.","sie / in München / umsteigen.",[mainClause("Sie","steigen","in München","um")]),
+  separableVerbSentenceCard("Ich bringe meine Tasche mit.","Я беру із собою сумку.","ich / meine Tasche / mitbringen.",[mainClause("Ich","bringe","meine Tasche","mit")])
 ];
 const separableVerbContextPracticeCards=[
-  separableVerbSentenceCard("Warum rufst du mich nicht an?","Чому ти мені не телефонуєш?","warum / du / mich / nicht / anrufen?","TRENNBARE VERBEN · W-FRAGE"),
-  separableVerbSentenceCard("Er sieht am Abend fern.","Він дивиться телевізор увечері.","er / am Abend / fernsehen.","TRENNBARE VERBEN · HAUPTSATZ"),
-  separableVerbSentenceCard("Der Bus kommt in fünf Minuten an.","Автобус прибуде через п'ять хвилин.","der Bus / in fünf Minuten / ankommen.","TRENNBARE VERBEN · HAUPTSATZ"),
-  separableVerbSentenceCard("Wir können um acht Uhr aufstehen.","Ми можемо встати о восьмій годині.","wir / um acht Uhr / aufstehen / können.","TRENNBARE VERBEN · MODALVERB"),
-  separableVerbSentenceCard("Ich kann meine Freundin vom Bahnhof abholen.","Я можу зустріти подругу на вокзалі.","ich / meine Freundin / vom Bahnhof / abholen / können.","TRENNBARE VERBEN · MODALVERB"),
-  separableVerbSentenceCard("Ich bleibe zu Hause, weil ich früh aufstehe.","Я залишаюся вдома, бо рано встаю.","ich / zu Hause / bleiben / weil / ich / früh / aufstehen.","TRENNBARE VERBEN · NEBENSATZ")
+  separableVerbSentenceCard("Warum rufst du mich nicht an?","Чому ти мені не телефонуєш?","warum / du / mich / nicht / anrufen?",[mainClause("Warum","rufst","du mich nicht","an")],"TRENNBARE VERBEN · W-FRAGE"),
+  separableVerbSentenceCard("Er sieht am Abend fern.","Він дивиться телевізор увечері.","er / am Abend / fernsehen.",[mainClause("Er","sieht","am Abend","fern")],"TRENNBARE VERBEN · HAUPTSATZ"),
+  separableVerbSentenceCard("Der Bus kommt in fünf Minuten an.","Автобус прибуде через п'ять хвилин.","der Bus / in fünf Minuten / ankommen.",[mainClause("Der Bus","kommt","in fünf Minuten","an")],"TRENNBARE VERBEN · HAUPTSATZ"),
+  separableVerbSentenceCard("Wir können um acht Uhr aufstehen.","Ми можемо встати о восьмій годині.","wir / um acht Uhr / aufstehen / können.",[mainClause("Wir","können","um acht Uhr","aufstehen")],"TRENNBARE VERBEN · MODALVERB"),
+  separableVerbSentenceCard("Ich kann meine Freundin vom Bahnhof abholen.","Я можу зустріти подругу на вокзалі.","ich / meine Freundin / vom Bahnhof / abholen / können.",[mainClause("Ich","kann","meine Freundin vom Bahnhof","abholen")],"TRENNBARE VERBEN · MODALVERB"),
+  separableVerbSentenceCard("Ich bleibe zu Hause, weil ich früh aufstehe.","Я залишаюся вдома, бо рано встаю.","ich / zu Hause / bleiben / weil / ich / früh / aufstehen.",[mainClause("Ich","bleibe","zu Hause"),subordinateClause("weil","ich früh","aufstehe")],"TRENNBARE VERBEN · NEBENSATZ")
 ];
-const moegenPracticeCards=[
+const moegenPracticeCards=withVerbParadigms([
   modalVerbClozeCard("mögen","Ich mag Kaffee.","Я люблю каву.","Ich ___ Kaffee.","mag","люблю"),
   modalVerbClozeCard("mögen","Du magst deutsche Musik.","Тобі подобається німецька музика.","Du ___ deutsche Musik.","magst","любиш"),
   modalVerbClozeCard("mögen","Sie mag Schokolade.","Вона любить шоколад.","Sie ___ Schokolade.","mag","любить"),
   modalVerbClozeCard("mögen","Wir mögen Pizza.","Ми любимо піцу.","Wir ___ Pizza.","mögen","любимо"),
   modalVerbClozeCard("mögen","Ihr mögt Bücher.","Вам подобаються книжки.","Ihr ___ Bücher.","mögt","любите"),
   modalVerbClozeCard("mögen","Sie mögen den Film.","Їм подобається фільм.","Sie ___ den Film.","mögen","люблять")
-];
-const moechtenPracticeCards=[
+],[moegenParadigm]);
+const moechtenPracticeCards=withVerbParadigms([
   modalVerbClozeCard("möchten","Ich möchte einen Tee.","Я хотів би / хотіла б чай.","Ich ___ einen Tee.","möchte","хотів би / хотіла б"),
   modalVerbClozeCard("möchten","Du möchtest nach Hause gehen.","Ти хотів би / хотіла б піти додому.","Du ___ nach Hause gehen.","möchtest","хотів би / хотіла б"),
   modalVerbClozeCard("möchten","Sie möchte Deutsch lernen.","Вона хотіла б вивчати німецьку.","Sie ___ Deutsch lernen.","möchte","хотіла б"),
   modalVerbClozeCard("möchten","Wir möchten etwas essen.","Ми хотіли б щось поїсти.","Wir ___ etwas essen.","möchten","хотіли б"),
   modalVerbClozeCard("möchten","Ihr möchtet ins Kino gehen.","Ви хотіли б піти в кіно.","Ihr ___ ins Kino gehen.","möchtet","хотіли б"),
   modalVerbClozeCard("möchten","Sie möchten bezahlen.","Вони хотіли б заплатити.","Sie ___ bezahlen.","möchten","хотіли б")
-];
+],[moechtenParadigm]);
 const moegenMoechtenComparisonPracticeCards=[
   modalVerbClozeCard("mögen oder möchten","Ich mag Kaffee.","Мені подобається кава.","Ich ___ Kaffee.","mag","подобається"),
   modalVerbClozeCard("mögen oder möchten","Ich möchte einen Kaffee, bitte.","Я хотів би / хотіла б каву, будь ласка.","Ich ___ einen Kaffee, bitte.","möchte","хотів би / хотіла б"),
@@ -2064,6 +2378,45 @@ const localPrepositionsContrastCards=[
   {id:"local-contrast-sofa",targetId:"local-contrast-sofa",type:"sentence-build",word:"Ich setze mich auf das Sofa.",translation:"Я сідаю на диван.",promptText:"auf das Sofa / mich / ich / setze",response:{mode:"text",scope:"sentence",accepted:["Ich setze mich auf das Sofa."],caseSensitive:false,punctuationSensitive:false},explanation:"Sich setzen описує переміщення на сидіння, тому auf вимагає Akkusativ.",example:"Ich sitze auf dem Sofa.",exampleTranslation:"Я сиджу на дивані.",category:"LOKALE PRÄPOSITIONEN · SATZBAU"},
   {id:"local-contrast-sofa-position",targetId:"local-contrast-sofa-position",type:"sentence-build",word:"Ich sitze auf dem Sofa.",translation:"Я сиджу на дивані.",promptText:"auf dem Sofa / ich / sitze",response:{mode:"text",scope:"sentence",accepted:["Ich sitze auf dem Sofa."],caseSensitive:false,punctuationSensitive:false},explanation:"Sitzen описує розташування, тому auf вимагає Dativ.",example:"Ich setze mich auf das Sofa.",exampleTranslation:"Я сідаю на диван.",category:"LOKALE PRÄPOSITIONEN · SATZBAU"}
 ];
+// Explicit scene metadata for the shared card illustration (Constitution §2, "Visual language").
+const localPrepositionScenes={
+  "local-dative-in-schublade":{scene:"drawer",motion:false,noun:nounMeta("feminine","Schublade",{givenInPractice:true})},
+  "local-dative-an-wand":{scene:"wall",motion:false,noun:nounMeta("feminine","Wand",{givenInPractice:true})},
+  "local-dative-auf-tisch":{scene:"newspaper",motion:false,noun:nounMeta("masculine","Tisch",{givenInPractice:true})},
+  "local-dative-ueber-bett":{scene:"bed",motion:false,noun:nounMeta("neuter","Bett",{givenInPractice:true})},
+  "local-dative-unter-stuhl":{scene:"chair",motion:false,noun:nounMeta("masculine","Stuhl",{givenInPractice:true})},
+  "local-dative-vor-haus":{scene:"house-front",motion:false,noun:nounMeta("neuter","Haus",{givenInPractice:true})},
+  "local-dative-hinter-haus":{scene:"house-behind",motion:false,noun:nounMeta("neuter","Haus",{givenInPractice:true})},
+  "local-dative-neben-studentin":{scene:"people",motion:false,noun:nounMeta("feminine","Studentin",{givenInPractice:true})},
+  "local-dative-zwischen-fenstern":{scene:"windows",motion:false,noun:nounMeta("plural","Fenster",{exampleWord:"Fenstern",givenInPractice:true})},
+  "local-accusative-in-schublade":{scene:"drawer",motion:true,noun:nounMeta("feminine","Schublade",{givenInPractice:true})},
+  "local-accusative-an-wand":{scene:"wall",motion:true,noun:nounMeta("feminine","Wand",{givenInPractice:true})},
+  "local-accusative-auf-tisch":{scene:"table",motion:true,noun:nounMeta("masculine","Tisch",{givenInPractice:true})},
+  "local-accusative-ueber-bett":{scene:"bed",motion:true,noun:nounMeta("neuter","Bett",{givenInPractice:true})},
+  "local-accusative-unter-stuhl":{scene:"chair",motion:true,noun:nounMeta("masculine","Stuhl",{givenInPractice:true})},
+  "local-accusative-vor-haus":{scene:"house-front",motion:true,noun:nounMeta("neuter","Haus",{givenInPractice:true})},
+  "local-accusative-hinter-haus":{scene:"house-behind",motion:true,noun:nounMeta("neuter","Haus",{givenInPractice:true})},
+  "local-accusative-neben-studentin":{scene:"people",motion:true,noun:nounMeta("feminine","Studentin",{exampleWord:"",givenInPractice:true})},
+  "local-accusative-zwischen-fenster":{scene:"windows",motion:true,noun:nounMeta("plural","Fenster",{givenInPractice:true})},
+  "local-contrast-vase":{scene:"table",motion:true,noun:nounMeta("masculine","Tisch",{givenInPractice:true})},
+  "local-contrast-vase-position":{scene:"table",motion:false,noun:nounMeta("masculine","Tisch",{givenInPractice:true})},
+  "local-contrast-picture":{scene:"wall",motion:true,noun:nounMeta("feminine","Wand",{givenInPractice:true})},
+  "local-contrast-picture-position":{scene:"wall",motion:false,noun:nounMeta("feminine","Wand",{givenInPractice:true})},
+  "local-contrast-key":{scene:"bag",motion:true,noun:nounMeta("feminine","Tasche",{givenInPractice:true})},
+  "local-contrast-key-position":{scene:"bag",motion:false,noun:nounMeta("feminine","Tasche",{givenInPractice:true})},
+  "local-contrast-sofa":{scene:"sofa",motion:true,noun:nounMeta("neuter","Sofa",{givenInPractice:true})},
+  "local-contrast-sofa-position":{scene:"sofa",motion:false,noun:nounMeta("neuter","Sofa",{givenInPractice:true})}
+};
+for(const card of [...localPrepositionsDativeCards,...localPrepositionsAccusativeCards,...localPrepositionsContrastCards]){
+  const {scene,motion,noun}=localPrepositionScenes[card.targetId],cue=motion?"Wohin?":"Wo?";
+  // The prompt names the place, so its noun and gender stay visible in practice.
+  Object.assign(card,{
+    scene:{kind:scene,motion},
+    cue,
+    noun,
+    practiceSupport:{label:`${cue} · значення`,text:card.translation}
+  });
+}
 const dativeVerbCards=[
   {
     id:"dative-antworten-recall",targetId:"dative-antworten",type:"recall",word:"antworten",translation:"відповідати",category:"VERBEN MIT DATIV",practiceVariants:false,
@@ -2475,7 +2828,8 @@ const presentPracticeStages=[
   ...splitIntoSteps("present-translate","Практика за українською підказкою","Використайте українське речення як контекст і введіть лише потрібну німецьку форму або форми дієслова.",presentTranslationCards,9,"input","Переклад")
 ];
 const koennenClozeCards=koennenPracticeCards.filter(card=>card.category==="KÖNNEN · LÜCKENTEXT");
-const koennenFormPracticeCards=koennenClozeCards.slice(0,6);
+// The six form clozes run ich, du, wir, er, ihr, sie.
+const koennenFormPracticeCards=withVerbParadigms(koennenClozeCards.slice(0,6),[koennenParadigm],[0,1,3,2,4,5]);
 const koennenContextCards=koennenClozeCards.slice(6);
 const koennenWordOrderPracticeCards=koennenPracticeCards.filter(card=>card.category==="KÖNNEN · SATZBILDUNG");
 const studyCardsFromPractice=cards=>cards.map(({answer,answerTranslation,practiceType,...card})=>card);
@@ -2921,12 +3275,12 @@ const deckDefinitions={
         {title:"Dativ: wem?",detail:"Helfen і danken вимагають Dativ. З geben одержувач стоїть у Dativ, а предмет, який передають, — в Akkusativ. Після mit завжди потрібен Dativ."},
         {title:"Не перекладай відмінок механічно",detail:"Українською кажемо «телефонувати кому», але німецьке anrufen вимагає Akkusativ. Після mit українською часто вживаємо орудний відмінок, а німецькою — Dativ."},
         {title:"Особа, число й регістр",detail:"Вона й вони мають однакову форму Nominativ, але різні форми Dativ. Ввічливе звертання завжди пишеться з великої літери, зокрема в Dativ."},
-        {title:"Рід і незмінні форми",detail:"Для er та es форми Dativ збігаються; для wir та ihr Akkusativ і Dativ мають однакову форму. Рід es визначається німецьким іменником, навіть якщо український переклад має інший рід."}
+        {title:"Рід і незмінні форми",detail:"Для er та es форми Dativ збігаються; для wir та ihr Akkusativ і Dativ мають однакову форму. Рід es визначається німецьким іменником, навіть якщо український переклад має інший рід.",table:{columns:[{label:"Akkusativ"},{label:"Dativ"}],rows:[{label:"ich",cells:["mich","mir"]},{label:"du",cells:["dich","dir"]},{label:"er",gender:"masculine",cells:["ihn","ihm"]},{label:"sie",gender:"feminine",cells:["sie","ihr"]},{label:"es",gender:"neuter",cells:["es","ihm"]},{label:"wir",cells:["uns","uns"]},{label:"ihr",cells:["euch","euch"]},{label:"sie (мн.)",gender:"plural",cells:["sie","ihnen"]},{label:"Sie",title:"Ви (ввічливо)",cells:["Sie","Ihnen"]}],highlights:[{row:2,column:1},{row:4,column:1},{row:5,column:0},{row:5,column:1},{row:6,column:0},{row:6,column:1}],note:"Виділені форми збігаються: у er та es однаковий Dativ, у wir та ihr — однакові Akkusativ і Dativ."}}
       ]
     },
     cards:personalPronounCaseCards,stages:personalPronounCaseStages
   },
-  possessives:{title:"Possessive pronouns",label:"Possessive pronouns",badge:"mein",tip:"Possessive pronouns show who something belongs to. Their ending follows the noun.",guide:{title:"Присвійні займенники",intro:"Уживайте присвійний займенник перед іменником, щоб показати належність: mein означає «мій», dein — «твій» тощо.",rules:["Особа-власник визначає основу: mein, dein, sein, ihr, unser, euer, Ihr, ihr.","Закінчення змінюється відповідно до іменника: mein Bruder, meine Mutter, mein Kind, meine Freunde.","Пишіть Ihr з великої літери для ввічливого «Ваш»; ihr залежно від контексту означає «її» або «їхній».","Присвійний займенник стоїть перед іменником і зазвичай має ті самі закінчення, що й ein: ein Buch, mein Buch; eine Tasche, meine Tasche."]},cards:possessivePronounCards,stages:possessiveStages},
+  possessives:{title:"Possessive pronouns",label:"Possessive pronouns",badge:"mein",tip:"Possessive pronouns show who something belongs to. Their ending follows the noun.",guide:{title:"Присвійні займенники",intro:"Уживайте присвійний займенник перед іменником, щоб показати належність: mein означає «мій», dein — «твій» тощо.",rules:["Особа-власник визначає основу: mein, dein, sein, ihr, unser, euer, Ihr, ihr.",{title:"Закінчення змінюється відповідно до іменника",detail:"mein Bruder, meine Mutter, mein Kind, meine Freunde.",table:{columns:genderColumns,rows:[{label:"Nom.",title:"Nominativ",cells:["—","—","-e","-e"]}],highlights:[{row:0,column:2},{row:0,column:3}],note:"Чоловічий і середній рід лишаються без закінчення; жіночий рід і множина додають -e до основи."}},"Пишіть Ihr з великої літери для ввічливого «Ваш»; ihr залежно від контексту означає «її» або «їхній».","Присвійний займенник стоїть перед іменником і зазвичай має ті самі закінчення, що й ein: ein Buch, mein Buch; eine Tasche, meine Tasche."]},cards:possessivePronounCards,stages:possessiveStages},
   "possessive-cases":{
     title:"Possessivartikel: Akkusativ und Dativ",label:"Possessivartikel: Akkusativ und Dativ",badge:"-em",
     tip:"Спочатку визнач відмінок, потім основу за власником і закінчення за німецьким родом або множиною іменника.",
@@ -2935,7 +3289,19 @@ const deckDefinitions={
       intro:"Повторіть основи в уроці «Присвійні займенники». Тут вивчайте чотири моделі роду й числа в кожному відмінку. Присвійний артикль стоїть перед іменником; у відповідь вводьте лише артикль.",
       rules:[
         {title:"Власник визначає основу",detail:"Ich → mein, du → dein, er/es → sein, sie (вона) → ihr, wir → unser, ihr (ви, неформально) → euer, sie (вони) → ihr, Sie (ввічливо) → Ihr. Закінчення визначає не власник, а іменник після артикля."},
-        {title:"Таблиця закінчень: Nominativ для порівняння",detail:"Порядок у всіх трьох рядках: Maskulinum · Neutrum · Femininum · Plural. Позначка «—» означає відсутність закінчення.",formula:"Nominativ: — · — · -e · -e"},
+        {
+          title:"Таблиця закінчень за родом і відмінком",
+          detail:"Колонки за родом іменника: der — Maskulinum, das — Neutrum, die — Femininum, далі Plural. Позначка «—» означає відсутність закінчення.",
+          table:{
+            columns:genderColumns,
+            rows:possessiveCaseRows.map(row=>({label:row.label,title:row.title,cells:genderColumns.map(column=>{
+              const ending=possessiveEndings[row.grammarCase][column.gender];
+              return ending?`-${ending}`:"—";
+            })})),
+            highlights:[{row:1,column:0}],
+            note:"Від Nominativ до Akkusativ змінюється лише der: додається -en. Das, die і Plural не змінюються."
+          }
+        },
         {title:"Akkusativ визначає дієслово або прийменник",detail:"Besuchen, sehen, suchen, haben і brauchen вимагають Akkusativ; після für також завжди Akkusativ. У порівнянні з Nominativ змінюється лише чоловічий рід.",formula:"Akkusativ: -en · — · -e · -e"},
         {title:"Dativ: кому? або після mit і bei",detail:"Helfen, danken і antworten вимагають Dativ. З geben одержувач стоїть у Dativ, а предмет — в Akkusativ. Mit і bei завжди мають Dativ, навіть під час руху.",formula:"Dativ: -em · -em · -er · -en"},
         {title:"Дві зміни в Dativ множини",detail:"Присвійний артикль отримує -en; іменник зазвичай також отримує -n. Не додавайте -n, якщо множина вже закінчується на -n або -s.",formula:"mit meinen Freunden · mit meinen Kindern · bei meinen Eltern · mit meinen Autos"},
@@ -2945,22 +3311,22 @@ const deckDefinitions={
     },
     cards:possessiveCaseCards,stages:possessiveCaseStages
   },
-  sein:{title:"Verb sein",label:"Verb sein",badge:"sein",tip:"The verb sein is irregular, so learn each form as a complete pair with its pronoun.",guide:{title:"Sein у теперішньому часі",intro:"Sein означає «бути» й відмінюється неправильно, тому його форми потрібно вивчати окремо.",rules:["ich bin, du bist, er/sie/es ist, wir sind, ihr seid, sie/Sie sind.","Уживайте sein для ідентифікації, опису, місцеперебування та багатьох простих представлень: Ich bin müde.","Форма має відповідати підмету: Anna ist hier, але Anna und Paul sind hier.","Пам’ятайте про велику літеру S у Sie sind під час ввічливого звертання."]},cards:seinCards,stages:seinStages},
-  conjugation:{title:"Verb conjugation",label:"Verb conjugation",badge:"V",tip:"Weak verbs take regular endings: -e, -st, -t, -en, -t, -en. After a stem ending in -t or -d, add an extra e.",guide:{title:"Слабкі дієслова в Präsens",intro:"Візьміть основу дієслова й доберіть закінчення, що відповідає підмету.",rules:[{title:"Використовуйте регулярні закінчення",detail:"Більшість слабких дієслів відмінюються за однаковою схемою від ich до sie/Sie.",formula:"ich -e · du -st · er/sie/es -t · wir -en · ihr -t · sie/Sie -en"},{title:"Додавайте додаткове -e",detail:"Якщо основа закінчується на -t, -d або приголосний + -m/-n, додайте e перед закінченням.",formula:"du arbeitest · er arbeitet · ihr arbeitet"},{title:"Не додавайте зайве -s",detail:"В основах на -s, -ß або -z форма du має закінчення -t замість -st.",formula:"du heißt · du tanzt · du übersetzt"}]},cards:conjugationCards,stages:conjugationStages},
-  "strong-verbs":{title:"Strong verbs",label:"Strong verbs",badge:"ä",tip:"Strong verbs can change their stem vowel in singular present-tense forms.",guide:{title:"Сильні дієслова в Präsens",intro:"Спочатку повторіть повну парадигму кожного дієслова, а потім утворюйте всі форми за картками з пропусками.",rules:[{title:"Зміна e на i",detail:"Sprechen, treffen, lesen і essen змінюють e на i у другій та третій особі однини.",formula:"du sprichst · er trifft · sie liest · du isst"},{title:"Зміна a на ä",detail:"Fahren і anfangen змінюють a на ä у другій та третій особі однини.",formula:"du fährst · er fährt · du fängst an"},{title:"Особлива форма wissen",detail:"Wissen має weiß у ich і er/sie/es, weißt у du та регулярну основу wiss- у множині.",formula:"ich weiß · du weißt · wir wissen"},{title:"Anfangen є відокремлюваним",detail:"Відмінювана частина fängt стоїть на другому місці, а префікс an — у кінці головного речення.",formula:"Der Kurs fängt um neun Uhr an."},{title:"Зберігайте основу в множині",detail:"Зміна голосного не відбувається з wir, ihr або sie/Sie.",formula:"wir sprechen · ihr esst · sie wissen · wir fangen an"}]},cards:strongVerbCards,stages:strongVerbStages},
+  sein:{title:"Verb sein",label:"Verb sein",badge:"sein",tip:"The verb sein is irregular, so learn each form as a complete pair with its pronoun.",guide:{title:"Sein у теперішньому часі",intro:"Sein означає «бути» й відмінюється неправильно, тому його форми потрібно вивчати окремо.",rules:[{title:"Шість форм sein",detail:"Жодна форма не повторює основу sein, тому вчіть кожну разом із займенником.",table:{columns:[{label:"Однина"},{label:"Множина"}],rows:[{label:"1-ша особа",cells:["ich bin","wir sind"]},{label:"2-га особа",cells:["du bist","ihr seid"]},{label:"3-тя особа",cells:["er/sie/es ist","sie/Sie sind"]}],highlights:[{row:0,column:1},{row:2,column:1}],note:"Виділено однакову форму: у 1-й і 3-й особі множини — sind."}},"Уживайте sein для ідентифікації, опису, місцеперебування та багатьох простих представлень: Ich bin müde.","Форма має відповідати підмету: Anna ist hier, але Anna und Paul sind hier.","Пам’ятайте про велику літеру S у Sie sind під час ввічливого звертання."]},cards:seinCards,stages:seinStages},
+  conjugation:{title:"Verb conjugation",label:"Verb conjugation",badge:"V",tip:"Weak verbs take regular endings: -e, -st, -t, -en, -t, -en. After a stem ending in -t or -d, add an extra e.",guide:{title:"Слабкі дієслова в Präsens",intro:"Візьміть основу дієслова й доберіть закінчення, що відповідає підмету.",rules:[{title:"Використовуйте регулярні закінчення",detail:"Більшість слабких дієслів відмінюються за однаковою схемою від ich до sie/Sie.",formula:"ich -e · du -st · er/sie/es -t · wir -en · ihr -t · sie/Sie -en"},{title:"Додавайте додаткове -e",detail:"Якщо основа закінчується на -t, -d або приголосний + -m/-n, додайте e перед закінченням.",formula:"du arbeitest · er arbeitet · ihr arbeitet",table:{columns:[{label:"mach-"},{label:"arbeit-"}],rows:[{label:"ich",cells:["-e","-e"]},{label:"du",cells:["-st","-est"]},{label:"er/sie/es",cells:["-t","-et"]},{label:"wir",cells:["-en","-en"]},{label:"ihr",cells:["-t","-et"]},{label:"sie/Sie",cells:["-en","-en"]}],highlights:[{row:1,column:1},{row:2,column:1},{row:4,column:1}],note:"Додаткове e з'являється лише перед закінченнями -st і -t."}},{title:"Не додавайте зайве -s",detail:"В основах на -s, -ß або -z форма du має закінчення -t замість -st.",formula:"du heißt · du tanzt · du übersetzt"}]},cards:conjugationCards,stages:conjugationStages},
+  "strong-verbs":{title:"Strong verbs",label:"Strong verbs",badge:"ä",tip:"Strong verbs can change their stem vowel in singular present-tense forms.",guide:{title:"Сильні дієслова в Präsens",intro:"Спочатку повторіть повну парадигму кожного дієслова, а потім утворюйте всі форми за картками з пропусками.",rules:[{title:"Зміна e на i",detail:"Sprechen, treffen, lesen і essen змінюють e на i у другій та третій особі однини.",formula:"du sprichst · er trifft · sie liest · du isst"},{title:"Зміна a на ä",detail:"Fahren і anfangen змінюють a на ä у другій та третій особі однини.",formula:"du fährst · er fährt · du fängst an"},{title:"Особлива форма wissen",detail:"Wissen має weiß у ich і er/sie/es, weißt у du та регулярну основу wiss- у множині.",formula:"ich weiß · du weißt · wir wissen"},{title:"Anfangen є відокремлюваним",detail:"Відмінювана частина fängt стоїть на другому місці, а префікс an — у кінці головного речення.",formula:"Der Kurs fängt um neun Uhr an."},{title:"Зберігайте основу в множині",detail:"Зміна голосного не відбувається з wir, ihr або sie/Sie.",formula:"wir sprechen · ihr esst · sie wissen · wir fangen an",table:{columns:[{label:"ich"},{label:"du"},{label:"er/sie/es"},{label:"wir/ihr/sie"}],rows:[{label:"e → i",title:"sprechen, treffen, essen",cells:["e","i","i","e"]},{label:"e → ie",title:"lesen",cells:["e","ie","ie","e"]},{label:"a → ä",title:"fahren, anfangen",cells:["a","ä","ä","a"]},{label:"i → ei",title:"wissen",cells:["ei","ei","ei","i"]}],highlights:[[0,1],[0,2],[1,1],[1,2],[2,1],[2,2],[3,0],[3,1],[3,2]].map(([row,column])=>({row,column})),note:"Голосний основи в кожній особі. Виділено зміну: e → i — sprechen, treffen, essen; e → ie — lesen; a → ä — fahren, anfangen; i → ei — wissen."}}]},cards:strongVerbCards,stages:strongVerbStages},
   "past-verbs":{title:"Past verb forms · A1",label:"Past verb forms · A1",badge:"A1",tip:"Use Perfekt for everyday A1 past events; learn Präteritum only for sein and haben.",guide:pastVerbGuide("A1"),cards:pastVerbA1Cards,stages:pastVerbA1Stages},
   "past-verbs-a2":{title:"Past verb forms · A2",label:"Past verb forms · A2",badge:"A2",tip:"Use Präteritum for modal verbs and common biography facts; retain Perfekt for everyday past events.",guide:pastVerbGuide("A2"),cards:pastVerbA2.cards,stages:pastVerbA2Stages},
   "past-verbs-b1":{title:"Past verb forms · B1",label:"Past verb forms · B1",badge:"B1",tip:"Use the broader Präteritum vocabulary in written narratives and contrast it with Perfekt.",guide:pastVerbGuide("B1"),cards:pastVerbB1.cards,stages:pastVerbB1Stages},
   perfekt:{title:"Perfekt: haben und sein",label:"Perfekt",badge:"P2",tip:"Спочатку визначте: це дія, переміщення чи зміна стану? Потім виберіть haben або sein і поставте Partizip II в кінці.",guide:{title:"Perfekt: коли haben, а коли sein?",intro:"Perfekt утворюється з відмінюваного haben або sein та Partizip II. Починайте з простого алгоритму: haben — для більшості дій; sein — переважно для переміщення і зміни стану.",rules:[{title:"1. Побудуйте рамку речення",detail:"Допоміжне дієслово стоїть на другому місці, а Partizip II — у кінці.",formula:"Ich habe die Hausaufgaben gemacht."},{title:"2. Оберіть haben для більшості дій",detail:"Haben уживається з діяльністю, станами, зворотними та більшістю перехідних дієслів.",formula:"Ich habe gearbeitet. · Wir haben uns getroffen."},{title:"3. Оберіть sein для переміщення",detail:"Sein уживається, коли підмет сам переміщується або прибуває в інше місце.",formula:"Ich bin nach Hause gegangen. · Der Zug ist angekommen."},{title:"4. Оберіть sein для зміни стану",detail:"Sein уживається, коли хтось або щось переходить у новий стан.",formula:"Das Kind ist eingeschlafen. · Er ist krank geworden."},{title:"5. Запам’ятайте особливі дієслова",detail:"Sein також уживається з sein, werden, bleiben, passieren, geschehen, begegnen та gelingen.",formula:"Sie ist zu Hause geblieben. · Was ist passiert?"},{title:"6. Перевірте прямий додаток",detail:"Якщо дієслово має прямий додаток в Akkusativ, зазвичай потрібне haben.",formula:"Ich habe ein Buch gelesen. · Sie hat die Tür geöffnet."},{title:"7. Утворіть Partizip II",detail:"Для правильних дієслів зазвичай додаємо ge-…-t; дієслова на -ieren та з невідокремлюваним префіксом не отримують ge-.",formula:"machen → gemacht · studieren → studiert · erzählen → erzählt"},{title:"8. Не плутайте стан і зміну стану",detail:"Звичайний стан часто вживається з haben, а початок нового стану — із sein.",formula:"Ich habe geschlafen. · Ich bin eingeschlafen."}]},cards:perfektCards,stages:perfektStages},
   "present-practice":{title:"Present-tense practice",practiceTitle:"Present-tense practice",label:"Präsens practice",badge:"P",tip:"Use this focused review to retrieve conjugated forms in context. Revise each verb pattern in its dedicated lesson first.",guide:{title:"Відпрацювання форм Präsens",intro:"Це повторення вже вивчених моделей дієвідмінювання, а не вступ до нових правил. Використовуйте речення як контекст, але вводьте лише відмінювану форму або форми.",rules:["У частині з пропусками введіть форму, якої бракує в німецькому реченні; підказка в дужках показує інфінітив.","У частині з українськими підказками визначте особу й число, а потім введіть лише відповідну німецьку форму, не все речення.","Вправа повторює слабкі, сильні та неправильні форми, зокрема sein, gehen, fahren, sehen і möchten."]},cards:presentPracticeCards,stages:presentPracticeStages},
-  koennen:{title:"Modal verbs",label:"Modal verbs",badge:"M",tip:"Use können for ability, mögen for likes, and möchten for polite wishes.",guide:{title:"Модальні дієслова: können, mögen і möchten",intro:"Ці дієслова допомагають говорити про вміння, уподобання та ввічливі бажання. Форма залежить від підмета.",rules:["Können означає «могти, вміти»: ich kann, du kannst, er/sie/es kann, wir können, ihr könnt, sie/Sie können.","Mögen означає «любити, подобатися»: ich mag, du magst, er/sie/es mag, wir mögen, ihr mögt, sie/Sie mögen.","Möchten — форма Konjunktiv II від mögen. У сучасній мові вона означає ввічливе «хотів би / хотіла б»: ich möchte, du möchtest, er/sie/es möchte, wir möchten, ihr möchtet, sie/Sie möchten.","Порівнюйте значення: Ich mag Kaffee. = «Мені подобається кава». Ich möchte einen Kaffee. = «Я хотів би / хотіла б каву».","З können і möchten друге дієслово стоїть в інфінітиві в кінці речення: Ich kann schwimmen. Wir möchten bezahlen."]},cards:koennenCards,stages:koennenStages},
-  haben:{title:"Haben, bekommen & brauchen",label:"Haben, bekommen & brauchen",badge:"hab",tip:"Use haben for what you have, bekommen for what you receive, and brauchen for what you need.",guide:{title:"Haben, bekommen & brauchen",intro:"Ці три дієслова допомагають говорити про речі, людей, потреби та отримання в повсякденних ситуаціях A1.",rules:["haben означає «мати»: Ich habe einen Hund.","bekommen означає «отримувати»: Wir bekommen morgen Geld.","brauchen означає «потребувати»: Er braucht eine neue Brille.","Форми bekommen і brauchen відмінюються регулярно; haben має особливі форми du hast, er/sie/es hat та ihr habt."]},cards:habenCards,stages:habenStages},
+  koennen:{title:"Modal verbs",label:"Modal verbs",badge:"M",tip:"Use können for ability, mögen for likes, and möchten for polite wishes.",guide:{title:"Модальні дієслова: können, mögen і möchten",intro:"Ці дієслова допомагають говорити про вміння, уподобання та ввічливі бажання. Форма залежить від підмета.",rules:[{title:"Три дієслова, три значення",detail:"Können означає «могти, вміти», mögen — «любити, подобатися», möchten — ввічливе «хотів би / хотіла б» (Konjunktiv II від mögen).",table:{columns:[{label:"können"},{label:"mögen"},{label:"möchten"}],rows:verbPersons.map((label,person)=>({label,cells:[koennenParadigm,moegenParadigm,moechtenParadigm].map(paradigm=>paradigm.forms[person])})),highlights:[0,1,2].flatMap(row=>[0,1].map(column=>({row,column}))),note:"Виділено однину können і mögen: ö → a, а ich і er/sie/es не мають закінчення. У möchten ich і er/sie/es мають однакову форму."}},"Порівнюйте значення: Ich mag Kaffee. = «Мені подобається кава». Ich möchte einen Kaffee. = «Я хотів би / хотіла б каву».","З können і möchten друге дієслово стоїть в інфінітиві в кінці речення: Ich kann schwimmen. Wir möchten bezahlen."]},cards:koennenCards,stages:koennenStages},
+  haben:{title:"Haben, bekommen & brauchen",label:"Haben, bekommen & brauchen",badge:"hab",tip:"Use haben for what you have, bekommen for what you receive, and brauchen for what you need.",guide:{title:"Haben, bekommen & brauchen",intro:"Ці три дієслова допомагають говорити про речі, людей, потреби та отримання в повсякденних ситуаціях A1.",rules:["haben означає «мати»: Ich habe einen Hund.","bekommen означає «отримувати»: Wir bekommen morgen Geld.","brauchen означає «потребувати»: Er braucht eine neue Brille.",{title:"Порівняйте форми",detail:"Bekommen і brauchen відмінюються регулярно. У haben в однині перед -st і -t випадає b.",table:{columns:[{label:"haben"},{label:"bekommen"},{label:"brauchen"}],rows:verbPersons.map((label,person)=>({label,cells:[habenParadigm,bekommenParadigm,brauchenParadigm].map(paradigm=>paradigm.forms[person])})),highlights:[{row:1,column:0},{row:2,column:0}],note:"Виділено форми haben без b."}}]},cards:habenCards,stages:habenStages},
   frequency:{title:"Frequency adverbs",label:"Frequency adverbs",badge:"oft",tip:"Frequency adverbs such as oft and nie normally stay in the middle of the sentence after the conjugated verb.",guide:{title:"Прислівники частоти",intro:"Прислівники частоти показують, як часто щось відбувається. Вони не змінюють форму й зазвичай стоять у середині речення.",rules:[{title:"Вивчайте шкалу частоти",detail:"Від найбільшої до найменшої частоти: immer, fast immer, meistens, oft, manchmal, selten, fast nie, nie.",formula:"immer → oft → manchmal → selten → nie"},{title:"Ставте прислівник після відмінюваного дієслова",detail:"У простому реченні прислівник частоти зазвичай стоїть після дієслова.",formula:"Ich lerne oft Deutsch."},{title:"Зберігайте дієслово на другому місці",detail:"Якщо речення починається з часу, підмет і прислівник ідуть після відмінюваного дієслова.",formula:"Am Sonntag lese ich manchmal ein Buch."},{title:"Використовуйте nie без nicht",detail:"Nie уже означає заперечення «ніколи», тому в таких реченнях nicht не потрібне.",formula:"Wir essen nie Fleisch."}]},cards:frequencyCards,stages:frequencyStages},
-  "local-prepositions":{title:"Local prepositions: Dativ & Akkusativ",label:"Local prepositions",badge:"Wo?",tip:"Ask Wo? for a position and Wohin? for a destination. The question decides Dativ or Akkusativ.",guide:{title:"Локальні прийменники: Dativ чи Akkusativ?",intro:"In, an, auf, über, unter, vor, hinter, neben і zwischen можуть стояти з двома відмінками. Відмінок визначає не сам прийменник, а значення: місце чи напрямок.",rules:[{title:"1. Запитайте Wo?",detail:"Якщо щось уже перебуває в певному місці, вживайте Dativ.",formula:"Das Buch liegt in der Schublade. · Die Vase steht auf dem Tisch."},{title:"2. Запитайте Wohin?",detail:"Якщо хтось або щось рухається до місця, вживайте Akkusativ.",formula:"Er legt das Buch in die Schublade. · Ich stelle die Vase auf den Tisch."},{title:"3. Помічайте артикль",detail:"У чоловічому роді Dativ dem і Akkusativ den добре показують різницю. У жіночому та середньому роді форма інколи однакова, але правило не змінюється.",formula:"auf dem Tisch → auf den Tisch · an der Wand → an die Wand"},{title:"4. Вивчайте дієслово разом зі значенням",detail:"Liegen, stehen, sitzen і hängen часто описують місце; legen, stellen, sich setzen і hängen часто описують напрямок.",formula:"Der Hund liegt unter dem Stuhl. · Der Hund läuft unter den Stuhl."}]},cards:[...localPrepositionsDativeCards,...localPrepositionsAccusativeCards,...localPrepositionsContrastCards],stages:localPrepositionsStages},
+  "local-prepositions":{title:"Local prepositions: Dativ & Akkusativ",label:"Local prepositions",badge:"Wo?",tip:"Ask Wo? for a position and Wohin? for a destination. The question decides Dativ or Akkusativ.",guide:{title:"Локальні прийменники: Dativ чи Akkusativ?",intro:"In, an, auf, über, unter, vor, hinter, neben і zwischen можуть стояти з двома відмінками. Відмінок визначає не сам прийменник, а значення: місце чи напрямок.",rules:[{title:"1. Запитайте Wo?",detail:"Якщо щось уже перебуває в певному місці, вживайте Dativ.",formula:"Das Buch liegt in der Schublade. · Die Vase steht auf dem Tisch."},{title:"2. Запитайте Wohin?",detail:"Якщо хтось або щось рухається до місця, вживайте Akkusativ.",formula:"Er legt das Buch in die Schublade. · Ich stelle die Vase auf den Tisch."},{title:"3. Помічайте артикль",detail:"У чоловічому роді Dativ dem і Akkusativ den добре показують різницю. У жіночому та середньому роді форма інколи однакова, але правило не змінюється.",formula:"Wo? → Dativ · Wohin? → Akkusativ",table:{columns:genderColumns,rows:[nominativeArticleRow,{label:"Wo?",title:"Dativ",cells:definiteArticles.dative},{label:"Wohin?",title:"Akkusativ",cells:definiteArticles.accusative}],highlights:[{row:1,column:0},{row:1,column:1},{row:1,column:2},{row:1,column:3},{row:2,column:0}],note:"Виділено зміни порівняно з Nominativ: Wo? змінює всі артиклі, Wohin? — лише чоловічий рід."}},{title:"4. Вивчайте дієслово разом зі значенням",detail:"Liegen, stehen, sitzen і hängen часто описують місце; legen, stellen, sich setzen і hängen часто описують напрямок.",formula:"Der Hund liegt unter dem Stuhl. · Der Hund läuft unter den Stuhl."}]},cards:[...localPrepositionsDativeCards,...localPrepositionsAccusativeCards,...localPrepositionsContrastCards],stages:localPrepositionsStages},
   "time-expressions":{title:"Time expressions",label:"Time expressions",badge:"Zeit",tip:"Use um for clock times, am for days and daytime periods, im for months and seasons, and nachts for habitual night actions.",guide:{title:"Час: um, am, im, in та Nacht",intro:"Ці короткі слова показують, коли щось відбувається. Обирайте форму за типом часу: година, день, місяць, проміжок часу або ніч.",rules:[{title:"Уживайте um з точною годиною",detail:"Um відповідає на запитання «о котрій годині?»",formula:"um acht Uhr"},{title:"Уживайте am з днями, датами й частинами дня",detail:"Am — це скорочення an dem. Воно вживається з днями тижня, датами та Morgen, Vormittag, Mittag, Nachmittag, Abend.",formula:"am Montag · am ersten Mai · am Abend"},{title:"Уживайте im з місяцями та порами року",detail:"Im — це скорочення in dem.",formula:"im Mai · im Sommer"},{title:"Уживайте in для майбутнього  проміжку часу",detail:"In показує, через який час щось станеться.",formula:"in zwei Wochen · in einer Stunde"},{title:"Запам’ятайте особливі форми з Nacht",detail:"Не кажемо am Nacht. Nachts означає «уночі» загалом або регулярно; in der Nacht — під час конкретної ночі. З heute, gestern, letzte не потрібен прийменник.",formula:"nachts · in der Nacht · letzte Nacht"},{title:"Використовуйте nach і vor для розмовного часу",detail:"Nach означає хвилини після поточної години, vor — хвилини до наступної. Halb vier означає 3:30, тобто половина до четвертої.",formula:"fünf nach zehn · zehn vor sechs · halb vier"}]},cards:[...timeExpressionCards,...spokenTimeCards],stages:timeExpressionStages},
   "time-worksheet-vocabulary":{title:"Time worksheet vocabulary",label:"Time worksheet vocabulary",badge:"Zeit",tip:"Learn each new word with the seasonal or daily-routine context from the worksheet.",guide:{title:"Словник: час і пори року",intro:"У цьому уроці зібрано лише нові слова з аркуша про час. Вивчайте іменники разом з артиклем і формою множини, а дієслова — у короткому реченні.",rules:["Вивчайте іменники з артиклем: der Baum, die Kirche, das Restaurant.","Форма множини наведена там, де вона є в аркуші: die Bäume, die Blätter, die Pilze, die Vögel.","Дієслова fallen, blühen, verbringen і genießen найкраще запам'ятовувати разом із сезонним контекстом."]},cards:timeWorksheetVocabularyCards,stages:timeWorksheetVocabularyStages},
   "everyday-vocabulary":{title:"Everyday vocabulary",label:"Everyday vocabulary",badge:"Alltag",tip:"Learn sequence words in pairs and nouns with their articles.",guide:{title:"Повсякденна лексика",intro:"Цей урок поєднує слова для опису послідовності дій із базовою лексикою про їжу та напої.",rules:[{title:"Zuerst і danach",detail:"Ці прислівники допомагають показати порядок дій.",formula:"Zuerst lese ich. Danach mache ich die Aufgabe."},{title:"Anfangen — відокремлюване дієслово",detail:"У простому реченні an стоїть у кінці.",formula:"Der Kurs fängt um neun Uhr an."},{title:"Вивчайте іменники з артиклем",detail:"Артикль показує рід іменника. Süßigkeiten уживається у множині.",formula:"der Kräutertee · die Süßigkeiten · der Kaugummi · der Brei"}]},cards:[...everydayVocabularyRoutineCards,...everydayVocabularyFoodCards],stages:everydayVocabularyStages},
-  "travel-transport":{title:"Travel & transport",label:"Travel & transport",badge:"Bahn",tip:"Learn travel nouns with their articles, then connect route phrases and separable verbs to complete situations.",guide:{title:"Подорожі та транспорт",intro:"Цей урок охоплює транспорт, місця на станції, багаж, корисні фрази для маршруту та дії в дорозі.",rules:[{title:"Вивчайте іменники з артиклем",detail:"Артикль показує рід іменника, тому запам'ятовуйте його разом зі словом.",formula:"der Bahnhof · die Haltestelle · das Gepäck"},{title:"Mit для транспорту",detail:"Щоб сказати, чим ви подорожуєте, використовуйте mit + Dativ.",formula:"mit dem Zug · mit der S-Bahn · mit dem Flugzeug"},{title:"Nach і zu для напрямку",detail:"Nach уживається з містами без артикля, а zu - з людьми та багатьма місцями.",formula:"nach Paris · zu meiner Freundin"},{title:"Відокремлювані дієслова",detail:"У простому реченні префікс іде в кінець.",formula:"Der Zug fährt ab. · Wir steigen ein."}]},cards:[...travelTransportCards,...travelPhraseCards,...travelActionCards],stages:travelTransportStages},
+  "travel-transport":{title:"Travel & transport",label:"Travel & transport",badge:"Bahn",tip:"Learn travel nouns with their articles, then connect route phrases and separable verbs to complete situations.",guide:{title:"Подорожі та транспорт",intro:"Цей урок охоплює транспорт, місця на станції, багаж, корисні фрази для маршруту та дії в дорозі.",rules:[{title:"Вивчайте іменники з артиклем",detail:"Артикль показує рід іменника, тому запам'ятовуйте його разом зі словом.",formula:"der Bahnhof · die Haltestelle · das Gepäck"},{title:"Mit для транспорту",detail:"Щоб сказати, чим ви подорожуєте, використовуйте mit + Dativ.",formula:"mit dem Zug · mit der S-Bahn · mit dem Flugzeug",table:{columns:genderColumns,rows:[nominativeArticleRow,{label:"mit",title:"mit + Dativ",cells:definiteArticles.dative}],highlights:[0,1,2,3].map(column=>({row:1,column})),note:"Після mit змінюються всі артиклі. У множині іменник зазвичай додає -n."}},{title:"Nach і zu для напрямку",detail:"Nach уживається з містами без артикля, а zu - з людьми та багатьма місцями.",formula:"nach Paris · zu meiner Freundin"},{title:"Відокремлювані дієслова",detail:"У простому реченні префікс іде в кінець.",formula:"Der Zug fährt ab. · Wir steigen ein."}]},cards:[...travelTransportCards,...travelPhraseCards,...travelActionCards],stages:travelTransportStages},
   "giving-directions":{
     title:"Giving directions",label:"Giving directions",badge:"Weg",
     tip:"Give clear route instructions with direction words and familiar street landmarks.",
@@ -2984,7 +3350,7 @@ const deckDefinitions={
       intro:"Вивчіть 16 дієслів із таблиці. У цих значеннях людина або інший додаток стоїть у Dativ. Під час практики відновлюйте інфінітив або одну форму дієслова за українською підказкою.",
       rules:[
         {title:"Запитайте Wem? — кому?",detail:"Німецький відмінок визначає дієслово, а не український переклад. Наприклад, українське «допомагати комусь» і «слідувати за кимось» обидва мають Dativ у німецькій.",formula:"Wem? → mir · dir · ihm · ihr"},
-        {title:"Займенники й артиклі",detail:"Dativ: ich → mir, du → dir, er → ihm, sie → ihr, es → ihm, wir → uns, ihr → euch, sie → ihnen, Sie → Ihnen. Артиклі: der/das → dem, die → der; множина die → den, зазвичай із -n в іменнику.",formula:"dem Lehrer · der Mutter · den Kindern"},
+        {title:"Займенники й артиклі",detail:"Dativ: ich → mir, du → dir, er → ihm, sie → ihr, es → ihm, wir → uns, ihr → euch, sie → ihnen, Sie → Ihnen. Артиклі: der/das → dem, die → der; множина die → den, зазвичай із -n в іменнику.",formula:"dem Lehrer · der Mutter · den Kindern",table:{columns:genderColumns,rows:[nominativeArticleRow,{label:"Dat.",title:"Dativ",cells:definiteArticles.dative}],highlights:[0,1,2,3].map(column=>({row:1,column})),note:"У Dativ змінюються всі артиклі. У множині іменник зазвичай додає -n."}},
         {title:"Що є підметом?",detail:"Коли описуєте, що подобається, належить, підходить, смакує, болить, привертає увагу або чого бракує, підметом є відповідна річ або людина. Той, хто відчуває, помічає або володіє, стоїть у Dativ. Дієслово узгоджується з підметом.",formula:"підмет: die Schuhe · Dativ: dir"},
         {title:"Особливі форми й відокремлення",detail:"У деяких дієслів голосний змінюється з a на ä або з e на i у du та er/sie/es, але не в множині. У дієсловах зі значеннями «боліти» й «привертати увагу» відокремлювана частина стоїть у кінці головного речення.",formula:"a → ä · e → i"},
         {title:"Вітати з подією",detail:"Коли вітаєте когось із подією, і людина, і подія після zu стоять у Dativ; zum = zu dem, zur = zu der.",formula:"кому: dir · з чим: zu deinem Geburtstag"},
@@ -2993,7 +3359,7 @@ const deckDefinitions={
     },
     cards:dativeVerbCards,stages:dativeVerbStages
   },
-  "es-gibt-leisure":{title:"Es gibt & leisure places",label:"Es gibt & leisure places",badge:"gibt",tip:"Use Es gibt to say that something exists; the noun after it is in the accusative.",guide:{title:"Es gibt і місця для дозвілля",intro:"За допомогою Es gibt можна сказати, що в місті або в певному місці щось є. Далі вивчайте назви місць разом з артиклем і вислови про дозвілля.",rules:[{title:"Es gibt означає «є»",detail:"Цей вираз уживається як в однині, так і в множині. Es не перекладається окремо.",formula:"Es gibt ein Kino. · Es gibt viele Cafés."},{title:"Після Es gibt - Akkusativ",detail:"Неозначений артикль чоловічого роду змінюється з ein на einen; жіночий і середній рід залишаються без змін.",formula:"einen Park · eine Ausstellung · ein Café"},{title:"Вивчайте місця з артиклем",detail:"Запам'ятовуйте рід і форму множини разом зі словом.",formula:"das Museum - die Museen · die Bar - die Bars"},{title:"Man для загальних дій",detail:"Man означає «людина / люди» в загальному значенні та має форму дієслова третьої особи однини.",formula:"Im Café kann man Kaffee trinken. · In der Disco tanzt man."},{title:"Denn пояснює причину",detail:"Denn означає «тому що». Після нього порядок слів у простому реченні не змінюється.",formula:"Ich gehe ins Kino, denn der Film ist interessant."}]},cards:[...esGibtPatternCards,...leisurePlaceCards,...leisureActivityCards],stages:esGibtLeisureStages},
+  "es-gibt-leisure":{title:"Es gibt & leisure places",label:"Es gibt & leisure places",badge:"gibt",tip:"Use Es gibt to say that something exists; the noun after it is in the accusative.",guide:{title:"Es gibt і місця для дозвілля",intro:"За допомогою Es gibt можна сказати, що в місті або в певному місці щось є. Далі вивчайте назви місць разом з артиклем і вислови про дозвілля.",rules:[{title:"Es gibt означає «є»",detail:"Цей вираз уживається як в однині, так і в множині. Es не перекладається окремо.",formula:"Es gibt ein Kino. · Es gibt viele Cafés."},{title:"Після Es gibt - Akkusativ",detail:"Неозначений артикль чоловічого роду змінюється з ein на einen; жіночий і середній рід залишаються без змін.",formula:"einen Park · eine Ausstellung · ein Café",table:{columns:genderColumns.slice(0,3),rows:[{label:"Nom.",title:"Nominativ",cells:["—","—","-e"]},{label:"Akk.",title:"Akkusativ",cells:["-en","—","-e"]}],highlights:[{row:1,column:0}],note:"Закінчення додається до неозначеного артикля. Змінюється лише чоловічий рід. У множині неозначеного артикля немає."}},{title:"Вивчайте місця з артиклем",detail:"Запам'ятовуйте рід і форму множини разом зі словом.",formula:"das Museum - die Museen · die Bar - die Bars"},{title:"Man для загальних дій",detail:"Man означає «людина / люди» в загальному значенні та має форму дієслова третьої особи однини.",formula:"Im Café kann man Kaffee trinken. · In der Disco tanzt man."},{title:"Denn пояснює причину",detail:"Denn означає «тому що». Після нього порядок слів у простому реченні не змінюється.",formula:"Ich gehe ins Kino, denn der Film ist interessant."}]},cards:[...esGibtPatternCards,...leisurePlaceCards,...leisureActivityCards],stages:esGibtLeisureStages},
   "word-order":{title:"Word order",label:"Word order",badge:"S",tip:"Use TE-KA-MO-LO for several adverbials: time, reason, manner, then place.",guide:{title:"Порядок слів у реченні",intro:"Німецький порядок слів суворіший, ніж український. Спочатку визначте тип речення, а потім знайдіть місце для відмінюваного дієслова й інфінітива.",rules:[{title:"TE-KA-MO-LO",detail:"Коли в середині речення є кілька обставин, їхній звичний порядок: TE (wann?) - KA (warum?) - MO (wie?) - LO (wo?/wohin?).",formula:"Ich fahre heute wegen des Regens mit dem Bus zur Arbeit."},{title:"Пряме речення з модальним дієсловом",detail:"Підмет стоїть першим, модальне дієслово - другим, а друге дієслово в інфінітиві - в кінці.",formula:"Ich mag am Morgen Kaffee trinken."},{title:"Інверсія з модальним дієсловом",detail:"Час або інша фраза може стояти першою, але модальне дієслово залишається на другому місці.",formula:"Am Morgen mag ich Kaffee trinken."},{title:"Питання ja/nein",detail:"Без питального слова модальне дієслово стоїть першим, підмет - другим, а інфінітив - у кінці.",formula:"Magst du am Morgen Kaffee trinken?"},{title:"W-Frage з модальним дієсловом",detail:"Питальне слово стоїть першим, модальне дієслово - другим, підмет - після нього, а інфінітив - у кінці.",formula:"Was magst du am Morgen trinken?"},{title:"Інші розповідні речення",detail:"Без модального дієслова відмінюване дієслово все одно стоїть на другому місці: підмет або обставина часу можуть бути першими.",formula:"Heute fahre ich mit dem Bus nach Hause."}]},cards:[...wordOrderStatementCards,...wordOrderTeKaMoLoCards,...wordOrderModalCards,...wordOrderInversionCards,...wordOrderQuestionCards],stages:wordOrderStages},
   "separable-verbs":{title:"Separable verbs",label:"Separable verbs",badge:"auf",tip:"In a main clause, conjugate the verb stem and put the separable prefix at the end.",guide:{title:"Відокремлювані дієслова",intro:"Багато німецьких дієслів мають префікс, який у головному реченні відокремлюється та переходить у кінець. Вивчайте дієслово як одну одиницю: aufstehen, anrufen, einkaufen.",rules:[{title:"У головному реченні префікс відокремлюється",detail:"Відмінюється основа, а префікс стоїть у кінці речення.",formula:"Ich stehe früh auf. · Der Zug fährt ab."},{title:"У питанні префікс теж у кінці",detail:"Відмінювана основа стоїть після W-слова або на початку питання ja/nein.",formula:"Warum rufst du mich an?"},{title:"У підрядному реченні дієслово не розділяється",detail:"Після weil, dass та інших сполучників повна відмінювана форма стоїть наприкінці.",formula:"..., weil ich früh aufstehe."},{title:"З модальним дієсловом інфінітив не розділяється",detail:"Модальне дієслово відмінюється, а повний інфінітив стоїть наприкінці.",formula:"Wir können früh aufstehen."},{title:"Не всі префіксальні дієслова відокремлюються",detail:"be-, emp-, ent-, er-, ge-, miss-, ver-, zer- зазвичай невідокремлювані.",formula:"Ich verstehe die Aufgabe. · Wir besuchen Freunde."}]},cards:[...separableVerbCards,...separableVerbPatternCards],stages:separableVerbStages}
 };

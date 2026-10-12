@@ -9,6 +9,10 @@ contract. Keep new behavior consistent across all lessons and screens. If a requ
 change intentionally conflicts with The Constitution, update it in the same change and
 explain the tradeoff.
 
+For visual learning aids (gender colours, endings, paradigms, pictures, diagrams, guide
+tables), also follow the chosen designs in
+[Visual design decisions](docs/visual-design-decisions.md) and record any change there.
+
 Whenever a task includes creating a git commit, push that commit to the current
 branch's configured remote immediately after the commit succeeds. If the push fails,
 report the failure clearly and keep the local commit intact.
