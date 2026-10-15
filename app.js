@@ -30,6 +30,7 @@ const lessonCatalog={
   frequency:{title:"Прислівники частотності",germanTitle:"Häufigkeitsadverbien",outcome:"Точно виражати частотність: від immer до nie.",className:"Лексика"},
   "local-prepositions":{title:"Прийменники місця: Dativ і Akkusativ",germanTitle:"Wechselpräpositionen: Dativ und Akkusativ",outcome:"Добирати Dativ для місця та Akkusativ для напрямку руху.",className:"Граматика"},
   "time-expressions":{title:"Часові вирази",germanTitle:"Zeitangaben",outcome:"Добирати часові вирази й називати час у розмові.",className:"Граматика"},
+  "temporal-prepositions":{title:"Прийменники часу: vor, in, nach, für",germanTitle:"Temporale Präpositionen: vor, in, nach, für",outcome:"Казати, коли щось сталося чи станеться і скільки триватиме: vor, in, nach + Dativ, für + Akkusativ, а також um, am, von … bis.",className:"Граматика",level:"A1"},
   "time-worksheet-vocabulary":{title:"Пори року й розпорядок дня",germanTitle:"Jahreszeiten und Tagesablauf",outcome:"Уживати лексику про пори року та розпорядок дня в контексті.",className:"Лексика"},
   "everyday-vocabulary":{title:"Повсякденна лексика",germanTitle:"Alltagswortschatz",outcome:"Уживати поширені слова про щоденні справи, їжу та напої.",className:"Лексика"},
   "travel-transport":{title:"Подорожі й транспорт",germanTitle:"Reisen und Verkehrsmittel",outcome:"Говорити німецькою про транспорт, маршрути й дії під час подорожі.",className:"Лексика"},
@@ -89,6 +90,8 @@ const categoryLabels={
   "FOTOBESCHREIBUNG":"Опис фото","PERSON":"Особа","PRONOMEN":"Займенник","WORTFOLGE":"Порядок слів",
   "JA/NEIN":"Загальне запитання","INVERSION":"Інверсія","FRAGEBILDUNG":"Побудова запитання",
   "TRENNBARES VERB":"Дієслово з відокремлюваним префіксом","TRENNBARE VERBEN":"Відокремлювані дієслова",
+  "TEMPORALE PRÄPOSITION":"Прийменник часу","VOR + DATIV":"vor + Dativ","NACH + DATIV":"nach + Dativ","IN + DATIV":"in + Dativ",
+  "FÜR + AKKUSATIV":"für + Akkusativ","UM + UHRZEIT":"um + час на годиннику","AM + TAG":"am + день або частина доби","VON … BIS":"von … bis",
   "HAUPTSATZ":"Головне речення","NEBENSATZ":"Підрядне речення","NICHT TRENNBAR":"Невідокремлюваний префікс"
 };
 function categoryLabel(category){

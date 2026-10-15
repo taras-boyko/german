@@ -211,7 +211,8 @@ test("noun metadata is explicit, valid and covers the planned lessons",()=>{
   }
   assert.deepEqual(coverage,{
     possessives:22,"possessive-cases":8,"local-prepositions":26,"time-worksheet-vocabulary":22,
-    "everyday-vocabulary":8,"travel-transport":42,"giving-directions":6,"es-gibt-leisure":44
+    "everyday-vocabulary":8,"travel-transport":42,"giving-directions":6,"es-gibt-leisure":44,
+    "temporal-prepositions":12
   });
 });
 
@@ -526,9 +527,10 @@ const structureCoverage={
   "separable-verbs":()=>true,
   "word-order":()=>true,
   koennen:stage=>stage.id.startsWith("koennen-order-"),
-  perfekt:(stage,card)=>card.id.startsWith("perfekt-frame-")
+  perfekt:(stage,card)=>card.id.startsWith("perfekt-frame-"),
+  "temporal-prepositions":(stage,card)=>card.type==="sentence-build"
 };
-const structureCounts={"separable-verbs":28,"word-order":37,koennen:25,perfekt:12};
+const structureCounts={"separable-verbs":28,"word-order":37,koennen:25,perfekt:12,"temporal-prepositions":30};
 
 test("sentence structures are explicit, ordered and rebuild the card's sentence",()=>{
   const {app}=runtime();
@@ -913,6 +915,32 @@ test("guide tables show what changes and follow the concealment rule",()=>{
   }
 });
 
+test("case tables and paradigms list Nom., Akk., Dat. in order",()=>{
+  const {app}=runtime();
+  const caseRank=entry=>{
+    const text=`${entry.title||""} ${entry.label||""}`;
+    if(/Nominativ|^Nom\./.test(text))return 0;
+    if(/Akkusativ|\bAkk\./.test(text))return 1;
+    if(/Dativ|\bDat\./.test(text))return 2;
+    return null;
+  };
+  const assertOrder=(entries,where)=>{
+    const ranks=Array.from(entries,caseRank).filter(rank=>rank!==null);
+    assert.deepEqual(ranks,[...ranks].sort((a,b)=>a-b),where);
+  };
+  let checked=0;
+  for(const [lessonId,definition] of Object.entries(app.definitions)){
+    const tables=definition.guide.rules.filter(rule=>typeof rule==="object"&&rule.table).map(rule=>rule.table);
+    const paradigms=definition.stages.flatMap(stage=>stage.cards).map(card=>card.paradigm).filter(Boolean);
+    for(const table of [...tables,...paradigms]){
+      assertOrder(table.rows,`${lessonId}: rows`);
+      assertOrder(table.columns,`${lessonId}: columns`);
+      checked++;
+    }
+  }
+  assert.ok(checked>0);
+});
+
 test("guide tables are well formed across lessons",()=>{
   const {app,elements}=runtime();
   const withTables=[];
@@ -924,7 +952,7 @@ test("guide tables are well formed across lessons",()=>{
       for(const {row,column} of table.highlights||[])assert.ok(table.rows[row]&&table.columns[column],`${lessonId}: highlight ${row}/${column}`);
     }
   }
-  assert.deepEqual(withTables.sort(),["conjugation","dative-verbs","es-gibt-leisure","haben","koennen","local-prepositions","personal-pronoun-cases","possessive-cases","possessives","sein","strong-verbs","travel-transport"]);
+  assert.deepEqual(withTables.sort(),["conjugation","dative-verbs","es-gibt-leisure","haben","koennen","local-prepositions","personal-pronoun-cases","possessive-cases","possessives","sein","strong-verbs","temporal-prepositions","travel-transport"]);
   const card=app.definitions["personal-pronoun-cases"].stages[0].cards[0];
   app.renderCard("personal-pronoun-cases",0,card);
   const table=descendants(elements.get("deck-guide-rules")).find(node=>node.tagName==="TABLE");

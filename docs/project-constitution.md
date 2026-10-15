@@ -256,6 +256,11 @@ future passes provide contextual variety and retention checks.
   in practice until Check, like any other leaking guide text. Tables whose cells are
   the lesson's answers (for example a pronoun or conjugation paradigm) therefore
   appear on learn cards and after Check only.
+- Every table, strip, or paradigm that lists grammatical cases (guide tables and
+  card paradigms, as rows or columns) uses one fixed order: Nominativ, Akkusativ,
+  Dativ. A table may leave a case out, but never reorders the rest; rows labelled by
+  a question (`Wohin?` for Akkusativ, `Wo?` for Dativ) follow the case they stand for.
+  Notes and details that walk through the table name the cases in the same order.
 
 ### Visual language
 

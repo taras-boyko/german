@@ -470,12 +470,14 @@ cell (`-en`) highlighted in lavender. The note reads:
 only signal. Unlike the mock-up, it avoids full word forms such as *meinen*, so it
 stays visible during practice. The mock-up's Genitiv row is left out because the
 lesson covers Nominativ, Akkusativ and Dativ.
+**Case order:** every case table and strip lists Nom., Akk., Dat. in that order
+(question rows follow their case: `Wohin?` before `Wo?`).
 **Data:** a guide rule's `table: { columns, rows, highlights, note }`. Highlighted
 cells are listed explicitly (`highlights: [{ row, column }]`). A row may carry a
 `gender` (shown as a dot before its label) for person rows such as `er`, `sie`, `es`.
 
 **Rolled out to:** possessives (Nominativ endings), es gibt (ein → einen), local
-prepositions (Nom. vs Wo? vs Wohin? articles), travel (`mit` + Dativ articles),
+prepositions (Nom. vs Wohin? vs Wo? articles), travel (`mit` + Dativ articles),
 dative verbs (Nom. vs Dat. articles), personal-pronoun cases (Akkusativ and Dativ by
 person) and conjugation (`mach-` vs `arbeit-` endings). The pronoun and conjugation
 tables list the forms the lesson asks for, so they show on learn cards and after
@@ -602,7 +604,8 @@ phase. Check them before treating the rollout as final.
 |---|---|---|---|
 | possessive-cases | Every card | Every card | Nom. / Akk. / Dat. endings |
 | possessives | Nominativ possessive cards (`mein Bruder`, `deine Freunde`, `ihre Tasche` …) | Nominativ possessive cards | Nominativ endings |
-| local-prepositions | Every card; shown in practice because the gap gives the noun | — | Nom. / Wo? / Wohin? articles |
+| local-prepositions | Every card; shown in practice because the gap gives the noun | — | Nom. / Wohin? / Wo? articles |
+| temporal-prepositions | Event and time-span cards; event cards show it in practice (the gap gives the noun), span cards after Check | — | Nom. / Akk. / Dat. articles |
 | es-gibt-leisure | Places with singular and plural, pattern cards | — | ein → einen |
 | travel-transport | Transport, places and phrases with a noun | — | `mit` + Dativ |
 | time-worksheet-vocabulary | Season, weather and nature nouns | — | — |
@@ -635,6 +638,7 @@ Position boxes (5) appear on learn cards and after Check on sentence builds.
 | word-order | All 15 rule cards | All 22 |
 | koennen | 4 word-order rule cards | 21 (word-order practice stage) |
 | perfekt | 6 frame cards | The same 6 frames in practice |
+| temporal-prepositions | 15 sentence cards | The same 15 in practice |
 
 Other können cards (forms and gap fills) and the other Perfekt cards (haben or sein,
 participle forms) have no boxes: they practise a single form, not the sentence order.
@@ -691,13 +695,13 @@ reaches them.
 
 ### Phase 6 coverage
 
-The library is one screen, so Phase 6 had no pilot lesson. It groups all 26 lessons:
+The library is one screen, so Phase 6 had no pilot lesson. It groups all 27 lessons:
 
 | Class | Lessons |
 |---|---|
 | Лексика (8) | w-questions, pronouns, frequency, time-worksheet-vocabulary, everyday-vocabulary, travel-transport, giving-directions, dative-verbs |
 | Морфологія (11) | personal-pronoun-cases, possessives, possessive-cases, sein, conjugation, strong-verbs, past-verbs, past-verbs-a2, past-verbs-b1, perfekt, present-practice |
-| Граматика (5) | koennen, haben, local-prepositions, time-expressions, es-gibt-leisure |
+| Граматика (6) | koennen, haben, local-prepositions, time-expressions, temporal-prepositions, es-gibt-leisure |
 | Синтаксис (2) | word-order, separable-verbs |
 
 ## Ideas not built
