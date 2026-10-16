@@ -1020,11 +1020,15 @@ function sceneArt(scene){
   return scenes[scene.kind]||"";
 }
 
+function sceneMarkup(art){
+  return `<rect width="240" height="128" rx="18" class="scene-background"/>${art}`;
+}
+
 function renderCardScene(card){
   const art=card.scene?sceneArt(card.scene):"";
   $("card-illustration").hidden=!art;
   $("flashcard").classList.toggle("illustrated-card",Boolean(art));
-  if(art)$("card-illustration-art").innerHTML=`<title>Ілюстрація просторового розташування</title><rect width="240" height="128" rx="18" class="scene-background"/>${art}`;
+  if(art)$("card-illustration-art").innerHTML=`<title>Ілюстрація просторового розташування</title>${sceneMarkup(art)}`;
 }
 
 // Splits a form into stem, changed vowel and ending pieces, skipping empty pieces.
@@ -1071,19 +1075,26 @@ function genderDot(gender){
   return dot;
 }
 
+// Each noun entry (singular, then plural) as its nodes, joined by a "/" that screen readers skip.
+function nounEntryNodes(noun,entryNodes){
+  return nounEntries(noun).flatMap((entry,entryIndex)=>{
+    const nodes=entryNodes(entry);
+    if(!entryIndex)return nodes;
+    const separator=textSpan("/","noun-gender-separator");
+    separator.setAttribute("aria-hidden","true");
+    return [separator,...nodes];
+  });
+}
+
 function renderNounGender(card){
   const line=$("noun-gender"),shown=nounLineShown(card);
   line.hidden=!shown;
   if(!shown){line.replaceChildren();return}
   const labelsOnly=headwordNoun(card);
   line.classList.toggle("labels-only",labelsOnly);
-  line.replaceChildren(...nounEntries(card.noun).flatMap((entry,entryIndex)=>{
+  line.replaceChildren(...nounEntryNodes(card.noun,entry=>{
     const label=textSpan(genderLabels[entry.gender],`noun-gender-label gender-${entry.gender}`);
-    const nodes=labelsOnly?[label]:[genderDot(entry.gender),Object.assign(textSpan(nounPhrase(entry),"noun-gender-word"),{lang:"de"}),label];
-    if(!entryIndex)return nodes;
-    const separator=textSpan("/","noun-gender-separator");
-    separator.setAttribute("aria-hidden","true");
-    return [separator,...nodes];
+    return labelsOnly?[label]:[genderDot(entry.gender),Object.assign(textSpan(nounPhrase(entry),"noun-gender-word"),{lang:"de"}),label];
   }));
 }
 
@@ -1159,17 +1170,13 @@ const auxiliaryChoices=[
   {verb:"haben",text:"дія з об’єктом / без руху",icon:'<svg viewBox="0 0 44 30" focusable="false"><rect x="14" y="6" width="16" height="16" rx="3" fill="currentColor"/><path d="M6 26h32" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/></svg>'}
 ];
 
-// The haben / sein decision as a picture: both rows stay readable, the card's choice is marked.
-function renderCardAuxiliary(card){
-  const figure=$("card-auxiliary"),auxiliary=card.auxiliary,shown=Boolean(auxiliary)&&answerVisualsShown();
-  figure.hidden=!shown;
-  if(!shown){figure.replaceChildren();return}
-  const caption=document.createElement("figcaption"),list=document.createElement("ul");
-  caption.textContent="Perfekt · haben чи sein";
+// Both rows stay readable; the active verb, if any, is marked.
+function auxiliaryList(activeVerb){
+  const list=document.createElement("ul");
   list.className="auxiliary-choices";
   list.append(...auxiliaryChoices.map(choice=>{
     const item=document.createElement("li"),icon=document.createElement("span"),text=document.createElement("span"),verb=textSpan(choice.verb,"auxiliary-verb");
-    const active=choice.verb===auxiliary.verb;
+    const active=choice.verb===activeVerb;
     item.className=`auxiliary-choice aux-${choice.verb}${active?" active":""}`;
     if(active)item.setAttribute("aria-current","true");
     icon.className="auxiliary-icon";
@@ -1181,7 +1188,17 @@ function renderCardAuxiliary(card){
     item.append(icon,text);
     return item;
   }));
-  figure.replaceChildren(caption,list);
+  return list;
+}
+
+// The haben / sein decision as a picture: both rows stay readable, the card's choice is marked.
+function renderCardAuxiliary(card){
+  const figure=$("card-auxiliary"),auxiliary=card.auxiliary,shown=Boolean(auxiliary)&&answerVisualsShown();
+  figure.hidden=!shown;
+  if(!shown){figure.replaceChildren();return}
+  const caption=document.createElement("figcaption");
+  caption.textContent="Perfekt · haben чи sein";
+  figure.replaceChildren(caption,auxiliaryList(auxiliary.verb));
 }
 
 const structureLabels={
@@ -1195,12 +1212,8 @@ const verbFirstLabel=["Дієсл. 1","Відмінюване дієслово �
 const verbPartRoles=new Set(["verb","end"]);
 
 // Word order as position boxes, one row per clause; both verb parts share the accent, the middle is dashed.
-function renderCardStructure(card){
-  const figure=$("card-structure"),structure=card.structure,shown=Boolean(structure)&&answerVisualsShown();
-  figure.hidden=!shown;
-  if(!shown){figure.replaceChildren();return}
-  const caption=document.createElement("figcaption"),sentence=document.createElement("div");
-  caption.textContent="Порядок слів";
+function structureSentence(structure){
+  const sentence=document.createElement("div");
   sentence.className="structure-sentence";
   sentence.append(...structure.flatMap((clause,clauseIndex)=>{
     const list=document.createElement("ol");
@@ -1221,33 +1234,37 @@ function renderCardStructure(card){
     comma.setAttribute("aria-hidden","true");
     return [comma,list];
   }));
-  figure.replaceChildren(caption,sentence);
+  return sentence;
 }
 
-// How often as a point on a 0–100 % bar. The bar shows meaning, so it stays in practice; the German words wait for Check.
-function renderCardFrequency(card){
-  const figure=$("card-frequency"),frequency=card.frequency;
-  figure.hidden=!frequency;
-  if(!frequency){figure.replaceChildren();return}
-  const labelled=answerVisualsShown(),active=frequency.scale[frequency.active],percent=`≈ ${active.percent} %`;
-  const caption=document.createElement("figcaption"),scale=document.createElement("div"),track=document.createElement("div"),fill=document.createElement("span"),marker=document.createElement("span");
-  if(labelled){
-    const word=textSpan(active.word,"frequency-word");
-    word.lang="de";
-    caption.append(word,document.createTextNode(` · ${percent}`));
-  }else caption.textContent=`${percent} часу`;
+function renderCardStructure(card){
+  const figure=$("card-structure"),structure=card.structure,shown=Boolean(structure)&&answerVisualsShown();
+  figure.hidden=!shown;
+  if(!shown){figure.replaceChildren();return}
+  const caption=document.createElement("figcaption");
+  caption.textContent="Порядок слів";
+  figure.replaceChildren(caption,structureSentence(structure));
+}
+
+// The 0–100 % bar. Without an active step (the guide's whole scale) the fill spans the bar and there is no marker.
+function frequencyScaleNode(frequency,labelled){
+  const active=frequency.scale[frequency.active],scale=document.createElement("div"),track=document.createElement("div"),fill=document.createElement("span");
   scale.className=`frequency-scale${labelled?" labelled":""}`;
-  scale.style.setProperty("--frequency",`${active.percent}%`);
+  scale.style.setProperty("--frequency",`${active?active.percent:100}%`);
   track.className="frequency-track";
   track.setAttribute("aria-hidden","true");
   fill.className="frequency-fill";
-  marker.className="frequency-marker";
   track.append(fill,...frequency.scale.filter(step=>step.percent>0&&step.percent<100).map(step=>{
     const tick=document.createElement("span");
     tick.className="frequency-tick";
     tick.style.setProperty("--at",`${step.percent}%`);
     return tick;
-  }),marker);
+  }));
+  if(active){
+    const marker=document.createElement("span");
+    marker.className="frequency-marker";
+    track.append(marker);
+  }
   scale.append(track);
   if(labelled){
     const steps=document.createElement("ol");
@@ -1269,7 +1286,22 @@ function renderCardFrequency(card){
     ends.append(textSpan("0 %"),textSpan("100 %"));
     scale.append(ends);
   }
-  figure.replaceChildren(caption,scale);
+  return scale;
+}
+
+// How often as a point on a 0–100 % bar. The bar shows meaning, so it stays in practice; the German words wait for Check.
+function renderCardFrequency(card){
+  const figure=$("card-frequency"),frequency=card.frequency;
+  figure.hidden=!frequency;
+  if(!frequency){figure.replaceChildren();return}
+  const labelled=answerVisualsShown(),active=frequency.scale[frequency.active],percent=`≈ ${active.percent} %`;
+  const caption=document.createElement("figcaption");
+  if(labelled){
+    const word=textSpan(active.word,"frequency-word");
+    word.lang="de";
+    caption.append(word,document.createTextNode(` · ${percent}`));
+  }else caption.textContent=`${percent} часу`;
+  figure.replaceChildren(caption,frequencyScaleNode(frequency,labelled));
 }
 
 // German counts minutes from the full hour or from halb; the counted span becomes the shaded sector.
@@ -1295,12 +1327,9 @@ function clockLine(className,minutes,inner,outer){
   return `<line class="${className}" x1="${x1}" y1="${y1}" x2="${x2}" y2="${y2}"/>`;
 }
 
-// The prompt time as an analog clock. The hands show meaning; the counted sector and its reading wait for Check.
-function renderCardClock(card){
-  const figure=$("card-clock"),clock=card.clock;
-  figure.hidden=!clock;
-  if(!clock){figure.replaceChildren();return}
-  const explained=answerVisualsShown(),reading=clockReading(clock),time=`${clock.hour}:${String(clock.minute).padStart(2,"0")}`;
+// An analog clock face; when explained, the counted sector is shaded and its reading joins the label.
+function clockFace(clock,explained){
+  const reading=clockReading(clock),time=`${clock.hour}:${String(clock.minute).padStart(2,"0")}`;
   const face=document.createElement("div"),radius=53,[fromX,fromY]=clockPoint(reading.from,radius),[toX,toY]=clockPoint(reading.to,radius);
   const sector=explained&&reading.to>reading.from?`<path class="clock-sector" d="M60 60L${fromX} ${fromY}A${radius} ${radius} 0 ${reading.to-reading.from>30?1:0} 1 ${toX} ${toY}Z"/>`:"";
   const ticks=Array.from({length:12},(_,hour)=>clockLine(`clock-tick${hour%3?"":" major"}`,hour*5,hour%3?48:45,53)).join("");
@@ -1311,10 +1340,30 @@ function renderCardClock(card){
   const hands=clockLine("clock-hand clock-hand-hour",clock.hour%12*5+clock.minute/12,0,28)+clockLine("clock-hand clock-hand-minute",clock.minute,0,44);
   face.className="clock-face";
   face.innerHTML=`<svg viewBox="0 0 120 120" role="img" aria-label="Годинник показує ${time}${explained?`: ${reading.text}`:""}" focusable="false"><circle class="clock-ring" cx="60" cy="60" r="56"/>${sector}${ticks}${hands}${numbers}<circle class="clock-center" cx="60" cy="60" r="3.5"/></svg>`;
+  return face;
+}
+
+// The prompt time as an analog clock. The hands show meaning; the counted sector and its reading wait for Check.
+function renderCardClock(card){
+  const figure=$("card-clock"),clock=card.clock;
+  figure.hidden=!clock;
+  if(!clock){figure.replaceChildren();return}
+  const explained=answerVisualsShown(),face=clockFace(clock,explained);
   if(!explained){figure.replaceChildren(face);return}
   const caption=document.createElement("figcaption");
-  caption.textContent=reading.text;
+  caption.textContent=clockReading(clock).text;
   figure.replaceChildren(face,caption);
+}
+
+// The words beside a picture say the same, so the image is decorative for screen readers.
+function pictureImage(picture,size){
+  const image=document.createElement("img");
+  image.setAttribute("src",`assets/icons/${picture}.svg`);
+  image.setAttribute("alt","");
+  image.setAttribute("width",String(size));
+  image.setAttribute("height",String(size));
+  image.setAttribute("draggable","false");
+  return image;
 }
 
 // A picture shows what a concrete word means, not its German form, so it stays visible before Check.
@@ -1324,14 +1373,8 @@ function renderCardPicture(card){
   figure.hidden=!card.picture;
   if(!card.picture){figure.dataset.picture="";figure.replaceChildren();return}
   if(figure.dataset.picture===card.picture&&figure.children.length)return;
-  const image=document.createElement("img");
-  image.setAttribute("src",`assets/icons/${card.picture}.svg`);
-  image.setAttribute("alt","");
-  image.setAttribute("width","96");
-  image.setAttribute("height","96");
-  image.setAttribute("draggable","false");
   figure.dataset.picture=card.picture;
-  figure.replaceChildren(image);
+  figure.replaceChildren(pictureImage(card.picture,96));
 }
 
 function renderCardVisuals(card){
@@ -1343,6 +1386,61 @@ function renderCardVisuals(card){
   renderCardParadigm(card);
   renderCardAuxiliary(card);
   renderCardStructure(card);
+}
+
+const ruleVisualKinds=["structure","auxiliary","frequency","clocks","scenes","pictures"];
+
+// Every string a rule illustration displays, so the guide can hide it while it would reveal the answer.
+function ruleVisualTexts(visual){
+  if(visual.structure){
+    const clauses=visual.structure.map(clause=>clause.map(slot=>slot.text).filter(Boolean).join(" "));
+    return [...visual.structure.flat().map(slot=>slot.text),...clauses,clauses.join(", ")];
+  }
+  if(visual.auxiliary)return auxiliaryChoices.flatMap(choice=>[choice.verb,choice.text]);
+  if(visual.frequency)return visual.frequency.scale.map(step=>step.word);
+  if(visual.clocks)return visual.clocks.flatMap(clock=>[clock.text,clockReading(clock).text]);
+  if(visual.scenes)return visual.scenes.flatMap(scene=>[scene.text,scene.cue||""]);
+  if(visual.pictures)return visual.pictures.flatMap(item=>item.noun?[...nounEntries(item.noun).map(nounPhrase),nounEntries(item.noun).map(nounPhrase).join(" / ")]:[item.word]);
+  return [];
+}
+
+function ruleVisualItem(...nodes){
+  const item=document.createElement("li");
+  item.className="guide-visual-item";
+  item.append(...nodes);
+  return item;
+}
+
+function germanSpan(text,className){
+  return Object.assign(textSpan(text,className),{lang:"de"});
+}
+
+// A rule's illustration reuses the card components; tiles hold one clock, scene or picture each.
+function ruleVisual(visual){
+  const kind=ruleVisualKinds.find(key=>visual[key]),figure=document.createElement("figure");
+  figure.className=`guide-rule-visual guide-visual-${kind}`;
+  if(kind==="structure"){figure.append(structureSentence(visual.structure));return figure}
+  if(kind==="auxiliary"){figure.append(auxiliaryList(visual.auxiliary.verb));return figure}
+  if(kind==="frequency"){figure.append(frequencyScaleNode(visual.frequency,true));return figure}
+  const list=document.createElement("ul");
+  list.className="guide-visual-items";
+  if(kind==="clocks")list.append(...visual.clocks.map(clock=>ruleVisualItem(clockFace(clock,true),germanSpan(clock.text,"guide-visual-text"),textSpan(clockReading(clock).text,"guide-visual-reading"))));
+  if(kind==="scenes")list.append(...visual.scenes.map(scene=>{
+    const art=document.createElement("span"),nodes=[art];
+    art.className="guide-visual-scene";
+    art.innerHTML=`<svg viewBox="0 0 240 128" aria-hidden="true" focusable="false">${sceneMarkup(sceneArt(scene))}</svg>`;
+    if(scene.cue)nodes.push(germanSpan(scene.cue,"guide-visual-cue"));
+    return ruleVisualItem(...nodes,germanSpan(scene.text,"guide-visual-text"));
+  }));
+  if(kind==="pictures")list.append(...visual.pictures.map(item=>{
+    const label=document.createElement("span");
+    label.className="guide-visual-label";
+    if(item.noun)label.append(...nounEntryNodes(item.noun,entry=>[genderDot(entry.gender),germanSpan(nounPhrase(entry),"guide-visual-text")]));
+    else label.append(germanSpan(item.word,"guide-visual-text"));
+    return ruleVisualItem(pictureImage(item.picture,48),label);
+  }));
+  figure.append(list);
+  return figure;
 }
 
 // The answer form is split inside the headword; any surrounding words (pronoun, separable prefix) stay muted.
@@ -1615,11 +1713,18 @@ function renderDeckGuide(card){
     })])];
     return texts.every(text=>safeGuideText(text)===text)?table:null;
   };
+  // An illustration is all-or-nothing: if any of its words would reveal the answer, the whole figure waits for Check.
+  const safeGuideVisual=visual=>visual&&ruleVisualTexts(visual).every(text=>safeGuideText(text)===text)?visual:null;
   const rules=guide.rules.map(rule=>{
     if(typeof rule==="string")return safeGuideText(rule)||null;
+    // A rule without a title reads like a plain rule but may carry an illustration.
+    if(!rule.title){
+      const detail=safeGuideText(rule.detail);
+      return detail?{detail,visual:safeGuideVisual(rule.visual)}:null;
+    }
     const title=safeGuideText(rule.title);
     if(!title)return null;
-    return {...rule,title,detail:safeGuideText(rule.detail),formula:rule.formula?safeGuideText(rule.formula):"",table:rule.table&&safeGuideTable(rule.table)};
+    return {...rule,title,detail:safeGuideText(rule.detail),formula:rule.formula?safeGuideText(rule.formula):"",visual:safeGuideVisual(rule.visual),table:rule.table&&safeGuideTable(rule.table)};
   }).filter(Boolean);
   const intro=safeGuideText(guide.intro);
   $("deck-guide-intro").textContent=intro;
@@ -1632,12 +1737,16 @@ function renderDeckGuide(card){
     number.className="guide-rule-number";number.textContent=String(index+1).padStart(2,"0");
     text.className="guide-rule-text";
     if(typeof rule==="string")text.textContent=rule;
-    else{
+    else if(!rule.title){
+      text.textContent=rule.detail;
+      if(rule.visual)text.append(ruleVisual(rule.visual));
+    }else{
       const title=document.createElement("strong"),detail=document.createElement("span");
       title.className="guide-rule-title";title.textContent=rule.title;
       detail.className="guide-rule-detail";detail.textContent=rule.detail;
       text.append(title,detail);
       if(rule.formula){const formula=document.createElement("span");formula.className="guide-rule-formula";formula.textContent=rule.formula;text.append(formula)}
+      if(rule.visual)text.append(ruleVisual(rule.visual));
       if(rule.table){
         text.append(grammarTable(rule.table,"guide-table"));
         if(rule.table.note){const note=document.createElement("span");note.className="guide-table-note";note.textContent=rule.table.note;text.append(note)}

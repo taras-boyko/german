@@ -64,7 +64,7 @@ function runtime(){
     renderCorrection=()=>{};
     updatePageTitle=()=>{};
     globalThis.runtime={
-      definitions:deckDefinitions,variantsForStage,sceneArt,genderLabels,standaloneOccurrence,slashRuns,
+      definitions:deckDefinitions,variantsForStage,sceneArt,genderLabels,standaloneOccurrence,slashRuns,ruleVisualKinds,frequencyScale,
       lessonCatalog,lessonClasses,lessonClassGlyphs,renderLibrary,
       scenes:localPrepositionScenes,
       renderCard(lessonId,stageIndex,card,status=""){
@@ -961,9 +961,163 @@ test("guide tables are well formed across lessons",()=>{
   assert.equal(er.textContent,"erihnihm");
 });
 
+// Rule illustrations: one approved card component per rule, showing that rule's own example.
+const ruleVisualCoverage={
+  "w-questions":["1:structure","2:structure"],
+  "word-order":["2:structure","3:structure","4:structure","5:structure","6:structure"],
+  "separable-verbs":["1:structure","2:structure","3:structure","4:structure","5:structure"],
+  frequency:["1:frequency","2:structure","3:structure"],
+  perfekt:["1:structure","2:auxiliary","3:auxiliary"],
+  "past-verbs":["2:auxiliary"],
+  "past-verbs-a2":["3:auxiliary"],
+  "past-verbs-b1":["3:auxiliary"],
+  koennen:["3:structure"],
+  "strong-verbs":["4:structure"],
+  "everyday-vocabulary":["2:structure","3:pictures"],
+  "travel-transport":["1:pictures","4:structure"],
+  "giving-directions":["1:structure","2:pictures","3:structure"],
+  "temporal-prepositions":["7:clocks","8:structure"],
+  "time-expressions":["1:clocks","6:clocks"],
+  "local-prepositions":["1:scenes","2:scenes","4:scenes"],
+  "time-worksheet-vocabulary":["1:pictures"],
+  "es-gibt-leisure":["3:pictures"]
+};
+
+function ruleText(rule){
+  return typeof rule==="string"?rule:[rule.title,rule.detail,rule.formula].filter(Boolean).join(" ");
+}
+
+function guideFigures(elements){
+  return descendants(elements.get("deck-guide-rules")).filter(node=>node.tagName==="FIGURE");
+}
+
+test("rule illustrations are explicit, valid and show their own rule's example",()=>{
+  const {app}=runtime();
+  const {existsSync}=require("node:fs");
+  const cards=Object.values(app.definitions).flatMap(definition=>definition.stages.flatMap(stage=>app.variantsForStage(stage)));
+  const coverage={};
+  for(const [lessonId,definition] of Object.entries(app.definitions)){
+    definition.guide.rules.forEach((rule,ruleIndex)=>{
+      if(typeof rule==="string"||!rule.visual)return;
+      const label=`${lessonId} rule ${ruleIndex+1}`;
+      const kinds=Object.keys(rule.visual);
+      assert.equal(kinds.length,1,`${label}: one illustration per rule`);
+      const [kind]=kinds,value=rule.visual[kind];
+      assert.ok(app.ruleVisualKinds.includes(kind),`${label}: ${kind}`);
+      (coverage[lessonId]||=[]).push(`${ruleIndex+1}:${kind}`);
+      const text=ruleText(rule);
+      const shown=part=>assert.ok(app.standaloneOccurrence(text,part.replace(/[.?!]$/,"")),`${label}: ${part}`);
+      if(kind==="structure"){
+        for(const clause of value){
+          const roles=Array.from(clause,slot=>slot.role);
+          const order=[["first","verb","middle","end"],["verb","middle","end"],["link","middle","end"]].find(candidate=>candidate[0]===roles[0]);
+          assert.ok(order,`${label}: ${roles}`);
+          assert.deepEqual(roles,order.filter(role=>roles.includes(role)),`${label}: order`);
+          for(const slot of clause)assert.ok(slot.text&&slot.text===slot.text.trim(),label);
+        }
+        shown(structureText(value));
+      }
+      if(kind==="auxiliary"){
+        assert.ok(value.verb===undefined||["haben","sein"].includes(value.verb),label);
+        shown(value.verb||"haben");
+        shown(value.verb||"sein");
+      }
+      if(kind==="frequency"){
+        assert.equal(value.scale,app.frequencyScale,`${label}: the shared scale`);
+        for(const step of value.scale)shown(step.word);
+      }
+      if(kind==="clocks")for(const clock of value){
+        assert.ok(Number.isInteger(clock.hour)&&clock.hour>=1&&clock.hour<=12,label);
+        assert.ok(Number.isInteger(clock.minute)&&clock.minute>=0&&clock.minute<60,label);
+        shown(clock.text);
+      }
+      if(kind==="scenes")for(const scene of value){
+        assert.ok(app.sceneArt(scene),`${label}: unknown scene ${scene.kind}`);
+        if(scene.cue)assert.equal(scene.cue,scene.motion?"Wohin?":"Wo?",label);
+        shown(scene.text);
+      }
+      if(kind==="pictures")for(const item of value){
+        assert.notEqual(Boolean(item.noun),Boolean(item.word),`${label}: a noun or a word`);
+        assert.ok(existsSync(join(__dirname,`../assets/icons/${item.picture}.svg`)),label);
+        const word=item.noun?item.noun.word:item.word;
+        const card=cards.find(candidate=>candidate.picture===item.picture&&(item.noun?candidate.noun?.word===word:candidate.word===word));
+        assert.ok(card,`${label}: ${item.picture} means ${word} on no card`);
+        if(item.noun){
+          assert.equal(item.noun.gender,card.noun.gender,label);
+          if(item.noun.plural)assert.equal(item.noun.plural.word,card.noun.plural?.word,label);
+          shown(`${articles[item.noun.gender]} ${item.noun.word}`);
+        }else shown(item.word);
+      }
+    });
+  }
+  assert.deepEqual(coverage,ruleVisualCoverage);
+});
+
+test("rule illustrations show in the guide and wait for Check when they would reveal the answer",()=>{
+  const {app,elements}=runtime();
+  const firstLearn=lessonId=>{
+    const stageIndex=app.definitions[lessonId].stages.findIndex(stage=>stage.mode!=="input");
+    return {stageIndex,card:app.variantsForStage(app.definitions[lessonId].stages[stageIndex])[0]};
+  };
+  const show=lessonId=>{const {stageIndex,card}=firstLearn(lessonId);app.renderCard(lessonId,stageIndex,card);return guideFigures(elements)};
+
+  const perfekt=show("perfekt");
+  assert.deepEqual(perfekt.map(figure=>figure.className),["guide-rule-visual guide-visual-structure","guide-rule-visual guide-visual-auxiliary","guide-rule-visual guide-visual-auxiliary"]);
+  const activeChoice=figure=>descendants(figure).filter(node=>node.className?.includes?.("auxiliary-choice")&&node.className.includes("active")).map(node=>node.textContent);
+  assert.deepEqual(perfekt.slice(1).map(figure=>activeChoice(figure).map(text=>text.split("рух")[0].split("дія")[0])),[["haben"],["sein"]]);
+  const pastAuxiliary=show("past-verbs").find(figure=>figure.className.endsWith("auxiliary"));
+  assert.equal(activeChoice(pastAuxiliary).length,0,"a rule about both auxiliaries marks neither");
+
+  const tiles=figure=>descendants(figure).filter(node=>node.className==="guide-visual-item");
+  const pictures=show("travel-transport").find(figure=>figure.className.endsWith("pictures"));
+  assert.deepEqual(tiles(pictures).map(tile=>[tile.children[0].attributes.src,tile.children[0].attributes.width,tile.children[1].textContent]),[
+    ["assets/icons/station.svg","48","der Bahnhof"],["assets/icons/bus-stop.svg","48","die Haltestelle"],["assets/icons/baggage-claim.svg","48","das Gepäck"]
+  ]);
+  assert.equal(tiles(pictures)[0].children[0].attributes.alt,"");
+  assert.equal(descendants(tiles(pictures)[1]).find(node=>node.className?.startsWith?.("gender-dot")).className,"gender-dot gender-feminine");
+
+  const clocks=show("time-expressions").filter(figure=>figure.className.endsWith("clocks"));
+  assert.deepEqual(tiles(clocks[1]).map(tile=>tile.children.slice(1).map(node=>node.textContent)),[["fünf nach zehn","5 хв після 10"],["zehn vor sechs","10 хв до 6"],["halb vier","½ години до 4"]]);
+  assert.match(tiles(clocks[1])[0].children[0].innerHTML,/clock-sector/);
+
+  const scenes=show("local-prepositions").filter(figure=>figure.className.endsWith("scenes"));
+  const scene=tiles(scenes[2])[1];
+  assert.match(scene.children[0].innerHTML,/^<svg viewBox="0 0 240 128" aria-hidden="true"/);
+  assert.deepEqual(scene.children.slice(1).map(node=>[node.className,node.lang]),[["guide-visual-cue","de"],["guide-visual-text","de"]]);
+  assert.equal(scene.children[1].textContent,"Wohin?");
+
+  let concealed=0;
+  for(const lessonId of Object.keys(ruleVisualCoverage)){
+    const total=ruleVisualCoverage[lessonId].length;
+    for(const [stageIndex,stage] of app.definitions[lessonId].stages.entries()){
+      if(stage.mode!=="input")continue;
+      for(const card of app.variantsForStage(stage)){
+        const label=`${stage.id}: ${card.id}`;
+        app.renderCard(lessonId,stageIndex,card);
+        const before=guideFigures(elements);
+        const texts=before.flatMap(figure=>[
+          ...descendants(figure).map(node=>node.textContent),
+          ...descendants(figure).filter(node=>node.tagName==="OL").map(list=>list.children.map(item=>item.children[0]?.textContent??item.textContent).join(" "))
+        ]);
+        for(const answer of card.response.accepted){
+          for(const text of texts)assert.equal(app.standaloneOccurrence(text,answer.replace(/[?!.,]+$/,"")),null,`${label}: ${answer} in ${text}`);
+        }
+        if(before.length<total){
+          concealed++;
+          assert.equal(elements.get("guide-answer-note").hidden,false,label);
+        }
+        app.renderCard(lessonId,stageIndex,card,"correct");
+        assert.equal(guideFigures(elements).length,total,`${label}: after Check`);
+      }
+    }
+  }
+  assert.ok(concealed>0,"some illustrations wait for Check");
+});
+
 test("the shared visual renderer has no lesson-specific branches",()=>{
-  const names=["answerVisualsShown","sceneArt","renderCardScene","formSegments","formNodes","nounEntries","nounPhrase","nounLineShown","headwordNoun","genderDot",
-    "renderNounGender","grammarTable","endingLabel","renderCardParadigm","renderCardAuxiliary","renderCardStructure","renderCardFrequency","clockReading","clockPoint","clockLine","renderCardClock","renderCardPicture","renderCardVisuals","renderStudyHeadword","exampleFocus","textSpan","renderExample","practiceSupport"];
+  const names=["answerVisualsShown","sceneArt","sceneMarkup","renderCardScene","formSegments","formNodes","nounEntries","nounEntryNodes","nounPhrase","nounLineShown","headwordNoun","genderDot",
+    "renderNounGender","grammarTable","endingLabel","renderCardParadigm","auxiliaryList","renderCardAuxiliary","structureSentence","renderCardStructure","frequencyScaleNode","renderCardFrequency","clockReading","clockPoint","clockLine","clockFace","renderCardClock","pictureImage","renderCardPicture","renderCardVisuals",
+    "ruleVisualTexts","ruleVisualItem","germanSpan","ruleVisual","renderDeckGuide","renderStudyHeadword","exampleFocus","textSpan","renderExample","practiceSupport"];
   for(const name of names){
     const start=source.indexOf(`function ${name}(`);
     assert.ok(start>=0,name);

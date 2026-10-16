@@ -310,7 +310,7 @@
   margin: 0;
 }
 
-.deck-guide #deck-guide-rules li {
+.deck-guide #deck-guide-rules > li {
   grid-template-columns: 28px minmax(0, 1fr);
   padding: 12px 0;
   border: 0;
@@ -321,11 +321,11 @@
   line-height: 1.5;
 }
 
-.deck-guide #deck-guide-rules li + li {
+.deck-guide #deck-guide-rules > li + li {
   border-top: 1px solid var(--lesson-line);
 }
 
-.deck-guide #deck-guide-rules li::before {
+.deck-guide #deck-guide-rules > li::before {
   display: none;
 }
 
@@ -358,6 +358,117 @@
   background: none;
   color: var(--lesson-accent);
   font-family: var(--lesson-font);
+}
+
+/* Rule illustration: the card components on a light panel below the formula; tiles wrap and stay centred. */
+.deck-guide .guide-rule-visual {
+  margin: 6px 0 2px;
+  padding: 12px;
+  border-radius: 12px;
+  background: #faf9ff;
+}
+
+.deck-guide .guide-rule-visual .structure-text,
+.deck-guide .guide-rule-visual .structure-comma {
+  font-size: 16px;
+}
+
+/* Side by side when the panel is wide enough, stacked on phones. */
+.deck-guide .guide-rule-visual .auxiliary-choices {
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  max-width: 480px;
+  margin: 0 auto;
+}
+
+.deck-guide .guide-rule-visual .frequency-scale {
+  max-width: 380px;
+  margin: 0 auto;
+}
+
+.deck-guide .guide-visual-items {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 14px 12px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.deck-guide .guide-visual-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  min-width: 0;
+  text-align: center;
+}
+
+.deck-guide .guide-visual-text {
+  color: var(--ink);
+  font-size: 15px;
+  font-weight: 600;
+  line-height: 1.35;
+}
+
+.deck-guide .guide-visual-clocks .guide-visual-item {
+  width: 120px;
+}
+
+.deck-guide .guide-visual-clocks svg {
+  display: block;
+  width: 96px;
+  height: auto;
+}
+
+.deck-guide .guide-visual-reading {
+  color: var(--lesson-accent);
+  font-size: 14px;
+  font-weight: 700;
+  line-height: 1.35;
+}
+
+.deck-guide .guide-visual-scenes .guide-visual-item {
+  flex: 1 1 180px;
+  max-width: 260px;
+}
+
+.deck-guide .guide-visual-scene,
+.deck-guide .guide-visual-scene svg {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.deck-guide .guide-visual-cue {
+  padding: 1px 10px;
+  border-radius: 8px;
+  background: #efecff;
+  color: var(--lesson-accent);
+  font: 700 14px/1.5 var(--lesson-font);
+}
+
+.deck-guide .guide-visual-pictures .guide-visual-item {
+  min-width: 84px;
+}
+
+.deck-guide .guide-visual-pictures img {
+  display: block;
+  width: 48px;
+  height: 48px;
+  user-select: none;
+}
+
+.deck-guide .guide-visual-label {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  gap: 2px 5px;
+}
+
+.deck-guide .guide-visual-label .noun-gender-separator {
+  color: var(--lesson-muted);
 }
 
 .card-stage .card-body {
@@ -1606,6 +1717,20 @@
   .guide-table th,
   .guide-table td {
     padding: 4px 2px;
+  }
+
+  /* An illustration also uses the space under the rule number (28px column + 10px gap). */
+  .deck-guide .guide-rule-visual {
+    margin-left: -38px;
+    padding: 10px 8px;
+  }
+
+  .deck-guide .guide-visual-items {
+    gap: 12px 8px;
+  }
+
+  .deck-guide .guide-visual-pictures .guide-visual-item {
+    min-width: 72px;
   }
 }
 

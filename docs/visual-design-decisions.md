@@ -19,7 +19,9 @@ records the options, the reasons for each choice, and how each one was rolled ou
 Chosen by the learner on 2026-10-12: **1A, 2A, 3C, 4C, 5A, 6A, 7A, 8A, 9A, 10C**.
 Component 11 was added for Phase 6. Its option **11A** is a provisional default: the
 learner was unavailable and asked for autonomous work, so the recommended option was
-built. Review it like any other choice.
+built. Review it like any other choice. Row 12 (Phase 7) is not a new design: it
+places the approved components in the rule guide, so it was built across lessons at
+once and waits for review.
 
 | # | Component | Choice | Visible | Status |
 |---|---|---|---|---|
@@ -34,6 +36,7 @@ built. Review it like any other choice.
 | 9 | [haben / sein](#9-haben-vs-sein-in-perfekt) | **A** — movement vs action icon | Learn; after Check | Rolled out (Phase 2) |
 | 10 | [Guide tables](#10-rule-tables-in-the-guide) | **C** — "what changes" table | Guide panel | Rolled out (Phases 1–2) |
 | 11 | [Library class map](#11-library-class-map) | **A** — groups by class with glyph tiles | Library | Rolled out (Phase 6), provisional |
+| 12 | [Rule illustrations](#12-illustrations-in-the-guide-rules) | Reuses 5, 6, 7, 8, 9 and the local-preposition scenes | Guide panel; in practice hidden until Check when it would reveal the answer | Built (Phase 7), awaiting review |
 
 "Rolled out" means the design was approved after its pilot and now runs in every
 lesson listed under [Phase 1 coverage](#phase-1-coverage),
@@ -41,7 +44,9 @@ lesson listed under [Phase 1 coverage](#phase-1-coverage),
 [Phase 3 coverage](#phase-3-coverage),
 [Phase 4 coverage](#phase-4-coverage),
 [Phase 5 coverage](#phase-5-coverage) and
-[Phase 6 coverage](#phase-6-coverage). "Piloted" means the
+[Phase 6 coverage](#phase-6-coverage). "Built, awaiting review" means the design runs
+in every lesson listed under [Phase 7 coverage](#phase-7-coverage) and waits for the
+learner's review. "Piloted" means the
 design runs in one pilot lesson and waits for the learner's review. "Planned" means
 nothing is built yet; the phase and pilot lesson are listed in [Rollout](#rollout).
 
@@ -538,6 +543,42 @@ by its heading.
 keep the course order. A lesson with an unknown class gets its own group after the
 four, without a glyph.
 
+## 12. Illustrations in the guide rules
+
+**Encodes:** the rule's own example as the picture the learner meets on the cards:
+where the verb parts stand, haben or sein, how often, what time, Wo? or Wohin?, or
+what a word means.
+**Applies to:** the "Правила" panel of every lesson where an approved component fits
+a rule; see [Phase 7 coverage](#phase-7-coverage).
+**Visible:** guide panel. During practice, an illustration that shows an accepted
+answer (one of its words, or a clause read whole) is hidden until Check, and the
+answer note explains why.
+
+No gallery options: the illustration reuses the chosen designs unchanged, so a
+change to component 5, 6, 7, 8 or 9 changes it too.
+
+| Kind (`visual` key) | Component | In the guide |
+|---|---|---|
+| `structure` | 5A position boxes | The rule's example sentence, verb parts in the accent |
+| `auxiliary` | 9A haben / sein panel | Both rows; the rule's verb is marked, or neither when the rule compares them. Side by side when there is room |
+| `frequency` | 7A 0–100 % bar | The whole scale, every German step named, no active step |
+| `clocks` | 8A analog clock | One tile per time: clock (96 px) with the span, the German time, the Ukrainian reading |
+| `scenes` | Local-preposition scenes | One tile per scene with its `Wo?` / `Wohin?` cue and sentence |
+| `pictures` | 6A vocabulary picture + 1A gender dot | One tile per word: picture (48 px), dot and article + noun |
+
+**In the app:** the illustration sits in a pale lavender panel under the rule's
+formula, before any table. Tiles wrap and centre, so two or three fit on a 390 px
+phone. Below 420 px the panel also uses the space under the rule number. A rule shows
+at most one illustration, every word in it also appears in the rule's own text, and
+the same panel is not repeated down a guide: perfekt shows haben on rule 2 and sein
+on rule 3 only.
+**Data:** a guide rule's `visual`, with exactly one of `structure` (clauses built
+with `mainClause`, `subordinateClause` or `verbFirstClause`), `auxiliary`
+(`{ verb }` or `{}`), `frequency` (`{ scale: frequencyScale }`), `clocks`
+(`[{ hour, minute, text }]`), `scenes` (`[{ kind, motion, cue, text }]`) or `pictures`
+(`[{ picture, noun }]` or `[{ picture, word }]`). A plain-text rule that needs an
+illustration becomes `{ detail, visual }` and still reads as plain text.
+
 ---
 
 ## Colour tokens
@@ -581,7 +622,8 @@ sentence is shown in the feedback above it.
 
 ## Rollout
 
-Each phase is piloted on one lesson and reviewed before it reaches other lessons.
+Each phase that adds a new design is piloted on one lesson and reviewed before it
+reaches other lessons.
 
 | Phase | Scope | Components | Pilot lesson | Status |
 |---|---|---|---|---|
@@ -592,6 +634,7 @@ Each phase is piloted on one lesson and reviewed before it reaches other lessons
 | 4 | Concept visuals | 7, 8 | frequency; time-expressions | Rolled out |
 | 5 | Vocabulary pictures | 6 | travel-transport | Rolled out |
 | 6 | Library by lesson class | 11 | — (one screen) | Rolled out, provisional |
+| 7 | Illustrations in the guide rules | 12 (reuses 5, 6, 7, 8, 9) | — (no new design) | Built, awaiting review |
 
 Every phase was checked with the test suite, screenshots on a 320 px and a 390 px
 phone and on desktop, an overflow sweep, and a before/after comparison of all lesson
@@ -704,9 +747,39 @@ The library is one screen, so Phase 6 had no pilot lesson. It groups all 27 less
 | Граматика (6) | koennen, haben, local-prepositions, time-expressions, temporal-prepositions, es-gibt-leisure |
 | Синтаксис (2) | word-order, separable-verbs |
 
+### Phase 7 coverage
+
+39 guide rules in 18 lessons carry an illustration (rule numbers as shown in the
+guide).
+
+| Lesson | Rule: illustration |
+|---|---|
+| w-questions | 1 `Wo wohnst du`, 2 `Wann kommt ihr` (boxes) |
+| word-order | 2–5 the modal sentence `Ich mag am Morgen Kaffee trinken` as statement, inversion, ja/nein and W-question; 6 `Heute fahre ich …` (boxes) |
+| separable-verbs | 1 `Ich stehe früh auf`, 2 `Warum rufst du mich an`, 3 `weil ich früh aufstehe`, 4 `Wir können früh aufstehen`, 5 `Ich verstehe die Aufgabe` (boxes) |
+| frequency | 1 the whole bar; 2 `Ich lerne oft Deutsch`, 3 `Am Sonntag lese ich manchmal ein Buch` (boxes) |
+| perfekt | 1 `Ich habe die Hausaufgaben gemacht` (boxes); 2 haben, 3 sein (panel) |
+| past-verbs, past-verbs-a2, past-verbs-b1 | The "Haben або sein" rule (panel, neither marked) |
+| koennen | 3 `Ich kann schwimmen` (boxes) |
+| strong-verbs | 4 `Der Kurs fängt um neun Uhr an` (boxes) |
+| everyday-vocabulary | 2 `Der Kurs fängt um neun Uhr an` (boxes); 3 der Kräutertee, die Süßigkeiten, der Brei (pictures) |
+| travel-transport | 1 der Bahnhof, die Haltestelle, das Gepäck (pictures); 4 `Der Zug fährt ab` (boxes) |
+| giving-directions | 1 `Zuerst gehen Sie geradeaus`, 3 `Sie biegen links ab` (boxes); 2 geradeaus, nach rechts, nach links (arrows) |
+| temporal-prepositions | 7 `um 9 Uhr` (clock); 8 `Nach der Arbeit gehe ich ins Fitnessstudio` (boxes) |
+| time-expressions | 1 `um acht Uhr`; 6 `fünf nach zehn`, `zehn vor sechs`, `halb vier` (clocks) |
+| local-prepositions | 1 Wo? (book in the drawer, vase on the table), 2 Wohin? (the same moving), 4 the dog under the chair, Wo? vs Wohin? (scenes) |
+| time-worksheet-vocabulary | 1 der Baum, die Kirche, das Restaurant (pictures) |
+| es-gibt-leisure | 3 das Museum, die Bar (pictures) |
+
+Rules about endings or forms keep their tables (component 10) and get no extra
+picture. Rules whose only fitting component would repeat the panel above them, or
+whose example has no approved component (for example a sequence of `zuerst`,
+`danach`), stay text only.
+
 ## Ideas not built
 
-The first review proposed more visuals than the eleven components above. The design
+The first review proposed more visuals than the eleven components above (row 12
+reuses them). The design
 gallery narrowed the work to these components, so the ideas below were never built.
 Each needs gallery options, a choice and a pilot before it is added.
 
@@ -747,6 +820,7 @@ An idea marked as a conflict also needs a change to the Constitution.
 | 2026-10-12 | Learner | Defects fixed | Long headwords, prompts and strips shrink to fit; slash texts break only between alternatives; guide tables and the lesson header fit at 320 px; Ukrainian headings no longer fall back to a serif. See [Text fit and fonts](#text-fit-and-fonts) |
 | 2026-10-12 | Provisional (learner unavailable) | 11A | Phase 6: library grouped by lesson class with glyph tiles; options B and C stay in the gallery. See [Phase 6 coverage](#phase-6-coverage) |
 | 2026-10-12 | Learner | Design rules recorded | The colour roles, active versus inactive items, decorative parts, reduced motion, giveaways and each component's details moved into the Constitution. The ideas that were never built are listed in [Ideas not built](#ideas-not-built) |
+| 2026-10-15 | Learner request | 12 | Phase 7: rule guides illustrated with the approved components (boxes, haben/sein, frequency bar, clocks, scenes, pictures); an illustration that would reveal the answer waits for Check. See [Phase 7 coverage](#phase-7-coverage). Awaiting review |
 
 ## Review notes
 

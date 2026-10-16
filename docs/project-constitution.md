@@ -256,6 +256,16 @@ future passes provide contextual variety and retention checks.
   in practice until Check, like any other leaking guide text. Tables whose cells are
   the lesson's answers (for example a pronoun or conjugation paradigm) therefore
   appear on learn cards and after Check only.
+- A guide rule may carry one illustration (`visual`) that shows the rule's own
+  example with an approved card component: position boxes (`structure`), the
+  haben/sein panel (`auxiliary`, marking the rule's verb or neither), the whole
+  frequency bar (`frequency`), clocks (`clocks`), local-preposition scenes (`scenes`)
+  or vocabulary pictures with gender dots (`pictures`). Every word it shows also
+  appears in that rule's title, detail or formula. A rule without a title
+  (`{detail, visual}`) reads like a plain rule. An illustration is all or nothing:
+  if any of its words, or a clause read whole, would reveal an accepted answer, the
+  whole figure is hidden until Check and the answer note shows. Illustrate only where
+  the picture adds to the rule; never repeat the same panel down a guide.
 - Every table, strip, or paradigm that lists grammatical cases (guide tables and
   card paradigms, as rows or columns) uses one fixed order: Nominativ, Akkusativ,
   Dativ. A table may leave a case out, but never reorders the rest; rows labelled by
@@ -302,7 +312,8 @@ future passes provide contextual variety and retention checks.
   visual that only one kind of answer would get (a clock only on the `um` cards of an
   um / am / im drill) is left out.
 - Visual metadata (`scene`, `cue`, `practiceSupport`, `noun`, `answerParts`,
-  `paradigm`, `auxiliary`, `structure`, `frequency`, `clock`, `picture`, guide `table`) is
+  `paradigm`, `auxiliary`, `structure`, `frequency`, `clock`, `picture`, guide `table`
+  and guide `visual`) is
   authored explicitly in lesson data. Never derive it
   from IDs, labels, translations, or lesson names. A lesson builder may read it from
   the card's own authored German forms (the compact verb notation `f[ä]hr|st`, a
@@ -400,7 +411,8 @@ future passes provide contextual variety and retention checks.
   noun), and a noun always shows the same picture. A card has either a scene or a
   picture, never both.
 - Pilot a new visual component on one lesson and review it before extending it to
-  other lessons.
+  other lessons. A new placement of an approved component (for example in the rule
+  guide) reuses its design unchanged and may cover every lesson where it fits.
 - Text never overflows the card or breaks inside a word. A headword, prompt or strip
   shrinks to fit its longest unbreakable run. Slash-separated alternatives
   (`das Kino / die Kinos`) and sentence-build chunks wrap only after a slash and stay
@@ -535,7 +547,11 @@ Use one versioned logical progress model even if local and disk adapters differ:
   card's digital time. A `picture` names an existing file in `assets/icons/`, every
   icon there is used, each picture belongs to one word or one noun across the course,
   and a practice card with a picture shows its meaning before Check. Guide-table rows have one cell
-  per column and highlights point at existing cells.
+  per column and highlights point at existing cells. A guide `visual` has exactly one
+  kind; its `structure` follows the same field order, its frequency bar is the shared
+  scale, its scenes exist in the scene library with `Wo?`/`Wohin?` matching the
+  motion, its pictures mean the same word or noun (with the same gender) as on the
+  cards, and every sentence, time, word or noun it shows appears in the rule's text.
 - A new target is incomplete without enough variants to keep successive learn and
   practice passes meaningfully different, except for documented closed-set cases.
 - New lessons must use the shared sequence, shuffle, evaluation, completion, and
