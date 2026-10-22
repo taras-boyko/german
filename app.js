@@ -18,7 +18,7 @@ const lessonCatalog={
   "past-verbs-b1":{title:"Минулий час · B1",germanTitle:"Vergangenheit · B1",outcome:"Розрізняти Präteritum і Perfekt у розповідях рівня B1.",className:"Морфологія",level:"B1"},
   perfekt:{title:"Минулий час Perfekt: haben і sein",germanTitle:"Das Perfekt: haben und sein",outcome:"Утворювати Perfekt із правильним haben або sein та Partizip II.",className:"Морфологія"},
   "present-practice":{title:"Теперішній час: практика",germanTitle:"Präsens üben",outcome:"Пригадувати форми теперішнього часу за контекстом і значенням.",className:"Морфологія"},
-  koennen:{title:"Модальні дієслова",germanTitle:"Modalverben",outcome:"Уживати können, mögen і möchten у корисних реченнях.",className:"Граматика"},
+  koennen:{title:"Модальні дієслова",germanTitle:"Modalverben",outcome:"Уживати können, mögen, möchten і wollen у корисних реченнях.",className:"Граматика"},
   haben:{title:"Мати, отримувати, потребувати",germanTitle:"Haben, bekommen, brauchen",outcome:"Розрізняти значення й форми haben, bekommen і brauchen.",className:"Граматика"},
   "word-order":{title:"Порядок слів",germanTitle:"Wortstellung",outcome:"Будувати розповідні й питальні речення з правильним порядком слів.",className:"Синтаксис"},
   "separable-verbs":{title:"Дієслова з відокремлюваними префіксами",germanTitle:"Trennbare Verben",outcome:"Правильно розміщувати відокремлювані префікси в різних типах речень.",className:"Синтаксис"},
@@ -27,10 +27,12 @@ const lessonCatalog={
   possessives:{title:"Присвійні займенники",germanTitle:"Possessivartikel",outcome:"Добирати основу за власником і правильне закінчення присвійного займенника.",className:"Морфологія"},
   "possessive-cases":{title:"Присвійні артиклі: Akkusativ і Dativ",germanTitle:"Possessivartikel: Akkusativ und Dativ",outcome:"Уживати присвійні артиклі в обох відмінках за родом і числом іменника, включно з euer та ввічливим Ihr.",className:"Морфологія",level:"A1"},
   sein:{title:"Дієслово sein — бути",germanTitle:"Das Verb sein",outcome:"Пригадувати всі форми sein у теперішньому часі.",className:"Морфологія"},
+  werden:{title:"Дієслово werden — ставати",germanTitle:"Das Verb werden",outcome:"Пригадувати форми werden і вживати його для зміни стану, професії та з модальними дієсловами.",className:"Морфологія"},
   frequency:{title:"Прислівники частотності",germanTitle:"Häufigkeitsadverbien",outcome:"Точно виражати частотність: від immer до nie.",className:"Лексика"},
   "local-prepositions":{title:"Прийменники місця: Dativ і Akkusativ",germanTitle:"Wechselpräpositionen: Dativ und Akkusativ",outcome:"Добирати Dativ для місця та Akkusativ для напрямку руху.",className:"Граматика"},
   "time-expressions":{title:"Часові вирази",germanTitle:"Zeitangaben",outcome:"Добирати часові вирази й називати час у розмові.",className:"Граматика"},
   "temporal-prepositions":{title:"Прийменники часу: vor, in, nach, für",germanTitle:"Temporale Präpositionen: vor, in, nach, für",outcome:"Казати, коли щось сталося чи станеться і скільки триватиме: vor, in, nach + Dativ, für + Akkusativ, а також um, am, von … bis.",className:"Граматика",level:"A1"},
+  "mit-ohne":{title:"Прийменники mit і ohne",germanTitle:"Präpositionen mit und ohne",outcome:"Казати, з ким, чим або як щось відбувається і чого немає: mit + Dativ, ohne + Akkusativ.",className:"Граматика",level:"A1"},
   "time-worksheet-vocabulary":{title:"Пори року й розпорядок дня",germanTitle:"Jahreszeiten und Tagesablauf",outcome:"Уживати лексику про пори року та розпорядок дня в контексті.",className:"Лексика"},
   "everyday-vocabulary":{title:"Повсякденна лексика",germanTitle:"Alltagswortschatz",outcome:"Уживати поширені слова про щоденні справи, їжу та напої.",className:"Лексика"},
   "travel-transport":{title:"Подорожі й транспорт",germanTitle:"Reisen und Verkehrsmittel",outcome:"Говорити німецькою про транспорт, маршрути й дії під час подорожі.",className:"Лексика"},
@@ -92,7 +94,10 @@ const categoryLabels={
   "TRENNBARES VERB":"Дієслово з відокремлюваним префіксом","TRENNBARE VERBEN":"Відокремлювані дієслова",
   "TEMPORALE PRÄPOSITION":"Прийменник часу","VOR + DATIV":"vor + Dativ","NACH + DATIV":"nach + Dativ","IN + DATIV":"in + Dativ",
   "FÜR + AKKUSATIV":"für + Akkusativ","UM + UHRZEIT":"um + час на годиннику","AM + TAG":"am + день або частина доби","VON … BIS":"von … bis",
-  "HAUPTSATZ":"Головне речення","NEBENSATZ":"Підрядне речення","NICHT TRENNBAR":"Невідокремлюваний префікс"
+  "HAUPTSATZ":"Головне речення","NEBENSATZ":"Підрядне речення","NICHT TRENNBAR":"Невідокремлюваний префікс",
+  "WOLLEN":"Wollen","WERDEN":"Werden","KÖNNEN":"Können","VERÄNDERUNG":"Зміна стану","BERUF":"Професія","INFINITIV":"Інфінитив",
+  "MIT + DATIV":"mit + Dativ","OHNE + AKKUSATIV":"ohne + Akkusativ","MIT ODER OHNE":"Mit чи ohne","BEGLEITUNG":"Супровід",
+  "MITTEL":"Засіб","ART UND WEISE":"Спосіб дії","ARTIKEL":"Артикль","POSSESSIV":"Присвійний займенник","OHNE ARTIKEL":"Без артикля","BEDEUTUNG":"Значення"
 };
 function categoryLabel(category){
   return category.split(" · ").map(part=>categoryLabels[part]||part).join(" · ");

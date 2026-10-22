@@ -738,18 +738,18 @@ reaches them.
 
 ### Phase 6 coverage
 
-The library is one screen, so Phase 6 had no pilot lesson. It groups all 27 lessons:
+The library is one screen, so Phase 6 had no pilot lesson. It groups all 29 lessons:
 
 | Class | Lessons |
 |---|---|
 | Лексика (8) | w-questions, pronouns, frequency, time-worksheet-vocabulary, everyday-vocabulary, travel-transport, giving-directions, dative-verbs |
-| Морфологія (11) | personal-pronoun-cases, possessives, possessive-cases, sein, conjugation, strong-verbs, past-verbs, past-verbs-a2, past-verbs-b1, perfekt, present-practice |
-| Граматика (6) | koennen, haben, local-prepositions, time-expressions, temporal-prepositions, es-gibt-leisure |
+| Морфологія (12) | personal-pronoun-cases, possessives, possessive-cases, sein, werden, conjugation, strong-verbs, past-verbs, past-verbs-a2, past-verbs-b1, perfekt, present-practice |
+| Граматика (7) | koennen, haben, local-prepositions, time-expressions, temporal-prepositions, es-gibt-leisure, mit-ohne |
 | Синтаксис (2) | word-order, separable-verbs |
 
 ### Phase 7 coverage
 
-39 guide rules in 18 lessons carry an illustration (rule numbers as shown in the
+41 guide rules in 20 lessons carry an illustration (rule numbers as shown in the
 guide).
 
 | Lesson | Rule: illustration |
@@ -761,11 +761,13 @@ guide).
 | perfekt | 1 `Ich habe die Hausaufgaben gemacht` (boxes); 2 haben, 3 sein (panel) |
 | past-verbs, past-verbs-a2, past-verbs-b1 | The "Haben або sein" rule (panel, neither marked) |
 | koennen | 3 `Ich kann schwimmen` (boxes) |
+| werden | 4 `Ich werde Lehrer` (boxes) |
 | strong-verbs | 4 `Der Kurs fängt um neun Uhr an` (boxes) |
 | everyday-vocabulary | 2 `Der Kurs fängt um neun Uhr an` (boxes); 3 der Kräutertee, die Süßigkeiten, der Brei (pictures) |
 | travel-transport | 1 der Bahnhof, die Haltestelle, das Gepäck (pictures); 4 `Der Zug fährt ab` (boxes) |
 | giving-directions | 1 `Zuerst gehen Sie geradeaus`, 3 `Sie biegen links ab` (boxes); 2 geradeaus, nach rechts, nach links (arrows) |
 | temporal-prepositions | 7 `um 9 Uhr` (clock); 8 `Nach der Arbeit gehe ich ins Fitnessstudio` (boxes) |
+| mit-ohne | 8 `Mit dem Bus fahre ich zur Arbeit` (boxes) |
 | time-expressions | 1 `um acht Uhr`; 6 `fünf nach zehn`, `zehn vor sechs`, `halb vier` (clocks) |
 | local-prepositions | 1 Wo? (book in the drawer, vase on the table), 2 Wohin? (the same moving), 4 the dog under the chair, Wo? vs Wohin? (scenes) |
 | time-worksheet-vocabulary | 1 der Baum, die Kirche, das Restaurant (pictures) |
