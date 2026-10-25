@@ -655,7 +655,7 @@ phase. Check them before treating the rollout as final.
 | everyday-vocabulary | Food nouns | — | — |
 | giving-directions | Landmarks | — | — |
 | dative-verbs | — | — | Nom. vs Dat. articles |
-| personal-pronoun-cases | — | — | Akkusativ / Dativ by person |
+| personal-pronoun-cases | — | — | Nom. / Akk. / Dat. forms by person |
 | conjugation | — | — | `mach-` vs `arbeit-` |
 
 ### Phase 2 coverage

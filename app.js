@@ -1111,7 +1111,12 @@ function grammarTable(table,variant){
     const cell=document.createElement("th");
     cell.setAttribute("scope","col");
     cell.className=column.gender?`gender-${column.gender}`:"";
-    cell.textContent=column.label;
+    if(column.title){
+      const abbreviation=document.createElement("abbr");
+      abbreviation.title=column.title;
+      abbreviation.textContent=column.label;
+      cell.append(abbreviation);
+    }else cell.textContent=column.label;
     return cell;
   }));
   element.append(head,...table.rows.map((row,rowIndex)=>{

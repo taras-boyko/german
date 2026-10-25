@@ -33,8 +33,18 @@ const personalPronounPersons=[
   ["formal","Sie (Ви)","Sie Sie Ihnen"]
 ];
 const personalPronounParadigm={
-  title:"Personalpronomen",forms:true,columns:["Nom.","Akk.","Dat."].map(label=>({label})),
+  title:"Personalpronomen",forms:true,columns:[{label:"Nom.",title:"Nominativ"},{label:"Akk.",title:"Akkusativ"},{label:"Dat.",title:"Dativ"}],
   rows:personalPronounPersons.map(([,title,forms])=>({label:title.split(" ")[0],title,cells:forms.split(" ").map(stem=>({stem,ending:""}))}))
+};
+const personalPronounCaseTable={
+  columns:personalPronounParadigm.columns,
+  rows:personalPronounParadigm.rows.map((row,index)=>{
+    const person=personalPronounPersons[index][0];
+    const gender={er:"masculine",she:"feminine",es:"neuter",they:"plural"}[person];
+    return {label:person==="they"?"sie (мн.)":row.label,title:row.title,gender,cells:row.cells.map(({stem})=>stem)};
+  }),
+  highlights:[{row:2,column:2},{row:4,column:2},{row:5,column:1},{row:5,column:2},{row:6,column:1},{row:6,column:2}],
+  note:"Виділено збіги форм між Akkusativ і Dativ: у er та es однаковий Dativ, а у wir та ihr однакові форми обох відмінків."
 };
 // Each card names its person; the call names the case column.
 function withPronounCase(caseLabel,cards){
@@ -3663,7 +3673,7 @@ const deckDefinitions={
         {title:"Dativ: wem?",detail:"Helfen і danken вимагають Dativ. З geben одержувач стоїть у Dativ, а предмет, який передають, — в Akkusativ. Після mit завжди потрібен Dativ."},
         {title:"Не перекладай відмінок механічно",detail:"Українською кажемо «телефонувати кому», але німецьке anrufen вимагає Akkusativ. Після mit українською часто вживаємо орудний відмінок, а німецькою — Dativ."},
         {title:"Особа, число й регістр",detail:"Вона й вони мають однакову форму Nominativ, але різні форми Dativ. Ввічливе звертання завжди пишеться з великої літери, зокрема в Dativ."},
-        {title:"Рід і незмінні форми",detail:"Для er та es форми Dativ збігаються; для wir та ihr Akkusativ і Dativ мають однакову форму. Рід es визначається німецьким іменником, навіть якщо український переклад має інший рід.",table:{columns:[{label:"Akkusativ"},{label:"Dativ"}],rows:[{label:"ich",cells:["mich","mir"]},{label:"du",cells:["dich","dir"]},{label:"er",gender:"masculine",cells:["ihn","ihm"]},{label:"sie",gender:"feminine",cells:["sie","ihr"]},{label:"es",gender:"neuter",cells:["es","ihm"]},{label:"wir",cells:["uns","uns"]},{label:"ihr",cells:["euch","euch"]},{label:"sie (мн.)",gender:"plural",cells:["sie","ihnen"]},{label:"Sie",title:"Ви (ввічливо)",cells:["Sie","Ihnen"]}],highlights:[{row:2,column:1},{row:4,column:1},{row:5,column:0},{row:5,column:1},{row:6,column:0},{row:6,column:1}],note:"Виділені форми збігаються: у er та es однаковий Dativ, у wir та ihr — однакові Akkusativ і Dativ."}}
+        {title:"Рід і незмінні форми",detail:"Порівняй форми в Nominativ, Akkusativ і Dativ. У er та es збігається форма Dativ; у wir та ihr однакові форми Akkusativ і Dativ. Рід es визначається німецьким іменником, навіть якщо український переклад має інший рід.",table:personalPronounCaseTable}
       ]
     },
     cards:personalPronounCaseCards,stages:personalPronounCaseStages

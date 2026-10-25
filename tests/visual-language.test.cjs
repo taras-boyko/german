@@ -957,9 +957,12 @@ test("guide tables are well formed across lessons",()=>{
   const card=app.definitions["personal-pronoun-cases"].stages[0].cards[0];
   app.renderCard("personal-pronoun-cases",0,card);
   const table=descendants(elements.get("deck-guide-rules")).find(node=>node.tagName==="TABLE");
+  const header=descendants(table).find(node=>node.tagName==="TR");
+  assert.deepEqual(header.children.slice(1).map(cell=>cell.textContent),["Nom.","Akk.","Dat."]);
+  assert.deepEqual(header.children.slice(1).map(cell=>cell.children[0].title),["Nominativ","Akkusativ","Dativ"]);
   const er=descendants(table).filter(node=>node.tagName==="TR").find(row=>row.textContent.startsWith("er"));
   assert.equal(er.children[0].children[0].className,"gender-dot gender-masculine");
-  assert.equal(er.textContent,"erihnihm");
+  assert.equal(er.textContent,"ererihnihm");
 });
 
 // Rule illustrations: one approved card component per rule, showing that rule's own example.
