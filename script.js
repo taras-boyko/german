@@ -55,7 +55,7 @@ function withPronounCase(caseLabel,cards){
     return {...card,answerParts:personalPronounParadigm.rows[row].cells[column],paradigm:{...personalPronounParadigm,active:{row,column}}};
   });
 }
-const personalPronounAccusativeCards=withPronounCase("Akk.",[
+const personalPronounAccusativeBaseCards=withPronounCase("Akk.",[
   {
     id:"pronoun-accusative-ich-recall",targetId:"pronoun-accusative-ich",person:"ich",type:"recall",word:"mich",translation:"мене · Akkusativ від ich",promptText:"Akkusativ: ich (я)",
     example:"Meine Schwester besucht mich.",exampleTranslation:"Моя сестра відвідує мене.",explanation:"Besuchen вимагає Akkusativ: ich → mich.",category:"PERSONALPRONOMEN · AKKUSATIV",practiceVariants:false,
@@ -192,7 +192,7 @@ const personalPronounAccusativeCards=withPronounCase("Akk.",[
     response:{mode:"text",scope:"word",accepted:["Sie"],caseSensitive:true,punctuationSensitive:false}
   }
 ]);
-const personalPronounDativeCards=withPronounCase("Dat.",[
+const personalPronounDativeBaseCards=withPronounCase("Dat.",[
   {
     id:"pronoun-dative-ich-recall",targetId:"pronoun-dative-ich",person:"ich",type:"recall",word:"mir",translation:"мені · Dativ від ich",promptText:"Dativ: ich (я)",
     example:"Meine Schwester hilft mir.",exampleTranslation:"Моя сестра допомагає мені.",explanation:"Helfen вимагає Dativ: ich → mir.",category:"PERSONALPRONOMEN · DATIV",practiceVariants:false,
@@ -328,6 +328,177 @@ const personalPronounDativeCards=withPronounCase("Dat.",[
     explanation:"Mit вимагає Dativ: Sie → Ihnen, а не Sie. Зберігай велику літеру у ввічливому звертанні.",category:"PERSONALPRONOMEN · DATIV",practiceVariants:false,
     response:{mode:"text",scope:"word",accepted:["Ihnen"],caseSensitive:true,punctuationSensitive:false}
   }
+]);
+const personalPronounAdditionalAccusativeExamples=[
+  ["ich","treffen","Meine Schwester trifft mich nach dem Kurs.","Моя сестра зустрічає мене після курсу.","Meine Schwester trifft ___ nach dem Kurs."],
+  ["ich","anrufen","Kannst du mich heute Abend anrufen?","Чи можеш ти зателефонувати мені сьогодні ввечері?","Kannst du ___ heute Abend anrufen?"],
+  ["ich","fragen","Der Arzt fragt mich nach meinem Namen.","Лікар запитує мене про ім'я.","Der Arzt fragt ___ nach meinem Namen."],
+  ["ich","fotografieren","Anna fotografiert mich im Garten.","Анна фотографує мене в саду.","Anna fotografiert ___ im Garten."],
+  ["ich","suchen","Die Kinder suchen mich im ganzen Haus.","Діти шукають мене по всьому будинку.","Die Kinder suchen ___ im ganzen Haus."],
+  ["ich","für","Diese Karte ist für mich.","Ця листівка для мене.","Diese Karte ist für ___."],
+  ["du","suchen","Ich suche dich am Bahnhof.","Я шукаю тебе на вокзалі.","Ich suche ___ am Bahnhof."],
+  ["du","einladen","Wir laden dich zur Feier ein.","Ми запрошуємо тебе на свято.","Wir laden ___ zur Feier ein."],
+  ["du","verstehen","Niemand versteht dich am Telefon.","Ніхто не розуміє тебе телефоном.","Niemand versteht ___ am Telefon."],
+  ["du","erwarten","Meine Eltern erwarten dich zu Hause.","Мої батьки чекають на тебе вдома.","Meine Eltern erwarten ___ zu Hause."],
+  ["du","für","Ist das Paket für dich?","Ця посилка для тебе?","Ist das Paket für ___?"],
+  ["du","treffen","Wir treffen dich um acht am Eingang.","Ми зустрічаємо тебе о восьмій біля входу.","Wir treffen ___ um acht am Eingang."],
+  ["er","kennen","Kennst du ihn aus dem Kurs?","Ти знаєш його з курсу?","Kennst du ___ aus dem Kurs?"],
+  ["er","sehen","Niemand sieht ihn im Dunkeln.","У темряві його ніхто не бачить.","Niemand sieht ___ im Dunkeln."],
+  ["er","für","Das Geschenk ist für ihn.","Цей подарунок для нього.","Das Geschenk ist für ___."],
+  ["er","anrufen","Ich rufe ihn später zurück.","Я передзвоню йому пізніше.","Ich rufe ___ später zurück."],
+  ["er","suchen","Die Polizei sucht ihn seit Montag.","Поліція шукає його з понеділка.","Die Polizei sucht ___ seit Montag."],
+  ["er","treffen","Wir treffen ihn vor dem Kino.","Ми зустрічаємо його перед кінотеатром.","Wir treffen ___ vor dem Kino."],
+  ["she","anrufen","Morgen rufe ich sie zurück.","Завтра я їй передзвоню.","Morgen rufe ich ___ zurück."],
+  ["she","sehen","Die Kinder sehen sie am Fenster.","Діти бачать її біля вікна.","Die Kinder sehen ___ am Fenster."],
+  ["she","suchen","Wir suchen sie seit einer Stunde.","Ми шукаємо її вже годину.","Wir suchen ___ seit einer Stunde."],
+  ["she","für","Ist diese Nachricht für sie?","Це повідомлення для неї?","Ist diese Nachricht für ___?"],
+  ["she","kennen","Niemand kennt sie persönlich.","Особисто її ніхто не знає.","Niemand kennt ___ persönlich."],
+  ["she","besuchen","Kannst du sie morgen besuchen?","Ти можеш відвідати її завтра?","Kannst du ___ morgen besuchen?"],
+  ["es","fotografieren","Das Baby lacht. Der Vater fotografiert es.","Немовля сміється. Тато фотографує його.","Das Baby lacht. Der Vater fotografiert ___."],
+  ["es","hearing-awake","Das Baby ist wach. Hörst du es?","Немовля не спить. Ти чуєш його?","Das Baby ist wach. Hörst du ___?"],
+  ["es","mitnehmen","Die Eltern nehmen das Baby mit. Sie nehmen es mit.","Батьки беруть немовля із собою. Вони беруть його із собою.","Die Eltern nehmen das Baby mit. Sie nehmen ___ mit."],
+  ["es","hearing-cry","Das Baby weint. Die Mutter hört es im Kinderzimmer.","Немовля плаче. Мама чує його в дитячій кімнаті.","Das Baby weint. Die Mutter hört ___ im Kinderzimmer."],
+  ["es","bringen","Das Baby ist müde. Wir bringen es ins Bett.","Немовля втомилося. Ми вкладаємо його в ліжко.","Das Baby ist müde. Wir bringen ___ ins Bett."],
+  ["es","sehen","Die Großeltern besuchen das Baby. Sie sehen es am Sonntag.","Дідусь і бабуся відвідують немовля. Вони бачать його в неділю.","Die Großeltern besuchen das Baby. Sie sehen ___ am Sonntag."],
+  ["wir","besuchen","Kannst du uns morgen besuchen?","Ти можеш відвідати нас завтра?","Kannst du ___ morgen besuchen?"],
+  ["wir","untersuchen","Der Arzt untersucht uns heute.","Лікар оглядає нас сьогодні.","Der Arzt untersucht ___ heute."],
+  ["wir","erwarten","Die Gastgeber erwarten uns um acht.","Господарі чекають на нас о восьмій.","Die Gastgeber erwarten ___ um acht."],
+  ["wir","rufen","Die Lehrerin ruft uns nach vorn.","Учителька кличе нас уперед.","Die Lehrerin ruft ___ nach vorn."],
+  ["wir","für","Dieser Tisch ist für uns reserviert.","Цей стіл зарезервовано для нас.","Dieser Tisch ist für ___ reserviert."],
+  ["wir","sehen","Die Kinder sehen uns auf der Bühne.","Діти бачать нас на сцені.","Die Kinder sehen ___ auf der Bühne."],
+  ["ihr","einladen","Ich lade euch zum Essen ein.","Я запрошую вас на обід.","Ich lade ___ zum Essen ein."],
+  ["ihr","besuchen","Morgen besucht Anna euch zu Hause.","Завтра Анна відвідає вас удома.","Morgen besucht Anna ___ zu Hause."],
+  ["ihr","treffen","Wir treffen euch vor dem Museum.","Ми зустрічаємо вас перед музеєм.","Wir treffen ___ vor dem Museum."],
+  ["ihr","fragen","Der Trainer fragt euch nach eurem Ziel.","Тренер запитує вас про вашу мету.","Der Trainer fragt ___ nach eurem Ziel."],
+  ["ihr","für","Für euch gibt es noch Kuchen.","Для вас іще є пиріг.","Für ___ gibt es noch Kuchen."],
+  ["ihr","hören","Niemand hört euch im Nebenraum.","У сусідній кімнаті вас ніхто не чує.","Niemand hört ___ im Nebenraum."],
+  ["they","treffen","Morgen treffe ich sie im Café.","Завтра я зустрічаю їх у кафе.","Morgen treffe ich ___ im Café."],
+  ["they","loben","Der Lehrer lobt sie für ihre Arbeit.","Учитель хвалить їх за їхню роботу.","Der Lehrer lobt ___ für ihre Arbeit."],
+  ["they","erwarten","Wir erwarten sie vor dem Hotel.","Ми чекаємо на них перед готелем.","Wir erwarten ___ vor dem Hotel."],
+  ["they","anrufen","Ich rufe sie später an.","Я зателефоную їм пізніше.","Ich rufe ___ später an."],
+  ["they","verstehen","Niemand versteht sie ohne Untertitel.","Без субтитрів їх ніхто не розуміє.","Niemand versteht ___ ohne Untertitel."],
+  ["they","für","Für sie reservieren wir einen Tisch.","Для них ми резервуємо стіл.","Für ___ reservieren wir einen Tisch."],
+  ["formal","zurückrufen","Kann ich Sie morgen zurückrufen?","Чи можу я передзвонити Вам завтра?","Kann ich ___ morgen zurückrufen?"],
+  ["formal","erwarten","Wir erwarten Sie am Empfang.","Ми чекаємо на Вас біля стійки реєстрації.","Wir erwarten ___ am Empfang."],
+  ["formal","bringen","Der Fahrer bringt Sie zum Hotel.","Водій відвезе Вас до готелю.","Der Fahrer bringt ___ zum Hotel."],
+  ["formal","für","Für Sie habe ich einen Platz reserviert.","Для Вас зарезервовано місце.","Für ___ habe ich einen Platz reserviert."],
+  ["formal","hören","Am Telefon höre ich Sie kaum.","Телефоном я ледве чую Вас.","Am Telefon höre ich ___ kaum."],
+  ["formal","besuchen","Frau Klein, wir besuchen Sie am Freitag.","Пані Кляйн, ми відвідаємо Вас у п'ятницю.","Frau Klein, wir besuchen ___ am Freitag."]
+];
+const personalPronounAdditionalDativeExamples=[
+  ["ich","geben","Gibst du mir bitte den Stift?","Ти можеш дати мені ручку?","Gibst du ___ bitte den Stift?"],
+  ["ich","danken","Meine Freunde danken mir für die Hilfe.","Мої друзі дякують мені за допомогу.","Meine Freunde danken ___ für die Hilfe."],
+  ["ich","helfen","Die Nachbarin hilft mir beim Umzug.","Сусідка допомагає мені з переїздом.","Die Nachbarin hilft ___ beim Umzug."],
+  ["ich","mit","Kommst du mit mir zum Markt?","Ти підеш зі мною на ринок?","Kommst du mit ___ zum Markt?"],
+  ["ich","bringen","Der Kellner bringt mir die Speisekarte.","Офіціант приносить мені меню.","Der Kellner bringt ___ die Speisekarte."],
+  ["ich","zeigen","Meine Kollegin zeigt mir den Weg zum Büro.","Моя колега показує мені дорогу до офісу.","Meine Kollegin zeigt ___ den Weg zum Büro."],
+  ["du","geben","Der Arzt gibt dir einen Termin.","Лікар призначає тобі прийом.","Der Arzt gibt ___ einen Termin."],
+  ["du","danken","Ich danke dir für die Nachricht.","Я дякую тобі за повідомлення.","Ich danke ___ für die Nachricht."],
+  ["du","helfen","Mein Bruder hilft dir bei den Hausaufgaben.","Мій брат допомагає тобі з домашнім завданням.","Mein Bruder hilft ___ bei den Hausaufgaben."],
+  ["du","mit","Darf ich mit dir zum Bahnhof gehen?","Можна мені піти з тобою до вокзалу?","Darf ich mit ___ zum Bahnhof gehen?"],
+  ["du","erklären","Die Lehrerin erklärt dir die Regel.","Учителька пояснює тобі правило.","Die Lehrerin erklärt ___ die Regel."],
+  ["du","bringen","Wir bringen dir den Kaffee.","Ми принесемо тобі каву.","Wir bringen ___ den Kaffee."],
+  ["er","danken","Wir danken ihm für seine Unterstützung.","Ми дякуємо йому за підтримку.","Wir danken ___ für seine Unterstützung."],
+  ["er","zeigen","Kannst du ihm den Weg zeigen?","Ти можеш показати йому дорогу?","Kannst du ___ den Weg zeigen?"],
+  ["er","bringen","Maria bringt ihm nach dem Essen einen Kaffee.","Марія приносить йому каву після їжі.","Maria bringt ___ nach dem Essen einen Kaffee."],
+  ["er","helfen","Die Ärztin hilft ihm sofort.","Лікарка одразу допомагає йому.","Die Ärztin hilft ___ sofort."],
+  ["er","mit","Ich spreche mit ihm über den Film.","Я розмовляю з ним про фільм.","Ich spreche mit ___ über den Film."],
+  ["er","erklären","Der Chef erklärt ihm den Plan.","Керівник пояснює йому план.","Der Chef erklärt ___ den Plan."],
+  ["she","geben","Gibst du ihr den Schlüssel?","Ти даси їй ключ?","Gibst du ___ den Schlüssel?"],
+  ["she","danken","Wir danken ihr für die Einladung.","Ми дякуємо їй за запрошення.","Wir danken ___ für die Einladung."],
+  ["she","erklären","Der Chef erklärt ihr den Plan.","Керівник пояснює їй план.","Der Chef erklärt ___ den Plan."],
+  ["she","bringen","Die Kinder bringen ihr eine Zeichnung.","Діти приносять їй малюнок.","Die Kinder bringen ___ eine Zeichnung."],
+  ["she","helfen","Kannst du ihr bitte helfen?","Ти можеш їй допомогти?","Kannst du ___ bitte helfen?"],
+  ["she","mit","Ich spreche mit ihr nach dem Kurs.","Я розмовляю з нею після курсу.","Ich spreche mit ___ nach dem Kurs."],
+  ["es","geben","Das Baby ist durstig. Der Vater gibt ihm eine Flasche.","Немовля хоче пити. Тато дає йому пляшечку.","Das Baby ist durstig. Der Vater gibt ___ eine Flasche."],
+  ["es","mit","Das Baby spielt. Die Eltern sind mit ihm im Garten.","Немовля грається. Батьки з ним у саду.","Das Baby spielt. Die Eltern sind mit ___ im Garten."],
+  ["es","vorlesen","Das Baby liegt im Bett. Die Mutter liest ihm ein Buch vor.","Немовля лежить у ліжку. Мама читає йому книжку.","Das Baby liegt im Bett. Die Mutter liest ___ ein Buch vor."],
+  ["es","helfen","Das Baby ist müde. Der Vater hilft ihm beim Anziehen.","Немовля втомилося. Тато допомагає йому одягнутися.","Das Baby ist müde. Der Vater hilft ___ beim Anziehen."],
+  ["es","schenken","Das Baby hat Geburtstag. Wir schenken ihm ein Spielzeug.","У немовляти день народження. Ми даруємо йому іграшку.","Das Baby hat Geburtstag. Wir schenken ___ ein Spielzeug."],
+  ["es","gefallen","Das Baby lacht. Gefällt ihm das Lied?","Немовля сміється. Йому подобається ця пісня?","Das Baby lacht. Gefällt ___ das Lied?"],
+  ["wir","geben","Der Chef gibt uns eine neue Aufgabe.","Керівник дає нам нове завдання.","Der Chef gibt ___ eine neue Aufgabe."],
+  ["wir","danken","Unsere Nachbarn danken uns für die Hilfe.","Наші сусіди дякують нам за допомогу.","Unsere Nachbarn danken ___ für die Hilfe."],
+  ["wir","zeigen","Die Trainerin zeigt uns die Übung.","Тренерка показує нам вправу.","Die Trainerin zeigt ___ die Übung."],
+  ["wir","mit","Möchtest du mit uns zum Konzert kommen?","Ти хочеш піти з нами на концерт?","Möchtest du mit ___ zum Konzert kommen?"],
+  ["wir","helfen","Die Kinder helfen uns im Garten.","Діти допомагають нам у саду.","Die Kinder helfen ___ im Garten."],
+  ["wir","bringen","Der Kellner bringt uns die Rechnung.","Офіціант приносить нам рахунок.","Der Kellner bringt ___ die Rechnung."],
+  ["ihr","geben","Wir geben euch die Adresse.","Ми даємо вам адресу.","Wir geben ___ die Adresse."],
+  ["ihr","danken","Ich danke euch für die Einladung.","Я дякую вам за запрошення.","Ich danke ___ für die Einladung."],
+  ["ihr","zeigen","Die Lehrerin zeigt euch den Raum.","Учителька показує вам кімнату.","Die Lehrerin zeigt ___ den Raum."],
+  ["ihr","mit","Darf ich mit euch nach Hause fahren?","Можна мені поїхати з вами додому?","Darf ich mit ___ nach Hause fahren?"],
+  ["ihr","helfen","Jonas hilft euch beim Umzug.","Йонас допомагає вам із переїздом.","Jonas hilft ___ beim Umzug."],
+  ["ihr","bringen","Der Gastgeber bringt euch Tee.","Господар приносить вам чай.","Der Gastgeber bringt ___ Tee."],
+  ["they","helfen","Die Nachbarin hilft ihnen beim Tragen.","Сусідка допомагає їм нести речі.","Die Nachbarin hilft ___ beim Tragen."],
+  ["they","danken","Ich danke ihnen für die schnelle Antwort.","Я дякую їм за швидку відповідь.","Ich danke ___ für die schnelle Antwort."],
+  ["they","erklären","Der Arzt erklärt ihnen den Befund.","Лікар пояснює їм висновок обстеження.","Der Arzt erklärt ___ den Befund."],
+  ["they","mit","Möchten Sie mit ihnen am Tisch sitzen?","Ви хотіли б сидіти з ними за столом?","Möchten Sie mit ___ am Tisch sitzen?"],
+  ["they","zeigen","Der Verkäufer zeigt ihnen den Eingang.","Продавець показує їм вхід.","Der Verkäufer zeigt ___ den Eingang."],
+  ["they","schicken","Wir schicken ihnen die Unterlagen morgen.","Ми надішлемо їм документи завтра.","Wir schicken ___ die Unterlagen morgen."],
+  ["formal","öffnen","Darf ich Ihnen die Tür öffnen?","Можна мені відчинити Вам двері?","Darf ich ___ die Tür öffnen?"],
+  ["formal","schicken","Wir schicken Ihnen den Vertrag morgen.","Ми надішлемо Вам договір завтра.","Wir schicken ___ den Vertrag morgen."],
+  ["formal","helfen","Die Kollegin hilft Ihnen gern.","Колега охоче допомагає Вам.","Die Kollegin hilft ___ gern."],
+  ["formal","danken","Ich danke Ihnen für Ihre Geduld.","Я дякую Вам за терпіння.","Ich danke ___ für Ihre Geduld."],
+  ["formal","anbieten","Darf ich Ihnen einen Kaffee anbieten?","Можна запропонувати Вам каву?","Darf ich ___ einen Kaffee anbieten?"],
+  ["formal","zeigen","Der Fahrer zeigt Ihnen den Weg zum Hotel.","Водій показує Вам дорогу до готелю.","Der Fahrer zeigt ___ den Weg zum Hotel."]
+];
+const personalPronounCaseRules={
+  treffen:"Treffen вимагає Akkusativ",
+  anrufen:"Anrufen вимагає Akkusativ",
+  fragen:"Fragen вимагає Akkusativ",
+  fotografieren:"Fotografieren вимагає Akkusativ",
+  suchen:"Suchen вимагає Akkusativ",
+  für:"Für завжди вимагає Akkusativ",
+  einladen:"Einladen вимагає Akkusativ",
+  verstehen:"Verstehen вимагає Akkusativ",
+  erwarten:"Erwarten вимагає Akkusativ",
+  kennen:"Kennen вимагає Akkusativ",
+  sehen:"Sehen вимагає Akkusativ",
+  besuchen:"Besuchen вимагає Akkusativ",
+  loben:"Loben вимагає Akkusativ",
+  zurückrufen:"Zurückrufen вимагає Akkusativ",
+  bringen:"Bringen вимагає Akkusativ",
+  hören:"Hören вимагає Akkusativ",
+  "hearing-awake":"Hören вимагає Akkusativ",
+  "hearing-cry":"Hören вимагає Akkusativ",
+  mitnehmen:"Mitnehmen вимагає Akkusativ",
+  untersuchen:"Untersuchen вимагає Akkusativ",
+  rufen:"Rufen вимагає Akkusativ",
+  geben:"Одержувач із geben стоїть у Dativ",
+  danken:"Danken вимагає Dativ",
+  helfen:"Helfen вимагає Dativ",
+  mit:"Mit завжди вимагає Dativ",
+  zeigen:"Одержувач із zeigen стоїть у Dativ",
+  erklären:"Одержувач із erklären стоїть у Dativ",
+  vorlesen:"Одержувач із vorlesen стоїть у Dativ",
+  schenken:"Одержувач із schenken стоїть у Dativ",
+  gefallen:"Gefallen вимагає Dativ",
+  schicken:"Одержувач із schicken стоїть у Dativ",
+  öffnen:"Одержувач із öffnen стоїть у Dativ",
+  anbieten:"Одержувач із anbieten стоїть у Dativ"
+};
+function addPronounContextExamples(baseCards,caseLabel,examples){
+  const grammaticalCase=caseLabel==="Akk."?"accusative":"dative";
+  return examples.map(([person,rule,example,translation,promptText])=>{
+    const targetId=`pronoun-${grammaticalCase}-${person}`;
+    const base=baseCards.find(card=>card.targetId===targetId&&card.type==="cloze");
+    if(!base)throw new Error(`Missing base pronoun card: ${targetId}`);
+    const ruleText=personalPronounCaseRules[rule];
+    if(!ruleText)throw new Error(`Unknown pronoun case rule: ${rule}`);
+    const answer=base.response.accepted[0];
+    return {
+      id:`${base.targetId}-context-${rule.normalize("NFD").replace(/[\u0300-\u036f]/g,"").toLowerCase()}`,
+      targetId:base.targetId,person,type:"cloze",word:answer,example,translation,studyTranslation:base.studyTranslation,promptText,support:base.support,
+      explanation:`${ruleText}: ${base.studyTranslation.split(" · ")[0]}.`,category:base.category,practiceVariants:false,response:base.response
+    };
+  });
+}
+const personalPronounAccusativeCards=withPronounCase("Akk.",[
+  ...personalPronounAccusativeBaseCards,
+  ...addPronounContextExamples(personalPronounAccusativeBaseCards,"Akk.",personalPronounAdditionalAccusativeExamples)
+]);
+const personalPronounDativeCards=withPronounCase("Dat.",[
+  ...personalPronounDativeBaseCards,
+  ...addPronounContextExamples(personalPronounDativeBaseCards,"Dat.",personalPronounAdditionalDativeExamples)
 ]);
 const personalPronounCaseCards=[...personalPronounAccusativeCards,...personalPronounDativeCards];
 const personalPronounMixedPrompts={

@@ -29,15 +29,17 @@ function sharedRuntime(){
   return runtime.runtime;
 }
 
-test("every pronoun and case has three explicit variants and the correct form",()=>{
-  assert.equal(lesson.cards.length,54);
-  assert.equal(new Set(lesson.cards.map(card=>card.id)).size,54);
+test("every pronoun and case has nine explicit variants and the correct form",()=>{
+  assert.equal(lesson.cards.length,162);
+  assert.equal(new Set(lesson.cards.map(card=>card.id)).size,162);
   for(const [grammaticalCase,pronouns] of Object.entries(forms)){
     for(const [person,answer] of Object.entries(pronouns)){
       const targetId=`pronoun-${grammaticalCase}-${person}`;
       const variants=lesson.cards.filter(card=>card.targetId===targetId);
-      assert.equal(variants.length,3,targetId);
-      assert.deepEqual(variants.map(card=>card.type),["recall","cloze","cloze"]);
+      assert.equal(variants.length,9,targetId);
+      assert.deepEqual(variants.slice(0,3).map(card=>card.type),["recall","cloze","cloze"]);
+      assert.ok(variants.slice(3).every(card=>card.type==="cloze"),targetId);
+      assert.equal(new Set(variants.map(card=>card.example)).size,9,targetId);
       for(const card of variants){
         assert.deepEqual(card.response.accepted,[answer],card.id);
         assert.equal(card.response.mode,"text");
@@ -92,7 +94,7 @@ test("each chapter has matching learn and practice target pools",()=>{
   }
 });
 
-test("mixed practice uses three contextual gaps per target without changing saved identities or answers",()=>{
+test("mixed practice uses nine contextual gaps per target without changing saved identities or answers",()=>{
   const learn=lesson.stages[4],practice=lesson.stages[5];
   assert.equal(practice.categoryBeforeCheck,"PERSONALPRONOMEN");
   for(const card of practice.cards){
@@ -108,7 +110,7 @@ test("mixed practice uses three contextual gaps per target without changing save
   }
   for(const targetId of new Set(practice.cards.map(card=>card.targetId))){
     const variants=practice.cards.filter(card=>card.targetId===targetId);
-    assert.equal(new Set(variants.map(card=>`${card.promptText}\u0000${card.support}`)).size,3,targetId);
+    assert.equal(new Set(variants.map(card=>`${card.promptText}\u0000${card.support}`)).size,9,targetId);
   }
 });
 
@@ -124,8 +126,8 @@ test("shared passes cover every target and rotate explicit variants without gene
       assert.equal(new Set(pass.map(card=>card.targetId)).size,7,stage.id);
       for(const card of pass){
         const cycle=cycles.get(card.targetId)||new Set();
-        if(cycle.size===3)cycle.clear();
-        assert.ok(!cycle.has(card.id),`${stage.id}: repeated ${card.id} before using all three variants`);
+        if(cycle.size===9)cycle.clear();
+        assert.ok(!cycle.has(card.id),`${stage.id}: repeated ${card.id} before using all nine variants`);
         cycle.add(card.id);
         cycles.set(card.targetId,cycle);
         covered.add(card.targetId);

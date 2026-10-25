@@ -93,13 +93,13 @@ test("localization preserves the pre-localization identities, German content, an
   const snapshot=Object.entries(app.definitions).filter(([lessonId])=>!["possessive-cases","temporal-prepositions","werden","mit-ohne"].includes(lessonId)).map(([lessonId,definition])=>({
     lessonId,stages:definition.stages.filter(stage=>!stage.id.startsWith("wollen-")).map(stage=>({
       id:stage.id,mode:stage.mode,progressId:stage.progressId,requiresFullCoverage:!!stage.requiresFullCoverage,
-      cards:app.variantsForStage(stage).map(card=>({
+      cards:app.variantsForStage(stage).filter(card=>!/^pronoun-(?:accusative|dative)-[^:]+-context-[a-z0-9-]+$/.test(card.id)).map(card=>({
         id:card.id,targetId:card.targetId,type:card.type,response:card.response,
         word:card.word,example:card.example,promptText:card.promptText,support:card.support,translation:card.translation
       }))
     }))
   }));
-  // Baseline from 4781214 plus explicit mixed-case gaps, preserving their IDs and answers.
+  // Preserve the existing baseline; new context variants are covered by the pronoun-case tests.
   assert.equal(createHash("sha256").update(JSON.stringify(snapshot)).digest("hex"),
     "0bff08ec36d176ed42674bfdba559bbcd25d4fceaf950531d1677996cea1430c");
   for(const [lessonId,definition] of Object.entries(app.definitions)){
