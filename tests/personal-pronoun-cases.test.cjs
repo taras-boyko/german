@@ -65,6 +65,12 @@ test("clozes have one gap, a clear person cue, and a matching German sentence",(
   }
 });
 
+test("Dativ context variants do not inherit unrelated example details",()=>{
+  const card=lesson.cards.find(card=>card.id==="pronoun-dative-wir-context-zeigen");
+  assert.equal(card.example,"Die Trainerin zeigt uns die Übung.");
+  assert.equal(card.support,"Заміни wir (ми).");
+});
+
 test("formal, feminine, and plural sie remain separate capitalization objectives",()=>{
   const sensitiveTargets=new Set([
     "pronoun-accusative-she","pronoun-accusative-they","pronoun-accusative-formal",

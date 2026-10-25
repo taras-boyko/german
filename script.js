@@ -274,7 +274,7 @@ const personalPronounDativeBaseCards=withPronounCase("Dat.",[
     response:{mode:"text",scope:"word",accepted:["uns"],caseSensitive:false,punctuationSensitive:false}
   },
   {
-    id:"pronoun-dative-wir-give",targetId:"pronoun-dative-wir",person:"wir",type:"cloze",word:"uns",example:"Der Lehrer gibt uns die Bücher.",translation:"Учитель дає нам книжки.",studyTranslation:"wir → uns · нам",promptText:"Der Lehrer gibt ___ die Bücher.",support:"Заміни wir (ми): одержувачі книжок.",
+    id:"pronoun-dative-wir-give",targetId:"pronoun-dative-wir",person:"wir",type:"cloze",word:"uns",example:"Der Lehrer gibt uns die Bücher.",translation:"Учитель дає нам книжки.",studyTranslation:"wir → uns · нам",promptText:"Der Lehrer gibt ___ die Bücher.",support:"Заміни wir (ми).",
     explanation:"Одержувачі з geben стоять у Dativ: wir → uns.",category:"PERSONALPRONOMEN · DATIV",practiceVariants:false,
     response:{mode:"text",scope:"word",accepted:["uns"],caseSensitive:false,punctuationSensitive:false}
   },
