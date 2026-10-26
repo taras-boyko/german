@@ -3527,10 +3527,18 @@ const mitOhneCategories={
   "mit-begleitung":"MIT + DATIV · BEGLEITUNG",
   "mit-mittel":"MIT + DATIV · MITTEL",
   "mit-art-und-weise":"MIT + DATIV · ART UND WEISE",
+  "mit-zutat":"MIT + DATIV · ZUTAT",
+  "mit-pronomen":"MIT + DATIV · PRONOMEN",
   "ohne-artikel":"OHNE + AKKUSATIV · ARTIKEL",
   "ohne-possessiv":"OHNE + AKKUSATIV · POSSESSIV",
+  "ohne-indefinit":  "OHNE + AKKUSATIV · UNBESTIMMTER ARTIKEL",
   "ohne-ohne-artikel":"OHNE + AKKUSATIV · OHNE ARTIKEL",
-  "mit-ohne-wahl":"MIT ODER OHNE · BEDEUTUNG",
+  "ohne-pronomen":"OHNE + AKKUSATIV · PRONOMEN",
+  "mit-ohne-wahl-begleitung":"MIT ODER OHNE · BEDEUTUNG",
+  "mit-ohne-wahl-zutat":"MIT ODER OHNE · BEDEUTUNG",
+  "mit-ohne-wahl-hilfe":"MIT ODER OHNE · BEDEUTUNG",
+  "mit-ohne-wahl-zahlung":"MIT ODER OHNE · BEDEUTUNG",
+  "mit-ohne-wahl-gefuehl":"MIT ODER OHNE · BEDEUTUNG",
   "satzbau-mit":"MIT + DATIV · SATZBAU",
   "satzbau-ohne":"OHNE + AKKUSATIV · SATZBAU"
 };
@@ -3544,40 +3552,87 @@ const mitOhneClozeRows=(targetId,rows)=>rows.map(([key,promptText,answer,transla
 const mitBegleitungCards=mitOhneClozeRows("mit-begleitung",[
   ["meiner","Ich gehe ___ Freundin ins Kino.","mit meiner","Я іду в кіно з моєю подругою.","Freundin — жіночий рід. Після mit — Dativ: mit meiner."],
   ["unserem","Wir fahren ___ Bruder nach Berlin.","mit unserem","Ми їдемо до Берліна з нашим братом.","Bruder — чоловічий рід. Після mit — Dativ: mit unserem."],
-  ["dem-hund","Er geht ___ Hund spazieren.","mit dem","Він гуляє з собакою.","Hund — чоловічий рід. Після mit der → dem."],
+  ["seinem-hund","Er geht ___ Hund spazieren.","mit seinem","Він гуляє зі своїм псом.","Hund — чоловічий рід: sein → seinem після mit. «Свій» вказує на er."],
   ["seinen-eltern","Er wohnt ___ Eltern in Wien.","mit seinen","Він живе разом зі своїми батьками у Відні.","Eltern — множина. У Dativ множини присвійний — seinen, а іменник уже має -n."]
 ]);
 const mitMittelCards=mitOhneClozeRows("mit-mittel",[
-  ["auto","Ich fahre ___ Auto zur Arbeit.","mit dem","Я їду на роботу на машині.","Auto — середній рід: das → dem. Засіб, яким щось відбувається, — mit + Dativ."],
+  ["auto","Ich fahre ___ Auto zur Arbeit.","mit dem","Я їду на роботу автомобілем.","Auto — середній рід: das → dem. Транспорт як засіб після mit: mit dem Auto."],
   ["bahn","Sie kommt ___ Bahn.","mit der","Вона приїжджає потягом.","Bahn — жіночий рід: die → der після mit."],
-  ["flugzeug","Wir fliegen ___ Flugzeug nach Wien.","mit dem","Ми летимо до Відня літаком.","Flugzeug — середній рід: das → dem після mit."]
+  ["flugzeug","Wir fliegen ___ Flugzeug nach Wien.","mit dem","Ми летимо до Відня літаком.","Flugzeug — середній рід: das → dem після mit."],
+  ["rad","Wir fahren ___ Rad an den See.","mit dem","Ми їдемо до озера на велосипеді.","Rad — середній рід: das → dem після mit. Велосипед — засіб: mit dem Rad."]
 ]);
 const mitArtUndWeiseCards=mitOhneClozeRows("mit-art-und-weise",[
   ["spass","Er macht das ___ Spaß.","mit","Він робить це із задоволенням.","Спосіб дії: mit + іменник без артикля — mit Spaß, mit Liebe, mit Geduld."],
   ["liebe","Sie kocht ___ Liebe.","mit","Вона готує з любов’ю.","Mit Liebe — спосіб дії без артикля."],
-  ["geduld","Wir lernen ___ Geduld Deutsch.","mit","Ми вивчаємо німецьку з терпінням.","Mit Geduld — спосіб дії без артикля."]
+  ["geduld","Wir lernen Deutsch ___ Geduld.","mit","Ми вивчаємо німецьку з терпінням.","Mit Geduld — спосіб дії без артикля: Wir lernen Deutsch mit Geduld."]
+]);
+const mitZutatCards=mitOhneClozeRows("mit-zutat",[
+  ["milch","Ich trinke Kaffee ___ Milch.","mit","Я п’ю каву з молоком.","Milch — без артикля після mit: Kaffee mit Milch. Інгредієнт стоїть без артикля."],
+  ["zitrone","Ich trinke Tee ___ Zitrone.","mit","Я п’ю чай з лимоном.","Zitrone — без артикля після mit: Tee mit Zitrone."],
+  ["pilze","Ich esse Pizza ___ Pilzen.","mit","Я їм піцу з грибами.","Pilze — множина; у Dativ множини додається -n: mit Pilzen."]
+]);
+const mitPronomenCards=mitOhneClozeRows("mit-pronomen",[
+  ["dir","Am Samstag fahre ich ___ an den See.","mit dir","У суботу я їду з тобою на озеро.","Після mit — Dativ: du → dir. Mit dir — «з тобою»."],
+  ["mir","Kommst du heute ___ ins Kino?","mit mir","Ти сьогодні йдеш зі мною в кіно?","Після mit — Dativ: ich → mir. Mit mir — «зі мною»."],
+  ["ihm","Ich spreche ___ über den Film.","mit ihm","Я розмовляю з ним про фільм.","Після mit — Dativ: er → ihm, а не ihn. Mit ihm — «з ним»."],
+  ["uns","Die Lehrerin spricht ___ über das Thema.","mit uns","Учителька говорить з нами на цю тему.","Після mit — Dativ: wir → uns. Mit uns — «з нами»."]
 ]);
 const ohneArtikelCards=mitOhneClozeRows("ohne-artikel",[
-  ["mantel","Ich gehe ___ Mantel nach draußen.","ohne den","Я виходжу на вулицю без пальта.","Ohne + Akkusativ: der → den. Mantel — чоловічий рід."],
-  ["hut","Der Mann kommt ___ Hut in die Kirche.","ohne den","Чоловік заходить до церкви без капелюха.","Hut — чоловічий рід: der → den після ohne."],
-  ["milch","Er trinkt den Tee ___ Milch.","ohne die","Він п’є чай без молока.","Milch — жіночий рід. У Akkusativ жіночого роду артикль не змінюється: die → die."],
-  ["auto","Wir fahren ___ Auto in die Stadt.","ohne das","Ми їдемо до міста без машини.","Auto — середній рід. У Akkusativ середнього роду артикль не змінюється: das → das."]
+  ["mantel","Der Mantel hängt im Flur. Ich gehe ___ Mantel nach draußen.","ohne den","Пальто висить у передпокої. Я виходжу на вулицю без нього.","Mantel — чоловічий рід: der → den після ohne. Вже згаданий предмет має означений артикль."],
+  ["schluessel","Der Schlüssel liegt auf dem Tisch. Er geht ___ Schlüssel aus dem Haus.","ohne den","Ключ лежить на столі. Він виходить з дому без нього.","Schlüssel — чоловічий рід: der → den після ohne."],
+  ["milch","Auf dem Tisch steht die Milch. Ich trinke den Tee ___ Milch.","ohne die","Молоко стоїть на столі. Я п’ю чай без нього.","Milch — жіночий рід: у Akkusativ die не змінюється. Молоко вже відоме, тому артикль лишається."],
+  ["auto","Das Auto steht vor dem Haus. Wir fahren ___ Auto in die Stadt.","ohne das","Машина стоїть перед будинком. Ми їдемо до міста без неї.","Auto — середній рід: у Akkusativ das не змінюється, на відміну від der → den."]
 ]);
 const ohnePossessivCards=mitOhneClozeRows("ohne-possessiv",[
-  ["schirm","Er verlässt das Haus ___ Schirm.","ohne seinen","Він виходить з дому без парасольки.","Schirm — чоловічий рід. Після ohne присвійний змінюється як артикль: sein → seinen."],
-  ["bruder","Ich fahre ___ Bruder in den Urlaub.","ohne meinen","Я їду у відпустку без брата.","Bruder — чоловічий рід: mein → meinen після ohne."],
-  ["kinder","Wir reisen ___ Kinder nach Spanien.","ohne unsere","Ми подорожуємо до Іспанії без наших дітей.","Kinder — множина. У Akkusativ присвійний — unsere, як і в Nominativ."]
+  ["schirm","Er verlässt das Haus ___ Schirm.","ohne seinen","Він виходить з дому без свого зонта.","Schirm — чоловічий рід: sein → seinen після ohne (Akkusativ)."],
+  ["tasche","Du gehst ___ Tasche ins Büro?","ohne deine","Ти йдеш в офіс без своєї сумки?","Tasche — жіночий рід: dein → deine. У Akkusativ жіночий присвійний такий самий, як у Nominativ."],
+  ["kinder","Wir reisen ___ Kinder nach Spanien.","ohne unsere","Ми подорожуємо до Іспанії без наших дітей.","Kinder — множина: unsere в Akkusativ, як і в Nominativ."],
+  ["handy","Ich fahre nie ___ Handy in den Urlaub.","ohne mein","Я ніколи не їжджу у відпустку без свого телефона.","Handy — середній рід: mein у Akkusativ не змінюється, як і в Nominativ."]
+]);
+const ohneIndefinitCards=mitOhneClozeRows("ohne-indefinit",[
+  ["hut","Der Mann geht ___ Hut in die Kirche.","ohne einen","Чоловік іде до церкви без жодного капелюха.","Hut — чоловічий рід: ein → einen після ohne. «Жодного» — неозначена форма."],
+  ["jacke","Sie geht ___ Jacke nach draußen.","ohne eine","Вона виходить на вулицю без жодної куртки.","Jacke — жіночий рід: ein → eine після ohne. Ohne eine Jacke — «без жодної куртки»."],
+  ["wort","Er verlässt das Zimmer ___ Wort.","ohne ein","Він виходить з кімнати без жодного слова.","Wort — середній рід: ein у Akkusativ не змінюється. Ohne ein Wort — усталений вираз."]
 ]);
 const ohneOhneArtikelCards=mitOhneClozeRows("ohne-ohne-artikel",[
   ["kaese","Ich esse Pizza ___ Käse.","ohne","Я їм піцу без сиру.","Käse — без артикля: ohne стоїть одразу перед іменником, коли мова про загальне поняття."],
   ["zucker","Ich trinke Tee ___ Zucker.","ohne","Я п’ю чай без цукру.","Zucker — без артикля, бо мова про загальне поняття: ohne Zucker."],
   ["dressing","Ich esse den Salat ___ Dressing.","ohne","Я їм салат без заправки.","Dressing — без артикля: ohne Dressing, бо йдеться про загальне поняття."]
 ]);
-const mitOhneWahlCards=mitOhneClozeRows("mit-ohne-wahl",[
-  ["brot","Ich esse Brot ___ Butter.","mit","Я їм хліб з маслом.","Масло є — mit + Dativ: mit Butter."],
-  ["dir","Ich gehe ___ dir ins Kino.","mit","Я іду з тобою в кіно.","Ти йдеш разом із людиною — mit + Dativ: mit dir."],
-  ["kuchen","Wir essen den Kuchen ___ Sahne.","ohne","Ми їмо торт без вершків.","Сметани немає — ohne + Akkusativ: ohne Sahne без артикля."]
+const ohnePronomenCards=mitOhneClozeRows("ohne-pronomen",[
+  ["mich","Er geht nie ___ ins Kino.","ohne mich","Він ніколи не ходить у кіно без мене.","Після ohne — Akkusativ: ich → mich. Ohne mich — «без мене»."],
+  ["dich","Wir fahren nicht ___ in den Urlaub.","ohne dich","Ми не їдемо у відпустку без тебе.","Після ohne — Akkusativ: du → dich, а не dir. Ohne dich — «без тебе»."],
+  ["ihn","Ich kann nicht ___ leben.","ohne ihn","Я не можу жити без нього.","Після ohne — Akkusativ: er → ihn, а не ihm. Ohne ihn — «без нього»."],
+  ["sie","Er kommt nie ___ zur Party.","ohne sie","Він ніколи не приходить на вечірку без неї.","Після ohne — Akkusativ: sie (вона) → sie. Ohne sie — «без неї»."]
 ]);
+// Choice targets: each has a German gap with no article after it, so the following word never reveals mit or ohne.
+const mitOhneWahlCards=[
+  ...mitOhneClozeRows("mit-ohne-wahl-begleitung",[
+    ["anna","Ich gehe heute Abend ___ Anna ins Kino.","mit","Я йду сьогодні ввечері в кіно з Анною.","Anna іде разом — mit + Dativ. Ім’я після mit не змінюється."],
+    ["tom","Wir fahren morgen ___ Tom nach Berlin.","ohne","Ми завтра їдемо до Берліна без Тома.","Tom не їде — ohne + Akkusativ. Ім’я після ohne не змінюється."],
+    ["tennis","Er spielt Tennis ___ Anna.","mit","Він грає в теніс з Анною.","Anna грає разом — mit + Dativ: mit Anna."]
+  ]),
+  ...mitOhneClozeRows("mit-ohne-wahl-zutat",[
+    ["brot","Ich esse Brot ___ Butter.","mit","Я їм хліб з маслом.","Масло є — mit + Dativ: mit Butter."],
+    ["kuchen","Wir essen den Kuchen ___ Sahne.","ohne","Ми їмо торт без вершків.","Сметани немає — ohne + Akkusativ: ohne Sahne."],
+    ["tee","Ich trinke den Tee ___ Honig.","mit","Я п’ю чай з медом.","Мед є — mit + Dativ: mit Honig."]
+  ]),
+  ...mitOhneClozeRows("mit-ohne-wahl-hilfe",[
+    ["aufgabe","Er löst die Aufgabe ___ Hilfe.","ohne","Він розв’язує завдання сам, без допомоги.","Допомоги немає — ohne + Akkusativ: ohne Hilfe."],
+    ["regal","Wir bauen das Regal ___ Hilfe.","mit","Ми будуємо полицю за допомогою.","Допомога є — mit + Dativ: mit Hilfe."],
+    ["schwimmbad","Kinder dürfen nicht ___ Begleitung von Erwachsenen ins Schwimmbad.","ohne","Дітям не можна в басейн без супроводу дорослих.","Супроводу немає — ohne + Akkusativ: ohne Begleitung."]
+  ]),
+  ...mitOhneClozeRows("mit-ohne-wahl-zahlung",[
+    ["karte","Ich bezahle ___ Karte.","mit","Я плачу карткою.","Оплата карткою — засіб: mit + Dativ: mit Karte."],
+    ["geld","Er geht ___ Geld in die Stadt.","ohne","Він іде до міста без грошей.","Грошей немає — ohne + Akkusativ: ohne Geld."],
+    ["bargeld","Wir zahlen ___ Bargeld.","mit","Ми платимо готівкою.","Оплата готівкою — засіб: mit + Dativ: mit Bargeld."]
+  ]),
+  ...mitOhneClozeRows("mit-ohne-wahl-gefuehl",[
+    ["tanz","Sie tanzt ___ Freude.","mit","Вона танцює з радістю.","Радість є — mit + Dativ: mit Freude."],
+    ["angst","Lisa geht ___ Angst in die Prüfung.","ohne","Ліза йде на іспит без страху.","Страху немає — ohne + Akkusativ: ohne Angst."],
+    ["arbeit","Er macht die Arbeit ___ Freude.","ohne","Він робить роботу без радості.","Радості немає — ohne + Akkusativ: ohne Freude."]
+  ])
+];
 // [key, targetId, canonical sentence, other valid order, chunks, Ukrainian sentence, structure, explanation]
 const mitOhneSentenceCards=[
   ["bus","satzbau-mit","Ich fahre heute mit dem Bus zur Arbeit.","Heute fahre ich mit dem Bus zur Arbeit.","mit dem Bus / ich / fahren / heute / zur Arbeit","Сьогодні я їду на роботу автобусом.",mainClause("Ich","fahre","heute mit dem Bus","zur Arbeit"),"Fahre стоїть на другому місці. Mit dem Bus стоїть перед напрямком zur Arbeit. Heute на початку теж правильно."],
@@ -3591,16 +3646,16 @@ const mitOhneSentenceCards=[
   example:alternative,exampleTranslation:translation,explanation,category:mitOhneCategories[targetId],structure:[structure],
   response:modalResponse([word,alternative],"sentence")
 }));
-const mitCards=[...mitBegleitungCards,...mitMittelCards,...mitArtUndWeiseCards];
-const ohneCards=[...ohneArtikelCards,...ohnePossessivCards,...ohneOhneArtikelCards];
+const mitCards=[...mitBegleitungCards,...mitMittelCards,...mitArtUndWeiseCards,...mitZutatCards,...mitPronomenCards];
+const ohneCards=[...ohneArtikelCards,...ohnePossessivCards,...ohneIndefinitCards,...ohneOhneArtikelCards,...ohnePronomenCards];
 const mitOhneCards=[...mitCards,...ohneCards,...mitOhneWahlCards,...mitOhneSentenceCards];
 const mitOhneStages=[
-  lessonStep("mit-learn","Вивчення: mit + Dativ","Вивчіть mit (з) з Dativ: супровід, засіб і спосіб дії. Після mit усі артиклі змінюються, а присвійні займенники отримують закінчення Dativ.",mitCards,"learn","Mit · з Dativ","Вивчення"),
-  mitOhnePracticeStep("mit-practice","Практика: mit + Dativ","Впишіть mit з артиклем або присвійним займенником у Dativ. Рід іменника або множина підкажуть форму.",mitCards,"input","Mit · з Dativ","Практика"),
-  lessonStep("ohne-learn","Вивчення: ohne + Akkusativ","Вивчіть ohne (без) з Akkusativ: змінюється лише der → den, присвійні — як артиклі, а без артикля іменник стоїть просто після ohne.",ohneCards,"learn","Ohne · без Akkusativ","Вивчення"),
-  mitOhnePracticeStep("ohne-practice","Практика: ohne + Akkusativ","Впишіть ohne з артиклем, присвійним займенником або без артикля — залежно від іменника.",ohneCards,"input","Ohne · без Akkusativ","Практика"),
-  lessonStep("choice-learn","Вивчення: mit чи ohne","Порівняйте mit і ohne: якщо предмет є — mit, якщо немає — ohne.",mitOhneWahlCards,"learn","Mit або ohne","Вивчення"),
-  mitOhnePracticeStep("choice-practice","Практика: mit чи ohne","Оберіть mit або ohne за змістом речення. Форма іменника після обох прийменників залежить від відмінка.",mitOhneWahlCards,"input","Mit або ohne","Практика"),
+  lessonStep("mit-learn","Вивчення: mit + Dativ","Вивчіть mit (з) з Dativ: супровід, засіб, спосіб дії, інгредієнт і займенник. Після mit усі артиклі змінюються, присвійні отримують закінчення Dativ, а займенники — mir, dir, ihm, uns.",mitCards,"learn","Mit · з Dativ","Вивчення"),
+  mitOhnePracticeStep("mit-practice","Практика: mit + Dativ","Впишіть mit з артиклем, присвійним займенником або займенником у Dativ. Рід іменника, множина або зміст речення підкажуть форму.",mitCards,"input","Mit · з Dativ","Практика"),
+  lessonStep("ohne-learn","Вивчення: ohne + Akkusativ","Вивчіть ohne (без) з Akkusativ: змінюється лише der → den, присвійні та ein-форми — як артиклі, займенники — mich, dich, ihn, sie. Без артикля іменник стоїть просто після ohne.",ohneCards,"learn","Ohne · без Akkusativ","Вивчення"),
+  mitOhnePracticeStep("ohne-practice","Практика: ohne + Akkusativ","Впишіть ohne з артиклем, присвійним займенником, неозначеним артиклем, займенником або без артикля — залежно від іменника чи займенника.",ohneCards,"input","Ohne · без Akkusativ","Практика"),
+  lessonStep("choice-learn","Вивчення: mit чи ohne","Порівняйте mit і ohne: якщо є людина, їжа, допомога, гроші чи засіб — mit, якщо цього немає — ohne.",mitOhneWahlCards,"learn","Mit або ohne","Вивчення"),
+  mitOhnePracticeStep("choice-practice","Практика: mit чи ohne","Оберіть mit або ohne за змістом речення: спершу визначте, чи є людина, їжа, засіб або допомога.",mitOhneWahlCards,"input","Mit або ohne","Практика"),
   lessonStep("satzbau-learn","Вивчення: речення з mit і ohne","Подивіться, де стоїть фраза з mit або ohne. Відмінюване дієслово завжди лишається на другому місці.",mitOhneSentenceCards,"learn","Речення з mit і ohne","Вивчення"),
   lessonStep("satzbau-practice","Побудова речень з mit і ohne","Складіть повне речення з фрагментів: поставте дієслово на друге місце, а фразу з mit або ohne — на її місце.",mitOhneSentenceCards,"input","Речення з mit і ohne","Практика")
 ];
@@ -4306,7 +4361,7 @@ const deckDefinitions={
     tip:"Спочатку визнач, чи є предмет — mit або ohne, — потім відмінок: mit + Dativ, ohne + Akkusativ.",
     guide:{
       title:"Прийменники mit і ohne",
-      intro:"Mit означає «з» і вимагає Dativ. Ohne означає «без» і вимагає Akkusativ. Вивчайте обидва прийменники разом з артиклем, присвійним займенником або без артикля.",
+      intro:"Mit означає «з» і вимагає Dativ. Ohne означає «без» і вимагає Akkusativ. Вивчайте обидва прийменники разом з артиклем, присвійним займенником, займенником або без артикля.",
       rules:[
         {title:"Mit + Dativ: супровід і засіб",detail:"Mit показує, з ким щось робимо або чим щось робимо. Після mit завжди Dativ.",formula:"mit meiner Freundin · mit dem Bus"},
         {
@@ -4319,7 +4374,7 @@ const deckDefinitions={
             note:"Виділено зміни порівняно з Nominativ: після mit змінюється кожен артикль."
           }
         },
-        {title:"Mit без артикля",detail:"Спосіб дії часто стоїть без артикля: mit Spaß, mit Liebe, mit Geduld.",formula:"mit Spaß · mit Geduld"},
+        {title:"Mit без артикля",detail:"Спосіб дії та інгредієнти часто стоять без артикля: mit Spaß, mit Liebe, Kaffee mit Milch.",formula:"mit Spaß · Kaffee mit Milch"},
         {title:"Ohne + Akkusativ: без чогось",detail:"Ohne означає «без» і вимагає Akkusativ. Змінюється лише der → den. Die, das і die (мн.) не змінюються.",formula:"ohne den Mantel · ohne Milch"},
         {
           title:"Артиклі після ohne",
@@ -4332,7 +4387,9 @@ const deckDefinitions={
           }
         },
         {title:"Присвійні після ohne",detail:"Присвійні займенники після ohne змінюються як артиклі в Akkusativ: seinen, meinen, unsere.",formula:"ohne seinen Schirm · ohne unsere Kinder"},
-        {title:"Mit чи ohne за змістом",detail:"Якщо предмет є — mit, якщо немає — ohne. Порівняйте: Brot mit Butter (з маслом) і Brot ohne Butter (без масла).",formula:"Brot mit Butter ↔ Brot ohne Butter"},
+        {title:"Займенники після mit і ohne",detail:"Після mit стоїть Dativ: mir, dir, ihm, ihr, uns, euch, ihnen. Після ohne стоїть Akkusativ: mich, dich, ihn, sie, uns, euch.",formula:"mit dir · ohne dich"},
+        {title:"Неозначений артикль після ohne",detail:"Ein змінюється як у Akkusativ: einen для чоловічого роду, eine для жіночого, ein для середнього. Значення — «жодного».",formula:"ohne einen Hut · ohne eine Jacke · ohne ein Wort"},
+        {title:"Mit чи ohne за змістом",detail:"Якщо є людина, їжа, допомога, гроші чи засіб — mit, якщо цього немає — ohne. Порівняйте: Brot mit Butter (з маслом) і Brot ohne Butter (без масла).",formula:"Brot mit Butter ↔ Brot ohne Butter"},
         {title:"Вираз з mit або ohne на початку речення",detail:"Фраза з mit або ohne може стояти на першому місці. Відмінюване дієслово лишається другим, підмет — після нього.",formula:"Mit dem Bus fahre ich zur Arbeit.",visual:{structure:[mainClause("Mit dem Bus","fahre","ich","zur Arbeit")]}}
       ]
     },

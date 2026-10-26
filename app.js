@@ -100,7 +100,7 @@ const categoryLabels={
   "HAUPTSATZ":"Головне речення","NEBENSATZ":"Підрядне речення","NICHT TRENNBAR":"Невідокремлюваний префікс",
   "WOLLEN":"Wollen","WERDEN":"Werden","KÖNNEN":"Können","VERÄNDERUNG":"Зміна стану","BERUF":"Професія","INFINITIV":"Інфінитив",
   "MIT + DATIV":"mit + Dativ","OHNE + AKKUSATIV":"ohne + Akkusativ","MIT ODER OHNE":"Mit чи ohne","BEGLEITUNG":"Супровід",
-  "MITTEL":"Засіб","ART UND WEISE":"Спосіб дії","ARTIKEL":"Артикль","POSSESSIV":"Присвійний займенник","OHNE ARTIKEL":"Без артикля","BEDEUTUNG":"Значення",
+  "MITTEL":"Засіб","ART UND WEISE":"Спосіб дії","ZUTAT":"Інгредієнт","ARTIKEL":"Артикль","POSSESSIV":"Присвійний займенник","OHNE ARTIKEL":"Без артикля","BEDEUTUNG":"Значення",
   "UNBESTIMMTER ARTIKEL":"Неозначений артикль","NEGATIVARTIKEL":"Заперечний артикль"
 };
 function categoryLabel(category){

@@ -12,7 +12,7 @@ const context=vm.createContext({});
 vm.runInContext(script,context);
 const lesson=JSON.parse(vm.runInContext(`JSON.stringify(deckDefinitions["${lessonId}"])`,context));
 const card=id=>lesson.cards.find(item=>item.id===id);
-const chapterTargets=[3,3,1,2];
+const chapterTargets=[5,5,5,2];
 
 function runtime(saved=new Map()){
   const elements=new Map(),requests=[];
@@ -127,8 +127,8 @@ function runtime(saved=new Map()){
 }
 
 test("four chapters pair a learn stage with a practice stage over the same pool, with at least three variants per target",()=>{
-  assert.equal(lesson.cards.length,29);
-  assert.equal(new Set(lesson.cards.map(item=>item.id)).size,29);
+  assert.equal(lesson.cards.length,57);
+  assert.equal(new Set(lesson.cards.map(item=>item.id)).size,57);
   assert.equal(lesson.stages.length,8);
   assert.equal(new Set(lesson.stages.map(stage=>stage.chapter)).size,4);
   for(let index=0;index<lesson.stages.length;index+=2){
@@ -147,7 +147,7 @@ test("four chapters pair a learn stage with a practice stage over the same pool,
 
 test("cloze cards have one gap, rebuild the example and show phrase scope only for multi-word answers",()=>{
   const cloze=lesson.cards.filter(item=>item.type==="cloze");
-  assert.equal(cloze.length,23);
+  assert.equal(cloze.length,51);
   for(const item of cloze){
     assert.equal(item.word,item.response.accepted[0],item.id);
     assert.equal(item.promptText.split("___").length,2,item.id);
@@ -224,19 +224,30 @@ test("evaluation accepts every listed answer and rejects the wrong preposition, 
       assert.ok(!app.answerMatches("wrong",item),item.id);
     }
   }
-  assert.ok(app.answerMatches("MIT DEM",find("mit-begleitung-dem-hund")));
-  assert.ok(app.answerMatches("Mit dem.",find("mit-begleitung-dem-hund")));
+  assert.ok(app.answerMatches("MIT SEINEM",find("mit-begleitung-seinem-hund")));
+  assert.ok(app.answerMatches("Mit seinem.",find("mit-begleitung-seinem-hund")));
   assert.ok(app.answerMatches("Ich heute fahre mit dem Bus zur Arbeit.",find("satzbau-mit-bus"))===false);
   for(const [id,wrongAnswers] of [
-    ["mit-begleitung-dem-hund",["mit","mit der","ohne dem"]],
+    ["mit-begleitung-seinem-hund",["mit","mit dem","ohne seinem"]],
     ["mit-mittel-bahn",["mit dem","mit die","ohne der"]],
+    ["mit-mittel-rad",["mit das","ohne dem"]],
     ["mit-art-und-weise-liebe",["ohne","mit den"]],
+    ["mit-zutat-pilze",["ohne","mit den"]],
+    ["mit-pronomen-dir",["mit dich","ohne dir","mit du"]],
+    ["mit-pronomen-ihm",["mit ihn","mit ihnen"]],
     ["ohne-artikel-mantel",["ohne","mit den","ohne dem"]],
+    ["ohne-artikel-auto",["ohne die","mit das"]],
     ["ohne-possessiv-schirm",["ohne den","ohne sein","mit seinen"]],
+    ["ohne-possessiv-tasche",["ohne deinen","mit deiner"]],
+    ["ohne-indefinit-hut",["ohne den","ohne einer","ohne eine"]],
+    ["ohne-indefinit-jacke",["ohne einen","ohne eines"]],
     ["ohne-ohne-artikel-zucker",["ohne den","mit"]],
     ["ohne-ohne-artikel-dressing",["ohne das","mit"]],
-    ["mit-ohne-wahl-brot",["ohne"]],
-    ["mit-ohne-wahl-kuchen",["mit"]],
+    ["ohne-pronomen-mich",["ohne mir","mit mich","ohne ich"]],
+    ["ohne-pronomen-ihn",["ohne ihm","ohne den"]],
+    ["mit-ohne-wahl-zutat-brot",["ohne"]],
+    ["mit-ohne-wahl-zutat-kuchen",["mit"]],
+    ["mit-ohne-wahl-zahlung-geld",["mit","mit Geld"]],
     ["satzbau-mit-bus",["Ich heute fahre mit dem Bus zur Arbeit."]],
     ["satzbau-ohne-bruder",["Heute er kommt ohne seinen Bruder zur Party."]]
   ]){

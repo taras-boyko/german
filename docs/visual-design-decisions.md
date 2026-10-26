@@ -768,7 +768,7 @@ guide).
 | travel-transport | 1 der Bahnhof, die Haltestelle, das Gepäck (pictures); 4 `Der Zug fährt ab` (boxes) |
 | giving-directions | 1 `Zuerst gehen Sie geradeaus`, 3 `Sie biegen links ab` (boxes); 2 geradeaus, nach rechts, nach links (arrows) |
 | temporal-prepositions | 7 `um 9 Uhr` (clock); 8 `Nach der Arbeit gehe ich ins Fitnessstudio` (boxes) |
-| mit-ohne | 8 `Mit dem Bus fahre ich zur Arbeit` (boxes) |
+| mit-ohne | 10 `Mit dem Bus fahre ich zur Arbeit` (boxes) |
 | time-expressions | 1 `um acht Uhr`; 6 `fünf nach zehn`, `zehn vor sechs`, `halb vier` (clocks) |
 | local-prepositions | 1 Wo? (book in the drawer, vase on the table), 2 Wohin? (the same moving), 4 the dog under the chair, Wo? vs Wohin? (scenes) |
 | time-worksheet-vocabulary | 1 der Baum, die Kirche, das Restaurant (pictures) |

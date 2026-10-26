@@ -986,7 +986,7 @@ const ruleVisualCoverage={
   "time-worksheet-vocabulary":["1:pictures"],
   "es-gibt-leisure":["3:pictures"],
   werden:["4:structure"],
-  "mit-ohne":["8:structure"]
+  "mit-ohne":["10:structure"]
 };
 
 function ruleText(rule){
