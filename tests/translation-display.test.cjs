@@ -134,6 +134,22 @@ test("switching cards clears hidden meanings without revealing answers before an
   assert.equal(elements.get("feedback-outcome").hidden,true);
 });
 
+test("keeps an expanded answer context open through subsequent practice cards",()=>{
+  const {app,elements}=runtime();
+  const lessonId="personal-pronoun-cases",stageIndex=1;
+  const [first,second]=app.variantsForStage(app.definitions[lessonId].stages[stageIndex]);
+  app.renderCard(lessonId,stageIndex,first,"correct");
+  const context=elements.get("feedback-context");
+  context.open=true;
+
+  app.renderCard(lessonId,stageIndex,second);
+  assert.equal(elements.get("answer").style.display,"none");
+  assert.equal(context.open,true);
+
+  app.renderCard(lessonId,stageIndex,second,"correct");
+  assert.equal(context.open,true);
+});
+
 test("mixed pronoun practice conceals the case until correct or wrong feedback",()=>{
   const {app,elements}=runtime();
   const lessonId="personal-pronoun-cases",stage=app.definitions[lessonId].stages[5];

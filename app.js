@@ -1604,7 +1604,7 @@ function render(focusTarget=""){
   renderExample(verificationMode&&revealed?example.text:(card.example||card.word),card);
   $("example-translation").textContent=exampleTranslation;
   $("example-translation").hidden=!translationKey(exampleTranslation);
-  $("feedback-context").open=!verificationMode||answerRevealed;
+  $("feedback-context").open=!verificationMode||answerRevealed||$("feedback-context").open;
   $("practice-portion").hidden=false;
   $("new-practice-portion").innerHTML='Новий підхід <span aria-hidden="true">↻</span>';
   const coverage=stageCoverage(stage);
