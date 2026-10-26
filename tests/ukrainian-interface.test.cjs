@@ -99,9 +99,9 @@ test("localization preserves the pre-localization identities, German content, an
       }))
     }))
   }));
-  // Preserve the existing baseline; new context variants are covered by the pronoun-case tests.
+  // Keep this baseline explicit; generated context variants are covered by the pronoun-case tests.
   assert.equal(createHash("sha256").update(JSON.stringify(snapshot)).digest("hex"),
-    "0bff08ec36d176ed42674bfdba559bbcd25d4fceaf950531d1677996cea1430c");
+    "bb13049097ab3a0a79b308b25d0ec03c42863c576ab221d838b44aa8c02e988b");
   for(const [lessonId,definition] of Object.entries(app.definitions)){
     for(const stage of definition.stages){
       const cards=app.variantsForStage(stage).slice(0,7);

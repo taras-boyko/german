@@ -65,10 +65,25 @@ test("clozes have one gap, a clear person cue, and a matching German sentence",(
   }
 });
 
-test("Dativ context variants do not inherit unrelated example details",()=>{
-  const card=lesson.cards.find(card=>card.id==="pronoun-dative-wir-context-zeigen");
-  assert.equal(card.example,"Die Trainerin zeigt uns die Übung.");
-  assert.equal(card.support,"Заміни wir (ми).");
+test("generated context variants use person cues instead of unrelated base-example details",()=>{
+  const cues={
+    ich:"Заміни ich (я).",
+    du:"Заміни du (ти).",
+    er:"Заміни er (він).",
+    she:"Заміни sie (вона). Зверни увагу на регістр.",
+    es:"Заміни es (воно, середній рід).",
+    wir:"Заміни wir (ми).",
+    ihr:"Заміни ihr (ви, неформально, кілька людей).",
+    they:"Заміни sie (вони). Зверни увагу на регістр.",
+    formal:"Заміни Sie (Ви, ввічливо). Зверни увагу на регістр."
+  };
+  const variants=lesson.cards.filter(card=>card.id.includes("-context-"));
+  assert.ok(variants.length>0);
+  for(const card of variants){
+    assert.ok(cues[card.person],card.id);
+    assert.equal(card.support,cues[card.person],card.id);
+  }
+  assert.equal(lesson.cards.find(card=>card.id==="pronoun-dative-wir-give").support,"Заміни wir (ми): одержувачі книжок.");
 });
 
 test("formal, feminine, and plural sie remain separate capitalization objectives",()=>{
@@ -83,6 +98,9 @@ test("formal, feminine, and plural sie remain separate capitalization objectives
     const ids=["she","they","formal"].map(person=>`pronoun-${grammaticalCase}-${person}`);
     assert.equal(new Set(ids).size,3);
     assert.ok(ids.every(id=>lesson.cards.some(card=>card.targetId===id)));
+  }
+  for(const card of lesson.stages[5].cards.filter(card=>["she","they","formal"].includes(card.person)&&card.id.endsWith("-recall"))){
+    assert.match(card.support,/Зверни увагу на регістр/,card.id);
   }
 });
 

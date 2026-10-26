@@ -274,7 +274,7 @@ const personalPronounDativeBaseCards=withPronounCase("Dat.",[
     response:{mode:"text",scope:"word",accepted:["uns"],caseSensitive:false,punctuationSensitive:false}
   },
   {
-    id:"pronoun-dative-wir-give",targetId:"pronoun-dative-wir",person:"wir",type:"cloze",word:"uns",example:"Der Lehrer gibt uns die Bücher.",translation:"Учитель дає нам книжки.",studyTranslation:"wir → uns · нам",promptText:"Der Lehrer gibt ___ die Bücher.",support:"Заміни wir (ми).",
+    id:"pronoun-dative-wir-give",targetId:"pronoun-dative-wir",person:"wir",type:"cloze",word:"uns",example:"Der Lehrer gibt uns die Bücher.",translation:"Учитель дає нам книжки.",studyTranslation:"wir → uns · нам",promptText:"Der Lehrer gibt ___ die Bücher.",support:"Заміни wir (ми): одержувачі книжок.",
     explanation:"Одержувачі з geben стоять у Dativ: wir → uns.",category:"PERSONALPRONOMEN · DATIV",practiceVariants:false,
     response:{mode:"text",scope:"word",accepted:["uns"],caseSensitive:false,punctuationSensitive:false}
   },
@@ -476,6 +476,17 @@ const personalPronounCaseRules={
   öffnen:"Одержувач із öffnen стоїть у Dativ",
   anbieten:"Одержувач із anbieten стоїть у Dativ"
 };
+const personalPronounContextCues={
+  ich:"Заміни ich (я).",
+  du:"Заміни du (ти).",
+  er:"Заміни er (він).",
+  she:"Заміни sie (вона). Зверни увагу на регістр.",
+  es:"Заміни es (воно, середній рід).",
+  wir:"Заміни wir (ми).",
+  ihr:"Заміни ihr (ви, неформально, кілька людей).",
+  they:"Заміни sie (вони). Зверни увагу на регістр.",
+  formal:"Заміни Sie (Ви, ввічливо). Зверни увагу на регістр."
+};
 function addPronounContextExamples(baseCards,caseLabel,examples){
   const grammaticalCase=caseLabel==="Akk."?"accusative":"dative";
   return examples.map(([person,rule,example,translation,promptText])=>{
@@ -484,10 +495,12 @@ function addPronounContextExamples(baseCards,caseLabel,examples){
     if(!base)throw new Error(`Missing base pronoun card: ${targetId}`);
     const ruleText=personalPronounCaseRules[rule];
     if(!ruleText)throw new Error(`Unknown pronoun case rule: ${rule}`);
+    const support=personalPronounContextCues[person];
+    if(!support)throw new Error(`Missing pronoun context cue: ${person}`);
     const answer=base.response.accepted[0];
     return {
       id:`${base.targetId}-context-${rule.normalize("NFD").replace(/[\u0300-\u036f]/g,"").toLowerCase()}`,
-      targetId:base.targetId,person,type:"cloze",word:answer,example,translation,studyTranslation:base.studyTranslation,promptText,support:base.support,
+      targetId:base.targetId,person,type:"cloze",word:answer,example,translation,studyTranslation:base.studyTranslation,promptText,support,
       explanation:`${ruleText}: ${base.studyTranslation.split(" · ")[0]}.`,category:base.category,practiceVariants:false,response:base.response
     };
   });
@@ -505,21 +518,21 @@ const personalPronounMixedPrompts={
   "pronoun-accusative-ich-recall":{promptText:"Meine Schwester besucht ___.",support:"Заміни ich (я)."},
   "pronoun-accusative-du-recall":{promptText:"Ich besuche ___ am Abend.",support:"Заміни du (ти)."},
   "pronoun-accusative-er-recall":{promptText:"Ich kenne ___ gut.",support:"Заміни er (він)."},
-  "pronoun-accusative-she-recall":{promptText:"Wir besuchen ___ heute.",support:"Заміни sie (вона)."},
+  "pronoun-accusative-she-recall":{promptText:"Wir besuchen ___ heute.",support:personalPronounContextCues.she},
   "pronoun-accusative-es-recall":{promptText:"Das Baby schläft. Ich sehe ___.",support:"Заміни es (воно): das Baby."},
   "pronoun-accusative-wir-recall":{promptText:"Unsere Freunde besuchen ___.",support:"Заміни wir (ми)."},
   "pronoun-accusative-ihr-recall":{promptText:"Ich besuche ___ morgen.",support:"Заміни ihr (ви, неформально, кілька людей)."},
-  "pronoun-accusative-they-recall":{promptText:"Ich kenne ___ schon.",support:"Заміни sie (вони)."},
-  "pronoun-accusative-formal-recall":{promptText:"Ich besuche ___ morgen.",support:"Заміни Sie (Ви, ввічливо)."},
+  "pronoun-accusative-they-recall":{promptText:"Ich kenne ___ schon.",support:personalPronounContextCues.they},
+  "pronoun-accusative-formal-recall":{promptText:"Ich besuche ___ morgen.",support:personalPronounContextCues.formal},
   "pronoun-dative-ich-recall":{promptText:"Meine Schwester hilft ___.",support:"Заміни ich (я)."},
   "pronoun-dative-du-recall":{promptText:"Ich helfe ___ gern.",support:"Заміни du (ти)."},
   "pronoun-dative-er-recall":{promptText:"Ich helfe ___ heute.",support:"Заміни er (він)."},
-  "pronoun-dative-she-recall":{promptText:"Ich helfe ___ gern.",support:"Заміни sie (вона)."},
+  "pronoun-dative-she-recall":{promptText:"Ich helfe ___ gern.",support:personalPronounContextCues.she},
   "pronoun-dative-es-recall":{promptText:"Das Baby weint. Die Mutter gibt ___ Milch.",support:"Заміни es (воно): das Baby."},
   "pronoun-dative-wir-recall":{promptText:"Unsere Freunde helfen ___.",support:"Заміни wir (ми)."},
   "pronoun-dative-ihr-recall":{promptText:"Ich helfe ___ morgen.",support:"Заміни ihr (ви, неформально, кілька людей)."},
-  "pronoun-dative-they-recall":{promptText:"Ich helfe ___ heute.",support:"Заміни sie (вони)."},
-  "pronoun-dative-formal-recall":{promptText:"Ich helfe ___ gern.",support:"Заміни Sie (Ви, ввічливо)."}
+  "pronoun-dative-they-recall":{promptText:"Ich helfe ___ heute.",support:personalPronounContextCues.they},
+  "pronoun-dative-formal-recall":{promptText:"Ich helfe ___ gern.",support:personalPronounContextCues.formal}
 };
 const personalPronounMixedPracticeCards=personalPronounCaseCards.map(card=>{
   const context=personalPronounMixedPrompts[card.id];
