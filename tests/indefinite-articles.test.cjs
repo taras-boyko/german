@@ -22,6 +22,11 @@ const expectedAnswers={
   "kein-dative-masculine":"keinem","kein-dative-neuter":"keinem","kein-dative-feminine":"keiner","kein-dative-plural":"keinen"
 };
 const negativeTarget=targetId=>targetId.startsWith("kein-");
+const variantCounts=stage=>{
+  const counts=new Map();
+  stage.cards.forEach(card=>counts.set(card.targetId,(counts.get(card.targetId)||0)+1));
+  return counts;
+};
 
 function runtime(saved=new Map()){
   const elements=new Map(),requests=[];
@@ -135,13 +140,16 @@ function runtime(saved=new Map()){
   return {app,elements,saved,requests,key,answer,open};
 }
 
-test("every target has three explicit natural variants whose cue fixes a single article",()=>{
-  assert.equal(lesson.cards.length,63);
-  assert.equal(new Set(lesson.cards.map(card=>card.id)).size,63);
+test("every target has three learn variants and nine practice variants, each with an explicit natural cue",()=>{
+  const learnIds=new Set(lesson.stages.filter(stage=>stage.mode==="learn").flatMap(stage=>stage.cards.map(card=>card.id)));
+  assert.equal(learnIds.size,63);
+  assert.equal(lesson.cards.length,189);
+  assert.equal(new Set(lesson.cards.map(card=>card.id)).size,189);
   assert.equal(new Set(lesson.cards.map(card=>card.targetId)).size,21);
   for(const [targetId,answer] of Object.entries(expectedAnswers)){
     const variants=lesson.cards.filter(card=>card.targetId===targetId);
-    assert.equal(variants.length,3,targetId);
+    assert.equal(variants.length,9,targetId);
+    assert.equal(variants.filter(card=>learnIds.has(card.id)).length,3,targetId);
     for(const card of variants){
       assert.equal(card.type,"cloze",card.id);
       assert.deepEqual(card.response.accepted,[answer],card.id);
@@ -201,7 +209,7 @@ test("every card's visual metadata agrees with its answer and gender",()=>{
   }
 });
 
-test("practice copies hide the gender line and never name gender or the case being tested",()=>{
+test("practice copies hide the gender line, keep every learn variant and triple the learn pool",()=>{
   const stages=lesson.stages;
   assert.equal(stages.length,10);
   assert.equal(new Set(stages.map(stage=>stage.chapter)).size,5);
@@ -210,7 +218,9 @@ test("practice copies hide the gender line and never name gender or the case bei
     assert.equal(learn.mode,"learn");
     assert.equal(practice.mode,"input");
     assert.equal(learn.chapter,practice.chapter);
-    assert.deepEqual(practice.cards.map(card=>card.id),learn.cards.map(card=>card.id));
+    const practiceIds=new Set(practice.cards.map(card=>card.id));
+    assert.ok(learn.cards.every(card=>practiceIds.has(card.id)),learn.id);
+    assert.equal(practice.cards.length,3*learn.cards.length,practice.id);
     assert.ok(learn.cards.every(card=>card.noun),learn.id);
     assert.ok(practice.cards.every(card=>!("noun" in card)),practice.id);
     assert.doesNotMatch(practice.categoryBeforeCheck,/MASKULINUM|NEUTRUM|FEMININUM|PLURAL/,practice.id);
@@ -221,7 +231,8 @@ test("practice copies hide the gender line and never name gender or the case bei
   assert.equal(stages[7].categoryBeforeCheck,"NEGATIVARTIKEL");
   assert.equal(stages[9].categoryBeforeCheck,"UNBESTIMMTER ARTIKEL · NEGATIVARTIKEL");
   assert.equal(new Set(stages[8].cards.map(card=>card.targetId)).size,21);
-  assert.equal(stages[7].cards.length,36);
+  assert.equal(stages[7].cards.length,108);
+  assert.equal(stages[9].cards.length,189);
 });
 
 test("shared sampling covers every target, rotates variants and keeps passes at seven or fewer",()=>{
@@ -229,6 +240,7 @@ test("shared sampling covers every target, rotates variants and keeps passes at 
   for(const stage of app.definitions[lessonId].stages){
     assert.equal(app.variantsForStage(stage).length,stage.cards.length,stage.id);
     const covered=new Set(),cycles=new Map(),allTargets=new Set(stage.cards.map(card=>card.targetId));
+    const variantCount=variantCounts(stage);
     let previous=[];
     const passes=Math.ceil(allTargets.size/7)+2;
     for(let passIndex=0;passIndex<passes*2;passIndex++){
@@ -238,7 +250,7 @@ test("shared sampling covers every target, rotates variants and keeps passes at 
       if(previous.length)assert.notEqual(pass[0].id,previous[0],stage.id);
       for(const card of pass){
         const cycle=cycles.get(card.targetId)||new Set();
-        if(cycle.size===3)cycle.clear();
+        if(cycle.size===variantCount.get(card.targetId))cycle.clear();
         assert.ok(!cycle.has(card.id),`${stage.id}: ${card.id} repeated before all variants appeared`);
         cycle.add(card.id);
         cycles.set(card.targetId,cycle);
@@ -249,6 +261,23 @@ test("shared sampling covers every target, rotates variants and keeps passes at 
       previous=pass.map(card=>card.id);
     }
     assert.equal(covered.size,allTargets.size,stage.id);
+  }
+});
+
+test("shuffle-bag variant coverage holds over long practice runs",()=>{
+  const {app}=runtime();
+  for(const stage of app.definitions[lessonId].stages.filter(item=>item.mode==="input")){
+    const variantCount=variantCounts(stage),cycles=new Map(),allTargets=[...variantCount.keys()];
+    app.lessonState(lessonId).masteredTargets[stage.id]=allTargets;
+    for(let passIndex=0;passIndex<300;passIndex++){
+      for(const card of app.samplePass(lessonId,stage)){
+        const cycle=cycles.get(card.targetId)||new Set();
+        if(cycle.size===variantCount.get(card.targetId))cycle.clear();
+        assert.ok(!cycle.has(card.id),`${stage.id} pass ${passIndex}: ${card.id} repeated before all variants appeared`);
+        cycle.add(card.id);
+        cycles.set(card.targetId,cycle);
+      }
+    }
   }
 });
 

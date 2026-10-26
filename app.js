@@ -3,6 +3,8 @@
 
 const STATE_VERSION=5;
 const PASS_SIZE=7;
+// Shuffle-bag history must keep every variant of a target's unfinished cycle, so it has to exceed the largest stage pool.
+const RECENT_VARIANT_LIMIT=1000;
 const stateStorageKey="german-learning-state-v5";
 const previousStateStorageKeys=["german-learning-state-v4","german-learning-state-v3"];
 const deviceStorageKey="german-learning-device-id";
@@ -151,7 +153,7 @@ function normalizeState(value){
       state.suspendedSessions[key]={session:entry.session&&typeof entry.session==="object"?entry.session:null,updatedAt:entry.updatedAt};
     }
   });
-  Object.entries(value.recentVariants||{}).forEach(([sequenceId,ids])=>{state.recentVariants[sequenceId]=uniqueStrings(ids).slice(-100)});
+  Object.entries(value.recentVariants||{}).forEach(([sequenceId,ids])=>{state.recentVariants[sequenceId]=uniqueStrings(ids).slice(-RECENT_VARIANT_LIMIT)});
   Object.entries(value.lastPasses||{}).forEach(([sequenceId,lastPass])=>{
     if(lastPass&&typeof lastPass==="object"&&typeof lastPass.updatedAt==="string"){
       state.lastPasses[sequenceId]={ids:uniqueStrings(lastPass.ids),updatedAt:lastPass.updatedAt};
@@ -383,7 +385,7 @@ function mergeState(local,disk){
     });
   });
   Object.entries(disk.recentVariants||{}).forEach(([sequenceId,ids])=>{
-    merged.recentVariants[sequenceId]=[...new Set([...(ids||[]),...(merged.recentVariants[sequenceId]||[])])].slice(-100);
+    merged.recentVariants[sequenceId]=[...new Set([...(ids||[]),...(merged.recentVariants[sequenceId]||[])])].slice(-RECENT_VARIANT_LIMIT);
   });
   Object.entries(disk.lastPasses||{}).forEach(([sequenceId,lastPass])=>{
     const current=merged.lastPasses[sequenceId];
@@ -639,7 +641,7 @@ function samplePass(lessonId,stage){
   let shuffled=fisherYates(cards);
   if(shuffled.length>1&&shuffled[0].id===previousFirst)[shuffled[0],shuffled[1]]=[shuffled[1],shuffled[0]];
   const recent=learningState.recentVariants[stage.id]||[];
-  learningState.recentVariants[stage.id]=[...recent,...shuffled.map(card=>card.id)].slice(-100);
+  learningState.recentVariants[stage.id]=[...recent,...shuffled.map(card=>card.id)].slice(-RECENT_VARIANT_LIMIT);
   learningState.lastPasses[stage.id]={ids:shuffled.map(card=>card.id),updatedAt:new Date().toISOString()};
   return shuffled;
 }
