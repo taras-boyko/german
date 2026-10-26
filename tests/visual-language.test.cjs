@@ -346,7 +346,7 @@ test("verb cards carry a person strip whose active tile is the answer form",()=>
       }
     }
   }
-  assert.deepEqual(covered,{sein:22,conjugation:66,"strong-verbs":120,koennen:48,haben:54,werden:12});
+  assert.deepEqual(covered,{sein:22,conjugation:66,"strong-verbs":120,koennen:48,haben:54,werden:24});
   for(const stage of app.definitions["strong-verbs"].stages)assert.equal(stage.cards.length,42,stage.id);
 });
 
