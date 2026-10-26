@@ -48,8 +48,8 @@ test("practice variants keep their target's noun, scene and cue",()=>{
       assert.deepEqual(card.noun,base.noun,card.id);
       assert.deepEqual(card.scene,base.scene,card.id);
       assert.equal(card.cue,base.cue,card.id);
-      assert.equal(card.practiceSupport.text,card.translation,card.id);
-      assert.equal(card.scene.motion,card.cue==="Wohin?",card.id);
+      if(card.cueAfterCheck)assert.equal(card.practiceSupport.label,"Значення",card.id);
+      else assert.equal(card.practiceSupport.text,card.translation,card.id);
     }
   }
 });
@@ -78,10 +78,24 @@ test("cloze prompts have one gap and sentence-build chunks rebuild their answer"
   }
 });
 
+test("contrast practice is a cloze whose gap is the place phrase and whose cue names no case",()=>{
+  const cards=stageByID("local-prepositions-contrast-practice").cards;
+  assert.equal(cards.length,24);
+  for(const card of cards){
+    assert.equal(card.type,"cloze",card.id);
+    assert.equal(card.cueAfterCheck,true,card.id);
+    assert.equal(card.practiceVariants,false,card.id);
+    assert.equal(card.promptText,card.word.replace(card.response.accepted[0],"___"),card.id);
+    assert.equal(card.promptText.split("___").length-1,1,card.id);
+    assert.equal(card.practiceSupport.label,"Значення",card.id);
+    assert.doesNotMatch(card.practiceSupport.text,/(?<![\p{L}])(?:auf|an|in|über|unter|vor|hinter|neben|zwischen)(?![\p{L}])/iu,card.id);
+  }
+});
+
 test("practice variant pools include the gapped example of every cloze card",()=>{
   for(const [prefix,{practice}] of Object.entries(sequences)){
     const cards=stageByID(`${prefix}-practice`).cards;
-    const gapped=cards.filter(card=>card.type==="cloze"&&standaloneCount(card.example,answerOf(card))>0).length;
+    const gapped=cards.filter(card=>card.type==="cloze"&&card.practiceVariants!==false&&standaloneCount(card.example,answerOf(card))>0).length;
     const variants=cards.length+gapped;
     assert.equal(variants,prefix.endsWith("contrast")?practice:practice*2,prefix);
   }

@@ -577,7 +577,6 @@ function contextVariant(card){
     promptText:`${sentence.slice(0,occurrence.start)}___${sentence.slice(occurrence.end)}`,
     // The meaning keeps the gap to one valid answer (e.g. "___ Auto" fits any possessive).
     support:card.support||(card.answer?"":card.exampleTranslation||""),
-    exampleTranslation:"Доповніть речення німецькою.",
     response:{...card.response,scope:expected.includes(" ")?"phrase":"word",accepted:[expected]}
   };
 }
@@ -1034,7 +1033,9 @@ function sceneMarkup(art){
 }
 
 function renderCardScene(card){
-  const art=card.scene?sceneArt(card.scene):"";
+  // A cueAfterCheck card keeps its motion arrow hidden until Check, so the scene shows only the place.
+  const scene=card.scene&&{...card.scene,motion:card.scene.motion&&(!card.cueAfterCheck||answerVisualsShown())};
+  const art=scene?sceneArt(scene):"";
   $("card-illustration").hidden=!art;
   $("flashcard").classList.toggle("illustrated-card",Boolean(art));
   if(art)$("card-illustration-art").innerHTML=`<title>Ілюстрація просторового розташування</title>${sceneMarkup(art)}`;
@@ -1591,7 +1592,7 @@ function render(focusTarget=""){
   const category=verificationMode&&!revealed?(stage.categoryBeforeCheck||card.category):card.category;
   $("category-label").textContent=`${categoryLabel(category)} · ${exerciseLabels[card.type]}`;
   $("w-badge").textContent=card.cue||"";
-  $("w-badge").hidden=!card.cue;
+  $("w-badge").hidden=!card.cue||(card.cueAfterCheck&&!answerVisualsShown());
   $("feedback-outcome").hidden=!feedbackVisible;
   $("feedback-outcome").className=`feedback-outcome ${verified?"correct":"incorrect"}`;
   if(feedbackVisible){

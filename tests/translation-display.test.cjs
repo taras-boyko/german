@@ -40,7 +40,7 @@ function runtime(){
     renderCorrection=()=>{};
     updatePageTitle=()=>{};
     globalThis.runtime={
-      definitions:deckDefinitions,variantsForStage,feedbackExample,translationKey,
+      definitions:deckDefinitions,variantsForStage,feedbackExample,translationKey,contextVariant,
       renderCard(lessonId,stageIndex,card,status=""){
         activeDeckId=lessonId;
         activeStageIndex=stageIndex;
@@ -183,4 +183,28 @@ test("focused practice and all learn stages retain their original case labels an
       assert.equal(text,stage.mode==="input"?card.promptText:card.word,card.id);
     }
   }
+});
+
+test("in-context practice feedback shows the example sentence's translation, not the gap instruction",()=>{
+  const {app,elements}=runtime();
+  let checked=0;
+  for(const [lessonId,definition] of Object.entries(app.definitions)){
+    for(const stage of definition.stages){
+      if(stage.mode!=="input")continue;
+      for(const card of stage.cards){
+        const variant=app.contextVariant(card);
+        if(!variant||app.feedbackExample(variant).label!=="Приклад у контексті")continue;
+        checked++;
+        assert.equal(app.feedbackExample(variant).translation,card.exampleTranslation||card.translation,`${lessonId}: ${card.id}`);
+      }
+    }
+  }
+  assert.ok(checked>0);
+
+  const lessonId="local-prepositions";
+  const stageIndex=app.definitions[lessonId].stages.findIndex(stage=>stage.mode==="input"&&stage.cards.some(card=>card.id==="local-accusative-an-wand-plakate"));
+  const card=app.definitions[lessonId].stages[stageIndex].cards.find(item=>item.id==="local-accusative-an-wand-plakate");
+  app.renderCard(lessonId,stageIndex,app.contextVariant(card),"revealed");
+  assert.equal(elements.get("example").textContent,card.example);
+  assert.equal(elements.get("example-translation").textContent,"Учениця вішає яскраві плакати на стіну.");
 });

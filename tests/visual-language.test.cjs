@@ -115,8 +115,12 @@ test("local-preposition scenes and cues come from explicit card data",()=>{
     assert.ok(card.scene,card.id);
     assert.ok(app.sceneArt(card.scene),`${card.id}: unknown scene ${card.scene.kind}`);
     assert.equal(card.cue,card.scene.motion?"Wohin?":"Wo?",card.id);
-    assert.ok(card.practiceSupport.label.startsWith(card.cue),card.id);
-    assert.ok(card.practiceSupport.text.startsWith(card.translation),card.id);
+    if(card.cueAfterCheck){
+      assert.equal(card.practiceSupport.label,"Значення",card.id);
+    }else{
+      assert.ok(card.practiceSupport.label.startsWith(card.cue),card.id);
+      assert.ok(card.practiceSupport.text.startsWith(card.translation),card.id);
+    }
     for(const answer of card.response.accepted){
       assert.equal(app.standaloneOccurrence(card.practiceSupport.text,answer.replace(/[?!.,]+$/,"")),null,`${card.id}: ${answer}`);
     }
@@ -279,22 +283,45 @@ test("example focus marks each noun form in its own gender",()=>{
   assert.deepEqual(focus().map(child=>[child.textContent,child.className]),[["Haltestelle","example-focus gender-feminine"]]);
 });
 
-test("local-preposition practice keeps the given noun visible and the meaning separate",()=>{
+test("local-preposition practice shows the noun line only after Check",()=>{
   const {app,elements}=runtime();
   const lesson=app.definitions["local-prepositions"];
   for(const card of lesson.cards){
-    assert.equal(card.noun.givenInPractice,true,card.id);
-    assert.equal(card.practiceSupport.text,card.translation,card.id);
-    assert.equal(card.practiceSupport.label,`${card.cue} · значення`,card.id);
+    assert.equal(card.noun.givenInPractice,undefined,card.id);
+    if(card.cueAfterCheck){
+      assert.equal(card.practiceSupport.label,"Значення",card.id);
+    }else{
+      assert.equal(card.practiceSupport.text,card.translation,card.id);
+      assert.equal(card.practiceSupport.label,`${card.cue} · значення`,card.id);
+    }
   }
   const stageIndex=lesson.stages.findIndex(stage=>stage.mode==="input");
   const card=app.variantsForStage(lesson.stages[stageIndex]).find(item=>item.targetId==="local-dative-zwischen-fenstern");
   app.renderCard("local-prepositions",stageIndex,card);
+  assert.equal(elements.get("noun-gender").hidden,true);
+  app.renderCard("local-prepositions",stageIndex,card,"correct");
   assert.equal(elements.get("noun-gender").hidden,false);
   assert.deepEqual(elements.get("noun-gender").children.map(child=>child.textContent),["","die Fenster","множина"]);
-  app.renderCard("local-prepositions",stageIndex,card,"correct");
   const focus=elements.get("example").children.filter(child=>child.className.startsWith("example-focus"));
   assert.deepEqual(focus.map(child=>[child.textContent,child.className]),[["Fenstern","example-focus gender-plural"]]);
+});
+
+test("contrast practice hides the case cue, motion arrow and noun line until Check",()=>{
+  const {app,elements}=runtime();
+  const lesson=app.definitions["local-prepositions"];
+  const stageIndex=lesson.stages.findIndex(stage=>stage.id==="local-prepositions-contrast-practice");
+  const motion=app.variantsForStage(lesson.stages[stageIndex]).find(card=>card.scene.motion);
+  const arrowShown=()=>elements.get("card-illustration-art").innerHTML.includes("scene-arrow");
+  app.renderCard("local-prepositions",stageIndex,motion);
+  assert.equal(elements.get("w-badge").hidden,true);
+  assert.equal(arrowShown(),false);
+  assert.equal(elements.get("noun-gender").hidden,true);
+  assert.equal(elements.get("prompt-support").textContent,motion.practiceSupport.text);
+  app.renderCard("local-prepositions",stageIndex,motion,"correct");
+  assert.equal(elements.get("w-badge").hidden,false);
+  assert.equal(elements.get("w-badge").textContent,"Wohin?");
+  assert.equal(arrowShown(),true);
+  assert.equal(elements.get("noun-gender").hidden,false);
 });
 
 const auxiliaryForms={haben:["habe","hast","hat","haben","habt"],sein:["bin","bist","ist","sind","seid"]};

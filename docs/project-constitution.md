@@ -311,7 +311,7 @@ future passes provide contextual variety and retention checks.
 - A visual must not give the answer away just by appearing. In a mixed drill, a
   visual that only one kind of answer would get (a clock only on the `um` cards of an
   um / am / im drill) is left out.
-- Visual metadata (`scene`, `cue`, `practiceSupport`, `noun`, `answerParts`,
+- Visual metadata (`scene`, `cue`, `cueAfterCheck`, `practiceSupport`, `noun`, `answerParts`,
   `paradigm`, `auxiliary`, `structure`, `frequency`, `clock`, `picture`, guide `table`
   and guide `visual`) is
   authored explicitly in lesson data. Never derive it
@@ -328,7 +328,8 @@ future passes provide contextual variety and retention checks.
   answer as a standalone word. In practice the noun line therefore appears only when
   no accepted answer contains the noun or its example forms, or when the prompt
   already gives the noun (`givenInPractice`); vocabulary recall of a noun shows it
-  after Check.
+  after Check. In a mixed case drill (`cueAfterCheck`) the Wo?/Wohin? cue and the
+  motion arrow also wait until Check, so the scene shows only the place.
 - On learn cards whose headword is exactly the article and noun (`der Bahnhof`,
   `das Kino / die Kinos`), each headword entry carries its own gender dot and the noun
   line shows only the Ukrainian gender names, so the noun is not repeated.

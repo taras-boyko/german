@@ -101,7 +101,7 @@ test("localization preserves the pre-localization identities, German content, an
   }));
   // Keep this baseline explicit; generated context variants are covered by the pronoun-case tests.
   assert.equal(createHash("sha256").update(JSON.stringify(snapshot)).digest("hex"),
-    "5268fc49810b7378bb0936bbaabf09534449d5805ce20903930cd9682de42ae7");
+    "31f2831f35ced03e211a215bdbcf30383d9bf5e7d9689a1634416249635f4591");
   for(const [lessonId,definition] of Object.entries(app.definitions)){
     for(const stage of definition.stages){
       const cards=app.variantsForStage(stage).slice(0,7);

@@ -647,7 +647,7 @@ phase. Check them before treating the rollout as final.
 |---|---|---|---|
 | possessive-cases | Every card | Every card | Nom. / Akk. / Dat. endings |
 | possessives | Nominativ possessive cards (`mein Bruder`, `deine Freunde`, `ihre Tasche` …) | Nominativ possessive cards | Nominativ endings |
-| local-prepositions | Every card; shown in practice because the gap gives the noun | — | Nom. / Wohin? / Wo? articles |
+| local-prepositions | Learn cards; in practice only after Check (the gap no longer gives the noun) | — | Nom. / Wohin? / Wo? articles |
 | temporal-prepositions | Event and time-span cards; event cards show it in practice (the gap gives the noun), span cards after Check | — | Nom. / Akk. / Dat. articles |
 | es-gibt-leisure | Places with singular and plural, pattern cards | — | ein → einen |
 | indefinite-articles | Every card, learn stages; practice hides the gender line until Check | Every card; ein and kein strips (der · das · die, Plural for kein) | ein and kein paradigms |
