@@ -3483,8 +3483,8 @@ const strongVerbStages=[
 const pastVerbStagesForLevel=(level,slug,formCards,practiceCards,legacyIds=false)=>{
   const a1=level==="A1";
   return [
-    {...lessonStep(legacyIds?"past-verbs-learn":`past-verbs-${slug}-learn`,`Вивчення минулого часу · ${level}`,a1?"Вивчіть повсякденний Perfekt. Präteritum потрібен лише для sein і haben.":`Прочитайте інфінітив, теперішній час, Präteritum і Perfekt кожного дієслова рівня ${level}.`,formCards,"learn",`Минулий час · ${level}`,"Вивчення"),requiresFullCoverage:true},
-    {...lessonStep(legacyIds?"past-verbs-practice":`past-verbs-${slug}-practice`,`Практика минулого часу · ${level}`,a1?"Введіть Perfekt; для sein і haben введіть Präteritum і Perfekt.":"Введіть Präteritum і Perfekt кожного дієслова через похилу риску.",practiceCards,"input",`Минулий час · ${level}`,"Практика"),requiresFullCoverage:true}
+    {...lessonStep(legacyIds?"past-verbs-learn":`past-verbs-${slug}-learn`,`Вивчення минулого часу · ${level}`,a1?"Вивчіть повсякденний Perfekt. Präteritum потрібен лише для sein і haben.":`Прочитайте інфінітив, теперішній час, Präteritum і Perfekt кожного дієслова рівня ${level}.`,formCards,"learn",`Минулий час · ${level}`,"Вивчення")},
+    {...lessonStep(legacyIds?"past-verbs-practice":`past-verbs-${slug}-practice`,`Практика минулого часу · ${level}`,a1?"Введіть Perfekt; для sein і haben введіть Präteritum і Perfekt.":"Введіть Präteritum і Perfekt кожного дієслова через похилу риску.",practiceCards,"input",`Минулий час · ${level}`,"Практика")}
   ];
 };
 const pastVerbA1Stages=pastVerbStagesForLevel("A1","a1",pastVerbA1FormCards,pastVerbA1PracticeCards,true);
@@ -3778,8 +3778,8 @@ const directionsStages=[
   ...learnThenPractice("directions-landmarks","вуличні орієнтири","Описуйте розташування місць і маршрути через перехрестя, світлофори й вулиці.",directionLandmarkCards,"Вуличні орієнтири")
 ];
 const dativeVerbStages=[
-  {...lessonStep("dative-verbs-learn","Вивчення дієслів із Dativ","Вивчіть усі 16 дієслів з українськими значеннями й природними прикладами. Зверніть увагу, кому адресовано дію або хто відчуває її результат.",dativeVerbCards,"learn","Дієслова з Dativ","Вивчення"),requiresFullCoverage:true},
-  {...lessonStep("dative-verbs-practice","Практика дієслів із Dativ","Пригадайте інфінітив за українським значенням або доповніть одну форму дієслова. Для wehtun і auffallen відокремлена частина вже показана.",dativeVerbCards,"input","Дієслова з Dativ","Практика"),requiresFullCoverage:true}
+  {...lessonStep("dative-verbs-learn","Вивчення дієслів із Dativ","Вивчіть усі 16 дієслів з українськими значеннями й природними прикладами. Зверніть увагу, кому адресовано дію або хто відчуває її результат.",dativeVerbCards,"learn","Дієслова з Dativ","Вивчення")},
+  {...lessonStep("dative-verbs-practice","Практика дієслів із Dativ","Пригадайте інфінітив за українським значенням або доповніть одну форму дієслова. Для wehtun і auffallen відокремлена частина вже показана.",dativeVerbCards,"input","Дієслова з Dativ","Практика")}
 ];
 const esGibtLeisureStages=[
   lessonStep("es-gibt-pattern-learn","Вивчення es gibt","Уживайте es gibt, щоб повідомити про наявність місця або предмета. Зверніть увагу на артикль в Akkusativ після нього.",esGibtPatternCards,"learn","Конструкція es gibt","Вивчення"),
@@ -3807,12 +3807,12 @@ const separableVerbStages=[
   lessonStep("separable-verbs-context-practice","Практика змішаних контекстів","Побудуйте розповідні речення, спеціальне запитання, речення з модальними дієсловами й підрядне речення.",separableVerbContextPracticeCards,"input","Змішані контексти","Практика")
 ];
 const localPrepositionsStages=[
-  {...lessonStep("local-prepositions-dative-learn","Вивчення Wo? + Dativ","Розпізнавайте нерухоме розташування з in, an, auf, über, unter, vor, hinter, neben і zwischen.",localPrepositionsDativeCards,"learn","Де? · Wo? + Dativ","Вивчення"),requiresFullCoverage:true},
-  {...lessonStep("local-prepositions-dative-practice","Практика Wo? + Dativ","Доповніть вираз місця. Спочатку поставте запитання Wo?, потім уживайте Dativ після прийменника.",localPrepositionsDativePracticeCards,"input","Де? · Wo? + Dativ","Практика"),requiresFullCoverage:true},
-  {...lessonStep("local-prepositions-accusative-learn","Вивчення Wohin? + Akkusativ","Розпізнавайте напрямок руху з тими самими прийменниками й артиклем в Akkusativ.",localPrepositionsAccusativeCards,"learn","Куди? · Wohin? + Akkusativ","Вивчення"),requiresFullCoverage:true},
-  {...lessonStep("local-prepositions-accusative-practice","Практика Wohin? + Akkusativ","Доповніть вираз напрямку. Спочатку поставте запитання Wohin?, потім уживайте Akkusativ після прийменника.",localPrepositionsAccusativePracticeCards,"input","Куди? · Wohin? + Akkusativ","Практика"),requiresFullCoverage:true},
-  {...lessonStep("local-prepositions-contrast-learn","Порівняння руху й розташування","Прочитайте пари речень про рух і розташування. Обирайте відмінок за значенням, а не лише за прийменником.",localPrepositionsContrastCards,"learn","Рух чи розташування?","Вивчення"),requiresFullCoverage:true},
-  {...lessonStep("local-prepositions-contrast-practice","Місце й напрямок у реченні","Доповніть місце. Дієслово показує, рух це чи розташування, і від цього залежить відмінок.",localPrepositionsContrastPracticeCards,"input","Рух чи розташування?","Практика"),requiresFullCoverage:true}
+  {...lessonStep("local-prepositions-dative-learn","Вивчення Wo? + Dativ","Розпізнавайте нерухоме розташування з in, an, auf, über, unter, vor, hinter, neben і zwischen.",localPrepositionsDativeCards,"learn","Де? · Wo? + Dativ","Вивчення")},
+  {...lessonStep("local-prepositions-dative-practice","Практика Wo? + Dativ","Доповніть вираз місця. Спочатку поставте запитання Wo?, потім уживайте Dativ після прийменника.",localPrepositionsDativePracticeCards,"input","Де? · Wo? + Dativ","Практика")},
+  {...lessonStep("local-prepositions-accusative-learn","Вивчення Wohin? + Akkusativ","Розпізнавайте напрямок руху з тими самими прийменниками й артиклем в Akkusativ.",localPrepositionsAccusativeCards,"learn","Куди? · Wohin? + Akkusativ","Вивчення")},
+  {...lessonStep("local-prepositions-accusative-practice","Практика Wohin? + Akkusativ","Доповніть вираз напрямку. Спочатку поставте запитання Wohin?, потім уживайте Akkusativ після прийменника.",localPrepositionsAccusativePracticeCards,"input","Куди? · Wohin? + Akkusativ","Практика")},
+  {...lessonStep("local-prepositions-contrast-learn","Порівняння руху й розташування","Прочитайте пари речень про рух і розташування. Обирайте відмінок за значенням, а не лише за прийменником.",localPrepositionsContrastCards,"learn","Рух чи розташування?","Вивчення")},
+  {...lessonStep("local-prepositions-contrast-practice","Місце й напрямок у реченні","Доповніть місце. Дієслово показує, рух це чи розташування, і від цього залежить відмінок.",localPrepositionsContrastPracticeCards,"input","Рух чи розташування?","Практика")}
 ];
 // Temporal prepositions: vor / nach with an event, vor / in / für with a span, the mixed drill and sentence builds.
 const temporalResponse=(accepted,scope)=>({mode:"text",scope,accepted,caseSensitive:false,punctuationSensitive:false});

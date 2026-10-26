@@ -183,7 +183,13 @@ future passes provide contextual variety and retention checks.
 - A chapter is learned after every required target has appeared in its learn sequence
   and mastered after every required target has been answered correctly in its practice
   sequence. Coverage accumulates across bounded passes; re-practice updates retention
-  but does not erase completion.
+  but does not erase completion. A finished sequence stays complete; targets added to it
+  later show as new work until practised and do not reopen it.
+- Lesson coverage counts each practice target once across the lesson's practice
+  sequences. A target is covered after every practice sequence that contains it has
+  mastered it, so 100% coverage means every practice sequence is complete. Coverage is
+  shown as covered targets of the total with a rounded-down percent, and reaches 100%
+  only when every target is covered.
 - Keep chapters freely accessible. Recommend the pedagogical next step instead of
   hard-locking content; this supports review and experienced learners.
 - Repeated mistakes stay in the current retry queue. Do not force a full restart or
@@ -213,6 +219,8 @@ future passes provide contextual variety and retention checks.
   hardcode them in markup.
 - Show title, concise outcome, level, chapter/sequence count, and status:
   **Not started**, **Learning**, **Ready to practice**, **Mastered**, or **Due**.
+- Show each lesson's practice coverage as a percent on its card and as covered targets
+  of the total in the lesson plan.
 - Group lessons by lesson class (`className`) in course-path order: **Лексика**
   (words and meaning) → **Морфологія** (word forms) → **Граматика** (choosing a form
   by rule) → **Синтаксис** (word order). Each group heading names the class, gives a
@@ -428,6 +436,8 @@ future passes provide contextual variety and retention checks.
   accuracy), **mastery** (completed targets), and **retention** (recency/due status).
 - Recommend the next review using due status first, then weak first-attempt accuracy,
   then unpracticed material. Do not treat lifetime 100% accuracy as permanent mastery.
+- Show practice coverage per lesson and across the course on Progress. Coverage does
+  not change pass size; passes stay at 5-9 cards.
 - Every recommendation links directly to the relevant practice sequence. Empty states
   explain the first useful action instead of showing meaningless zero-heavy metrics.
 
@@ -517,6 +527,9 @@ Use one versioned logical progress model even if local and disk adapters differ:
 - Date boundaries use the learner's local date; timestamps use ISO 8601 UTC.
 - Schema changes require a version bump, validation, and an idempotent migration.
   Preserve unknown/newer data rather than silently resetting it.
+- Completed stages without recorded targets are backfilled once with all of their
+  targets. This is a data-only migration, so it needs no version bump; targets added
+  later are never backfilled.
 - Daily sampling state may expire; mastery, attempts, and history do not.
 - Persist recent variant history long enough to enforce shuffle-bag coverage and avoid
   serving the same subset on consecutive passes.

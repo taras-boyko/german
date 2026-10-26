@@ -500,6 +500,7 @@ async function restoreState(){
     }
     const diskState=normalizeState(payload);
     learningState=mergeState(learningState,diskState);
+    backfillLegacyTargets();
     saveState(false);
     reconcileRuntimeState();
     renderAll();
@@ -666,7 +667,6 @@ function stageIsComplete(lessonId,stage){
   const lesson=lessonState(lessonId);
   const completed=stage.mode==="input"?lesson.masteredPractice:lesson.completedLearn;
   const legacy=legacySequenceAliases[lessonId]?.[stage.progressId];
-  if(stage.requiresFullCoverage&&progressTargets(lessonId,stage).size<new Set(stageTargetIds(stage)).size)return false;
   return completed.includes(stage.id)||completed.includes(stage.progressId)||Boolean(legacy?.every(id=>completed.includes(id)));
 }
 
@@ -674,6 +674,42 @@ function stageCoverage(stage){
   const targetIds=new Set(stageTargetIds(stage));
   const covered=[...progressTargets(activeDeckId,stage)].filter(targetId=>targetIds.has(targetId)).length,total=targetIds.size;
   return {covered,total};
+}
+
+// A practice target is covered once it is mastered in every practice stage that contains it.
+function lessonCoverage(lessonId){
+  const lesson=lessonState(lessonId),stagesByTarget=new Map();
+  deckDefinitions[lessonId].stages.filter(stage=>stage.mode==="input").forEach(stage=>{
+    new Set(stageTargetIds(stage)).forEach(targetId=>{
+      if(!stagesByTarget.has(targetId))stagesByTarget.set(targetId,[]);
+      stagesByTarget.get(targetId).push(stage);
+    });
+  });
+  let covered=0,newTargets=0;
+  stagesByTarget.forEach((stages,targetId)=>{
+    const mastered=stage=>(lesson.masteredTargets[stage.id]||[]).includes(targetId);
+    if(stages.every(mastered))covered+=1;
+    // Targets added to a stage the learner already finished stay visible as new work.
+    else if(stages.some(stage=>!mastered(stage)&&stageIsComplete(lessonId,stage)))newTargets+=1;
+  });
+  return {covered,total:stagesByTarget.size,newTargets};
+}
+
+function sumCoverage(coverages){
+  return coverages.reduce((sum,item)=>({covered:sum.covered+item.covered,total:sum.total+item.total,newTargets:sum.newTargets+item.newTargets}),{covered:0,total:0,newTargets:0});
+}
+
+function courseCoverage(){
+  return sumCoverage(Object.keys(deckDefinitions).map(lessonId=>lessonCoverage(lessonId)));
+}
+
+function coveragePercent(coverage){
+  if(!coverage.total)return 0;
+  return coverage.covered===coverage.total?100:Math.floor(coverage.covered/coverage.total*100);
+}
+
+function coverageText(coverage){
+  return `${coverage.covered} з ${counted(coverage.total,"ціль","цілі","цілей")}`;
 }
 
 function recommendedStageIndex(lessonId){
@@ -890,6 +926,23 @@ function markTarget(stage,targetId){
   const lesson=lessonState(activeDeckId);
   const collection=stage.mode==="input"?lesson.masteredTargets:lesson.learnedTargets;
   collection[stage.id]=[...new Set([...(collection[stage.id]||[]),targetId])];
+}
+
+// Records every target of a stage that is already complete but has no target record (older saves).
+// Runs only when no record exists, so targets added later stay uncovered.
+function backfillLegacyTargets(){
+  let changed=false;
+  Object.entries(learningState.lessons).forEach(([lessonId,lesson])=>{
+    if(!deckDefinitions[lessonId])return;
+    deckDefinitions[lessonId].stages.forEach(stage=>{
+      if(!stageIsComplete(lessonId,stage))return;
+      const collection=stage.mode==="input"?lesson.masteredTargets:lesson.learnedTargets;
+      if(collection[stage.id])return;
+      collection[stage.id]=[...new Set(stageTargetIds(stage))];
+      changed=true;
+    });
+  });
+  if(changed)saveState(false);
 }
 
 function normalizeAnswer(value,response={}){
@@ -1687,7 +1740,7 @@ function renderLessonPath(){
   $("lesson-phase-label").textContent=`${phase} · етап ${currentStepIndex+1} з ${chapter.steps.length}`;
   $("lesson-chapter-count").textContent=`Розділ ${activeChapterIndex+1} з ${chapters.length}`;
   $("stage-objective").textContent=current.objective;
-  $("lesson-step-count").textContent=`План уроку · завершено ${doneCount} з ${counted(stages.length,"етапу","етапів","етапів")}`;
+  $("lesson-step-count").textContent=`План уроку · завершено ${doneCount} з ${counted(stages.length,"етапу","етапів","етапів")} · охоплено ${coverageText(lessonCoverage(activeDeckId))}`;
   $("lesson-outline-count").textContent=counted(chapters.length,"розділ","розділи","розділів");
   $("lesson-steps").replaceChildren(...chapters.map((chapter,chapterIndex)=>{
     const item=document.createElement("li"),isComplete=chapter.steps.every(step=>stageIsComplete(activeDeckId,step.stage));
@@ -1900,7 +1953,7 @@ function showCompletion(stage,session,newMastery){
   const coverage=stageCoverage(stage),stageComplete=stageIsComplete(activeDeckId,stage);
   $("celebration-title").textContent=stageComplete?(stage.mode==="input"?"Етап засвоєно!":"Вивчення етапу завершено!"):"Підхід завершено";
   $("celebration-message").textContent=stageComplete?`Етап «${stage.title}» завершено.`:`Ви опрацювали ${counted(session.passTargetIds.length,"навчальну ціль","навчальні цілі","навчальних цілей")}. Залишилося ${counted(coverage.total-coverage.covered,"ціль","цілі","цілей")}.`;
-  $("completion-stats").textContent=stage.mode==="input"?`Точність перших відповідей: ${session.firstAttemptTotal?Math.round(session.firstAttemptCorrect/session.firstAttemptTotal*100):0}% · засвоєно ${coverage.covered} з ${coverage.total}`:`Переглянуто ${coverage.covered} з ${coverage.total}`;
+  $("completion-stats").textContent=stage.mode==="input"?`Точність перших відповідей: ${session.firstAttemptTotal?Math.round(session.firstAttemptCorrect/session.firstAttemptTotal*100):0}% · засвоєно ${coverage.covered} з ${coverage.total} · урок: охоплено ${coverageText(lessonCoverage(activeDeckId))}`:`Переглянуто ${coverage.covered} з ${coverage.total}`;
   const nextIndex=activeStageIndex+1,nextStage=activeDefinition().stages[nextIndex];
   if(!stageComplete){
     $("completion-primary").textContent="Продовжити розділ";
@@ -2015,7 +2068,8 @@ function libraryCard(lessonId,lessonClass){
   const meta=document.createElement("div");meta.className="section-meta";
   const sequences=document.createElement("span");sequences.textContent=counted(definition.stages.length,"етап","етапи","етапів");
   const level=document.createElement("span");level.textContent=catalog.level||"A1";
-  meta.append(sequences,level);
+  const coverage=document.createElement("span");coverage.textContent=`охоплено ${coveragePercent(lessonCoverage(lessonId))}%`;
+  meta.append(sequences,level,coverage);
   const badge=document.createElement("span");badge.className=`status-badge ${status.key}`;badge.textContent=status.label;
   footer.append(meta,badge);
   const button=document.createElement("button");button.type="button";button.className="primary-button";button.innerHTML=`<span>${actionLabel(lessonId)}</span><span aria-hidden="true">→</span>`;
@@ -2099,6 +2153,9 @@ function renderProgress(){
   $("progress-streak").textContent=String(summary.streak);
   $("progress-streak-label").textContent=`${pluralForm(summary.streak,"день","дні","днів")} поспіль`;
   $("progress-reviewed").textContent=String(summary.weekly);
+  const course=courseCoverage();
+  $("progress-coverage").textContent=`${coveragePercent(course)}%`;
+  $("progress-coverage-label").textContent=`охоплено ${coverageText(course)} курсу`;
   const recommended=recommendedLesson(),definition=deckDefinitions[recommended.id];
   $("lesson-history-note").textContent=summary.firstAttempts?"За першими відповідями":"Облік почнеться з першої відповіді у практиці";
   $("review-focus-button").textContent=recommended.status.key==="new"?`Почати: ${definition.title} →`:`Повторити: ${definition.title} →`;
@@ -2115,7 +2172,11 @@ function renderProgress(){
     title.textContent=definition.title;last.className="lesson-last-practice";last.textContent=`${status.label} · ${relativePracticeTime(lesson.lastPracticedAt)}`;heading.append(...[title,germanTitleElement(definition),last].filter(Boolean));
     const details=document.createElement("div");details.className="lesson-progress-details";
     const accuracy=document.createElement("strong"),accuracyLabel=document.createElement("span"),attempts=document.createElement("span");
-    accuracy.textContent=accuracyValue===null?"—":`${accuracyValue}%`;accuracyLabel.textContent="точність перших відповідей";attempts.textContent=lesson.firstAttempts?counted(lesson.firstAttempts,"перша відповідь","перші відповіді","перших відповідей"):"Відповідей у практиці ще немає";details.append(accuracy,accuracyLabel,attempts);
+    accuracy.textContent=accuracyValue===null?"—":`${accuracyValue}%`;accuracyLabel.textContent="точність перших відповідей";attempts.textContent=lesson.firstAttempts?counted(lesson.firstAttempts,"перша відповідь","перші відповіді","перших відповідей"):"Відповідей у практиці ще немає";
+    const coverage=lessonCoverage(lessonId),coverageNote=document.createElement("span");
+    coverageNote.className="lesson-coverage";
+    coverageNote.textContent=`охоплено ${coverageText(coverage)}${coverage.newTargets?` · ${counted(coverage.newTargets,"нова ціль","нові цілі","нових цілей")}`:""}`;
+    details.append(accuracy,accuracyLabel,attempts,coverageNote);
     const button=document.createElement("button");button.type="button";button.className="lesson-review-button";button.textContent=status.key==="new"?"Почати →":"Практика →";button.addEventListener("click",()=>reviewLesson(lessonId));
     item.append(heading,details,button);
     return item;
@@ -2225,6 +2286,7 @@ document.addEventListener("keydown",event=>{
 });
 window.addEventListener("beforeunload",()=>{if(learningState.activeSession){learningState.activeSession.updatedAt=new Date().toISOString();localStorage.setItem(stateStorageKey,JSON.stringify(learningState))}});
 
+backfillLegacyTargets();
 resumeInitialSession();
 renderAll();
 restorePendingCompletion();

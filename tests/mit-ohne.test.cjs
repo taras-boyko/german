@@ -93,7 +93,7 @@ function runtime(saved=new Map()){
   vm.runInContext(script,sandbox);
   vm.runInContext(`${source.slice(0,bootstrap)}
     globalThis.runtime={
-      definitions:deckDefinitions,samplePass,variantsForStage,answerMatches,lessonState,
+      definitions:deckDefinitions,samplePass,variantsForStage,answerMatches,lessonState,lessonCoverage,coveragePercent,courseCoverage,
       canResume,normalizeState,lessonStatus,persistState,
       resume(){resumeInitialSession();restorePendingCompletion()},
       get state(){return learningState},
@@ -336,6 +336,13 @@ test("all eight stages complete through bounded passes and the lesson becomes ma
     assert.ok(isComplete(),stage.id);
   }
   assert.equal(ui.app.lessonStatus(lessonId).key,"mastered");
+  assert.match(ui.elements.get("completion-stats").textContent,/урок: охоплено 17 з 17 цілей/);
+  const coverage=ui.app.lessonCoverage(lessonId);
+  assert.ok(coverage.total>0);
+  assert.equal(coverage.covered,coverage.total);
+  assert.equal(coverage.newTargets,0);
+  assert.equal(ui.app.coveragePercent(coverage),100);
+  assert.equal(ui.elements.get("progress-coverage").textContent,`${ui.app.coveragePercent(ui.app.courseCoverage())}%`);
   await ui.app.persistState();
   const durable=JSON.parse(ui.requests.at(-1).body);
   assert.equal(durable.lessons[lessonId].completedLearn.length,4);

@@ -107,7 +107,7 @@ function runtime(saved=new Map()){
   vm.runInContext(script,sandbox);
   vm.runInContext(`${source.slice(0,bootstrap)}
     globalThis.runtime={
-      definitions:deckDefinitions,samplePass,variantsForStage,answerMatches,lessonState,
+      definitions:deckDefinitions,samplePass,variantsForStage,answerMatches,lessonState,lessonCoverage,coveragePercent,courseCoverage,
       canResume,normalizeState,lessonStatus,persistState,
       resume(){resumeInitialSession();restorePendingCompletion()},
       get state(){return learningState},
@@ -380,6 +380,12 @@ test("all ten stages complete through bounded passes and persist durably",async(
     ui.elements.get("completion-library").click();
   }
   assert.equal(ui.app.lessonStatus(lessonId).key,"mastered");
+  const coverage=ui.app.lessonCoverage(lessonId);
+  assert.ok(coverage.total>0);
+  assert.equal(coverage.covered,coverage.total);
+  assert.equal(coverage.newTargets,0);
+  assert.equal(ui.app.coveragePercent(coverage),100);
+  assert.equal(ui.elements.get("progress-coverage").textContent,`${ui.app.coveragePercent(ui.app.courseCoverage())}%`);
   await ui.app.persistState();
   const durable=JSON.parse(ui.requests.at(-1).body);
   assert.equal(durable.version,5);

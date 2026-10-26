@@ -115,7 +115,7 @@ test("bottom stage choices expose current, completed, and saved attempts",()=>{
   assert.match(learnButton.attributes["aria-label"],/поточний етап.*завершено/);
   assert.match(practiceButton.className,/paused/);
   assert.match(practiceButton.attributes["aria-label"],/незавершений підхід збережено/);
-  assert.equal(elements.get("lesson-step-count").textContent,"План уроку · завершено 1 з 4 етапів");
+  assert.equal(elements.get("lesson-step-count").textContent,"План уроку · завершено 1 з 4 етапів · охоплено 0 з 12 цілей");
 });
 
 test("bottom switches can open practice in either chapter directly",()=>{
