@@ -1006,6 +1006,156 @@ attachNouns(possessivePronounCards,{
 },card=>card.targetId);
 const possessiveCaseCards=[...possessiveAccusativeCards,...possessiveDativeCards];
 const possessiveMixedCards=possessiveCaseCards.map(card=>({...card,category:"POSSESSIVE ENDING"}));
+// Indefinite article: ein has no plural. kein takes the same endings and adds keine (Nom., Akk.) and keinen (Dat.) in the plural.
+const indefiniteArticleEndings={
+  ein:{
+    nominative:{masculine:"",neuter:"",feminine:"e"},
+    accusative:{masculine:"en",neuter:"",feminine:"e"},
+    dative:{masculine:"em",neuter:"em",feminine:"er"}
+  },
+  kein:{
+    nominative:{masculine:"",neuter:"",feminine:"e",plural:"e"},
+    accusative:{masculine:"en",neuter:"",feminine:"e",plural:"e"},
+    dative:{masculine:"em",neuter:"em",feminine:"er",plural:"en"}
+  }
+};
+const indefiniteCaseRows=[
+  {grammarCase:"nominative",label:"Nom.",title:"Nominativ"},
+  {grammarCase:"accusative",label:"Akk.",title:"Akkusativ"},
+  {grammarCase:"dative",label:"Dat.",title:"Dativ"}
+];
+const indefiniteTargets={
+  "ein-nominative-masculine":{article:"ein",grammarCase:"nominative",gender:"masculine"},
+  "ein-nominative-neuter":{article:"ein",grammarCase:"nominative",gender:"neuter"},
+  "ein-nominative-feminine":{article:"ein",grammarCase:"nominative",gender:"feminine"},
+  "ein-accusative-masculine":{article:"ein",grammarCase:"accusative",gender:"masculine"},
+  "ein-accusative-neuter":{article:"ein",grammarCase:"accusative",gender:"neuter"},
+  "ein-accusative-feminine":{article:"ein",grammarCase:"accusative",gender:"feminine"},
+  "ein-dative-masculine":{article:"ein",grammarCase:"dative",gender:"masculine"},
+  "ein-dative-neuter":{article:"ein",grammarCase:"dative",gender:"neuter"},
+  "ein-dative-feminine":{article:"ein",grammarCase:"dative",gender:"feminine"},
+  "kein-nominative-masculine":{article:"kein",grammarCase:"nominative",gender:"masculine"},
+  "kein-nominative-neuter":{article:"kein",grammarCase:"nominative",gender:"neuter"},
+  "kein-nominative-feminine":{article:"kein",grammarCase:"nominative",gender:"feminine"},
+  "kein-nominative-plural":{article:"kein",grammarCase:"nominative",gender:"plural"},
+  "kein-accusative-masculine":{article:"kein",grammarCase:"accusative",gender:"masculine"},
+  "kein-accusative-neuter":{article:"kein",grammarCase:"accusative",gender:"neuter"},
+  "kein-accusative-feminine":{article:"kein",grammarCase:"accusative",gender:"feminine"},
+  "kein-accusative-plural":{article:"kein",grammarCase:"accusative",gender:"plural"},
+  "kein-dative-masculine":{article:"kein",grammarCase:"dative",gender:"masculine"},
+  "kein-dative-neuter":{article:"kein",grammarCase:"dative",gender:"neuter"},
+  "kein-dative-feminine":{article:"kein",grammarCase:"dative",gender:"feminine"},
+  "kein-dative-plural":{article:"kein",grammarCase:"dative",gender:"plural"}
+};
+const indefiniteArticleCategory={ein:"UNBESTIMMTER ARTIKEL",kein:"NEGATIVARTIKEL"};
+const indefiniteCaseCategory={nominative:"NOMINATIV",accusative:"AKKUSATIV",dative:"DATIV"};
+const indefiniteCaseTitle={nominative:"Nominativ",accusative:"Akkusativ",dative:"Dativ"};
+const indefiniteGenderCategory={masculine:"MASKULINUM",neuter:"NEUTRUM",feminine:"FEMININUM",plural:"PLURAL"};
+// ein shows only the three singular columns; kein also shows the plural column.
+function indefiniteVisuals(article,grammarCase,gender,noun,exampleWord){
+  const columns=article==="ein"?genderColumns.slice(0,3):genderColumns;
+  const endings=indefiniteArticleEndings[article];
+  return {
+    noun:nounMeta(gender,noun,{exampleWord}),
+    answerParts:{stem:article,ending:endings[grammarCase][gender]},
+    paradigm:{
+      title:`${article} + закінчення`,
+      columns,
+      rows:indefiniteCaseRows.map(row=>({label:row.label,title:row.title,cells:columns.map(column=>({stem:article,ending:endings[row.grammarCase][column.gender]}))})),
+      active:{row:indefiniteCaseRows.findIndex(row=>row.grammarCase===grammarCase),column:columns.findIndex(column=>column.gender===gender)}
+    }
+  };
+}
+function indefiniteCard(id,targetId,{word,noun,promptText,support,translation,example,explanation,exampleWord=noun}){
+  const target=indefiniteTargets[targetId];
+  if(!target)throw new Error(`Unknown indefinite article target: ${targetId}`);
+  const {article,grammarCase,gender}=target;
+  return {
+    id,targetId,type:"cloze",word,promptText,support,translation,
+    studyTranslation:`${indefiniteCaseTitle[grammarCase]} · ${genderArticles[gender]} ${noun}`,
+    example,explanation,
+    category:`${indefiniteArticleCategory[article]} · ${indefiniteCaseCategory[grammarCase]} · ${indefiniteGenderCategory[gender]}`,
+    practiceVariants:false,
+    response:{mode:"text",scope:"word",accepted:[word],caseSensitive:false,punctuationSensitive:false},
+    ...indefiniteVisuals(article,grammarCase,gender,noun,exampleWord)
+  };
+}
+const indefiniteNominativeCards=[
+  indefiniteCard("ein-nominative-masculine-tisch","ein-nominative-masculine",{word:"ein",noun:"Tisch",promptText:"Das ist ___ Tisch.",support:"Ствердження: стіл.",translation:"Це стіл.",example:"Das ist ein Tisch.",explanation:"Tisch — чоловічий рід. У Nominativ після ist стоїть ein без закінчення."}),
+  indefiniteCard("ein-nominative-masculine-stuhl","ein-nominative-masculine",{word:"ein",noun:"Stuhl",promptText:"Hier steht ___ Stuhl.",support:"Ствердження: стілець.",translation:"Тут стоїть стілець.",example:"Hier steht ein Stuhl.",explanation:"Stuhl — чоловічий рід, тому ein без закінчення як підмет речення."}),
+  indefiniteCard("ein-nominative-masculine-schluessel","ein-nominative-masculine",{word:"ein",noun:"Schlüssel",promptText:"Auf dem Tisch liegt ___ Schlüssel.",support:"Ствердження: ключ.",translation:"На столі лежить ключ.",example:"Auf dem Tisch liegt ein Schlüssel.",explanation:"Liegen має підмет у Nominativ. Schlüssel — чоловічий рід: ein без закінчення."}),
+  indefiniteCard("ein-nominative-neuter-buch","ein-nominative-neuter",{word:"ein",noun:"Buch",promptText:"Das ist ___ Buch.",support:"Ствердження: книжка.",translation:"Це книжка.",example:"Das ist ein Buch.",explanation:"Buch — середній рід. У Nominativ ein без закінчення, як і для чоловічого роду."}),
+  indefiniteCard("ein-nominative-neuter-auto","ein-nominative-neuter",{word:"ein",noun:"Auto",promptText:"Das ist ___ Auto.",support:"Ствердження: автомобіль.",translation:"Це автомобіль.",example:"Das ist ein Auto.",explanation:"Auto — середній рід, тому ein без закінчення."}),
+  indefiniteCard("ein-nominative-neuter-cafe","ein-nominative-neuter",{word:"ein",noun:"Café",promptText:"Neben dem Park ist ___ Café.",support:"Ствердження: кафе.",translation:"Поруч із парком є кафе.",example:"Neben dem Park ist ein Café.",explanation:"Café — середній рід. Після ist у Nominativ стоїть ein без закінчення."}),
+  indefiniteCard("ein-nominative-feminine-lampe","ein-nominative-feminine",{word:"eine",noun:"Lampe",promptText:"Das ist ___ Lampe.",support:"Ствердження: лампа.",translation:"Це лампа.",example:"Das ist eine Lampe.",explanation:"Lampe — жіночий рід. У Nominativ ein отримує закінчення -e: eine."}),
+  indefiniteCard("ein-nominative-feminine-uhr","ein-nominative-feminine",{word:"eine",noun:"Uhr",promptText:"Hier ist ___ Uhr.",support:"Ствердження: годинник.",translation:"Тут є годинник.",example:"Hier ist eine Uhr.",explanation:"Uhr — жіночий рід, тому eine."}),
+  indefiniteCard("ein-nominative-feminine-katze","ein-nominative-feminine",{word:"eine",noun:"Katze",promptText:"Auf dem Sofa liegt ___ Katze.",support:"Ствердження: кішка.",translation:"На дивані лежить кішка.",example:"Auf dem Sofa liegt eine Katze.",explanation:"Katze — жіночий рід, тому eine як підмет у Nominativ."})
+];
+const indefiniteAccusativeCards=[
+  indefiniteCard("ein-accusative-masculine-hund","ein-accusative-masculine",{word:"einen",noun:"Hund",promptText:"Ich habe ___ Hund.",support:"Ствердження: собака.",translation:"У мене є собака.",example:"Ich habe einen Hund.",explanation:"Haben вимагає Akkusativ. Hund — чоловічий рід: ein + -en → einen."}),
+  indefiniteCard("ein-accusative-masculine-stift","ein-accusative-masculine",{word:"einen",noun:"Stift",promptText:"Ich brauche ___ Stift.",support:"Ствердження: ручка.",translation:"Мені потрібна ручка.",example:"Ich brauche einen Stift.",explanation:"Brauchen вимагає Akkusativ. Stift — чоловічий рід, тому einen."}),
+  indefiniteCard("ein-accusative-masculine-kuchen","ein-accusative-masculine",{word:"einen",noun:"Kuchen",promptText:"Kaufst du ___ Kuchen?",support:"Ствердження: торт.",translation:"Ти купуєш торт?",example:"Kaufst du einen Kuchen?",explanation:"Kaufen має прямий додаток в Akkusativ. Kuchen — чоловічий рід: einen."}),
+  indefiniteCard("ein-accusative-neuter-buch","ein-accusative-neuter",{word:"ein",noun:"Buch",promptText:"Ich lese ___ Buch.",support:"Ствердження: книжка.",translation:"Я читаю книжку.",example:"Ich lese ein Buch.",explanation:"Lesen вимагає Akkusativ. Buch — середній рід: ein без змін."}),
+  indefiniteCard("ein-accusative-neuter-auto","ein-accusative-neuter",{word:"ein",noun:"Auto",promptText:"Wir kaufen ___ Auto.",support:"Ствердження: автомобіль.",translation:"Ми купуємо автомобіль.",example:"Wir kaufen ein Auto.",explanation:"Kaufen вимагає Akkusativ. Auto — середній рід, тому ein не змінюється."}),
+  indefiniteCard("ein-accusative-neuter-handy","ein-accusative-neuter",{word:"ein",noun:"Handy",promptText:"Ich brauche ___ Handy.",support:"Ствердження: телефон.",translation:"Мені потрібен телефон.",example:"Ich brauche ein Handy.",explanation:"Brauchen вимагає Akkusativ. Handy — середній рід: ein без змін."}),
+  indefiniteCard("ein-accusative-feminine-tasche","ein-accusative-feminine",{word:"eine",noun:"Tasche",promptText:"Ich habe ___ Tasche.",support:"Ствердження: сумка.",translation:"У мене є сумка.",example:"Ich habe eine Tasche.",explanation:"Haben вимагає Akkusativ. Tasche — жіночий рід: eine без змін."}),
+  indefiniteCard("ein-accusative-feminine-brille","ein-accusative-feminine",{word:"eine",noun:"Brille",promptText:"Ich brauche ___ Brille.",support:"Ствердження: окуляри.",translation:"Мені потрібні окуляри.",example:"Ich brauche eine Brille.",explanation:"Brauchen вимагає Akkusativ. Brille — жіночий рід, тому eine."}),
+  indefiniteCard("ein-accusative-feminine-katze","ein-accusative-feminine",{word:"eine",noun:"Katze",promptText:"Sie sieht ___ Katze im Garten.",support:"Ствердження: кішка.",translation:"Вона бачить кішку в саду.",example:"Sie sieht eine Katze im Garten.",explanation:"Sehen вимагає Akkusativ. Katze — жіночий рід: eine без змін."})
+];
+const indefiniteDativeCards=[
+  indefiniteCard("ein-dative-masculine-stift","ein-dative-masculine",{word:"einem",noun:"Stift",promptText:"Ich schreibe mit ___ Stift.",support:"Ствердження: ручка.",translation:"Я пишу ручкою.",example:"Ich schreibe mit einem Stift.",explanation:"Mit вимагає Dativ. Stift — чоловічий рід: ein + -em → einem."}),
+  indefiniteCard("ein-dative-masculine-freund","ein-dative-masculine",{word:"einem",noun:"Freund",promptText:"Ich helfe ___ Freund.",support:"Ствердження: друг.",translation:"Я допомагаю другові.",example:"Ich helfe einem Freund.",explanation:"Helfen вимагає Dativ: кому? Freund — чоловічий рід, тому einem."}),
+  indefiniteCard("ein-dative-masculine-bus","ein-dative-masculine",{word:"einem",noun:"Bus",promptText:"Ich fahre mit ___ Bus.",support:"Ствердження: автобус.",translation:"Я їду автобусом.",example:"Ich fahre mit einem Bus.",explanation:"Mit завжди вимагає Dativ. Bus — чоловічий рід: einem."}),
+  indefiniteCard("ein-dative-neuter-haus","ein-dative-neuter",{word:"einem",noun:"Haus",promptText:"Ich wohne in ___ Haus.",support:"Ствердження: будинок.",translation:"Я живу в будинку.",example:"Ich wohne in einem Haus.",explanation:"In з місцем (Wo?) вимагає Dativ. Haus — середній рід: einem."}),
+  indefiniteCard("ein-dative-neuter-kind","ein-dative-neuter",{word:"einem",noun:"Kind",promptText:"Ich zeige ___ Kind den Weg.",support:"Ствердження: дитина.",translation:"Я показую дитині дорогу.",example:"Ich zeige einem Kind den Weg.",explanation:"Zeigen: кому? Одержувач стоїть у Dativ. Kind — середній рід: einem."}),
+  indefiniteCard("ein-dative-neuter-bett","ein-dative-neuter",{word:"einem",noun:"Bett",promptText:"Das Buch liegt auf ___ Bett.",support:"Ствердження: ліжко.",translation:"Книжка лежить на ліжку.",example:"Das Buch liegt auf einem Bett.",explanation:"Auf з місцем (Wo?) вимагає Dativ. Bett — середній рід: einem."}),
+  indefiniteCard("ein-dative-feminine-wohnung","ein-dative-feminine",{word:"einer",noun:"Wohnung",promptText:"Ich wohne in ___ Wohnung.",support:"Ствердження: квартира.",translation:"Я живу в квартирі.",example:"Ich wohne in einer Wohnung.",explanation:"In з місцем (Wo?) вимагає Dativ. Wohnung — жіночий рід: einer."}),
+  indefiniteCard("ein-dative-feminine-kollegin","ein-dative-feminine",{word:"einer",noun:"Kollegin",promptText:"Ich antworte ___ Kollegin.",support:"Ствердження: колега.",translation:"Я відповідаю колезі.",example:"Ich antworte einer Kollegin.",explanation:"Antworten вимагає Dativ. Kollegin — жіночий рід: einer."}),
+  indefiniteCard("ein-dative-feminine-freundin","ein-dative-feminine",{word:"einer",noun:"Freundin",promptText:"Ich schreibe ___ Freundin eine Nachricht.",support:"Ствердження: подруга.",translation:"Я пишу подрузі повідомлення.",example:"Ich schreibe einer Freundin eine Nachricht.",explanation:"Schreiben: кому? Одержувач у Dativ. Freundin — жіночий рід: einer."})
+];
+const negativeNominativeCards=[
+  indefiniteCard("kein-nominative-masculine-schluessel","kein-nominative-masculine",{word:"kein",noun:"Schlüssel",promptText:"Das ist ___ Schlüssel.",support:"Заперечення: ключ.",translation:"Це не ключ.",example:"Das ist kein Schlüssel.",explanation:"Kein заперечує ein. Schlüssel — чоловічий рід: kein без закінчення в Nominativ."}),
+  indefiniteCard("kein-nominative-masculine-krimi","kein-nominative-masculine",{word:"kein",noun:"Krimi",promptText:"Der Film ist ___ Krimi.",support:"Заперечення: детектив.",translation:"Це не детектив.",example:"Der Film ist kein Krimi.",explanation:"Після ist стоїть Nominativ. Krimi — чоловічий рід: kein без закінчення."}),
+  indefiniteCard("kein-nominative-masculine-stift","kein-nominative-masculine",{word:"kein",noun:"Stift",promptText:"Auf dem Tisch liegt ___ Stift.",support:"Заперечення: ручка.",translation:"На столі немає ручки.",example:"Auf dem Tisch liegt kein Stift.",explanation:"Заперечення «немає» має kein замість ein. Stift — чоловічий рід, тому kein."}),
+  indefiniteCard("kein-nominative-neuter-handy","kein-nominative-neuter",{word:"kein",noun:"Handy",promptText:"Das ist ___ Handy.",support:"Заперечення: телефон.",translation:"Це не телефон.",example:"Das ist kein Handy.",explanation:"Kein заперечує ein. Handy — середній рід: kein без закінчення."}),
+  indefiniteCard("kein-nominative-neuter-problem","kein-nominative-neuter",{word:"kein",noun:"Problem",promptText:"Das ist ___ Problem.",support:"Заперечення: проблема.",translation:"Це не проблема.",example:"Das ist kein Problem.",explanation:"Problem — середній рід: kein без закінчення. Так говорять «Kein Problem!»."}),
+  indefiniteCard("kein-nominative-neuter-brot","kein-nominative-neuter",{word:"kein",noun:"Brot",promptText:"Im Kühlschrank liegt ___ Brot.",support:"Заперечення: хліб.",translation:"У холодильнику немає хліба.",example:"Im Kühlschrank liegt kein Brot.",explanation:"Brot — підмет у Nominativ і середній рід: kein без закінчення."}),
+  indefiniteCard("kein-nominative-feminine-lampe","kein-nominative-feminine",{word:"keine",noun:"Lampe",promptText:"Das ist ___ Lampe.",support:"Заперечення: лампа.",translation:"Це не лампа.",example:"Das ist keine Lampe.",explanation:"Lampe — жіночий рід: kein + -e → keine в Nominativ."}),
+  indefiniteCard("kein-nominative-feminine-uhr","kein-nominative-feminine",{word:"keine",noun:"Uhr",promptText:"Das ist ___ Uhr.",support:"Заперечення: годинник.",translation:"Це не годинник.",example:"Das ist keine Uhr.",explanation:"Uhr — жіночий рід, тому keine у Nominativ."}),
+  indefiniteCard("kein-nominative-feminine-decke","kein-nominative-feminine",{word:"keine",noun:"Decke",promptText:"Auf dem Sofa liegt ___ Decke.",support:"Заперечення: ковдра.",translation:"На дивані немає ковдри.",example:"Auf dem Sofa liegt keine Decke.",explanation:"Decke — жіночий рід: keine як підмет у Nominativ."}),
+  indefiniteCard("kein-nominative-plural-buecher","kein-nominative-plural",{word:"keine",noun:"Bücher",promptText:"Das sind ___ Bücher.",support:"Заперечення: книжки.",translation:"Це не книжки.",example:"Das sind keine Bücher.",explanation:"У множині kein має форму keine для Nominativ, а іменник стоїть без артикля."}),
+  indefiniteCard("kein-nominative-plural-kinder","kein-nominative-plural",{word:"keine",noun:"Kinder",promptText:"Hier sind ___ Kinder.",support:"Заперечення: діти.",translation:"Тут немає дітей.",example:"Hier sind keine Kinder.",explanation:"Множина: kein → keine в Nominativ для всіх родів."}),
+  indefiniteCard("kein-nominative-plural-stifte","kein-nominative-plural",{word:"keine",noun:"Stifte",promptText:"Auf dem Tisch liegen ___ Stifte.",support:"Заперечення: ручки.",translation:"На столі немає ручок.",example:"Auf dem Tisch liegen keine Stifte.",explanation:"Stifte — множина, тому keine в Nominativ."})
+];
+const negativeAccusativeCards=[
+  indefiniteCard("kein-accusative-masculine-schluessel","kein-accusative-masculine",{word:"keinen",noun:"Schlüssel",promptText:"Ich brauche ___ Schlüssel.",support:"Заперечення: ключ.",translation:"Мені не потрібен ключ.",example:"Ich brauche keinen Schlüssel.",explanation:"Brauchen вимагає Akkusativ. Schlüssel — чоловічий рід: kein + -en → keinen."}),
+  indefiniteCard("kein-accusative-masculine-kuchen","kein-accusative-masculine",{word:"keinen",noun:"Kuchen",promptText:"Ich kaufe ___ Kuchen.",support:"Заперечення: торт.",translation:"Я не купую торт.",example:"Ich kaufe keinen Kuchen.",explanation:"Kaufen вимагає Akkusativ. Kuchen — чоловічий рід: keinen."}),
+  indefiniteCard("kein-accusative-masculine-stift","kein-accusative-masculine",{word:"keinen",noun:"Stift",promptText:"Hast du ___ Stift?",support:"Заперечення: ручка.",translation:"У тебе немає ручки?",example:"Hast du keinen Stift?",explanation:"Haben вимагає Akkusativ. Stift — чоловічий рід: keinen."}),
+  indefiniteCard("kein-accusative-neuter-auto","kein-accusative-neuter",{word:"kein",noun:"Auto",promptText:"Ich habe ___ Auto.",support:"Заперечення: автомобіль.",translation:"У мене немає машини.",example:"Ich habe kein Auto.",explanation:"Haben вимагає Akkusativ. Auto — середній рід: kein без закінчення."}),
+  indefiniteCard("kein-accusative-neuter-handy","kein-accusative-neuter",{word:"kein",noun:"Handy",promptText:"Er kauft ___ Handy.",support:"Заперечення: телефон.",translation:"Він не купує телефону.",example:"Er kauft kein Handy.",explanation:"Kaufen вимагає Akkusativ. Handy — середній рід: kein без змін."}),
+  indefiniteCard("kein-accusative-neuter-bett","kein-accusative-neuter",{word:"kein",noun:"Bett",promptText:"Ich brauche ___ Bett.",support:"Заперечення: ліжко.",translation:"Мені не потрібне ліжко.",example:"Ich brauche kein Bett.",explanation:"Brauchen вимагає Akkusativ. Bett — середній рід: kein без закінчення."}),
+  indefiniteCard("kein-accusative-feminine-zeit","kein-accusative-feminine",{word:"keine",noun:"Zeit",promptText:"Sie hat ___ Zeit.",support:"Заперечення: час.",translation:"У неї немає часу.",example:"Sie hat keine Zeit.",explanation:"Haben вимагає Akkusativ. Zeit — жіночий рід: keine."}),
+  indefiniteCard("kein-accusative-feminine-lampe","kein-accusative-feminine",{word:"keine",noun:"Lampe",promptText:"Wir kaufen ___ Lampe.",support:"Заперечення: лампа.",translation:"Ми не купуємо лампу.",example:"Wir kaufen keine Lampe.",explanation:"Kaufen вимагає Akkusativ. Lampe — жіночий рід: keine."}),
+  indefiniteCard("kein-accusative-feminine-katze","kein-accusative-feminine",{word:"keine",noun:"Katze",promptText:"Ich sehe ___ Katze.",support:"Заперечення: кішка.",translation:"Я не бачу жодної кішки.",example:"Ich sehe keine Katze.",explanation:"Sehen вимагає Akkusativ. Katze — жіночий рід: keine."}),
+  indefiniteCard("kein-accusative-plural-buecher","kein-accusative-plural",{word:"keine",noun:"Bücher",promptText:"Ich habe ___ Bücher.",support:"Заперечення: книжки.",translation:"У мене немає книжок.",example:"Ich habe keine Bücher.",explanation:"Haben вимагає Akkusativ. У множині kein має форму keine."}),
+  indefiniteCard("kein-accusative-plural-autos","kein-accusative-plural",{word:"keine",noun:"Autos",promptText:"Wir kaufen ___ Autos.",support:"Заперечення: автомобілі.",translation:"Ми не купуємо жодних машин.",example:"Wir kaufen keine Autos.",explanation:"Kaufen вимагає Akkusativ. Autos — множина: keine."}),
+  indefiniteCard("kein-accusative-plural-katzen","kein-accusative-plural",{word:"keine",noun:"Katzen",promptText:"Hast du ___ Katzen?",support:"Заперечення: кішки.",translation:"У тебе немає кішок?",example:"Hast du keine Katzen?",explanation:"Haben вимагає Akkusativ. Katzen — множина: keine."})
+];
+const negativeDativeCards=[
+  indefiniteCard("kein-dative-masculine-zug","kein-dative-masculine",{word:"keinem",noun:"Zug",promptText:"Heute fahre ich mit ___ Zug.",support:"Заперечення: потяг.",translation:"Сьогодні я не їду жодним потягом.",example:"Heute fahre ich mit keinem Zug.",explanation:"Mit вимагає Dativ. Zug — чоловічий рід: kein + -em → keinem."}),
+  indefiniteCard("kein-dative-masculine-bleistift","kein-dative-masculine",{word:"keinem",noun:"Bleistift",promptText:"Ich schreibe mit ___ Bleistift.",support:"Заперечення: олівець.",translation:"Я не пишу жодним олівцем.",example:"Ich schreibe mit keinem Bleistift.",explanation:"Mit вимагає Dativ. Bleistift — чоловічий рід: keinem."}),
+  indefiniteCard("kein-dative-masculine-computer","kein-dative-masculine",{word:"keinem",noun:"Computer",promptText:"Ich arbeite an ___ Computer.",support:"Заперечення: комп’ютер.",translation:"Я не працюю за жодним комп’ютером.",example:"Ich arbeite an keinem Computer.",explanation:"An з місцем (Wo?) вимагає Dativ. Computer — чоловічий рід: keinem."}),
+  indefiniteCard("kein-dative-neuter-auto","kein-dative-neuter",{word:"keinem",noun:"Auto",promptText:"Ich fahre mit ___ Auto.",support:"Заперечення: автомобіль.",translation:"Я не їду жодним автомобілем.",example:"Ich fahre mit keinem Auto.",explanation:"Mit вимагає Dativ. Auto — середній рід: kein + -em → keinem."}),
+  indefiniteCard("kein-dative-neuter-dorf","kein-dative-neuter",{word:"keinem",noun:"Dorf",promptText:"Ich wohne in ___ Dorf.",support:"Заперечення: село.",translation:"Я не живу в жодному селі.",example:"Ich wohne in keinem Dorf.",explanation:"In з місцем (Wo?) вимагає Dativ. Dorf — середній рід: keinem."}),
+  indefiniteCard("kein-dative-neuter-maedchen","kein-dative-neuter",{word:"keinem",noun:"Mädchen",promptText:"Er hilft ___ Mädchen.",support:"Заперечення: дівчинка.",translation:"Він не допомагає жодній дівчинці.",example:"Er hilft keinem Mädchen.",explanation:"Helfen вимагає Dativ: кому? Mädchen — середній рід: keinem."}),
+  indefiniteCard("kein-dative-feminine-freundin","kein-dative-feminine",{word:"keiner",noun:"Freundin",promptText:"Ich gehe mit ___ Freundin ins Kino.",support:"Заперечення: подруга.",translation:"Я не ходжу в кіно з жодною подругою.",example:"Ich gehe mit keiner Freundin ins Kino.",explanation:"Mit вимагає Dativ. Freundin — жіночий рід: kein + -er → keiner."}),
+  indefiniteCard("kein-dative-feminine-lehrerin","kein-dative-feminine",{word:"keiner",noun:"Lehrerin",promptText:"Ich schreibe ___ Lehrerin.",support:"Заперечення: вчителька.",translation:"Я не пишу жодній вчительці.",example:"Ich schreibe keiner Lehrerin.",explanation:"Schreiben вимагає Dativ: кому? Lehrerin — жіночий рід: keiner."}),
+  indefiniteCard("kein-dative-feminine-mutter","kein-dative-feminine",{word:"keiner",noun:"Mutter",promptText:"Er schenkt ___ Mutter Blumen.",support:"Заперечення: мама.",translation:"Він не дарує квітів жодній матері.",example:"Er schenkt keiner Mutter Blumen.",explanation:"Schenken: кому? Одержувач у Dativ. Mutter — жіночий рід: keiner."}),
+  indefiniteCard("kein-dative-plural-kinder","kein-dative-plural",{word:"keinen",noun:"Kinder",exampleWord:"Kindern",promptText:"Ich helfe ___ Kindern.",support:"Заперечення: діти.",translation:"Я не допомагаю жодним дітям.",example:"Ich helfe keinen Kindern.",explanation:"Helfen вимагає Dativ. У Dativ множини kein → keinen, а іменник отримує -n: Kindern."}),
+  indefiniteCard("kein-dative-plural-freunde","kein-dative-plural",{word:"keinen",noun:"Freunde",exampleWord:"Freunden",promptText:"Ich fahre mit ___ Freunden nach Berlin.",support:"Заперечення: друзі.",translation:"Я не їду до Берліна з жодними друзями.",example:"Ich fahre mit keinen Freunden nach Berlin.",explanation:"Mit вимагає Dativ. Freunde в Dativ множини отримують -n: Freunden, а kein → keinen."}),
+  indefiniteCard("kein-dative-plural-katzen","kein-dative-plural",{word:"keinen",noun:"Katzen",promptText:"Sie spielt mit ___ Katzen.",support:"Заперечення: кішки.",translation:"Вона не грається з жодними кішками.",example:"Sie spielt mit keinen Katzen.",explanation:"Mit вимагає Dativ. Katzen уже закінчується на -n, тому додаткового -n немає."})
+];
+const indefiniteArticleCards=[...indefiniteNominativeCards,...indefiniteAccusativeCards,...indefiniteDativeCards,...negativeNominativeCards,...negativeAccusativeCards,...negativeDativeCards];
 // Marker notation: "f[ä]hr|st" marks the changed vowel in brackets and the ending after |.
 function verbForm(notation){
   const [marked,ending=""]=notation.split("|");
@@ -3087,6 +3237,20 @@ const possessiveCaseStages=[
   lessonStep("possessive-cases-mixed-learn","Порівняння присвійних артиклів у двох відмінках","Порівняйте вісім моделей у контексті. Спочатку визначте відмінок за дієсловом або прийменником, потім власника й рід іменника.",possessiveMixedCards,"learn","Akkusativ чи Dativ?","Вивчення"),
   lessonStep("possessive-cases-mixed-practice","Змішана практика присвійних артиклів","Самостійно визначте Akkusativ чи Dativ та введіть один присвійний артикль. Розрізняйте euer з закінченням і ввічливе Ihr.",possessiveMixedCards,"input","Akkusativ чи Dativ?","Практика")
 ];
+// Practice copies drop the noun line: its gender dot would reveal the article before Check.
+const indefinitePracticeCards=cards=>cards.map(({noun,...card})=>card);
+const indefiniteArticleStages=[
+  lessonStep("indefinite-nominative-learn","Вивчення ein у Nominativ","Вивчіть ein для чоловічого й середнього роду та eine для жіночого. У Nominativ закінчення в ein немає.",indefiniteNominativeCards,"learn","Називний відмінок · ein","Вивчення"),
+  {...lessonStep("indefinite-nominative-practice","Практика ein у Nominativ","Доповніть речення ein або eine за родом іменника. Значення речення показує, що предмет є.",indefinitePracticeCards(indefiniteNominativeCards),"input","Називний відмінок · ein","Практика"),categoryBeforeCheck:"UNBESTIMMTER ARTIKEL · NOMINATIV"},
+  lessonStep("indefinite-accusative-learn","Вивчення ein в Akkusativ","Вивчіть einen для чоловічого роду. Для середнього й жіночого роду ein і eine не змінюються.",indefiniteAccusativeCards,"learn","Знахідний відмінок · ein","Вивчення"),
+  {...lessonStep("indefinite-accusative-practice","Практика ein в Akkusativ","Доповніть речення після haben, brauchen, kaufen, lesen і sehen. Прямий додаток стоїть в Akkusativ.",indefinitePracticeCards(indefiniteAccusativeCards),"input","Знахідний відмінок · ein","Практика"),categoryBeforeCheck:"UNBESTIMMTER ARTIKEL · AKKUSATIV"},
+  lessonStep("indefinite-dative-learn","Вивчення ein у Dativ","Вивчіть einem для чоловічого й середнього роду та einer для жіночого. Після mit, helfen, zeigen і in (Wo?) стоїть Dativ.",indefiniteDativeCards,"learn","Давальний відмінок · ein","Вивчення"),
+  {...lessonStep("indefinite-dative-practice","Практика ein у Dativ","Доповніть речення ein у Dativ. Визначте, кому щось дають або де це відбувається.",indefinitePracticeCards(indefiniteDativeCards),"input","Давальний відмінок · ein","Практика"),categoryBeforeCheck:"UNBESTIMMTER ARTIKEL · DATIV"},
+  lessonStep("indefinite-negative-learn","Вивчення kein","Вивчіть kein у Nominativ, Akkusativ і Dativ: ті самі закінчення, що й у ein. У множині це keine або keinen.",[...negativeNominativeCards,...negativeAccusativeCards,...negativeDativeCards],"learn","Заперечний артикль · kein","Вивчення"),
+  {...lessonStep("indefinite-negative-practice","Практика kein","Доповніть заперечне речення kein. Значення «немає» вказує на kein, а відмінок і число — на контекст речення.",indefinitePracticeCards([...negativeNominativeCards,...negativeAccusativeCards,...negativeDativeCards]),"input","Заперечний артикль · kein","Практика"),categoryBeforeCheck:"NEGATIVARTIKEL"},
+  lessonStep("indefinite-mixed-learn","Порівняння ein і kein","Порівняйте ствердження з ein і заперечення з kein. Спочатку визначте, що каже речення, потім відмінок і рід іменника.",indefiniteArticleCards,"learn","Ein чи kein?","Вивчення"),
+  {...lessonStep("indefinite-mixed-practice","Змішана практика ein і kein","Визначте, ствердження це чи заперечення, потім відмінок і рід. Введіть один артикль.",indefinitePracticeCards(indefiniteArticleCards),"input","Ein чи kein?","Практика"),categoryBeforeCheck:"UNBESTIMMTER ARTIKEL · NEGATIVARTIKEL"}
+];
 const seinStages=[
   lessonStep("sein-learn","Вивчення дієслова sein","Прочитайте всі шість форм теперішнього часу разом із займенниками, перш ніж перевіряти себе.",seinCards,"learn","Дієслово sein","Вивчення","sein:learn"),
   lessonStep("sein-practice","Практика дієслова sein","Пригадайте всі шість форм теперішнього часу в змішаному підході. Повторюйте набір для кращого запам’ятовування.",seinCards,"input","Дієслово sein","Практика","sein:practice")
@@ -3861,6 +4025,43 @@ const deckDefinitions={
       ]
     },
     cards:personalPronounCaseCards,stages:personalPronounCaseStages
+  },
+  "indefinite-articles":{
+    title:"Unbestimmter Artikel: ein und kein",label:"Unbestimmter Artikel: ein und kein",badge:"ein",
+    tip:"Спочатку визначте рід і відмінок іменника, потім оберіть ein для ствердження або kein для заперечення.",
+    guide:{
+      title:"Неозначений артикль: ein і kein",
+      intro:"Ein і eine вводять іменник, який ще не визначений: Das ist ein Tisch. Українська мова артиклів не має, тому рід і відмінок визначайте за німецьким іменником. Kein заперечує той самий іменник.",
+      rules:[
+        {title:"Ein має форми за родом",detail:"Чоловічий і середній рід мають ein, жіночий — eine. Неозначеного артикля в множині немає.",formula:"ein Tisch · ein Buch · eine Lampe · Das sind Bücher."},
+        {
+          title:"Ein змінюється за відмінком",
+          detail:"Колонки — рід іменника: der, das, die. Від Nominativ до Akkusativ змінюється лише чоловічий рід, а в Dativ змінюються всі три.",
+          table:{
+            columns:genderColumns.slice(0,3),
+            rows:[{label:"Nom.",title:"Nominativ",cells:["ein","ein","eine"]},{label:"Akk.",title:"Akkusativ",cells:["einen","ein","eine"]},{label:"Dat.",title:"Dativ",cells:["einem","einem","einer"]}],
+            highlights:[{row:1,column:0},{row:2,column:0},{row:2,column:1},{row:2,column:2}],
+            note:"Виділено зміни порівняно з Nominativ: einen в Akkusativ і всі форми в Dativ."
+          }
+        },
+        {title:"Akkusativ стоїть після прямого додатка",detail:"Haben, brauchen, kaufen, lesen і sehen вимагають Akkusativ. Чоловічий рід отримує -en, решта роду лишаються без змін.",formula:"Ich habe einen Hund. · Ich lese ein Buch. · Ich sehe eine Katze."},
+        {title:"Dativ після mit, helfen і in (Wo?)",detail:"Mit, helfen, schreiben і zeigen вимагають Dativ. Після in, що вказує на місце (Wo?), теж стоїть Dativ.",formula:"mit einem Bus · einem Freund helfen · in einer Wohnung"},
+        {
+          title:"Kein — заперечний артикль",
+          detail:"Kein має ті самі закінчення, що й ein. У множині всі роди мають keine (Nominativ, Akkusativ) і keinen (Dativ).",
+          formula:"Das sind keine Bücher. · Ich habe keine Bücher.",
+          table:{
+            columns:genderColumns,
+            rows:[{label:"Nom.",title:"Nominativ",cells:["kein","kein","keine","keine"]},{label:"Akk.",title:"Akkusativ",cells:["keinen","kein","keine","keine"]},{label:"Dat.",title:"Dativ",cells:["keinem","keinem","keiner","keinen"]}],
+            highlights:[{row:0,column:3},{row:1,column:3},{row:2,column:3}],
+            note:"Виділено множину: вона однакова для всіх родів."
+          }
+        },
+        {title:"Kein чи nicht",detail:"Kein заперечує іменник, який у ствердженні мав би ein або стояв би в множині без артикля. Nicht заперечує дію, прикметник або іменник з визначеним артиклем.",formula:"Ich habe keinen Hund. · Ich habe den Hund nicht."},
+        {title:"Без артикля після sein з професією",detail:"Після sein з професією, національністю чи релігією ein не ставимо.",formula:"Er ist Lehrer. · Sie ist Ärztin."}
+      ]
+    },
+    cards:indefiniteArticleCards,stages:indefiniteArticleStages
   },
   possessives:{title:"Possessive pronouns",label:"Possessive pronouns",badge:"mein",tip:"Possessive pronouns show who something belongs to. Their ending follows the noun.",guide:{title:"Присвійні займенники",intro:"Уживайте присвійний займенник перед іменником, щоб показати належність: mein означає «мій», dein — «твій» тощо.",rules:["Особа-власник визначає основу: mein, dein, sein, ihr, unser, euer, Ihr, ihr.",{title:"Закінчення змінюється відповідно до іменника",detail:"mein Bruder, meine Mutter, mein Kind, meine Freunde.",table:{columns:genderColumns,rows:[{label:"Nom.",title:"Nominativ",cells:["—","—","-e","-e"]}],highlights:[{row:0,column:2},{row:0,column:3}],note:"Чоловічий і середній рід лишаються без закінчення; жіночий рід і множина додають -e до основи."}},"Пишіть Ihr з великої літери для ввічливого «Ваш»; ihr залежно від контексту означає «її» або «їхній».","Присвійний займенник стоїть перед іменником і зазвичай має ті самі закінчення, що й ein: ein Buch, mein Buch; eine Tasche, meine Tasche."]},cards:possessivePronounCards,stages:possessiveStages},
   "possessive-cases":{

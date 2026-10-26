@@ -24,6 +24,7 @@ const lessonCatalog={
   "separable-verbs":{title:"Дієслова з відокремлюваними префіксами",germanTitle:"Trennbare Verben",outcome:"Правильно розміщувати відокремлювані префікси в різних типах речень.",className:"Синтаксис"},
   pronouns:{title:"Особові займенники",germanTitle:"Personalpronomen",outcome:"Добирати особові займенники за особою, числом і формою звертання.",className:"Лексика"},
   "personal-pronoun-cases":{title:"Особові займенники: Akkusativ і Dativ",germanTitle:"Personalpronomen: Akkusativ und Dativ",outcome:"Добирати особові займенники в Akkusativ і Dativ та розрізняти sie і Sie.",className:"Морфологія",level:"A1"},
+  "indefinite-articles":{title:"Неозначений артикль: ein і kein",germanTitle:"Unbestimmter Artikel: ein und kein",outcome:"Добирати ein, eine, einen, einem, einer та заперечний kein за родом, множиною і відмінком іменника.",className:"Морфологія",level:"A1"},
   possessives:{title:"Присвійні займенники",germanTitle:"Possessivartikel",outcome:"Добирати основу за власником і правильне закінчення присвійного займенника.",className:"Морфологія"},
   "possessive-cases":{title:"Присвійні артиклі: Akkusativ і Dativ",germanTitle:"Possessivartikel: Akkusativ und Dativ",outcome:"Уживати присвійні артиклі в обох відмінках за родом і числом іменника, включно з euer та ввічливим Ihr.",className:"Морфологія",level:"A1"},
   sein:{title:"Дієслово sein — бути",germanTitle:"Das Verb sein",outcome:"Пригадувати всі форми sein у теперішньому часі.",className:"Морфологія"},
@@ -97,7 +98,8 @@ const categoryLabels={
   "HAUPTSATZ":"Головне речення","NEBENSATZ":"Підрядне речення","NICHT TRENNBAR":"Невідокремлюваний префікс",
   "WOLLEN":"Wollen","WERDEN":"Werden","KÖNNEN":"Können","VERÄNDERUNG":"Зміна стану","BERUF":"Професія","INFINITIV":"Інфінитив",
   "MIT + DATIV":"mit + Dativ","OHNE + AKKUSATIV":"ohne + Akkusativ","MIT ODER OHNE":"Mit чи ohne","BEGLEITUNG":"Супровід",
-  "MITTEL":"Засіб","ART UND WEISE":"Спосіб дії","ARTIKEL":"Артикль","POSSESSIV":"Присвійний займенник","OHNE ARTIKEL":"Без артикля","BEDEUTUNG":"Значення"
+  "MITTEL":"Засіб","ART UND WEISE":"Спосіб дії","ARTIKEL":"Артикль","POSSESSIV":"Присвійний займенник","OHNE ARTIKEL":"Без артикля","BEDEUTUNG":"Значення",
+  "UNBESTIMMTER ARTIKEL":"Неозначений артикль","NEGATIVARTIKEL":"Заперечний артикль"
 };
 function categoryLabel(category){
   return category.split(" · ").map(part=>categoryLabels[part]||part).join(" · ");

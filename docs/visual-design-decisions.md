@@ -650,6 +650,7 @@ phase. Check them before treating the rollout as final.
 | local-prepositions | Every card; shown in practice because the gap gives the noun | — | Nom. / Wohin? / Wo? articles |
 | temporal-prepositions | Event and time-span cards; event cards show it in practice (the gap gives the noun), span cards after Check | — | Nom. / Akk. / Dat. articles |
 | es-gibt-leisure | Places with singular and plural, pattern cards | — | ein → einen |
+| indefinite-articles | Every card, learn stages; practice hides the gender line until Check | Every card; ein and kein strips (der · das · die, Plural for kein) | ein and kein paradigms |
 | travel-transport | Transport, places and phrases with a noun | — | `mit` + Dativ |
 | time-worksheet-vocabulary | Season, weather and nature nouns | — | — |
 | everyday-vocabulary | Food nouns | — | — |
@@ -738,12 +739,12 @@ reaches them.
 
 ### Phase 6 coverage
 
-The library is one screen, so Phase 6 had no pilot lesson. It groups all 29 lessons:
+The library is one screen, so Phase 6 had no pilot lesson. It groups all 30 lessons:
 
 | Class | Lessons |
 |---|---|
 | Лексика (8) | w-questions, pronouns, frequency, time-worksheet-vocabulary, everyday-vocabulary, travel-transport, giving-directions, dative-verbs |
-| Морфологія (12) | personal-pronoun-cases, possessives, possessive-cases, sein, werden, conjugation, strong-verbs, past-verbs, past-verbs-a2, past-verbs-b1, perfekt, present-practice |
+| Морфологія (13) | personal-pronoun-cases, indefinite-articles, possessives, possessive-cases, sein, werden, conjugation, strong-verbs, past-verbs, past-verbs-a2, past-verbs-b1, perfekt, present-practice |
 | Граматика (7) | koennen, haben, local-prepositions, time-expressions, temporal-prepositions, es-gibt-leisure, mit-ohne |
 | Синтаксис (2) | word-order, separable-verbs |
 
