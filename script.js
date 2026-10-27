@@ -4781,6 +4781,119 @@ const vocabHamburgStages=[
   ...vocabStages("vocab-hamburg-places","Місця в місті",vocabHamburgPlacesCards,hamburgVocabularyObjectives)
 ];
 const vocabHamburgCards=[...vocabHamburgWaterCards,...vocabHamburgAboveCards,...vocabHamburgEveningCards,...vocabHamburgPlacesCards];
+const sollenParadigm=verbParadigm("sollen","soll| soll|st soll| soll|en soll|t soll|en","ich = er/sie/es");
+const sollenResponse=(answer,scope="word")=>({mode:"text",scope,accepted:[answer],caseSensitive:false,punctuationSensitive:false});
+// Each group is one skill target; its explicitly named variants provide different contexts.
+function sollenClozes(groups,category,withParadigm=false){
+  return groups.flatMap(({targetId,answer,person,explanation,variants})=>variants.map(([id,promptText,translation,support])=>{
+    const card={
+      id,targetId,type:"cloze",word:withParadigm?`${verbPersons[person]} ${answer}`:answer,translation,promptText,support,
+      example:promptText.replace("___",promptText.startsWith("___")?answer[0].toUpperCase()+answer.slice(1):answer),exampleTranslation:translation,
+      explanation,category,practiceVariants:false,response:sollenResponse(answer)
+    };
+    return withParadigm?withVerbParadigm(card,sollenParadigm,person):card;
+  }));
+}
+const sollenFormCards=sollenClozes([
+  {targetId:"sollen-form-ich",answer:"soll",person:0,explanation:"Для ich форма sollen — soll без закінчення.",variants:[
+    ["sollen-ich-schlafen","Ich ___ acht Stunden schlafen.","Я маю спати вісім годин.","Лікар радить мені висипатися."],
+    ["sollen-ich-anrufen","___ ich dich morgen anrufen?","Мені зателефонувати тобі завтра?","Я запитую, чи цього від мене очікують."],
+    ["sollen-ich-machen","Was ___ ich jetzt machen?","Що мені зараз робити?","Я запитую поради."]]},
+  {targetId:"sollen-form-du",answer:"sollst",person:1,explanation:"Для du до soll додаємо -st: sollst.",variants:[
+    ["sollen-du-trinken","Du ___ mehr Wasser trinken.","Ти маєш пити більше води.","Це порада лікаря."],
+    ["sollen-du-licht","Du ___ das Licht ausschalten.","Ти маєш вимкнути світло.","Тобі передали прохання."],
+    ["sollen-du-handy","Du ___ im Kurs nicht mit dem Handy spielen.","Тобі не слід гратися телефоном на курсі.","Це правило курсу."]]},
+  {targetId:"sollen-form-er",answer:"soll",person:2,explanation:"Для er, sie та es форма sollen — soll без закінчення.",variants:[
+    ["sollen-er-helfen","Er ___ seiner Schwester helfen.","Він має допомогти сестрі.","Його про це попросили."],
+    ["sollen-sie-singular-warten","Sie ___ hier warten.","Вона має тут зачекати.","Йдеться про одну жінку."],
+    ["sollen-kind-schlafen","Das Kind ___ jetzt schlafen.","Дитина має зараз спати.","Батьки так вирішили."]]},
+  {targetId:"sollen-form-wir",answer:"sollen",person:3,explanation:"Для wir форма збігається з інфінітивом: sollen.",variants:[
+    ["sollen-wir-wasser","Wir ___ mehr Wasser trinken.","Ми маємо пити більше води.","Лікар радить це нам."],
+    ["sollen-wir-gehen","Wir ___ jetzt zum Bahnhof gehen.","Ми маємо зараз іти на вокзал.","Нам це сказали."],
+    ["sollen-wir-fragen","Was ___ wir fragen?","Що нам запитати?","Ми просимо поради."]]},
+  {targetId:"sollen-form-ihr",answer:"sollt",person:4,explanation:"Для ihr до soll додаємо -t: sollt.",variants:[
+    ["sollen-ihr-warten","Ihr ___ hier warten.","Ви маєте тут зачекати.","Звернення до кількох знайомих."],
+    ["sollen-ihr-leise","Ihr ___ nicht so laut sprechen.","Вам не слід говорити так голосно.","Звернення до кількох знайомих."],
+    ["sollen-ihr-kommen","___ ihr morgen kommen?","Вам сказали прийти завтра?","Звернення до кількох знайомих."]]},
+  {targetId:"sollen-form-sie",answer:"sollen",person:5,explanation:"Для sie (вони) і ввічливого Sie форма — sollen.",variants:[
+    ["sollen-kinder-spielen","Die Kinder ___ draußen spielen.","Діти мають гратися надворі.","Батьки так сказали."],
+    ["sollen-schueler-kommen","Die Schüler ___ pünktlich kommen.","Учні мають приходити вчасно.","Це правило школи."],
+    ["sollen-sie-warten","Sie ___ bitte hier warten.","Ви маєте, будь ласка, тут зачекати.","Ввічливе звернення до однієї особи."]]}
+],"SOLLEN · FORMEN",true);
+const sollenUseCards=sollenClozes([
+  {targetId:"sollen-use-auftrag",answer:"sollst",explanation:"Sollen передає прохання чи пораду іншої особи; для du — sollst.",variants:[
+    ["sollen-auftrag-arzt","Der Arzt sagt, du ___ mehr schlafen.","Лікар каже, що ти маєш більше спати.","Передай пораду лікаря за допомогою sollen."],
+    ["sollen-auftrag-mutter","Mama sagt, du ___ sie anrufen.","Мама каже, що ти маєш їй зателефонувати.","Передай прохання мами за допомогою sollen."],
+    ["sollen-auftrag-lehrer","Der Lehrer sagt, du ___ die Aufgabe machen.","Учитель каже, що ти маєш виконати завдання.","Передай слова вчителя за допомогою sollen."]]},
+  {targetId:"sollen-use-regel",answer:"sollst",explanation:"Sollen може передавати правило або очікувану поведінку; du — sollst.",variants:[
+    ["sollen-regel-helm","Du ___ beim Radfahren einen Helm tragen.","Тобі слід носити шолом під час їзди на велосипеді.","Вислови рекомендацію за допомогою sollen."],
+    ["sollen-regel-rot","Du ___ bei Rot warten.","На червоне світло слід чекати.","Передай правило за допомогою sollen."],
+    ["sollen-regel-handy","Du ___ im Unterricht nicht mit dem Handy spielen.","Тобі не слід гратися телефоном на занятті.","Передай правило за допомогою sollen."]]},
+  {targetId:"sollen-use-rat",answer:"soll",explanation:"Soll ich …? і Was soll ich …? запитують, що від мене очікують або що мені робити.",variants:[
+    ["sollen-rat-anziehen","Was ___ ich anziehen?","Що мені вдягнути?","Попроси поради за допомогою sollen."],
+    ["sollen-rat-machen","Was ___ ich jetzt machen?","Що мені зараз робити?","Попроси поради за допомогою sollen."],
+    ["sollen-rat-anrufen","Wann ___ ich meine Schwester anrufen?","Коли мені зателефонувати сестрі?","Попроси поради за допомогою sollen."]]},
+  {targetId:"sollen-use-angebot",answer:"soll",explanation:"Soll ich …? може запитувати, чи співрозмовник хоче, щоб я щось зробив або зробила.",variants:[
+    ["sollen-angebot-helfen","___ ich dir helfen?","Тобі допомогти?","Запропонуй допомогу за допомогою sollen."],
+    ["sollen-angebot-absagen","___ ich den Termin absagen?","Мені скасувати зустріч?","Запитай, чи від тебе цього хочуть, за допомогою sollen."],
+    ["sollen-angebot-fenster","___ ich das Fenster öffnen?","Мені відчинити вікно?","Запитай, чи від тебе цього хочуть, за допомогою sollen."]]},
+  {targetId:"sollen-use-bericht",answer:"soll",explanation:"Sollen може передавати неперевірене повідомлення з чужих слів, а не припис.",variants:[
+    ["sollen-bericht-essen","Das Essen dort ___ lecker sein.","Кажуть, що їжа там смачна.","Передай неперевірені чужі слова за допомогою sollen."],
+    ["sollen-bericht-wetter","Morgen ___ es regnen.","Кажуть, що завтра буде дощ.","Передай почуте повідомлення за допомогою sollen."],
+    ["sollen-bericht-film","Der Film ___ sehr gut sein.","Кажуть, що фільм дуже хороший.","Передай неперевірені чужі слова за допомогою sollen."]]}
+],"SOLLEN · GEBRAUCH");
+const sollenOrderGroups=[
+  {targetId:"sollen-order-statement",explanation:"У розповідному реченні sollen на другому місці, інфінітив у кінці.",variants:[
+    ["sollen-order-statement-licht","Du sollst das Licht ausschalten.","Ти маєш вимкнути світло.",[mainClause("Du","sollst","das Licht","ausschalten")]],
+    ["sollen-order-statement-wasser","Wir sollen mehr Wasser trinken.","Ми маємо пити більше води.",[mainClause("Wir","sollen","mehr Wasser","trinken")]],
+    ["sollen-order-statement-handy","Du sollst nicht mit dem Handy spielen.","Тобі не слід гратися телефоном.",[mainClause("Du","sollst","nicht mit dem Handy","spielen")]]]},
+  {targetId:"sollen-order-inversion",explanation:"Обставина часу займає перше місце, форма sollen — друге, підмет стоїть після неї.",variants:[
+    ["sollen-order-inversion-jetzt","Jetzt sollst du schlafen.","Зараз ти маєш спати.",[mainClause("Jetzt","sollst","du","schlafen")]],
+    ["sollen-order-inversion-morgen","Morgen soll ich meine Schwester anrufen.","Завтра я маю зателефонувати сестрі.",[mainClause("Morgen","soll","ich meine Schwester","anrufen")]],
+    ["sollen-order-inversion-heute","Heute sollen wir zu Hause bleiben.","Сьогодні ми маємо залишитися вдома.",[mainClause("Heute","sollen","wir zu Hause","bleiben")]]]},
+  {targetId:"sollen-order-question",explanation:"У запитанні без питального слова форма sollen стоїть першою, інфінітив — у кінці.",variants:[
+    ["sollen-order-question-helfen","Soll ich dir helfen?","Тобі допомогти?",[verbFirstClause("Soll","ich dir","helfen")]],
+    ["sollen-order-question-gehen","Sollen wir zum Bahnhof gehen?","Нам іти на вокзал?",[verbFirstClause("Sollen","wir zum Bahnhof","gehen")]],
+    ["sollen-order-question-fenster","Soll ich das Fenster öffnen?","Мені відчинити вікно?",[verbFirstClause("Soll","ich das Fenster","öffnen")]]]},
+  {targetId:"sollen-order-w-question",explanation:"Питальне слово стоїть першим, форма sollen — другою, інфінітив — у кінці.",variants:[
+    ["sollen-order-w-was","Was soll ich machen?","Що мені робити?",[mainClause("Was","soll","ich","machen")]],
+    ["sollen-order-w-wann","Wann soll ich meine Schwester anrufen?","Коли мені зателефонувати сестрі?",[mainClause("Wann","soll","ich meine Schwester","anrufen")]],
+    ["sollen-order-w-warum","Warum soll ich diese Aufgabe machen?","Чому я маю виконати це завдання?",[mainClause("Warum","soll","ich diese Aufgabe","machen")]]]}
+];
+const sollenOrderCards=sollenOrderGroups.flatMap(({targetId,explanation,variants})=>variants.map(([id,word,translation,structure])=>({
+  id,targetId,type:"sentence-build",word,translation,promptText:structure[0].map(slot=>slot.text).reverse().join(" / "),
+  support:`${translation} Почни з «${structure[0][0].text}».`,example:word,exampleTranslation:translation,
+  explanation,structure,category:"SOLLEN · SATZBAU",practiceVariants:false,response:sollenResponse(word,"sentence")
+})));
+const sollenChoiceCards=sollenClozes([
+  {targetId:"sollen-choice-sollen",answer:"soll",explanation:"Чужа порада або прохання: sollen; з ich — soll.",variants:[
+    ["sollen-choice-doctor","Der Arzt sagt: Ich ___ mehr schlafen.","Лікар каже: я маю більше спати.","Обери з können, mögen, wollen, sollen: передай пораду лікаря."],
+    ["sollen-choice-mother","Mama sagt: Ich ___ sie anrufen.","Мама каже: я маю їй зателефонувати.","Обери з können, mögen, wollen, sollen: передай прохання мами."],
+    ["sollen-choice-teacher","Der Lehrer sagt: Ich ___ die Aufgabe machen.","Учитель каже: я маю виконати завдання.","Обери з können, mögen, wollen, sollen: передай слова вчителя."]]},
+  {targetId:"sollen-choice-koennen",answer:"kann",explanation:"Können виражає вміння або можливість; з ich — kann.",variants:[
+    ["sollen-choice-swim","Ich ___ gut schwimmen.","Я вмію добре плавати.","Обери з können, mögen, wollen, sollen: ідеться про вміння."],
+    ["sollen-choice-guitar","Ich ___ Gitarre spielen.","Я вмію грати на гітарі.","Обери з können, mögen, wollen, sollen: ідеться про вміння."],
+    ["sollen-choice-drive","Ich ___ heute nicht kommen.","Я сьогодні не можу прийти.","Обери з können, mögen, wollen, sollen: ідеться про неможливість."]]},
+  {targetId:"sollen-choice-moegen",answer:"mag",explanation:"Mögen виражає вподобання; з ich — mag.",variants:[
+    ["sollen-choice-coffee","Ich ___ Kaffee.","Мені подобається кава.","Обери з können, mögen, wollen, sollen: ідеться про вподобання."],
+    ["sollen-choice-music","Ich ___ diese Musik.","Мені подобається ця музика.","Обери з können, mögen, wollen, sollen: ідеться про вподобання."],
+    ["sollen-choice-spinach","Ich ___ keinen Spinat.","Я не люблю шпинат.","Обери з können, mögen, wollen, sollen: ідеться про вподобання."]]},
+  {targetId:"sollen-choice-wollen",answer:"will",explanation:"Wollen виражає власне бажання або намір; з ich — will.",variants:[
+    ["sollen-choice-cinema","Ich ___ ins Kino gehen.","Я хочу піти в кіно.","Обери з können, mögen, wollen, sollen: ідеться про власний намір."],
+    ["sollen-choice-learn","Ich ___ Deutsch lernen.","Я хочу вивчати німецьку.","Обери з können, mögen, wollen, sollen: ідеться про власний намір."],
+    ["sollen-choice-visit","Ich ___ meine Freunde besuchen.","Я хочу відвідати друзів.","Обери з können, mögen, wollen, sollen: ідеться про власний намір."]]}
+],"MODALVERBEN · VERGLEICH");
+const sollenCards=[...sollenFormCards,...sollenUseCards,...sollenOrderCards,...sollenChoiceCards];
+const sollenStages=[
+  lessonStep("sollen-forms-learn","Форми sollen","Вивчіть шість форм теперішнього часу в коротких реченнях.",sollenFormCards,"learn","Форми sollen","Вивчення"),
+  lessonStep("sollen-forms-practice","Практика форм sollen","Введіть одну форму sollen за підметом.",sollenFormCards,"input","Форми sollen","Практика"),
+  lessonStep("sollen-uses-learn","Значення sollen","Порівняйте прохання, правила, запитання та неперевірені повідомлення.",sollenUseCards,"learn","Як уживати sollen","Вивчення"),
+  lessonStep("sollen-uses-practice","Практика значень sollen","Доповніть речення за ситуацією.",sollenUseCards,"input","Як уживати sollen","Практика"),
+  lessonStep("sollen-order-learn","Порядок слів із sollen","Порівняйте розповідні речення та запитання.",sollenOrderCards,"learn","Порядок слів","Вивчення"),
+  lessonStep("sollen-order-practice","Речення із sollen","Складіть ціле речення з фрагментів, починаючи з указаного слова.",sollenOrderCards,"input","Порядок слів","Практика"),
+  lessonStep("sollen-choice-learn","Порівняння модальних дієслів","Порівняйте чужі прохання, вміння, вподобання й власні наміри.",sollenChoiceCards,"learn","Вибір модального дієслова","Вивчення"),
+  lessonStep("sollen-choice-practice","Вибір модального дієслова","За контекстом введіть потрібну форму одного з чотирьох дієслів.",sollenChoiceCards,"input","Вибір модального дієслова","Практика")
+];
 const deckDefinitions={
   "w-questions":{title:"W-Fragen",label:"W-Fragen",badge:"W",tip:"W-questions always come first in a question, followed by the verb.",guide:{title:"W-Fragen: запитання",intro:"Оберіть питальне слово відповідно до потрібної інформації, а потім побудуйте речення навколо відмінюваного дієслова.",rules:[{detail:"Питальне слово стоїть на першому місці, а відмінюване дієслово — на другому: Wo wohnst du?",visual:{structure:[mainClause("Wo","wohnst","du")]}},{detail:"Підмет зазвичай стоїть після дієслова: Wann kommt ihr? Решта інформації йде далі.",visual:{structure:[mainClause("Wann","kommt","ihr")]}},"Використовуйте wo для місця, wohin для руху до місця, а woher — для місця, звідки хтось прибуває.","На W-Fragen не можна відповісти лише ja або nein: вони потребують конкретної інформації."]},cards,stages:wQuestionStages},
   pronouns:{title:"Personal pronouns",label:"Personal pronouns",badge:"ich",tip:"Use the pronoun that matches the person or people you are talking about.",guide:{title:"Особові займенники",intro:"Німецькі особові займенники показують, хто говорить, до кого звертаються або про кого йдеться.",rules:["ich, du, er/sie/es, wir, ihr, sie відповідають особі або групі в реченні.","Пишіть Sie з великої літери для ввічливого «Ви» в однині або множині; sie означає «вона» або «вони».","Займенник визначає форму дієслова: ich bin, du bist, wir sind.","Оберіть ihr для неформального звертання до кількох людей."]},cards:pronounCards,stages:pronounStages},
@@ -4896,6 +5009,24 @@ const deckDefinitions={
   "present-practice":{title:"Present-tense practice",practiceTitle:"Present-tense practice",label:"Präsens practice",badge:"P",tip:"Use this focused review to retrieve conjugated forms in context. Revise each verb pattern in its dedicated lesson first.",guide:{title:"Відпрацювання форм Präsens",intro:"Це повторення вже вивчених моделей дієвідмінювання, а не вступ до нових правил. Використовуйте речення як контекст, але вводьте лише відмінювану форму або форми.",rules:["У частині з пропусками введіть форму, якої бракує в німецькому реченні; підказка в дужках показує інфінітив.","У частині з українськими підказками визначте особу й число, а потім введіть лише відповідну німецьку форму, не все речення.","Вправа повторює слабкі, сильні та неправильні форми, зокрема sein, gehen, fahren, sehen і möchten."]},cards:presentPracticeCards,stages:presentPracticeStages},
   werden:{title:"Verb werden",label:"Verb werden",badge:"werden",tip:"Use werden for becoming something: Es wird kalt, Ich werde Lehrer.",guide:{title:"Werden у теперішньому часі",intro:"Werden означає «ставати». Воно відмінюється неправильно: у du і er/sie/es голосний e змінюється на i.",rules:[{title:"Шість форм werden",detail:"Основа werd- зберігається, крім du і er/sie/es: у них e переходить в i.",table:{columns:[{label:"Однина"},{label:"Множина"}],rows:[{label:"1-ша особа",cells:["ich werde","wir werden"]},{label:"2-га особа",cells:["du wirst","ihr werdet"]},{label:"3-тя особа",cells:["er/sie/es wird","sie/Sie werden"]}],highlights:[{row:1,column:0},{row:2,column:0}],note:"Виділено форми з e → i: du wirst і er/sie/es wird. Форми werde, werden і werdet мають основу werd-."}},"Werden означає «ставати»: Es wird kalt — стає холодно. Ich werde Lehrer — я стаю вчителем.","Sein описує стан, werden — зміну: Es ist kalt. Es wird kalt.",{title:"Після werden — іменна частина",detail:"Прикметник стоїть без закінчення, а назва професії — без артикля: Ich werde Lehrer. Mein Bruder will Musiker werden.",visual:{structure:[mainClause("Ich","werde","","Lehrer")]}}]},cards:werdenCards,stages:werdenStages},
   koennen:{title:"Modal verbs",label:"Modal verbs",badge:"M",tip:"Use können for ability, mögen for likes, möchten for polite wishes, and wollen for intentions.",guide:{title:"Модальні дієслова: können, mögen, möchten і wollen",intro:"Ці дієслова допомагають говорити про вміння, уподобання, ввічливі бажання та наміри. Форма залежить від підмета.",rules:[{title:"Чотири дієслова, чотири значення",detail:"Können означає «могти, вміти», mögen — «любити, подобатися», möchten — ввічливе «хотів би / хотіла б» (Konjunktiv II від mögen), wollen — «хотіти, мати намір».",table:{columns:[{label:"können"},{label:"mögen"},{label:"möchten"},{label:"wollen"}],rows:verbPersons.map((label,person)=>({label,cells:[koennenParadigm,moegenParadigm,moechtenParadigm,wollenParadigm].map(paradigm=>paradigm.forms[person])})),highlights:[0,1,2].flatMap(row=>[0,1,3].map(column=>({row,column}))),note:"Виділено однину können, mögen і wollen: ö → a, o → i; ich і er/sie/es не мають закінчення. У möchten ich і er/sie/es мають однакову форму."}},"Порівнюйте значення: Ich mag Kaffee. = «Мені подобається кава». Ich möchte einen Kaffee. = «Я хотів би / хотіла б каву». Ich will Deutsch lernen. = «Я маю намір вчити німецьку».",{detail:"З können, möchten і wollen друге дієслово стоїть в інфінітиві в кінці речення: Ich kann schwimmen. Wir möchten bezahlen. Er will nach Hause gehen.",visual:{structure:[mainClause("Ich","kann","","schwimmen")]}}]},cards:koennenCards,stages:koennenStages},  haben:{title:"Haben, bekommen & brauchen",label:"Haben, bekommen & brauchen",badge:"hab",tip:"Use haben for what you have, bekommen for what you receive, and brauchen for what you need.",guide:{title:"Haben, bekommen & brauchen",intro:"Ці три дієслова допомагають говорити про речі, людей, потреби та отримання в повсякденних ситуаціях A1.",rules:["haben означає «мати»: Ich habe einen Hund.","bekommen означає «отримувати»: Wir bekommen morgen Geld.","brauchen означає «потребувати»: Er braucht eine neue Brille.",{title:"Порівняйте форми",detail:"Bekommen і brauchen відмінюються регулярно. У haben в однині перед -st і -t випадає b.",table:{columns:[{label:"haben"},{label:"bekommen"},{label:"brauchen"}],rows:verbPersons.map((label,person)=>({label,cells:[habenParadigm,bekommenParadigm,brauchenParadigm].map(paradigm=>paradigm.forms[person])})),highlights:[{row:1,column:0},{row:2,column:0}],note:"Виділено форми haben без b."}}]},cards:habenCards,stages:habenStages},
+  sollen:{
+    title:"Das Modalverb sollen",label:"Sollen",badge:"soll",
+    tip:"Передавайте прохання, поради й повідомлення інших людей за допомогою sollen.",
+    guide:{
+      title:"Модальне дієслово sollen",
+      intro:"Спершу можна повторити урок «Модальні дієслова». Sollen допомагає передати, чого очікує інша людина, запитати поради або переказати почуте.",
+      rules:[
+        {title:"Форми теперішнього часу",detail:"Ich і er/sie/es мають однакову форму без закінчення. Голосний основи не змінюється.",table:{columns:[{label:"Однина"},{label:"Множина"}],rows:[{label:"1-ша особа",cells:["ich soll","wir sollen"]},{label:"2-га особа",cells:["du sollst","ihr sollt"]},{label:"3-тя особа",cells:["er/sie/es soll","sie/Sie sollen"]}],highlights:[{row:0,column:0},{row:2,column:0}],note:"Ich і er/sie/es мають однакову форму soll."}},
+        {title:"Чуже прохання, порада або правило",detail:"Sollen часто передає те, чого хтось очікує або радить: Der Arzt sagt, du sollst mehr schlafen. Можна також передати правило: Du sollst bei Rot warten."},
+        {title:"Запитайте або запропонуйте допомогу",detail:"Was soll ich machen? — «Що мені робити?» Soll ich dir helfen? — «Тобі допомогти?»"},
+        {title:"Неперевірене повідомлення",detail:"Sollen може передавати чужі слова без підтвердження: Das Essen soll lecker sein — «Кажуть, їжа смачна». Це не наказ."},
+        {title:"Sollen і müssen",detail:"Sollen часто вказує на чуже очікування; müssen — на необхідність. Вони можуть перекладатися схоже, але не завжди взаємозамінні."},
+        {title:"Порядок слів",detail:"У розповідному реченні відмінювана форма стоїть другою, а інфінітив у кінці. У запитанні без W-слова вона стоїть першою.",formula:"Du sollst das Licht ausschalten.",visual:{structure:[mainClause("Du","sollst","das Licht","ausschalten")]}},
+        {title:"Sollte — не форма Präsens",detail:"Sollte або solltet може виражати м’якшу пораду чи минулий обов’язок — значення залежить від контексту. Минулі форми модальних дієслів є в уроці «Минулий час · A2»."}
+      ]
+    },
+    cards:sollenCards,stages:sollenStages
+  },
   frequency:{title:"Frequency adverbs",label:"Frequency adverbs",badge:"oft",tip:"Frequency adverbs such as oft and nie normally stay in the middle of the sentence after the conjugated verb.",guide:{title:"Прислівники частоти",intro:"Прислівники частоти показують, як часто щось відбувається. Вони не змінюють форму й зазвичай стоять у середині речення.",rules:[{title:"Вивчайте шкалу частоти",detail:"Від найбільшої до найменшої частоти: immer, fast immer, meistens, oft, manchmal, selten, fast nie, nie.",formula:"immer → oft → manchmal → selten → nie",visual:{frequency:{scale:frequencyScale}}},{title:"Ставте прислівник після відмінюваного дієслова",detail:"У простому реченні прислівник частоти зазвичай стоїть після дієслова.",formula:"Ich lerne oft Deutsch.",visual:{structure:[mainClause("Ich","lerne","oft Deutsch")]}},{title:"Зберігайте дієслово на другому місці",detail:"Якщо речення починається з часу, підмет і прислівник ідуть після відмінюваного дієслова.",formula:"Am Sonntag lese ich manchmal ein Buch.",visual:{structure:[mainClause("Am Sonntag","lese","ich manchmal ein Buch")]}},{title:"Використовуйте nie без nicht",detail:"Nie уже означає заперечення «ніколи», тому в таких реченнях nicht не потрібне.",formula:"Wir essen nie Fleisch."}]},cards:frequencyCards,stages:frequencyStages},
   "local-prepositions":{title:"Local prepositions: Dativ & Akkusativ",label:"Local prepositions",badge:"Wo?",tip:"Ask Wo? for a position and Wohin? for a destination. The question decides Dativ or Akkusativ.",guide:{title:"Локальні прийменники: Dativ чи Akkusativ?",intro:"In, an, auf, über, unter, vor, hinter, neben і zwischen можуть стояти з двома відмінками. Відмінок визначає не сам прийменник, а значення: місце чи напрямок.",rules:[{title:"1. Запитайте Wo?",detail:"Якщо щось уже перебуває в певному місці, вживайте Dativ.",formula:"Das Buch liegt in der Schublade. · Die Vase steht auf dem Tisch.",visual:{scenes:[{kind:"drawer",motion:false,cue:"Wo?",text:"Das Buch liegt in der Schublade."},{kind:"table",motion:false,cue:"Wo?",text:"Die Vase steht auf dem Tisch."}]}},{title:"2. Запитайте Wohin?",detail:"Якщо хтось або щось рухається до місця, вживайте Akkusativ.",formula:"Er legt das Buch in die Schublade. · Ich stelle die Vase auf den Tisch.",visual:{scenes:[{kind:"drawer",motion:true,cue:"Wohin?",text:"Er legt das Buch in die Schublade."},{kind:"table",motion:true,cue:"Wohin?",text:"Ich stelle die Vase auf den Tisch."}]}},{title:"3. Помічайте артикль",detail:"У чоловічому роді Dativ dem і Akkusativ den добре показують різницю. У жіночому та середньому роді Akkusativ збігається з Nominativ (die, das), тому змінюється лише Dativ: der, dem.",formula:"Wo? → Dativ · Wohin? → Akkusativ",table:{columns:genderColumns,rows:[nominativeArticleRow,{label:"Wohin?",title:"Akkusativ",cells:definiteArticles.accusative},{label:"Wo?",title:"Dativ",cells:definiteArticles.dative}],highlights:[{row:1,column:0},{row:2,column:0},{row:2,column:1},{row:2,column:2},{row:2,column:3}],note:"Виділено зміни порівняно з Nominativ: Wohin? змінює лише чоловічий рід, Wo? — усі артиклі."}},{title:"4. Вивчайте дієслово разом зі значенням",detail:"Liegen, stehen, sitzen і hängen часто описують місце; legen, stellen, sich setzen і hängen часто описують напрямок.",formula:"Der Hund liegt unter dem Stuhl. · Der Hund läuft unter den Stuhl.",visual:{scenes:[{kind:"chair",motion:false,cue:"Wo?",text:"Der Hund liegt unter dem Stuhl."},{kind:"chair",motion:true,cue:"Wohin?",text:"Der Hund läuft unter den Stuhl."}]}},
         {title:"in — «у, в»",detail:"Щось перебуває всередині предмета, контейнера або простору.",formula:"in der Schublade · in die Schublade"},

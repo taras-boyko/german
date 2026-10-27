@@ -669,6 +669,7 @@ phase. Check them before treating the rollout as final.
 | conjugation | Every card; caption names extra e or du -t | — | `mach-` vs `arbeit-` (Phase 1) |
 | haben | Every card (haben, bekommen, brauchen) | — | haben vs bekommen vs brauchen |
 | koennen | Form cards (können, mögen, möchten); `ö → a` marked | — | können vs mögen vs möchten |
+| sollen | Present-tense form cards; no stem-vowel change | — | Six present-tense forms; ich and er/sie/es match |
 | personal-pronoun-cases | Every card; Nom. / Akk. / Dat. pronoun strip | — | Akkusativ / Dativ by person (Phase 1) |
 | reflexive-pronouns | Every card; Akk. / Dat. pronoun strip | — | Akkusativ / Dativ by person (Phase 1) |
 | perfekt | — | Frame and haben-or-sein stages | — |
@@ -683,6 +684,7 @@ Position boxes (5) appear on learn cards and after Check on sentence builds.
 | separable-verbs | All 14 (vocabulary and pattern cards) | All 14 |
 | word-order | Rule cards and dass sentence examples | Sentence builds, including dass clauses |
 | koennen | 4 word-order rule cards | 21 (word-order practice stage) |
+| sollen | Word-order examples | Word-order sentence builds |
 | perfekt | 6 frame cards | The same 6 frames in practice |
 | temporal-prepositions | 15 sentence cards | The same 15 in practice |
 
@@ -764,6 +766,7 @@ guide).
 | perfekt | 1 `Ich habe die Hausaufgaben gemacht` (boxes); 2 haben, 3 sein (panel) |
 | past-verbs, past-verbs-a2, past-verbs-b1 | The "Haben або sein" rule (panel, neither marked) |
 | koennen | 3 `Ich kann schwimmen` (boxes) |
+| sollen | 6 `Du sollst das Licht ausschalten` (boxes) |
 | werden | 4 `Ich werde Lehrer` (boxes) |
 | strong-verbs | 4 `Der Kurs fängt um neun Uhr an` (boxes) |
 | everyday-vocabulary | 2 `Der Kurs fängt um neun Uhr an` (boxes); 3 der Kräutertee, die Süßigkeiten, der Brei (pictures) |

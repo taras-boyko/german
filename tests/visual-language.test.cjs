@@ -374,7 +374,7 @@ test("verb cards carry a person strip whose active tile is the answer form",()=>
       }
     }
   }
-  assert.deepEqual(covered,{sein:22,conjugation:66,"strong-verbs":120,koennen:48,haben:54,werden:24});
+  assert.deepEqual(covered,{sein:22,conjugation:66,"strong-verbs":120,koennen:48,haben:54,werden:24,sollen:36});
   for(const stage of app.definitions["strong-verbs"].stages)assert.equal(stage.cards.length,42,stage.id);
 });
 
@@ -555,11 +555,12 @@ const structureCoverage={
   "separable-verbs":()=>true,
   "word-order":()=>true,
   koennen:stage=>/^(koennen|wollen)-order-/.test(stage.id),
+  sollen:stage=>/^sollen-order-/.test(stage.id),
   perfekt:(stage,card)=>card.id.startsWith("perfekt-frame-"),
   "temporal-prepositions":(stage,card)=>card.type==="sentence-build",
   "mit-ohne":(stage,card)=>card.type==="sentence-build"
 };
-const structureCounts={"separable-verbs":28,"word-order":55,koennen:35,perfekt:12,"temporal-prepositions":30,"mit-ohne":12};
+const structureCounts={"separable-verbs":28,"word-order":55,koennen:35,sollen:24,perfekt:12,"temporal-prepositions":30,"mit-ohne":12};
 
 test("sentence structures are explicit, ordered and rebuild the card's sentence",()=>{
   const {app}=runtime();
@@ -981,7 +982,7 @@ test("guide tables are well formed across lessons",()=>{
       for(const {row,column} of table.highlights||[])assert.ok(table.rows[row]&&table.columns[column],`${lessonId}: highlight ${row}/${column}`);
     }
   }
-  assert.deepEqual(withTables.sort(),["conjugation","dative-verbs","es-gibt-leisure","haben","indefinite-articles","koennen","local-prepositions","mit-ohne","personal-pronoun-cases","possessive-cases","possessives","reflexive-pronouns","sein","strong-verbs","temporal-prepositions","travel-transport","werden"]);
+  assert.deepEqual(withTables.sort(),["conjugation","dative-verbs","es-gibt-leisure","haben","indefinite-articles","koennen","local-prepositions","mit-ohne","personal-pronoun-cases","possessive-cases","possessives","reflexive-pronouns","sein","sollen","strong-verbs","temporal-prepositions","travel-transport","werden"]);
   const card=app.definitions["personal-pronoun-cases"].stages[0].cards[0];
   app.renderCard("personal-pronoun-cases",0,card);
   const table=descendants(elements.get("deck-guide-rules")).find(node=>node.tagName==="TABLE");
@@ -1004,6 +1005,7 @@ const ruleVisualCoverage={
   "past-verbs-a2":["3:auxiliary"],
   "past-verbs-b1":["3:auxiliary"],
   koennen:["3:structure"],
+  sollen:["6:structure"],
   "strong-verbs":["4:structure"],
   "everyday-vocabulary":["2:structure","3:pictures"],
   "travel-transport":["1:pictures","4:structure"],
