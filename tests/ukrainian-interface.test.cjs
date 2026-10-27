@@ -28,7 +28,7 @@ const ukrainian=/[а-яіїєґ]/iu;
 
 test("every lesson, chapter, phase, outcome, and exercise label is Ukrainian",()=>{
   const app=runtime();
-  assert.equal(Object.keys(app.definitions).length,31);
+  assert.equal(Object.keys(app.definitions).length,35);
   let stages=0;
   for(const [id,definition] of Object.entries(app.definitions)){
     for(const text of [definition.title,definition.label,definition.catalog.outcome,definition.catalog.className]){
@@ -52,13 +52,13 @@ test("every lesson, chapter, phase, outcome, and exercise label is Ukrainian",()
       }
     }
   }
-  assert.equal(stages,163);
+  assert.equal(stages,171);
 });
 
 test("grammar practice explains the deciding rule instead of a generic fallback",()=>{
   const app=runtime();
   const vocabulary=new Set(["w-questions","frequency","time-worksheet-vocabulary","everyday-vocabulary",
-    "travel-transport","giving-directions"]);
+    "travel-transport","giving-directions","vocab-license-travel","vocab-post-contracts","vocab-talk-feelings","vocab-life-daily"]);
   const vocabularyCategories=/^(FREIZEIT · (ORT|AKTION|WORTSCHATZ|BESCHREIBUNG|MENGE|ZEIT)|FOTOBESCHREIBUNG)/;
   const targets=new Set();
   for(const [lessonId,definition] of Object.entries(app.definitions)){
@@ -90,7 +90,7 @@ test("Ukrainian counts handle zero, singular, plural, teens, and compound number
 
 test("localization preserves the pre-localization identities, German content, answers and progression",()=>{
   const app=runtime();
-  const snapshot=Object.entries(app.definitions).filter(([lessonId])=>!["possessive-cases","temporal-prepositions","werden","mit-ohne","indefinite-articles","reflexive-pronouns"].includes(lessonId)).map(([lessonId,definition])=>({
+  const snapshot=Object.entries(app.definitions).filter(([lessonId])=>!["possessive-cases","temporal-prepositions","werden","mit-ohne","indefinite-articles","reflexive-pronouns","vocab-license-travel","vocab-post-contracts","vocab-talk-feelings","vocab-life-daily"].includes(lessonId)).map(([lessonId,definition])=>({
     lessonId,stages:definition.stages.filter(stage=>!stage.id.startsWith("wollen-")).map(stage=>({
       id:stage.id,mode:stage.mode,progressId:stage.progressId,
       cards:app.variantsForStage(stage).filter(card=>!/^pronoun-(?:accusative|dative)-[^:]+-context-[a-z0-9-]+$/.test(card.id)).map(card=>({

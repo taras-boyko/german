@@ -42,6 +42,10 @@ const lessonCatalog={
   "travel-transport":{title:"Подорожі й транспорт",germanTitle:"Reisen und Verkehrsmittel",outcome:"Говорити німецькою про транспорт, маршрути й дії під час подорожі.",className:"Лексика"},
   "giving-directions":{title:"Як пояснити дорогу",germanTitle:"Den Weg beschreiben",outcome:"Пояснювати прості маршрути й розташування знайомих місць у місті.",className:"Лексика",level:"A1"},
   "dative-verbs":{title:"Дієслова з Dativ",germanTitle:"Verben mit Dativ",outcome:"Пригадувати 16 дієслів і вживати їхні форми теперішнього часу з додатками в Dativ.",className:"Лексика",level:"A2"},
+  "vocab-license-travel":{title:"Водійське посвідчення і подорожі",germanTitle:"Führerschein und Reisen",outcome:"Пригадувати німецькі слова про водійське посвідчення, мотоцикл і подорожі та їхні українські значення.",className:"Лексика"},
+  "vocab-post-contracts":{title:"Пошта і договори",germanTitle:"Post und Verträge",outcome:"Пригадувати німецькі слова про листи, документи й договори та їхні українські значення.",className:"Лексика"},
+  "vocab-talk-feelings":{title:"Розмови і почуття",germanTitle:"Gespräche und Gefühle",outcome:"Пригадувати німецькі слова для розмов, думок і дій та їхні українські значення.",className:"Лексика"},
+  "vocab-life-daily":{title:"Життя і щодня",germanTitle:"Leben und Alltag",outcome:"Пригадувати німецькі слова про життя, сім’ю і щоденні справи та їхні українські значення.",className:"Лексика"},
   "es-gibt-leisure":{title:"Місто й дозвілля: es gibt",germanTitle:"Stadt und Freizeit: es gibt",outcome:"Описувати місця, заняття й можливості для дозвілля в місті.",className:"Граматика"}
 };
 // Library groups follow the course path: words → forms → rule-based choice → sentence order.
@@ -102,12 +106,14 @@ const categoryLabels={
   "WOLLEN":"Wollen","WERDEN":"Werden","KÖNNEN":"Können","VERÄNDERUNG":"Зміна стану","BERUF":"Професія","INFINITIV":"Інфінитив",
   "MIT + DATIV":"mit + Dativ","OHNE + AKKUSATIV":"ohne + Akkusativ","MIT ODER OHNE":"Mit чи ohne","BEGLEITUNG":"Супровід",
   "MITTEL":"Засіб","ART UND WEISE":"Спосіб дії","ZUTAT":"Інгредієнт","ARTIKEL":"Артикль","POSSESSIV":"Присвійний займенник","OHNE ARTIKEL":"Без артикля","BEDEUTUNG":"Значення",
-  "UNBESTIMMTER ARTIKEL":"Неозначений артикль","NEGATIVARTIKEL":"Заперечний артикль"
+  "UNBESTIMMTER ARTIKEL":"Неозначений артикль","NEGATIVARTIKEL":"Заперечний артикль",
+  "FÜHRERSCHEIN":"Водійське посвідчення","REISEN":"Подорожі","POST":"Пошта","VERTRÄGE":"Договори",
+  "GESPRÄCHE":"Розмови","GEFÜHLE":"Почуття","LEBEN":"Життя"
 };
 function categoryLabel(category){
   return category.split(" · ").map(part=>categoryLabels[part]||part).join(" · ");
 }
-const exerciseLabels={recall:"Пригадування",cloze:"Пропуск","sentence-build":"Побудова речення"};
+const exerciseLabels={recall:"Пригадування","recall-reverse":"Зворотне пригадування",cloze:"Пропуск","sentence-build":"Побудова речення"};
 const legacySequenceAliases={
   "w-questions":{"w-questions:learn":["w-basics-learn","w-place-learn","w-time-learn"]},
   pronouns:{"pronouns:learn":["pronouns-singular-learn","pronouns-plural-learn"]},
@@ -564,7 +570,7 @@ function standaloneOccurrence(sentence,expected){
 }
 
 function contextVariant(card){
-  if(card.practiceVariants===false||card.type==="sentence-build")return null;
+  if(card.practiceVariants===false||card.type==="sentence-build"||card.type==="recall-reverse")return null;
   const sentence=card.answer?card.word:card.example;
   if(!sentence)return null;
   // Gap whichever accepted form the sentence uses, e.g. "ihre" in "Ihre Tasche ist hier."
@@ -1007,6 +1013,7 @@ function renderCorrection(value,expected,response){
 }
 
 function inputCopy(card){
+  if(card.type==="recall-reverse")return ["Напишіть відповідь українською","Відповідь українською..."];
   if(card.response.scope==="sentence")return ["Напишіть повне речення німецькою","Повне речення німецькою..."];
   if(card.response.scope==="phrase")return ["Напишіть вираз німецькою","Вираз німецькою..."];
   return ["Напишіть відповідь німецькою","Відповідь німецькою..."];
@@ -1018,7 +1025,7 @@ function practicePromptParts(prompt){
 }
 
 function renderPracticePrompt(card){
-  const prompt=$("question-word"),parts=practicePromptParts(card.promptText);
+  const prompt=$("question-word"),parts=card.type==="recall-reverse"?null:practicePromptParts(card.promptText);
   // The instruction line has its own small size, so only the target words decide the fit.
   const target=slashRuns(parts?parts.target:card.promptText,card.type==="sentence-build");
   setFitChars(prompt,target.chars);
@@ -1037,6 +1044,7 @@ function renderPracticePrompt(card){
 }
 
 function feedbackExample(card){
+  if(card.type==="recall-reverse")return card.example?{label:"Приклад у контексті",text:card.example,translation:card.exampleTranslation||""}:{label:"Німецьке слово",text:card.word,translation:""};
   if(card.type==="recall")return {label:"Приклад у контексті",text:card.example||card.word,translation:card.exampleTranslation||card.translation};
   if(/[.?!]$/.test(card.word.trim()))return {label:"Правильне речення",text:card.word,translation:card.translation};
   if(card.example&&!card.example.includes("___"))return {label:"Приклад у контексті",text:card.example,translation:card.exampleTranslation||card.translation};
@@ -1051,6 +1059,7 @@ function feedbackExplanation(card){
   if(card.explanation)return card.explanation;
   if(card.type==="cloze")return "Визначте потрібну німецьку форму за контекстом речення.";
   if(card.type==="sentence-build")return "Побудуйте речення з правильним німецьким порядком слів.";
+  if(card.type==="recall-reverse")return `Німецьке слово «${card.word}» означає «${card.translation}».`;
   return `Пов’яжіть значення «${card.translation}» з відповіддю «${card.response.accepted[0]}».`;
 }
 
@@ -1132,8 +1141,10 @@ function nounLineShown(card){
 }
 
 // A learn card whose headword is exactly the noun (e.g. "der Baum / die Bäume") carries the dots itself.
+// A reverse card's heading is the German word itself, so it counts as a headword even in verification mode.
 function headwordNoun(card){
-  return !verificationMode&&Boolean(card.noun)&&card.word===nounEntries(card.noun).map(nounPhrase).join(" / ");
+  const headingIsWord=card.type==="recall-reverse"||!verificationMode;
+  return headingIsWord&&Boolean(card.noun)&&card.word===nounEntries(card.noun).map(nounPhrase).join(" / ");
 }
 
 function genderDot(gender){
@@ -1627,9 +1638,12 @@ function render(focusTarget=""){
   const revealed=verified||answerRevealed,expected=card.response.accepted[0],[inputLabel,inputPlaceholder]=inputCopy(card);
   const example=feedbackExample(card);
   const feedbackVisible=verificationMode&&revealed;
-  const exampleTranslation=feedbackVisible?example.translation:(card.exampleTranslation||card.translation);
+  // A reverse card's Ukrainian meaning is the answer, so it stays out of the example line until the attempt is checked.
+  const exampleTranslation=feedbackVisible?example.translation:(card.type==="recall-reverse"?"":(card.exampleTranslation||card.translation));
   const meaningTranslation=verificationMode?card.translation:(card.studyTranslation||card.translation);
-  const separateMeaning=Boolean(translationKey(meaningTranslation))&&translationKey(meaningTranslation)!==translationKey(exampleTranslation);
+  // The feedback title already names the answer, so the meaning line appears only when it adds to it.
+  const repeatsAnswer=card.type==="recall-reverse"&&translationKey(meaningTranslation)===translationKey(expected);
+  const separateMeaning=Boolean(translationKey(meaningTranslation))&&translationKey(meaningTranslation)!==translationKey(exampleTranslation)&&!repeatsAnswer;
   const support=verificationMode?practiceSupport(card):{label:"",text:""};
   if(!feedbackVisible){
     $("verification-feedback").textContent="";

@@ -32,7 +32,7 @@ input control when typed recall can assess the skill.
 {
   id: "stable-variant-id",
   targetId: "stable-learning-target-id",
-  type: "recall" | "cloze" | "sentence-build",
+  type: "recall" | "recall-reverse" | "cloze" | "sentence-build",
   prompt: "...",
   support: "...",                // optional context, never the answer
   response: {
@@ -82,6 +82,12 @@ input control when typed recall can assess the skill.
 `gender` is one of `masculine`, `neuter`, `feminine`, or `plural`.
 
 - `recall`: meaning or communicative cue -> German word or phrase.
+- `recall-reverse`: German word or phrase -> Ukrainian meaning, typed in Ukrainian.
+  Use only in vocabulary (Лексика) input stages, never in learn stages. Store every
+  correct Ukrainian meaning in `accepted`, and show the German cue as `prompt`; the
+  Ukrainian answer must not appear before an attempt. Reverse variants share a
+  `targetId` with their forward `recall` variants, so one pass draws one direction per
+  target.
 - `cloze`: contextual sentence with one assessable gap -> missing form. When the
   German sentence alone admits several valid forms (for example any possessive in
   `___ Auto ist neu.`), show its meaning as a cue so exactly one answer is correct.

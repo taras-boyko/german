@@ -67,7 +67,9 @@ test("every lesson shows duplicate translations once in learn and practice feedb
           const practice=stage.mode==="input";
           const meaning=practice?card.translation:(card.studyTranslation||card.translation);
           const example=practice?app.feedbackExample(card).translation:(card.exampleTranslation||card.translation);
-          const separate=Boolean(app.translationKey(meaning))&&app.translationKey(meaning)!==app.translationKey(example);
+          // A reverse card's meaning is the answer the learner typed, so it is not repeated as a separate line.
+          const repeatsAnswer=card.type==="recall-reverse"&&app.translationKey(meaning)===app.translationKey(card.response.accepted[0]);
+          const separate=Boolean(app.translationKey(meaning))&&app.translationKey(meaning)!==app.translationKey(example)&&!repeatsAnswer;
           const label=`${stage.id}: ${card.id}: ${status}`;
           assert.equal(elements.get("translation").hidden,practice||!separate,label);
           assert.equal(elements.get("answer-translation").hidden,!practice||!separate,label);
