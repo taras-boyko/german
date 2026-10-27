@@ -980,7 +980,7 @@ test("guide tables are well formed across lessons",()=>{
       for(const {row,column} of table.highlights||[])assert.ok(table.rows[row]&&table.columns[column],`${lessonId}: highlight ${row}/${column}`);
     }
   }
-  assert.deepEqual(withTables.sort(),["conjugation","dative-verbs","es-gibt-leisure","haben","indefinite-articles","koennen","local-prepositions","mit-ohne","personal-pronoun-cases","possessive-cases","possessives","sein","strong-verbs","temporal-prepositions","travel-transport","werden"]);
+  assert.deepEqual(withTables.sort(),["conjugation","dative-verbs","es-gibt-leisure","haben","indefinite-articles","koennen","local-prepositions","mit-ohne","personal-pronoun-cases","possessive-cases","possessives","reflexive-pronouns","sein","strong-verbs","temporal-prepositions","travel-transport","werden"]);
   const card=app.definitions["personal-pronoun-cases"].stages[0].cards[0];
   app.renderCard("personal-pronoun-cases",0,card);
   const table=descendants(elements.get("deck-guide-rules")).find(node=>node.tagName==="TABLE");

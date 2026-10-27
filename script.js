@@ -4311,6 +4311,121 @@ const cardExplanations={
   "separable-verbs-context-practice:ich-kann-meine-freundin-vom-bahnhof-abholen:vp87kh":"Модальне kann стоїть на другому місці, а abholen як Infinitiv лишається цілим у кінці речення, а не hole … ab.",
   "separable-verbs-context-practice:ich-bleibe-zu-hause-weil-ich-fruh-aufstehe:mbtia9":"У Nebensatz з weil дієслово йде в кінець, і префікс з’єднується з ним: weil ich früh aufstehe, а не stehe … auf. Перед weil ставиться кома."
 };
+// Only ich and du change form between Akkusativ and Dativ; the other persons use the same form in both cases.
+const reflexivePronounPersons=[
+  ["ich","ich (я)","ich mich mir"],
+  ["du","du (ти)","du dich dir"],
+  ["er","er (він)","er sich sich"],
+  ["she","sie (вона)","sie sich sich"],
+  ["es","es (воно)","es sich sich"],
+  ["wir","wir (ми)","wir uns uns"],
+  ["ihr","ihr (ви)","ihr euch euch"],
+  ["they","sie (вони)","sie sich sich"],
+  ["formal","Sie (Ви)","Sie sich sich"]
+];
+const reflexivePronounParadigm={
+  title:"Reflexivpronomen",forms:true,columns:[{label:"Nom.",title:"Nominativ"},{label:"Akk.",title:"Akkusativ"},{label:"Dat.",title:"Dativ"}],
+  rows:reflexivePronounPersons.map(([,title,forms])=>({label:title.split(" ")[0],title,cells:forms.split(" ").map(stem=>({stem,ending:""}))}))
+};
+const reflexivePronounCaseTable={
+  columns:reflexivePronounParadigm.columns,
+  rows:reflexivePronounParadigm.rows.map((row,index)=>({label:reflexivePronounPersons[index][0]==="they"?"sie (мн.)":row.label,title:row.title,cells:row.cells.map(({stem})=>stem)})),
+  highlights:reflexivePronounParadigm.rows.flatMap((row,index)=>row.cells[1].stem===row.cells[2].stem?[{row:index,column:1},{row:index,column:2}]:[]),
+  note:"Виділено рядки, де Akkusativ і Dativ мають однакову форму: sich для er, sie, es, sie (мн.) і Sie, uns для wir та euch для ihr."
+};
+const reflexivePronounGlosses={
+  "Akk.":{mich:"мене",dich:"тебе",sich:"себе",uns:"нас",euch:"вас"},
+  "Dat.":{mir:"мені",dir:"тобі",sich:"собі",uns:"нам",euch:"вам"}
+};
+function reflexiveCases(caseLabel,rows){
+  const column=reflexivePronounParadigm.columns.findIndex(({label})=>label===caseLabel);
+  if(column<1)throw new Error(`Unknown reflexive case: ${caseLabel}`);
+  const grammaticalCase=column===1?"accusative":"dative";
+  return rows.map(([person,verbPhrase,promptText,translation])=>{
+    const row=reflexivePronounPersons.findIndex(([key])=>key===person);
+    if(row<0)throw new Error(`Unknown reflexive person: ${person}`);
+    const paradigmRow=reflexivePronounParadigm.rows[row];
+    const answer=paradigmRow.cells[column].stem;
+    const subject=paradigmRow.cells[0].stem;
+    const verb=verbPhrase.split(" ")[1].normalize("NFD").replace(/[\u0300-\u036f]/g,"");
+    return {
+      id:`reflexive-${grammaticalCase}-${person}-${verb}`,targetId:`reflexive-${grammaticalCase}-${person}`,person,type:"cloze",
+      word:answer,example:promptText.replace("___",answer),translation,studyTranslation:`${subject} → ${answer} · ${reflexivePronounGlosses[caseLabel][answer]}`,
+      promptText,support:`Підмет: ${paradigmRow.title}.`,
+      explanation:column===1?`${verbPhrase} вимагає Akkusativ: ${subject} → ${answer}.`:`Поруч є прямий додаток в Akkusativ, тому займенник стоїть у Dativ: ${subject} → ${answer}.`,
+      category:`REFLEXIVPRONOMEN · ${column===1?"AKKUSATIV":"DATIV"}`,practiceVariants:false,
+      answerParts:paradigmRow.cells[column],paradigm:{...reflexivePronounParadigm,active:{row,column}},
+      response:{mode:"text",scope:"word",accepted:[answer],caseSensitive:false,punctuationSensitive:false}
+    };
+  });
+}
+const reflexiveAccusativeCards=reflexiveCases("Akk.",[
+  ["ich","sich freuen auf","Ich freue ___ auf den Urlaub.","Я з нетерпінням чекаю на відпустку."],
+  ["ich","sich interessieren für","Ich interessiere ___ für Musik.","Я цікавлюся музикою."],
+  ["ich","sich anmelden für","Ich melde ___ für den Kurs an.","Я записуюся на курс."],
+  ["du","sich freuen auf","Du freust ___ auf die Ferien.","Ти радієш канікулам."],
+  ["du","sich interessieren für","Interessierst du ___ für Sport?","Тебе цікавить спорт?"],
+  ["du","sich kümmern um","Kümmerst du ___ um die Kinder?","Ти піклуєшся про дітей?"],
+  ["er","sich ärgern über","Der Vater ärgert ___ über den Lärm.","Батько сердиться через шум."],
+  ["er","sich erinnern an","Er erinnert ___ an den Termin.","Він згадує про зустріч."],
+  ["er","sich fühlen","Er fühlt ___ heute gut.","Сьогодні він почувається добре."],
+  ["she","sich interessieren für","Anna interessiert ___ für Kunst.","Анну цікавить мистецтво."],
+  ["she","sich verabschieden von","Anna verabschiedet ___ von ihrer Freundin.","Анна прощається з подругою."],
+  ["she","sich waschen","Anna wäscht ___ nach dem Sport.","Анна миється після спорту."],
+  ["es","sich setzen auf","Das Kind setzt ___ auf den Stuhl.","Дитина сідає на стілець."],
+  ["es","sich freuen über","Das Kind freut ___ über das Geschenk.","Дитина радіє подарунку."],
+  ["es","sich erholen","Das Baby erholt ___ im Bett.","Немовля відпочиває в ліжку."],
+  ["wir","sich treffen","Wir treffen ___ um acht.","Ми зустрічаємося о восьмій."],
+  ["wir","sich beeilen","Wir beeilen ___ sehr.","Ми дуже поспішаємо."],
+  ["wir","sich interessieren für","Wir interessieren ___ für Musik.","Нас цікавить музика."],
+  ["ihr","sich interessieren für","Ihr interessiert ___ für Filme.","Вас цікавлять фільми."],
+  ["ihr","sich freuen auf","Ihr freut ___ auf das Wochenende.","Ви радієте вихідним."],
+  ["ihr","sich setzen","Setzt ___ bitte!","Сідайте, будь ласка!"],
+  ["formal","sich interessieren für","Interessieren Sie ___ für Musik?","Вас цікавить музика?"],
+  ["formal","sich setzen","Setzen Sie ___ bitte hier hin.","Сідайте сюди, будь ласка."],
+  ["formal","sich entschuldigen","Entschuldigen Sie ___ bitte.","Вибачте, будь ласка."],
+  ["they","sich freuen auf","Die Gäste freuen ___ auf den Abend.","Гості з нетерпінням чекають на вечір."],
+  ["they","sich interessieren für","Die Kinder interessieren ___ für Tiere.","Дітей цікавлять тварини."],
+  ["they","sich verabschieden","Die Freunde verabschieden ___ am Bahnhof.","Друзі прощаються на вокзалі."]
+]);
+const reflexiveDativeCards=reflexiveCases("Dat.",[
+  ["ich","sich waschen","Ich wasche ___ die Hände.","Я мию руки."],
+  ["ich","sich putzen","Ich putze ___ die Zähne.","Я чищу зуби."],
+  ["ich","sich kaufen","Ich kaufe ___ ein neues Buch.","Я купую собі нову книжку."],
+  ["du","sich waschen","Wäschst du ___ die Hände vor dem Essen?","Ти миєш руки перед їжею?"],
+  ["du","sich putzen","Du putzt ___ die Zähne.","Ти чистиш зуби."],
+  ["du","sich kaufen","Du kaufst ___ ein neues Handy.","Ти купуєш собі новий телефон."],
+  ["er","sich waschen","Er wäscht ___ die Hände.","Він миє руки."],
+  ["er","sich putzen","Er putzt ___ die Zähne.","Він чистить зуби."],
+  ["er","sich kaufen","Er kauft ___ ein neues Auto.","Він купує собі нове авто."],
+  ["she","sich waschen","Anna wäscht ___ die Hände.","Анна миє руки."],
+  ["she","sich putzen","Anna putzt ___ die Zähne.","Анна чистить зуби."],
+  ["she","sich kaufen","Anna kauft ___ ein neues Kleid.","Анна купує собі нову сукню."],
+  ["es","sich waschen","Das Kind wäscht ___ die Hände.","Дитина миє руки."],
+  ["es","sich putzen","Das Kind putzt ___ die Zähne.","Дитина чистить зуби."],
+  ["es","sich kaufen","Das Kind kauft ___ ein Eis.","Дитина купує собі морозиво."],
+  ["wir","sich waschen","Wir waschen ___ vor dem Essen die Hände.","Ми миємо руки перед їжею."],
+  ["wir","sich putzen","Wir putzen ___ die Zähne.","Ми чистимо зуби."],
+  ["wir","sich kaufen","Wir kaufen ___ ein Haus.","Ми купуємо собі будинок."],
+  ["ihr","sich waschen","Ihr wascht ___ die Hände.","Ви миєте руки."],
+  ["ihr","sich putzen","Ihr putzt ___ die Zähne.","Ви чистите зуби."],
+  ["ihr","sich kaufen","Ihr kauft ___ ein Geschenk.","Ви купуєте собі подарунок."],
+  ["formal","sich waschen","Waschen Sie ___ die Hände?","Ви миєте руки?"],
+  ["formal","sich putzen","Putzen Sie ___ jeden Tag die Zähne?","Ви чистите зуби щодня?"],
+  ["formal","sich kaufen","Kaufen Sie ___ eine Fahrkarte?","Ви купуєте собі квиток?"],
+  ["they","sich waschen","Die Kinder waschen ___ die Hände.","Діти миють руки."],
+  ["they","sich putzen","Die Kinder putzen ___ die Zähne.","Діти чистять зуби."],
+  ["they","sich kaufen","Die Freunde kaufen ___ ein Buch.","Друзі купують собі книжку."]
+]);
+const reflexiveCaseCards=[...reflexiveAccusativeCards,...reflexiveDativeCards];
+const reflexivePronounStages=[
+  lessonStep("reflexive-cases-accusative-learn","Вивчення зворотних займенників в Akkusativ","Вивчіть форми всіх дев’яти займенників в Akkusativ. Дієслова sich freuen auf, sich interessieren für і sich ärgern über вимагають sich в Akkusativ.",reflexiveAccusativeCards,"learn","Знахідний відмінок · Akkusativ","Вивчення"),
+  lessonStep("reflexive-cases-accusative-practice","Практика зворотних займенників в Akkusativ","Введіть займенник в Akkusativ за підметом речення. Після перевірки звірте форму з таблицею.",reflexiveAccusativeCards,"input","Знахідний відмінок · Akkusativ","Практика"),
+  lessonStep("reflexive-cases-dative-learn","Вивчення зворотних займенників у Dativ","Вивчіть форми в Dativ. Вони з’являються, коли після дієслова вже є прямий додаток: Ich wasche mir die Hände.",reflexiveDativeCards,"learn","Давальний відмінок · Dativ","Вивчення"),
+  lessonStep("reflexive-cases-dative-practice","Практика зворотних займенників у Dativ","Введіть займенник у Dativ за підметом. Перш ніж відповідати, знайдіть у реченні прямий додаток.",reflexiveDativeCards,"input","Давальний відмінок · Dativ","Практика"),
+  lessonStep("reflexive-cases-mixed-learn","Порівняння Akkusativ і Dativ","Порівняйте форми в контексті. Відмінок визначає дієслово або наявність прямого додатка, а не український переклад.",reflexiveCaseCards,"learn","Akkusativ чи Dativ?","Вивчення"),
+  {...lessonStep("reflexive-cases-mixed-practice","Практика обох відмінків","Спочатку визначте відмінок за дієсловом або прямим додатком, потім введіть займенник. Працюйте з усіма особами й ввічливим Sie.",reflexiveCaseCards,"input","Akkusativ чи Dativ?","Практика"),categoryBeforeCheck:"REFLEXIVPRONOMEN"}
+];
 const deckDefinitions={
   "w-questions":{title:"W-Fragen",label:"W-Fragen",badge:"W",tip:"W-questions always come first in a question, followed by the verb.",guide:{title:"W-Fragen: запитання",intro:"Оберіть питальне слово відповідно до потрібної інформації, а потім побудуйте речення навколо відмінюваного дієслова.",rules:[{detail:"Питальне слово стоїть на першому місці, а відмінюване дієслово — на другому: Wo wohnst du?",visual:{structure:[mainClause("Wo","wohnst","du")]}},{detail:"Підмет зазвичай стоїть після дієслова: Wann kommt ihr? Решта інформації йде далі.",visual:{structure:[mainClause("Wann","kommt","ihr")]}},"Використовуйте wo для місця, wohin для руху до місця, а woher — для місця, звідки хтось прибуває.","На W-Fragen не можна відповісти лише ja або nein: вони потребують конкретної інформації."]},cards,stages:wQuestionStages},
   pronouns:{title:"Personal pronouns",label:"Personal pronouns",badge:"ich",tip:"Use the pronoun that matches the person or people you are talking about.",guide:{title:"Особові займенники",intro:"Німецькі особові займенники показують, хто говорить, до кого звертаються або про кого йдеться.",rules:["ich, du, er/sie/es, wir, ihr, sie відповідають особі або групі в реченні.","Пишіть Sie з великої літери для ввічливого «Ви» в однині або множині; sie означає «вона» або «вони».","Займенник визначає форму дієслова: ich bin, du bist, wir sind.","Оберіть ihr для неформального звертання до кількох людей."]},cards:pronounCards,stages:pronounStages},
@@ -4330,6 +4445,23 @@ const deckDefinitions={
       ]
     },
     cards:personalPronounCaseCards,stages:personalPronounCaseStages
+  },
+  "reflexive-pronouns":{
+    title:"Reflexive pronouns: sich & similar forms",label:"Reflexive · sich",badge:"sich",
+    tip:"Спочатку визнач відмінок: якщо після дієслова вже є прямий додаток, займенник стоїть у Dativ.",
+    guide:{
+      title:"Зворотні займенники: sich і схожі форми",
+      intro:"Повторіть особові займенники в Akkusativ і Dativ (урок «Особові займенники: Akkusativ і Dativ»). Зворотний займенник ставимо, коли підмет і додаток — одна й та сама особа.",
+      rules:[
+        {title:"Sich — та сама особа",detail:"Зворотний займенник показує, що дію виконує й отримує та сама особа: Ich freue mich. Для кожної особи є власна форма: mich, dich, sich, uns, euch."},
+        {title:"Akkusativ після дієслів із sich",detail:"Більшість дієслів із sich вимагають Akkusativ: sich freuen auf, sich interessieren für, sich ärgern über, sich erinnern an. Прийменник після дієслова не змінює відмінка займенника."},
+        {title:"Dativ, коли є прямий додаток",detail:"Якщо після дієслова вже стоїть прямий додаток в Akkusativ (die Hände, die Zähne, ein Buch), займенник стоїть у Dativ: Ich wasche mir die Hände. Ich kaufe mir ein Buch."},
+        {title:"Sich для er, sie, es і Sie",detail:"Для er, sie, es, sie (мн.) і Sie форма sich однакова в обох відмінках. Ввічливе Sie пишемо з великої літери, а sich — завжди з малої."},
+        {title:"Наказовий спосіб",detail:"У наказах займенник стоїть після дієслова: Setzt euch bitte! Setzen Sie sich bitte!"},
+        {title:"Порівняй відмінки",detail:"Змінюються лише mich → mir і dich → dir. Решта форм, як-от sich, uns і euch, в Akkusativ і Dativ однакові.",table:reflexivePronounCaseTable}
+      ]
+    },
+    cards:reflexiveCaseCards,stages:reflexivePronounStages
   },
   "indefinite-articles":{
     title:"Unbestimmter Artikel: ein und kein",label:"Unbestimmter Artikel: ein und kein",badge:"ein",

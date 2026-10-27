@@ -657,6 +657,7 @@ phase. Check them before treating the rollout as final.
 | giving-directions | Landmarks | — | — |
 | dative-verbs | — | — | Nom. vs Dat. articles |
 | personal-pronoun-cases | — | — | Nom. / Akk. / Dat. forms by person |
+| reflexive-pronouns | — | — | Akk. / Dat. forms by person |
 | conjugation | — | — | `mach-` vs `arbeit-` |
 
 ### Phase 2 coverage
@@ -669,6 +670,7 @@ phase. Check them before treating the rollout as final.
 | haben | Every card (haben, bekommen, brauchen) | — | haben vs bekommen vs brauchen |
 | koennen | Form cards (können, mögen, möchten); `ö → a` marked | — | können vs mögen vs möchten |
 | personal-pronoun-cases | Every card; Nom. / Akk. / Dat. pronoun strip | — | Akkusativ / Dativ by person (Phase 1) |
+| reflexive-pronouns | Every card; Akk. / Dat. pronoun strip | — | Akkusativ / Dativ by person (Phase 1) |
 | perfekt | — | Frame and haben-or-sein stages | — |
 | past-verbs, past-verbs-a2, past-verbs-b1 | — | Every card except `hat/ist` verbs | — |
 
@@ -739,12 +741,12 @@ reaches them.
 
 ### Phase 6 coverage
 
-The library is one screen, so Phase 6 had no pilot lesson. It groups all 30 lessons:
+The library is one screen, so Phase 6 had no pilot lesson. It groups all 31 lessons:
 
 | Class | Lessons |
 |---|---|
 | Лексика (8) | w-questions, pronouns, frequency, time-worksheet-vocabulary, everyday-vocabulary, travel-transport, giving-directions, dative-verbs |
-| Морфологія (13) | personal-pronoun-cases, indefinite-articles, possessives, possessive-cases, sein, werden, conjugation, strong-verbs, past-verbs, past-verbs-a2, past-verbs-b1, perfekt, present-practice |
+| Морфологія (14) | personal-pronoun-cases, reflexive-pronouns, indefinite-articles, possessives, possessive-cases, sein, werden, conjugation, strong-verbs, past-verbs, past-verbs-a2, past-verbs-b1, perfekt, present-practice |
 | Граматика (7) | koennen, haben, local-prepositions, time-expressions, temporal-prepositions, es-gibt-leisure, mit-ohne |
 | Синтаксис (2) | word-order, separable-verbs |
 
@@ -824,6 +826,7 @@ An idea marked as a conflict also needs a change to the Constitution.
 | 2026-10-12 | Provisional (learner unavailable) | 11A | Phase 6: library grouped by lesson class with glyph tiles; options B and C stay in the gallery. See [Phase 6 coverage](#phase-6-coverage) |
 | 2026-10-12 | Learner | Design rules recorded | The colour roles, active versus inactive items, decorative parts, reduced motion, giveaways and each component's details moved into the Constitution. The ideas that were never built are listed in [Ideas not built](#ideas-not-built) |
 | 2026-10-15 | Learner request | 12 | Phase 7: rule guides illustrated with the approved components (boxes, haben/sein, frequency bar, clocks, scenes, pictures); an illustration that would reveal the answer waits for Check. See [Phase 7 coverage](#phase-7-coverage). Awaiting review |
+| 2026-10-27 | Provisional | reflexive-pronouns: Phase 1 and 2 strip and guide table; class Морфологія; purple accent | New lesson for sich and similar forms (Akkusativ and Dativ). The class and accent were chosen without learner review. Awaiting review |
 
 ## Review notes
 

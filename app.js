@@ -26,6 +26,7 @@ const lessonCatalog={
   "separable-verbs":{title:"Дієслова з відокремлюваними префіксами",germanTitle:"Trennbare Verben",outcome:"Правильно розміщувати відокремлювані префікси в різних типах речень.",className:"Синтаксис"},
   pronouns:{title:"Особові займенники",germanTitle:"Personalpronomen",outcome:"Добирати особові займенники за особою, числом і формою звертання.",className:"Лексика"},
   "personal-pronoun-cases":{title:"Особові займенники: Akkusativ і Dativ",germanTitle:"Personalpronomen: Akkusativ und Dativ",outcome:"Добирати особові займенники в Akkusativ і Dativ та розрізняти sie і Sie.",className:"Морфологія",level:"A1"},
+  "reflexive-pronouns":{title:"Зворотні займенники: sich і схожі форми",germanTitle:"Reflexivpronomen: Akkusativ und Dativ",outcome:"Добирати mich, dich, sich, uns, euch і mir, dir за відмінком і пояснювати, коли дієслово вимагає зворотного займенника.",className:"Морфологія",level:"A1"},
   "indefinite-articles":{title:"Неозначений артикль: ein і kein",germanTitle:"Unbestimmter Artikel: ein und kein",outcome:"Добирати ein, eine, einen, einem, einer та заперечний kein за родом, множиною і відмінком іменника.",className:"Морфологія",level:"A1"},
   possessives:{title:"Присвійні займенники",germanTitle:"Possessivartikel",outcome:"Добирати основу за власником і правильне закінчення присвійного займенника.",className:"Морфологія"},
   "possessive-cases":{title:"Присвійні артиклі: Akkusativ і Dativ",germanTitle:"Possessivartikel: Akkusativ und Dativ",outcome:"Уживати присвійні артиклі в обох відмінках за родом і числом іменника, включно з euer та ввічливим Ihr.",className:"Морфологія",level:"A1"},
@@ -67,7 +68,7 @@ function counted(number,one,few,many){
 }
 const categoryLabels={
   "QUESTION WORD":"Питальне слово","PLACE & DIRECTION":"Місце й напрямок","TIME & REASON":"Час і причина",
-  "PERSONAL PRONOUN":"Особовий займенник","PERSONALPRONOMEN":"Особові займенники",
+  "PERSONAL PRONOUN":"Особовий займенник","PERSONALPRONOMEN":"Особові займенники","REFLEXIVPRONOMEN":"Зворотні займенники",
   "POSSESSIVE PRONOUN":"Присвійний займенник","POSSESSIVE ENDING":"Присвійне закінчення",
   "VERB SEIN":"Дієслово sein","WEAK VERB":"Слабке дієслово","EXTRA -E":"Додаткове -e",
   "SIBILANT STEM":"Основа на свистячий звук","STRONG VERB":"Сильне дієслово",
