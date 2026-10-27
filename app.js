@@ -46,6 +46,7 @@ const lessonCatalog={
   "vocab-post-contracts":{title:"Пошта і договори",germanTitle:"Post und Verträge",outcome:"Пригадувати німецькі слова про листи, документи й договори та їхні українські значення.",className:"Лексика"},
   "vocab-talk-feelings":{title:"Розмови і почуття",germanTitle:"Gespräche und Gefühle",outcome:"Пригадувати німецькі слова для розмов, думок і дій та їхні українські значення.",className:"Лексика"},
   "vocab-life-daily":{title:"Життя і щодня",germanTitle:"Leben und Alltag",outcome:"Пригадувати німецькі слова про життя, сім’ю і щоденні справи та їхні українські значення.",className:"Лексика"},
+  "vocab-hamburg-city":{title:"Гамбург і міські місця",germanTitle:"Hamburg und Orte in der Stadt",outcome:"Пригадувати лексику з опису Гамбурга й міських місць за українським значенням і навпаки.",className:"Лексика",level:"A1"},
   "es-gibt-leisure":{title:"Місто й дозвілля: es gibt",germanTitle:"Stadt und Freizeit: es gibt",outcome:"Описувати місця, заняття й можливості для дозвілля в місті.",className:"Граматика"}
 };
 // Library groups follow the course path: words → forms → rule-based choice → sentence order.

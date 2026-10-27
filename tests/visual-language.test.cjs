@@ -217,7 +217,7 @@ test("noun metadata is explicit, valid and covers the planned lessons",()=>{
     possessives:22,"possessive-cases":8,"local-prepositions":26,"time-worksheet-vocabulary":22,
     "everyday-vocabulary":8,"travel-transport":42,"giving-directions":6,"es-gibt-leisure":44,
     "temporal-prepositions":12,"indefinite-articles":21,
-    "vocab-license-travel":3,"vocab-post-contracts":2,"vocab-life-daily":2
+    "vocab-license-travel":3,"vocab-post-contracts":2,"vocab-life-daily":2,"vocab-hamburg-city":19
   });
 });
 

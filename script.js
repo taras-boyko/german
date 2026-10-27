@@ -4437,9 +4437,9 @@ function vocabPair(targetId,{word,translation,promptText=translation,accepted,re
   const reverse={id:`${targetId}-reverse`,targetId,type:"recall-reverse",...shared,translation:reverseAccepted.join(" / "),promptText:word,response:response(reverseAccepted,"word")};
   return [forward,reverse];
 }
-const vocabStages=(lessonId,chapter,cards)=>[
-  lessonStep(`${lessonId}-learn`,`Вивчення: ${chapter}`,"Вивчіть німецькі слова з артиклями, українськими значеннями та прикладами. Звертайте увагу на форми, які змінюються.",cards.filter(card=>card.type!=="recall-reverse"),"learn",chapter,"Вивчення"),
-  lessonStep(`${lessonId}-practice`,`Практика: ${chapter}`,"Напишіть німецьке слово за українським значенням або українське значення за німецьким словом.",cards,"input",chapter,"Практика")
+const vocabStages=(lessonId,chapter,cards,objectives={})=>[
+  lessonStep(`${lessonId}-learn`,`Вивчення: ${chapter}`,objectives.learn||"Вивчіть німецькі слова з артиклями, українськими значеннями та прикладами. Звертайте увагу на форми, які змінюються.",cards.filter(card=>card.type!=="recall-reverse"),"learn",chapter,"Вивчення"),
+  lessonStep(`${lessonId}-practice`,`Практика: ${chapter}`,objectives.practice||"Напишіть німецьке слово за українським значенням або українське значення за німецьким словом.",cards,"input",chapter,"Практика")
 ];
 const vocabLicenseTravelCards=[
   ...vocabPair("vocab-fuehrerschein",{word:"der Führerschein",translation:"водійське посвідчення",accepted:["der Führerschein"],reverseAccepted:["водійське посвідчення","водійські права"],example:"Ich habe den Führerschein.",exampleTranslation:"Я маю водійське посвідчення.",explanation:"Führerschein — чоловічий рід: der. Після haben стоїть Akkusativ: den Führerschein.",category:"FÜHRERSCHEIN · REISEN",noun:nounMeta("masculine","Führerschein")}),
@@ -4474,10 +4474,57 @@ const vocabLifeDailyCards=[
   ...vocabPair("vocab-darf",{word:"darf",translation:"можна",cloze:{promptText:"___ ich hier sitzen?",support:"Можна тут сісти?"},accepted:["darf"],reverseAccepted:["можу","можна","може"],example:"Darf ich hier sitzen?",exampleTranslation:"Можна тут сісти?",explanation:"dürfen — мати дозвіл. З ich і er/sie/es: darf; з du: darfst.",category:"ALLTAG · LEBEN"}),
   ...vocabPair("vocab-lied",{word:"das Lied",translation:"пісня",accepted:["das Lied"],reverseAccepted:["пісня"],example:"Ich höre das Lied gern.",exampleTranslation:"Я охоче слухаю цю пісню.",explanation:"Lied — середній рід: das.",category:"ALLTAG · LEBEN",noun:nounMeta("neuter","Lied")})
 ];
+const hamburgVocabularyObjectives={
+  learn:"Вивчіть слова й вирази за українськими значеннями та прикладами. Запам’ятовуйте артиклі й форми іменників.",
+  practice:"Чергуйте два напрями пригадування: українська підказка → німецьке слово та німецьке слово → українське значення. У кожному підході ціль з’являється в одному напрямі."
+};
+const vocabHamburgWaterCards=[
+  ...vocabPair("vocab-hamburg-tor",{word:"das Tor",translation:"брама; ворота",accepted:["das Tor"],reverseAccepted:["брама","ворота"],example:"Hamburg ist das Tor zur Welt.",exampleTranslation:"Гамбург — брама у світ.",explanation:"Das Tor означає «брама» або «ворота»; das Tor zur Welt — «брама у світ».",category:"WORTSCHATZ",noun:nounMeta("neuter","Tor")}),
+  ...vocabPair("vocab-hamburg-spannend",{word:"spannend",translation:"цікавий; захопливий",accepted:["spannend"],reverseAccepted:["цікавий","захопливий"],example:"Der Hafen ist besonders spannend.",exampleTranslation:"Порт особливо цікавий.",explanation:"spannend описує щось цікаве або захопливе.",category:"WORTSCHATZ"}),
+  ...vocabPair("vocab-hamburg-hafen",{word:"der Hafen",translation:"порт; гавань",accepted:["der Hafen"],reverseAccepted:["порт","гавань"],example:"Der Hafen liegt an der Elbe.",exampleTranslation:"Порт розташований на Ельбі.",explanation:"Hafen — чоловічий рід: der.",category:"WORTSCHATZ",noun:nounMeta("masculine","Hafen")}),
+  ...vocabPair("vocab-hamburg-speicherstadt",{word:"die Speicherstadt",translation:"Шпайхерштадт; складський район Гамбурга",accepted:["die Speicherstadt"],reverseAccepted:["Шпайхерштадт","складський район Гамбурга"],example:"Die Speicherstadt liegt nahe der Elbe.",exampleTranslation:"Шпайхерштадт розташована неподалік від Ельби.",explanation:"Speicherstadt — назва історичного складського району Гамбурга.",category:"WORTSCHATZ",noun:nounMeta("feminine","Speicherstadt")}),
+  ...vocabPair("vocab-hamburg-lagern",{word:"lagern",translation:"зберігати; зберігатися",promptText:"зберігати на складі (інфінітив)",accepted:["lagern"],reverseAccepted:["зберігати","зберігатися","складувати"],example:"Dort lagern Waren von den Schiffen.",exampleTranslation:"Там зберігають товари з кораблів.",explanation:"lagern — зберігати товари або перебувати на зберіганні.",category:"WORTSCHATZ"}),
+  ...vocabPair("vocab-hamburg-ausstellung",{word:"die Ausstellung / die Ausstellungen",translation:"виставка; виставки",accepted:["die Ausstellung","die Ausstellungen"],reverseAccepted:["виставка","виставки"],example:"In Hamburg gibt es viele Ausstellungen.",exampleTranslation:"У Гамбурзі є багато виставок.",explanation:"Ausstellung — виставка; множина: Ausstellungen.",category:"WORTSCHATZ",noun:nounMeta("feminine","Ausstellung",{plural:"Ausstellungen",exampleWord:"",pluralExampleWord:"Ausstellungen"})}),
+  ...vocabPair("vocab-hamburg-lesung",{word:"die Lesung / die Lesungen",translation:"літературне читання; літературні читання",accepted:["die Lesung","die Lesungen"],reverseAccepted:["літературне читання","публічне читання","літературні читання"],example:"In Hamburg gibt es auch Lesungen.",exampleTranslation:"У Гамбурзі також відбуваються літературні читання.",explanation:"Lesung — публічне читання тексту, а не лекція.",category:"WORTSCHATZ",noun:nounMeta("feminine","Lesung",{plural:"Lesungen",exampleWord:"",pluralExampleWord:"Lesungen"})})
+];
+const vocabHamburgAboveCards=[
+  ...vocabPair("vocab-hamburg-nennen",{word:"nennen",translation:"називати",promptText:"називати (інфінітив)",accepted:["nennen"],reverseAccepted:["називати"],example:"Die Hamburger nennen die Kirche St. Michaelis „Michel“.",exampleTranslation:"Гамбуржці називають церкву святого Михаеля «Міхелем».",explanation:"nennen означає «називати когось або щось певним ім’ям».",category:"WORTSCHATZ"}),
+  ...vocabPair("vocab-hamburg-kirche",{word:"die Kirche",translation:"церква",accepted:["die Kirche"],reverseAccepted:["церква"],example:"Die Kirche ist sehr alt.",exampleTranslation:"Церква дуже стара.",explanation:"Kirche — жіночий рід: die.",category:"WORTSCHATZ",noun:nounMeta("feminine","Kirche")}),
+  ...vocabPair("vocab-hamburg-wahrzeichen",{word:"das Wahrzeichen",translation:"символ; визначна пам’ятка",accepted:["das Wahrzeichen"],reverseAccepted:["символ","визначна пам’ятка"],example:"Die Kirche St. Michaelis ist das Wahrzeichen von Hamburg.",exampleTranslation:"Церква святого Михаеля — символ Гамбурга.",explanation:"Wahrzeichen — відома споруда або місце, що символізує місто.",category:"WORTSCHATZ",noun:nounMeta("neuter","Wahrzeichen")}),
+  ...vocabPair("vocab-hamburg-blick",{word:"der Blick",translation:"вид; краєвид",accepted:["der Blick"],reverseAccepted:["вид","краєвид"],example:"Der Blick vom Kirchturm auf die Stadt ist toll.",exampleTranslation:"Краєвид на місто з церковної вежі чудовий.",explanation:"Blick auf etwas — вид на щось.",category:"WORTSCHATZ",noun:nounMeta("masculine","Blick")}),
+  ...vocabPair("vocab-hamburg-kirchturm",{word:"der Kirchturm",translation:"церковна вежа; дзвіниця",accepted:["der Kirchturm"],reverseAccepted:["церковна вежа","дзвіниця"],example:"Der Kirchturm ist 132 Meter hoch.",exampleTranslation:"Церковна вежа заввишки 132 метри.",explanation:"Kirchturm — вежа церкви.",category:"WORTSCHATZ",noun:nounMeta("masculine","Kirchturm")}),
+  ...vocabPair("vocab-hamburg-einfach",{word:"einfach",translation:"просто",accepted:["einfach"],reverseAccepted:["просто"],example:"Der Blick vom Kirchturm ist einfach toll.",exampleTranslation:"Краєвид із церковної вежі просто чудовий.",explanation:"У цьому реченні einfach підсилює оцінку: «просто чудовий».",category:"WORTSCHATZ"}),
+  ...vocabPair("vocab-hamburg-toll",{word:"toll",translation:"чудовий; класний",accepted:["toll"],reverseAccepted:["чудовий","класний"],example:"Der Blick vom Kirchturm ist toll.",exampleTranslation:"Краєвид із церковної вежі чудовий.",explanation:"toll — розмовне позитивне слово зі значенням «чудовий», «класний».",category:"WORTSCHATZ"})
+];
+const vocabHamburgEveningCards=[
+  ...vocabPair("vocab-hamburg-ueberall",{word:"überall",translation:"скрізь; всюди",accepted:["überall"],reverseAccepted:["скрізь","всюди"],example:"In Hamburg gibt es überall kleine Cafés.",exampleTranslation:"У Гамбурзі всюди є маленькі кав’ярні.",explanation:"überall означає «у кожному місці», «скрізь».",category:"WORTSCHATZ"}),
+  ...vocabPair("vocab-hamburg-besonders",{word:"besonders",translation:"особливо",accepted:["besonders"],reverseAccepted:["особливо"],example:"Besonders gern mag ich die Kneipen am Großneumarkt.",exampleTranslation:"Особливо мені подобаються паби біля Гросноймаркта.",explanation:"besonders підкреслює, що щось вирізняється серед іншого.",category:"WORTSCHATZ"}),
+  ...vocabPair("vocab-hamburg-kneipe",{word:"die Kneipe / die Kneipen",translation:"паб; бар",accepted:["die Kneipe","die Kneipen"],reverseAccepted:["паб","бар"],example:"In Hamburg gibt es viele Kneipen.",exampleTranslation:"У Гамбурзі є багато пабів.",explanation:"Kneipe — невеликий паб або бар; множина: Kneipen.",category:"WORTSCHATZ",noun:nounMeta("feminine","Kneipe",{plural:"Kneipen",exampleWord:"",pluralExampleWord:"Kneipen"})}),
+  ...vocabPair("vocab-hamburg-platz",{word:"der Platz",translation:"площа; майдан",accepted:["der Platz"],reverseAccepted:["площа","майдан"],example:"Der Großneumarkt ist ein Platz in Hamburg.",exampleTranslation:"Гросноймаркт — площа в Гамбурзі.",explanation:"Platz може означати міську площу або відкритий майдан.",category:"WORTSCHATZ",noun:nounMeta("masculine","Platz")}),
+  ...vocabPair("vocab-hamburg-theaterauffuehrung",{word:"die Theateraufführung / die Theateraufführungen",translation:"театральна вистава; театральні вистави",accepted:["die Theateraufführung","die Theateraufführungen"],reverseAccepted:["театральна вистава","вистава","театральні вистави","вистави"],example:"In Hamburg gibt es viele Theateraufführungen.",exampleTranslation:"У Гамбурзі відбуваються численні театральні вистави.",explanation:"Theateraufführung — театральна вистава; множина: Theateraufführungen.",category:"WORTSCHATZ",noun:nounMeta("feminine","Theateraufführung",{plural:"Theateraufführungen",exampleWord:"",pluralExampleWord:"Theateraufführungen"})}),
+  ...vocabPair("vocab-hamburg-unbedingt",{word:"unbedingt",translation:"обов’язково; неодмінно",accepted:["unbedingt"],reverseAccepted:["обов’язково","неодмінно"],example:"Ich möchte unbedingt nach Hamburg fahren.",exampleTranslation:"Я неодмінно хочу поїхати до Гамбурга.",explanation:"unbedingt підсилює бажання: «обов’язково», «неодмінно».",category:"WORTSCHATZ"}),
+  ...vocabPair("vocab-hamburg-tipp",{word:"der Tipp / die Tipps",translation:"порада; поради",accepted:["der Tipp","die Tipps"],reverseAccepted:["порада","поради"],example:"Danke für die Tipps, Jan!",exampleTranslation:"Дякую за поради, Яне!",explanation:"Tipp — порада; множина: Tipps.",category:"WORTSCHATZ",noun:nounMeta("masculine","Tipp",{plural:"Tipps",exampleWord:"",pluralExampleWord:"Tipps"})})
+];
+const vocabHamburgPlacesCards=[
+  ...vocabPair("vocab-hamburg-geschaeft-laden",{word:"das Geschäft / der Laden",translation:"магазин; крамниця",promptText:"місце, де можна робити покупки",accepted:["das Geschäft","der Laden"],reverseAccepted:["магазин","крамниця"],example:"Ich bin in einem Geschäft.",exampleTranslation:"Я в магазині.",explanation:"Geschäft має артикль das, Laden — der; обидва слова означають магазин.",category:"PLACE"}),
+  ...vocabPair("vocab-hamburg-bibliothek",{word:"die Bibliothek",translation:"бібліотека",promptText:"Я шукаю книжки, але не купую їх.",accepted:["die Bibliothek"],reverseAccepted:["бібліотека"],example:"In der Bibliothek suche ich Bücher, aber ich kaufe sie nicht.",exampleTranslation:"У бібліотеці я шукаю книжки, але не купую їх.",explanation:"У Bibliothek можна читати й позичати книжки, не купуючи їх.",category:"PLACE",noun:nounMeta("feminine","Bibliothek")}),
+  ...vocabPair("vocab-hamburg-schloss",{word:"das Schloss",translation:"замок; палац",promptText:"велика історична будівля, яку відвідують у відпустці, але в якій не живуть",accepted:["das Schloss"],reverseAccepted:["замок","палац"],example:"Im Urlaub sehen wir uns das Schloss an.",exampleTranslation:"У відпустці ми оглядаємо замок.",explanation:"У цьому контексті Schloss — замок або палац, який відвідують як пам’ятку.",category:"PLACE",noun:nounMeta("neuter","Schloss")}),
+  ...vocabPair("vocab-hamburg-park",{word:"der Park",translation:"парк",promptText:"місце в місті, де можна гуляти серед дерев, але це не ліс",accepted:["der Park"],reverseAccepted:["парк"],example:"Der Park liegt mitten in der Stadt.",exampleTranslation:"Парк розташований у центрі міста.",explanation:"У міському парку можна гуляти серед дерев.",category:"PLACE",noun:nounMeta("masculine","Park")}),
+  ...vocabPair("vocab-hamburg-markt",{word:"der Markt",translation:"ринок",promptText:"місце в центрі міста, де щочетверга продають свіжі фрукти й овочі",accepted:["der Markt"],reverseAccepted:["ринок"],example:"Am Donnerstag kaufe ich auf dem Markt Obst und Gemüse.",exampleTranslation:"У четвер я купую на ринку фрукти й овочі.",explanation:"Auf dem Markt люди купують свіжі продукти.",category:"PLACE",noun:nounMeta("masculine","Markt")}),
+  ...vocabPair("vocab-hamburg-turm",{word:"der Turm",translation:"вежа",promptText:"загальна назва високої споруди, з якої можна побачити місто згори",accepted:["der Turm"],reverseAccepted:["вежа"],example:"Der Turm ist 132 Meter hoch.",exampleTranslation:"Вежа заввишки 132 метри.",explanation:"Turm — загальна назва вежі; Kirchturm уточнює, що це вежа церкви.",category:"PLACE",noun:nounMeta("masculine","Turm")}),
+  ...vocabPair("vocab-hamburg-fluss",{word:"der Fluss",translation:"річка",promptText:"природна водойма з течією, у якій можна плавати; це не море",accepted:["der Fluss"],reverseAccepted:["річка"],example:"Bei schönem Wetter schwimme ich im Fluss.",exampleTranslation:"У гарну погоду я плаваю в річці.",explanation:"Fluss — річка з течією; не плутайте з морем.",category:"PLACE",noun:nounMeta("masculine","Fluss")})
+];
 const vocabLicenseTravelStages=vocabStages("vocab-license-travel","Водійське посвідчення і подорожі",vocabLicenseTravelCards);
 const vocabPostContractsStages=vocabStages("vocab-post-contracts","Пошта і договори",vocabPostContractsCards);
 const vocabTalkFeelingsStages=vocabStages("vocab-talk-feelings","Розмови і почуття",vocabTalkFeelingsCards);
 const vocabLifeDailyStages=vocabStages("vocab-life-daily","Життя і щодня",vocabLifeDailyCards);
+const vocabHamburgStages=[
+  ...vocabStages("vocab-hamburg-water","Місто й порт",vocabHamburgWaterCards,hamburgVocabularyObjectives),
+  ...vocabStages("vocab-hamburg-above","Місто згори",vocabHamburgAboveCards,hamburgVocabularyObjectives),
+  ...vocabStages("vocab-hamburg-evening","Вечір у Гамбурзі",vocabHamburgEveningCards,hamburgVocabularyObjectives),
+  ...vocabStages("vocab-hamburg-places","Місця в місті",vocabHamburgPlacesCards,hamburgVocabularyObjectives)
+];
+const vocabHamburgCards=[...vocabHamburgWaterCards,...vocabHamburgAboveCards,...vocabHamburgEveningCards,...vocabHamburgPlacesCards];
 const deckDefinitions={
   "w-questions":{title:"W-Fragen",label:"W-Fragen",badge:"W",tip:"W-questions always come first in a question, followed by the verb.",guide:{title:"W-Fragen: запитання",intro:"Оберіть питальне слово відповідно до потрібної інформації, а потім побудуйте речення навколо відмінюваного дієслова.",rules:[{detail:"Питальне слово стоїть на першому місці, а відмінюване дієслово — на другому: Wo wohnst du?",visual:{structure:[mainClause("Wo","wohnst","du")]}},{detail:"Підмет зазвичай стоїть після дієслова: Wann kommt ihr? Решта інформації йде далі.",visual:{structure:[mainClause("Wann","kommt","ihr")]}},"Використовуйте wo для місця, wohin для руху до місця, а woher — для місця, звідки хтось прибуває.","На W-Fragen не можна відповісти лише ja або nein: вони потребують конкретної інформації."]},cards,stages:wQuestionStages},
   pronouns:{title:"Personal pronouns",label:"Personal pronouns",badge:"ich",tip:"Use the pronoun that matches the person or people you are talking about.",guide:{title:"Особові займенники",intro:"Німецькі особові займенники показують, хто говорить, до кого звертаються або про кого йдеться.",rules:["ich, du, er/sie/es, wir, ihr, sie відповідають особі або групі в реченні.","Пишіть Sie з великої літери для ввічливого «Ви» в однині або множині; sie означає «вона» або «вони».","Займенник визначає форму дієслова: ich bin, du bist, wir sind.","Оберіть ihr для неформального звертання до кількох людей."]},cards:pronounCards,stages:pronounStages},
@@ -4773,6 +4820,19 @@ const deckDefinitions={
       ]
     },
     cards:vocabLifeDailyCards,stages:vocabLifeDailyStages
+  },
+  "vocab-hamburg-city":{
+    title:"Hamburg and city places",label:"Hamburg and city places",badge:"HH",
+    tip:"Вивчайте іменники з артиклями, а в практиці чергуйте українсько-німецький і німецько-український напрями.",
+    guide:{
+      title:"Гамбург і міські місця",
+      intro:"Вивчайте слова й вирази за прикладами. Іменники запам’ятовуйте разом з артиклем і, де зазначено, множиною.",
+      rules:[
+        {title:"Артикль є частиною іменника",detail:"Звертайте увагу на артикль і форму множини, коли запам’ятовуєте назву місця або предмета."},
+        {title:"Підказки описують контекст",detail:"Знайдіть у підказці ознаку місця, дії чи враження й пригадайте відповідне німецьке слово."}
+      ]
+    },
+    cards:vocabHamburgCards,stages:vocabHamburgStages
   }
 };
 if(false){
