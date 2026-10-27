@@ -185,11 +185,12 @@ future passes provide contextual variety and retention checks.
   sequence. Coverage accumulates across bounded passes; re-practice updates retention
   but does not erase completion. A finished sequence stays complete; targets added to it
   later show as new work until practised and do not reopen it.
-- Lesson coverage counts each practice target once across the lesson's practice
-  sequences. A target is covered after every practice sequence that contains it has
-  mastered it, so 100% coverage means every practice sequence is complete. Coverage is
-  shown as covered targets of the total with a rounded-down percent, and reaches 100%
-  only when every target is covered.
+- Lesson coverage counts each practice target once, in the first practice sequence
+  that contains it. A target is covered after that sequence has mastered it. Later
+  sequences that repeat the target, such as a mixed review, are review only and do not
+  change coverage. Coverage is shown as covered targets of the total with a rounded-down
+  percent, and reaches 100% only when every target is covered. Lesson mastery still
+  requires every practice sequence to be complete.
 - Keep chapters freely accessible. Recommend the pedagogical next step instead of
   hard-locking content; this supports review and experienced learners.
 - Repeated mistakes stay in the current retry queue. Do not force a full restart or

@@ -19,7 +19,7 @@ function runtime(saved=new Map()){
   vm.runInContext(`${source.slice(0,bindings)}
     globalThis.runtime={
       deckDefinitions,samplePass,stageIsComplete,lessonState,lessonCoverage,courseCoverage,
-      coveragePercent,coverageText,backfillLegacyTargets,
+      coveragePercent,coverageText,coverageMasteryNote,backfillLegacyTargets,
       get state(){return learningState}
     };
   })();`,sandbox);
@@ -36,13 +36,45 @@ test("practice coverage counts each learning target once across case and mixed s
   assert.equal(stageTargets(app,mixedStageId).length,18);
 });
 
-test("a target is covered only after every practice stage containing it has mastered it",()=>{
+test("a target is covered by its first practice stage and later mixed review does not change coverage",()=>{
   const {app}=runtime();
-  const [target]=stageTargets(app,accusativeStageId);
-  app.lessonState(lessonId).masteredTargets[accusativeStageId]=[target];
-  assert.equal(app.lessonCoverage(lessonId).covered,0);
-  app.lessonState(lessonId).masteredTargets[mixedStageId]=[target];
+  const lesson=app.lessonState(lessonId),[target]=stageTargets(app,accusativeStageId);
+  lesson.masteredTargets[accusativeStageId]=[target];
   assert.equal(app.lessonCoverage(lessonId).covered,1);
+  lesson.masteredTargets[accusativeStageId]=[];
+  lesson.masteredTargets[mixedStageId]=[target];
+  assert.equal(app.lessonCoverage(lessonId).covered,0);
+});
+
+test("finishing each small case stage advances lesson coverage before the mixed review",()=>{
+  const {app}=runtime();
+  const id="indefinite-articles",lesson=app.lessonState(id);
+  const practice=app.deckDefinitions[id].stages.filter(stage=>stage.mode==="input");
+  let expected=0;
+  for(const stage of practice.slice(0,3)){
+    const targets=[...new Set(stage.cards.map(card=>card.targetId))];
+    lesson.masteredTargets[stage.id]=targets;
+    lesson.masteredPractice.push(stage.id);
+    expected+=targets.length;
+    assert.equal(app.lessonCoverage(id).covered,expected,stage.id);
+  }
+  assert.deepEqual(plain(app.lessonCoverage(id)),{covered:9,total:21,newTargets:0});
+});
+
+test("a note explains that a fully covered lesson is mastered only after every practice stage",()=>{
+  const {app}=runtime();
+  const id="indefinite-articles",lesson=app.lessonState(id);
+  const practice=app.deckDefinitions[id].stages.filter(stage=>stage.mode==="input");
+  practice.slice(0,-1).forEach(stage=>{
+    lesson.masteredTargets[stage.id]=[...new Set(stage.cards.map(card=>card.targetId))];
+    lesson.masteredPractice.push(stage.id);
+  });
+  assert.deepEqual(plain(app.lessonCoverage(id)),{covered:21,total:21,newTargets:0});
+  assert.notEqual(app.coverageMasteryNote(id),"");
+  const mixed=practice.at(-1);
+  lesson.masteredTargets[mixed.id]=[...new Set(mixed.cards.map(card=>card.targetId))];
+  lesson.masteredPractice.push(mixed.id);
+  assert.equal(app.coverageMasteryNote(id),"");
 });
 
 test("targets missing from a finished stage stay complete for the stage but count as new work",()=>{
@@ -51,7 +83,7 @@ test("targets missing from a finished stage stay complete for the stage but coun
   lesson.masteredPractice.push(accusativeStageId);
   lesson.masteredTargets[accusativeStageId]=targets.slice(1);
   assert.equal(app.stageIsComplete(lessonId,app.deckDefinitions[lessonId].stages.find(stage=>stage.id===accusativeStageId)),true);
-  assert.deepEqual(plain(app.lessonCoverage(lessonId)),{covered:0,total:18,newTargets:1});
+  assert.deepEqual(plain(app.lessonCoverage(lessonId)),{covered:8,total:18,newTargets:1});
 });
 
 test("grandfathering records all targets of older completions once and never refills later targets",()=>{
