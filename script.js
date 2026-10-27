@@ -4472,6 +4472,157 @@ function contextualVocabulary({targetId,word,translation,prompt,reverseId,revers
     practiceVariants:false,response:response(reverseAccepted,"phrase")
   }];
 }
+// The example IDs are stable across both directions of the same vocabulary target.
+function pastActionVocabulary({targetId,word,infinitive,meaning,accepted,examples}){
+  const response=(answers,scope="word")=>({mode:"text",scope,accepted:answers,caseSensitive:false,punctuationSensitive:false});
+  return examples.flatMap(([id,example,exampleTranslation])=>{
+    const shared={targetId,word,translation:meaning,studyTranslation:`${meaning} · ${infinitive} (інфінітив)`,example,exampleTranslation,category:"Дії в минулому",
+      explanation:`${infinitive} → ${word}: ${meaning}.`,practiceVariants:false};
+    return [
+      {...shared,id,type:"recall",promptText:`${exampleTranslation} Який Partizip II?`,response:response([word])},
+      {...shared,id:`${id}-reverse`,type:"recall-reverse",promptText:`${example} Що означає «${word}»?`,
+        response:response(accepted,"phrase")}
+    ];
+  });
+}
+const pastActionDailyCards=[
+  ...pastActionVocabulary({targetId:"past-action-gearbeitet",word:"gearbeitet",infinitive:"arbeiten",meaning:"працювати",accepted:["працювати","працював","працювала","працювали"],examples:[
+    ["past-action-gearbeitet-buero","Ich habe im Büro gearbeitet.","Я працював в офісі."],
+    ["past-action-gearbeitet-gestern","Sie hat gestern lange gearbeitet.","Вона вчора довго працювала."],
+    ["past-action-gearbeitet-zusammen","Wir haben zusammen gearbeitet.","Ми працювали разом."]
+  ]}),
+  ...pastActionVocabulary({targetId:"past-action-gewohnt",word:"gewohnt",infinitive:"wohnen",meaning:"мешкати",accepted:["мешкати","жити","мешкав","мешкала","мешкали","жив","жила","жили"],examples:[
+    ["past-action-gewohnt-berlin","Ich habe in Berlin gewohnt.","Я мешкав у Берліні."],
+    ["past-action-gewohnt-stadt","Sie hat in der Stadt gewohnt.","Вона мешкала в місті."],
+    ["past-action-gewohnt-haus","Wir haben in einem Haus gewohnt.","Ми мешкали в будинку."]
+  ]}),
+  ...pastActionVocabulary({targetId:"past-action-gekostet",word:"gekostet",infinitive:"kosten",meaning:"коштувати",accepted:["коштувати","коштував","коштувала","коштувало","коштували"],examples:[
+    ["past-action-gekostet-buch","Das Buch hat zehn Euro gekostet.","Книжка коштувала десять євро."],
+    ["past-action-gekostet-kaffee","Der Kaffee hat drei Euro gekostet.","Кава коштувала три євро."],
+    ["past-action-gekostet-ticket","Die Fahrkarte hat viel gekostet.","Квиток дорого коштував."]
+  ]}),
+  ...pastActionVocabulary({targetId:"past-action-gefruehstueckt",word:"gefrühstückt",infinitive:"frühstücken",meaning:"снідати",accepted:["снідати","снідав","снідала","снідали","поснідав","поснідала","поснідали"],examples:[
+    ["past-action-gefruehstueckt-frueh","Ich habe heute früh gefrühstückt.","Я сьогодні рано поснідав."],
+    ["past-action-gefruehstueckt-zusammen","Wir haben zusammen gefrühstückt.","Ми разом поснідали."],
+    ["past-action-gefruehstueckt-hause","Sie hat zu Hause gefrühstückt.","Вона поснідала вдома."]
+  ]}),
+  ...pastActionVocabulary({targetId:"past-action-gelernt",word:"gelernt",infinitive:"lernen",meaning:"вчитися; вивчати",accepted:["вчитися","учитися","вивчати","навчатися","вчився","вчилася","вчилися","вивчав","вивчала","вивчали"],examples:[
+    ["past-action-gelernt-deutsch","Ich habe Deutsch gelernt.","Я вивчав німецьку мову."],
+    ["past-action-gelernt-pruefung","Sie hat für die Prüfung gelernt.","Вона вчилася до іспиту."],
+    ["past-action-gelernt-zusammen","Wir haben zusammen gelernt.","Ми вчилися разом."]
+  ]}),
+  ...pastActionVocabulary({targetId:"past-action-getrunken",word:"getrunken",infinitive:"trinken",meaning:"пити",accepted:["пити","пив","пила","пили","випив","випила","випили"],examples:[
+    ["past-action-getrunken-wasser","Ich habe Wasser getrunken.","Я пив воду."],
+    ["past-action-getrunken-kaffee","Sie hat Kaffee getrunken.","Вона пила каву."],
+    ["past-action-getrunken-tee","Wir haben Tee getrunken.","Ми пили чай."]
+  ]}),
+  ...pastActionVocabulary({targetId:"past-action-eingekauft",word:"eingekauft",infinitive:"einkaufen",meaning:"робити покупки",accepted:["робити покупки","купувати продукти","робив покупки","робила покупки","робили покупки","зробив покупки","зробила покупки","зробили покупки"],examples:[
+    ["past-action-eingekauft-supermarkt","Ich habe im Supermarkt eingekauft.","Я зробив покупки в супермаркеті."],
+    ["past-action-eingekauft-gestern","Sie hat gestern eingekauft.","Вона вчора зробила покупки."],
+    ["past-action-eingekauft-zusammen","Wir haben zusammen eingekauft.","Ми разом зробили покупки."]
+  ]}),
+  ...pastActionVocabulary({targetId:"past-action-genommen",word:"genommen",infinitive:"nehmen",meaning:"брати",accepted:["брати","взяти","брав","брала","брали","взяв","взяла","взяли"],examples:[
+    ["past-action-genommen-buch","Ich habe das Buch genommen.","Я взяв книжку."],
+    ["past-action-genommen-schluessel","Sie hat den Schlüssel genommen.","Вона взяла ключ."],
+    ["past-action-genommen-tasche","Wir haben die Tasche genommen.","Ми взяли сумку."]
+  ]}),
+  ...pastActionVocabulary({targetId:"past-action-aufgeraeumt",word:"aufgeräumt",infinitive:"aufräumen",meaning:"прибирати",accepted:["прибирати","прибрати","прибирав","прибирала","прибирали","прибрав","прибрала","прибрали"],examples:[
+    ["past-action-aufgeraeumt-zimmer","Ich habe mein Zimmer aufgeräumt.","Я прибрав свою кімнату."],
+    ["past-action-aufgeraeumt-kueche","Sie hat die Küche aufgeräumt.","Вона прибрала кухню."],
+    ["past-action-aufgeraeumt-zusammen","Wir haben zusammen aufgeräumt.","Ми прибрали разом."]
+  ]})
+];
+const pastActionSocialCards=[
+  ...pastActionVocabulary({targetId:"past-action-gesprochen",word:"gesprochen",infinitive:"sprechen",meaning:"говорити",accepted:["говорити","розмовляти","говорив","говорила","говорили","розмовляв","розмовляла","розмовляли"],examples:[
+    ["past-action-gesprochen-deutsch","Ich habe Deutsch gesprochen.","Я говорив німецькою мовою."],
+    ["past-action-gesprochen-franzoesisch","Sie hat Französisch gesprochen.","Вона говорила французькою мовою."],
+    ["past-action-gesprochen-englisch","Wir haben Englisch gesprochen.","Ми говорили англійською мовою."]
+  ]}),
+  ...pastActionVocabulary({targetId:"past-action-gesagt",word:"gesagt",infinitive:"sagen",meaning:"сказати",accepted:["казати","сказати","говорити","сказав","сказала","сказали"],examples:[
+    ["past-action-gesagt-danke","Ich habe Danke gesagt.","Я сказав «дякую»."],
+    ["past-action-gesagt-hallo","Sie hat Hallo gesagt.","Вона сказала «привіт»."],
+    ["past-action-gesagt-ja","Wir haben Ja gesagt.","Ми сказали «так»."]
+  ]}),
+  ...pastActionVocabulary({targetId:"past-action-geschrieben",word:"geschrieben",infinitive:"schreiben",meaning:"писати",accepted:["писати","написати","писав","писала","писали","написав","написала","написали"],examples:[
+    ["past-action-geschrieben-brief","Ich habe einen Brief geschrieben.","Я написав листа."],
+    ["past-action-geschrieben-mail","Sie hat eine E-Mail geschrieben.","Вона написала електронного листа."],
+    ["past-action-geschrieben-nachricht","Wir haben eine Nachricht geschrieben.","Ми написали повідомлення."]
+  ]}),
+  ...pastActionVocabulary({targetId:"past-action-eingeladen",word:"eingeladen",infinitive:"einladen",meaning:"запрошувати",accepted:["запрошувати","запросити","запрошував","запрошувала","запрошували","запросив","запросила","запросили"],examples:[
+    ["past-action-eingeladen-freund","Ich habe meinen Freund eingeladen.","Я запросив свого друга."],
+    ["past-action-eingeladen-anna","Sie hat Anna eingeladen.","Вона запросила Анну."],
+    ["past-action-eingeladen-gaeste","Wir haben Gäste eingeladen.","Ми запросили гостей."]
+  ]}),
+  ...pastActionVocabulary({targetId:"past-action-gelacht",word:"gelacht",infinitive:"lachen",meaning:"сміятися",accepted:["сміятися","сміявся","сміялася","сміялися","посміявся","посміялася","посміялися"],examples:[
+    ["past-action-gelacht-laut","Ich habe laut gelacht.","Я голосно сміявся."],
+    ["past-action-gelacht-viel","Sie hat viel gelacht.","Вона багато сміялася."],
+    ["past-action-gelacht-zusammen","Wir haben zusammen gelacht.","Ми сміялися разом."]
+  ]}),
+  ...pastActionVocabulary({targetId:"past-action-gesungen",word:"gesungen",infinitive:"singen",meaning:"співати",accepted:["співати","співав","співала","співали","заспівав","заспівала","заспівали"],examples:[
+    ["past-action-gesungen-lied","Ich habe ein Lied gesungen.","Я заспівав пісню."],
+    ["past-action-gesungen-kinder","Die Kinder haben zusammen gesungen.","Діти співали разом."],
+    ["past-action-gesungen-leise","Sie hat leise gesungen.","Вона співала тихо."]
+  ]}),
+  ...pastActionVocabulary({targetId:"past-action-angerufen",word:"angerufen",infinitive:"anrufen",meaning:"телефонувати",accepted:["телефонувати","подзвонити","зателефонувати","дзвонив","дзвонила","дзвонили","подзвонив","подзвонила","подзвонили","зателефонував","зателефонувала","зателефонували"],examples:[
+    ["past-action-angerufen-mutter","Ich habe meine Mutter angerufen.","Я подзвонив мамі."],
+    ["past-action-angerufen-arzt","Sie hat den Arzt angerufen.","Вона подзвонила лікарю."],
+    ["past-action-angerufen-freunde","Wir haben unsere Freunde angerufen.","Ми подзвонили друзям."]
+  ]}),
+  ...pastActionVocabulary({targetId:"past-action-geredet",word:"geredet",infinitive:"reden",meaning:"розмовляти; балакати",accepted:["розмовляти","балакати","говорити","розмовляв","розмовляла","розмовляли","балакав","балакала","балакали","говорив","говорила","говорили"],examples:[
+    ["past-action-geredet-zusammen","Wir haben zusammen geredet.","Ми разом балакали."],
+    ["past-action-geredet-viel","Sie hat viel geredet.","Вона багато балакала."],
+    ["past-action-geredet-stunden","Die Freunde haben stundenlang geredet.","Друзі годинами балакали."]
+  ]})
+];
+const pastActionThoughtCards=[
+  ...pastActionVocabulary({targetId:"past-action-geglaubt",word:"geglaubt",infinitive:"glauben",meaning:"вірити",accepted:["вірити","повірити","вірив","вірила","вірили","повірив","повірила","повірили"],examples:[
+    ["past-action-geglaubt-dir","Ich habe dir geglaubt.","Я повірив тобі."],
+    ["past-action-geglaubt-ihm","Sie hat ihm geglaubt.","Вона повірила йому."],
+    ["past-action-geglaubt-uns","Sie haben uns geglaubt.","Вони повірили нам."]
+  ]}),
+  ...pastActionVocabulary({targetId:"past-action-gesucht",word:"gesucht",infinitive:"suchen",meaning:"шукати",accepted:["шукати","шукав","шукала","шукали"],examples:[
+    ["past-action-gesucht-schluessel","Ich habe den Schlüssel gesucht.","Я шукав ключ."],
+    ["past-action-gesucht-buch","Sie hat das Buch gesucht.","Вона шукала книжку."],
+    ["past-action-gesucht-wohnung","Wir haben eine Wohnung gesucht.","Ми шукали квартиру."]
+  ]}),
+  ...pastActionVocabulary({targetId:"past-action-gefunden",word:"gefunden",infinitive:"finden",meaning:"знаходити",accepted:["знаходити","знайти","знайшов","знайшла","знайшли"],examples:[
+    ["past-action-gefunden-schluessel","Ich habe den Schlüssel gefunden.","Я знайшов ключ."],
+    ["past-action-gefunden-buch","Sie hat das Buch gefunden.","Вона знайшла книжку."],
+    ["past-action-gefunden-wohnung","Wir haben eine Wohnung gefunden.","Ми знайшли квартиру."]
+  ]}),
+  ...pastActionVocabulary({targetId:"past-action-gebraucht",word:"gebraucht",infinitive:"brauchen",meaning:"потребувати",accepted:["потребувати","потребував","потребувала","потребували","потрібно","потрібен","потрібна"],examples:[
+    ["past-action-gebraucht-hilfe","Ich habe Hilfe gebraucht.","Я потребував допомоги."],
+    ["past-action-gebraucht-zeit","Sie hat Zeit gebraucht.","Вона потребувала часу."],
+    ["past-action-gebraucht-geld","Wir haben Geld gebraucht.","Ми потребували грошей."]
+  ]}),
+  ...pastActionVocabulary({targetId:"past-action-gewusst",word:"gewusst",infinitive:"wissen",meaning:"знати",accepted:["знати","знав","знала","знали"],examples:[
+    ["past-action-gewusst-antwort","Ich habe die Antwort gewusst.","Я знав відповідь."],
+    ["past-action-gewusst-name","Sie hat seinen Namen gewusst.","Вона знала його ім’я."],
+    ["past-action-gewusst-weg","Wir haben den Weg gewusst.","Ми знали дорогу."]
+  ]}),
+  ...pastActionVocabulary({targetId:"past-action-geliebt",word:"geliebt",infinitive:"lieben",meaning:"любити; кохати",accepted:["любити","кохати","любив","любила","любили","кохав","кохала","кохали"],examples:[
+    ["past-action-geliebt-musik","Ich habe diese Musik geliebt.","Я любив цю музику."],
+    ["past-action-geliebt-hund","Sie hat ihren Hund geliebt.","Вона любила свого собаку."],
+    ["past-action-geliebt-stadt","Wir haben diese Stadt geliebt.","Ми любили це місто."]
+  ]}),
+  ...pastActionVocabulary({targetId:"past-action-gesehen",word:"gesehen",infinitive:"sehen",meaning:"бачити",accepted:["бачити","побачити","бачив","бачила","бачили","побачив","побачила","побачили"],examples:[
+    ["past-action-gesehen-film","Ich habe den Film gesehen.","Я бачив цей фільм."],
+    ["past-action-gesehen-vogel","Sie hat einen Vogel gesehen.","Вона побачила птаха."],
+    ["past-action-gesehen-anna","Wir haben Anna gesehen.","Ми бачили Анну."]
+  ]}),
+  ...pastActionVocabulary({targetId:"past-action-gedacht",word:"gedacht",infinitive:"denken",meaning:"думати",accepted:["думати","подумати","думав","думала","думали","подумав","подумала","подумали"],examples:[
+    ["past-action-gedacht-dich","Ich habe an dich gedacht.","Я думав про тебе."],
+    ["past-action-gedacht-urlaub","Sie hat an den Urlaub gedacht.","Вона думала про відпустку."],
+    ["past-action-gedacht-familie","Wir haben an die Familie gedacht.","Ми думали про сім’ю."]
+  ]})
+];
+const pastActionStages=[
+  ...vocabStages("past-action-daily","Щоденні справи",pastActionDailyCards),
+  ...vocabStages("past-action-social","Спілкування й люди",pastActionSocialCards),
+  ...vocabStages("past-action-thought","Думки, сприйняття й потреби",pastActionThoughtCards)
+].map(stage=>({...stage,objective:stage.mode==="learn"
+  ?"Вивчіть значення дієслів у реченнях про минуле та зверніть увагу на їхні форми."
+  :"Пригадайте німецьке дієслово в минулому часі або його українське значення за контекстом."}));
 const appointmentActionCards=[
   ...contextualVocabulary({targetId:"appointment-vereinbaren",word:"einen Termin vereinbaren",translation:"домовитися про зустріч",prompt:"домовитися про зустріч (інфінітив із einen Termin)",reverseId:"appointment-vereinbaren-reverse",reverseAccepted:["домовитися про зустріч","узгодити зустріч"],category:"TERMINE · PLANUNG",explanation:"Vereinbaren означає домовитися про час зустрічі; Termin тут стоїть в Akkusativ.",examples:[
     ["appointment-vereinbaren-arzt","Ich möchte einen Termin vereinbaren.","Я хочу домовитися про прийом."],
@@ -4960,6 +5111,21 @@ deckDefinitions.appointments={
     ]
   },
   cards:[...appointmentActionCards,...appointmentMessageCards],stages:appointmentStages
+};
+deckDefinitions["past-action-vocabulary"]={
+  title:"Everyday actions in the past",label:"Everyday actions in the past",badge:"V",
+  tip:"Connect everyday past actions with their meanings in context.",
+  guide:{
+    title:"Повсякденні дії в минулому",
+    intro:"Пригадуйте значення дієслів із Partizip II у коротких реченнях про минуле.",
+    rules:[
+      {title:"Значення в контексті",detail:"Порівнюйте дієслово з інфінітивом і значенням, а потім згадайте його в іншому реченні.",formula:"arbeiten → gearbeitet · працювати"},
+      {title:"Дія в минулому",detail:"У цих прикладах відмінюване haben стоїть у реченні, а Partizip II — в кінці.",formula:"Ich habe gestern gearbeitet."},
+      {title:"Схожі значення",detail:"Sprechen часто вживають для мови, якою говорять; reden — для розмови або балакання. Glauben означає вірити, denken — думати."},
+      {title:"Ціна і смак",detail:"Kosten може означати коштувати або куштувати. У цьому уроці контекст ціни показує значення «коштувати».",formula:"Das Buch hat zehn Euro gekostet."}
+    ]
+  },
+  cards:[...pastActionDailyCards,...pastActionSocialCards,...pastActionThoughtCards],stages:pastActionStages
 };
 if(false){
 let activeDeckId="w-questions",activeStageIndex=0,deck=[...wQuestionStages[0].cards],index=0,flipped=false,completed=0,roundCorrect=0,roundCorrectCards={},roundHadIncorrect=false,roundFinished=false,practiceInputStarted=false,verificationMode=false,verified=false,answerRevealed=false,celebrating=false,studyMode="learn",direction="uk-de";

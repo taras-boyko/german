@@ -39,6 +39,7 @@ const lessonCatalog={
   "mit-ohne":{title:"Прийменники mit і ohne",germanTitle:"Präpositionen mit und ohne",outcome:"Казати, з ким, чим або як щось відбувається і чого немає: mit + Dativ, ohne + Akkusativ.",className:"Граматика",level:"A1"},
   "time-worksheet-vocabulary":{title:"Пори року й розпорядок дня",germanTitle:"Jahreszeiten und Tagesablauf",outcome:"Уживати лексику про пори року та розпорядок дня в контексті.",className:"Лексика"},
   "everyday-vocabulary":{title:"Повсякденна лексика",germanTitle:"Alltagswortschatz",outcome:"Уживати поширені слова про щоденні справи, їжу та напої.",className:"Лексика"},
+  "past-action-vocabulary":{title:"Повсякденні дії в минулому",germanTitle:"Alltagshandlungen in der Vergangenheit",outcome:"Пригадувати значення повсякденних дієслів у реченнях про минуле.",className:"Лексика",level:"A1"},
   appointments:{title:"Домовленості та повідомлення",germanTitle:"Termine und Nachrichten",outcome:"Домовлятися про зустріч, переносити або скасовувати її та повідомляти про затримку.",className:"Лексика",level:"A2"},
   "travel-transport":{title:"Подорожі й транспорт",germanTitle:"Reisen und Verkehrsmittel",outcome:"Говорити німецькою про транспорт, маршрути й дії під час подорожі.",className:"Лексика"},
   "giving-directions":{title:"Як пояснити дорогу",germanTitle:"Den Weg beschreiben",outcome:"Пояснювати прості маршрути й розташування знайомих місць у місті.",className:"Лексика",level:"A1"},
@@ -1724,6 +1725,7 @@ function render(focusTarget=""){
   $("verification-label").textContent=inputLabel;
   $("verification-label").hidden=answerRevealed;
   $("verification-input").placeholder=inputPlaceholder;
+  $("verification-input").lang=card.type==="recall-reverse"?"uk":"de";
   $("verification-input").hidden=answerRevealed;
   $("verification-input").readOnly=revealed;
   $("flashcard").classList.toggle("flipped",!verificationMode||revealed);
