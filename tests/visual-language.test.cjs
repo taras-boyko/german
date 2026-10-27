@@ -559,7 +559,7 @@ const structureCoverage={
   "temporal-prepositions":(stage,card)=>card.type==="sentence-build",
   "mit-ohne":(stage,card)=>card.type==="sentence-build"
 };
-const structureCounts={"separable-verbs":28,"word-order":37,koennen:35,perfekt:12,"temporal-prepositions":30,"mit-ohne":12};
+const structureCounts={"separable-verbs":28,"word-order":55,koennen:35,perfekt:12,"temporal-prepositions":30,"mit-ohne":12};
 
 test("sentence structures are explicit, ordered and rebuild the card's sentence",()=>{
   const {app}=runtime();
@@ -996,7 +996,7 @@ test("guide tables are well formed across lessons",()=>{
 // Rule illustrations: one approved card component per rule, showing that rule's own example.
 const ruleVisualCoverage={
   "w-questions":["1:structure","2:structure"],
-  "word-order":["2:structure","3:structure","4:structure","5:structure","6:structure"],
+  "word-order":["2:structure","3:structure","4:structure","5:structure","6:structure","7:structure"],
   "separable-verbs":["1:structure","2:structure","3:structure","4:structure","5:structure"],
   frequency:["1:frequency","2:structure","3:structure"],
   perfekt:["1:structure","2:auxiliary","3:auxiliary"],

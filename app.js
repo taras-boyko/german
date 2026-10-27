@@ -39,6 +39,7 @@ const lessonCatalog={
   "mit-ohne":{title:"Прийменники mit і ohne",germanTitle:"Präpositionen mit und ohne",outcome:"Казати, з ким, чим або як щось відбувається і чого немає: mit + Dativ, ohne + Akkusativ.",className:"Граматика",level:"A1"},
   "time-worksheet-vocabulary":{title:"Пори року й розпорядок дня",germanTitle:"Jahreszeiten und Tagesablauf",outcome:"Уживати лексику про пори року та розпорядок дня в контексті.",className:"Лексика"},
   "everyday-vocabulary":{title:"Повсякденна лексика",germanTitle:"Alltagswortschatz",outcome:"Уживати поширені слова про щоденні справи, їжу та напої.",className:"Лексика"},
+  appointments:{title:"Домовленості та повідомлення",germanTitle:"Termine und Nachrichten",outcome:"Домовлятися про зустріч, переносити або скасовувати її та повідомляти про затримку.",className:"Лексика",level:"A2"},
   "travel-transport":{title:"Подорожі й транспорт",germanTitle:"Reisen und Verkehrsmittel",outcome:"Говорити німецькою про транспорт, маршрути й дії під час подорожі.",className:"Лексика"},
   "giving-directions":{title:"Як пояснити дорогу",germanTitle:"Den Weg beschreiben",outcome:"Пояснювати прості маршрути й розташування знайомих місць у місті.",className:"Лексика",level:"A1"},
   "dative-verbs":{title:"Дієслова з Dativ",germanTitle:"Verben mit Dativ",outcome:"Пригадувати 16 дієслів і вживати їхні форми теперішнього часу з додатками в Dativ.",className:"Лексика",level:"A2"},
@@ -109,7 +110,8 @@ const categoryLabels={
   "MITTEL":"Засіб","ART UND WEISE":"Спосіб дії","ZUTAT":"Інгредієнт","ARTIKEL":"Артикль","POSSESSIV":"Присвійний займенник","OHNE ARTIKEL":"Без артикля","BEDEUTUNG":"Значення",
   "UNBESTIMMTER ARTIKEL":"Неозначений артикль","NEGATIVARTIKEL":"Заперечний артикль",
   "FÜHRERSCHEIN":"Водійське посвідчення","REISEN":"Подорожі","POST":"Пошта","VERTRÄGE":"Договори",
-  "GESPRÄCHE":"Розмови","GEFÜHLE":"Почуття","LEBEN":"Життя"
+  "GESPRÄCHE":"Розмови","GEFÜHLE":"Почуття","LEBEN":"Життя",
+  "TERMINE":"Домовленості","PLANUNG":"Планування","NACHRICHT":"Повідомлення"
 };
 function categoryLabel(category){
   return category.split(" · ").map(part=>categoryLabels[part]||part).join(" · ");
@@ -718,6 +720,28 @@ function coverageText(coverage){
   return `${coverage.covered} з ${counted(coverage.total,"ціль","цілі","цілей")}`;
 }
 
+function coverageRemainingNote(coverage){
+  const remaining=coverage.total-coverage.covered;
+  return remaining?` · залишилось ${counted(remaining,"ціль","цілі","цілей")}`:"";
+}
+
+function newTargetsInCompletedStages(lessonId){
+  const lesson=lessonState(lessonId),seen=new Set();
+  const stages=new Map();
+  for(const stage of deckDefinitions[lessonId].stages.filter(item=>item.mode==="input")){
+    const targets=[...new Set(stageTargetIds(stage))].filter(target=>!seen.has(target));
+    targets.forEach(target=>seen.add(target));
+    const remaining=targets.filter(target=>!(lesson.masteredTargets[stage.id]||[]).includes(target));
+    if(stageIsComplete(lessonId,stage)&&remaining.length)stages.set(stage.id,remaining.length);
+  }
+  return stages;
+}
+
+function completedStageWithNewTargets(lessonId){
+  const stages=newTargetsInCompletedStages(lessonId);
+  return deckDefinitions[lessonId].stages.find(stage=>stages.has(stage.id))||null;
+}
+
 function coverageMasteryNote(lessonId){
   const coverage=lessonCoverage(lessonId),practiceStages=deckDefinitions[lessonId].stages.filter(stage=>stage.mode==="input");
   if(coverage.covered<coverage.total||practiceStages.every(stage=>stageIsComplete(lessonId,stage)))return "";
@@ -736,6 +760,8 @@ function recommendedStageIndex(lessonId){
   if(suspended)return suspended.stageIndex;
   const incomplete=definition.stages.findIndex(stage=>!stageIsComplete(lessonId,stage));
   if(incomplete>=0)return incomplete;
+  const newWork=completedStageWithNewTargets(lessonId);
+  if(newWork)return definition.stages.indexOf(newWork);
   const due=Date.parse(lessonState(lessonId).dueAt||"")<=Date.now();
   if(due){
     const practice=definition.stages.findIndex(stage=>stage.mode==="input");
@@ -1738,14 +1764,16 @@ function lessonChapters(stages){
 function stepButton(chapter,{stage,stageIndex}){
   const button=document.createElement("button"),done=stageIsComplete(activeDeckId,stage),current=stageIndex===activeStageIndex;
   const paused=!current&&Boolean(suspendedEntry(activeDeckId,stage.id));
+  const hasNewTargets=stage.mode==="input"&&newTargetsInCompletedStages(activeDeckId).has(stage.id);
   const stepIndex=chapter.steps.findIndex(step=>step.stageIndex===stageIndex);
   const phase=stage.phase||(stage.mode==="input"?"Практика":"Вивчення");
   button.type="button";
   button.className=`phase${current?" current":""}${done?" done":""}${paused?" paused":""}`;
   button.textContent=phase;
   button.setAttribute("aria-current",current?"step":"false");
-  button.setAttribute("aria-label",`Етап ${stepIndex+1} з ${chapter.steps.length}: ${phase} · ${chapter.name} · ${stage.title}${current?" (поточний етап)":""}${done?" (завершено)":""}${paused?" (незавершений підхід збережено)":""}`);
+  button.setAttribute("aria-label",`Етап ${stepIndex+1} з ${chapter.steps.length}: ${phase} · ${chapter.name} · ${stage.title}${current?" (поточний етап)":""}${done?" (завершено)":""}${hasNewTargets?" (є нові цілі для практики)":""}${paused?" (незавершений підхід збережено)":""}`);
   if(paused)button.title="Незавершений підхід збережено";
+  else if(hasNewTargets)button.title="Є нові цілі для практики";
   button.addEventListener("click",()=>{if(!current)selectStage(stageIndex)});
   return button;
 }
@@ -1760,7 +1788,8 @@ function renderLessonPath(){
   $("lesson-phase-label").textContent=`${phase} · етап ${currentStepIndex+1} з ${chapter.steps.length}`;
   $("lesson-chapter-count").textContent=`Розділ ${activeChapterIndex+1} з ${chapters.length}`;
   $("stage-objective").textContent=current.objective;
-  $("lesson-step-count").textContent=`План уроку · завершено ${doneCount} з ${counted(stages.length,"етапу","етапів","етапів")} · охоплено ${coverageText(lessonCoverage(activeDeckId))}${coverageMasteryNote(activeDeckId)}`;
+  const coverage=lessonCoverage(activeDeckId);
+  $("lesson-step-count").textContent=`План уроку · завершено ${doneCount} з ${counted(stages.length,"етапу","етапів","етапів")} · охоплено ${coverageText(coverage)}${coverageRemainingNote(coverage)}${coverageMasteryNote(activeDeckId)}`;
   $("lesson-outline-count").textContent=counted(chapters.length,"розділ","розділи","розділів");
   $("lesson-steps").replaceChildren(...chapters.map((chapter,chapterIndex)=>{
     const item=document.createElement("li"),isComplete=chapter.steps.every(step=>stageIsComplete(activeDeckId,step.stage));
@@ -2041,6 +2070,7 @@ function lessonStatus(lessonId){
 function actionLabel(lessonId){
   const status=lessonStatus(lessonId);
   if(lessonHasOpenAttempt(lessonId))return "Продовжити";
+  if(completedStageWithNewTargets(lessonId)?.id===deckDefinitions[lessonId].stages[recommendedStageIndex(lessonId)]?.id)return "Практикувати нові цілі";
   if(status.key==="due")return "Повторити зараз";
   if(status.key==="mastered")return "Повторити урок";
   if(status.key==="ready")return "Перейти до практики";
@@ -2088,7 +2118,8 @@ function libraryCard(lessonId,lessonClass){
   const meta=document.createElement("div");meta.className="section-meta";
   const sequences=document.createElement("span");sequences.textContent=counted(definition.stages.length,"етап","етапи","етапів");
   const level=document.createElement("span");level.textContent=catalog.level||"A1";
-  const coverage=document.createElement("span");coverage.textContent=`охоплено ${coveragePercent(lessonCoverage(lessonId))}%`;
+  const coverageData=lessonCoverage(lessonId),coverage=document.createElement("span");
+  coverage.textContent=`охоплено ${coveragePercent(coverageData)}%${coverageData.newTargets?` · ${counted(coverageData.newTargets,"нова ціль","нові цілі","нових цілей")}`:""}`;
   meta.append(sequences,level,coverage);
   const badge=document.createElement("span");badge.className=`status-badge ${status.key}`;badge.textContent=status.label;
   footer.append(meta,badge);
@@ -2151,7 +2182,7 @@ function relativePracticeTime(timestamp){
 
 function reviewStage(lessonId){
   const definition=deckDefinitions[lessonId];
-  return definition.stages.find(stage=>stage.mode==="input"&&!stageIsComplete(lessonId,stage))||definition.stages.find(stage=>stage.mode==="input")||definition.stages[0];
+  return definition.stages.find(stage=>stage.mode==="input"&&!stageIsComplete(lessonId,stage))||completedStageWithNewTargets(lessonId)||definition.stages.find(stage=>stage.mode==="input")||definition.stages[0];
 }
 
 function reviewLesson(lessonId){
@@ -2195,7 +2226,7 @@ function renderProgress(){
     accuracy.textContent=accuracyValue===null?"—":`${accuracyValue}%`;accuracyLabel.textContent="точність перших відповідей";attempts.textContent=lesson.firstAttempts?counted(lesson.firstAttempts,"перша відповідь","перші відповіді","перших відповідей"):"Відповідей у практиці ще немає";
     const coverage=lessonCoverage(lessonId),coverageNote=document.createElement("span");
     coverageNote.className="lesson-coverage";
-    coverageNote.textContent=`охоплено ${coverageText(coverage)}${coverage.newTargets?` · ${counted(coverage.newTargets,"нова ціль","нові цілі","нових цілей")}`:""}${coverageMasteryNote(lessonId)}`;
+    coverageNote.textContent=`охоплено ${coverageText(coverage)}${coverageRemainingNote(coverage)}${coverage.newTargets?` · ${counted(coverage.newTargets,"нова ціль","нові цілі","нових цілей")}`:""}${coverageMasteryNote(lessonId)}`;
     details.append(accuracy,accuracyLabel,attempts,coverageNote);
     const button=document.createElement("button");button.type="button";button.className="lesson-review-button";button.textContent=status.key==="new"?"Почати →":"Практика →";button.addEventListener("click",()=>reviewLesson(lessonId));
     item.append(heading,details,button);

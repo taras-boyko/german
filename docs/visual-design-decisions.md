@@ -681,7 +681,7 @@ Position boxes (5) appear on learn cards and after Check on sentence builds.
 | Lesson | Learn cards | Sentence builds |
 |---|---|---|
 | separable-verbs | All 14 (vocabulary and pattern cards) | All 14 |
-| word-order | All 15 rule cards | All 22 |
+| word-order | Rule cards and dass sentence examples | Sentence builds, including dass clauses |
 | koennen | 4 word-order rule cards | 21 (word-order practice stage) |
 | perfekt | 6 frame cards | The same 6 frames in practice |
 | temporal-prepositions | 15 sentence cards | The same 15 in practice |
@@ -758,7 +758,7 @@ guide).
 | Lesson | Rule: illustration |
 |---|---|
 | w-questions | 1 `Wo wohnst du`, 2 `Wann kommt ihr` (boxes) |
-| word-order | 2–5 the modal sentence `Ich mag am Morgen Kaffee trinken` as statement, inversion, ja/nein and W-question; 6 `Heute fahre ich …` (boxes) |
+| word-order | 2–5 the modal sentence `Ich mag am Morgen Kaffee trinken` as statement, inversion, ja/nein and W-question; 6 `Heute fahre ich …`; 7 `Ich weiß, dass der Termin morgen ist` (boxes) |
 | separable-verbs | 1 `Ich stehe früh auf`, 2 `Warum rufst du mich an`, 3 `weil ich früh aufstehe`, 4 `Wir können früh aufstehen`, 5 `Ich verstehe die Aufgabe` (boxes) |
 | frequency | 1 the whole bar; 2 `Ich lerne oft Deutsch`, 3 `Am Sonntag lese ich manchmal ein Buch` (boxes) |
 | perfekt | 1 `Ich habe die Hausaufgaben gemacht` (boxes); 2 haben, 3 sein (panel) |

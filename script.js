@@ -3788,6 +3788,22 @@ const esGibtLeisureStages=[
   ...learnThenPractice("leisure-activities","заняття на дозвіллі","Описуйте можливі заняття в місті й уживайте нові слова в контексті.",leisureActivityCards,"Заняття на дозвіллі"),
   ...learnThenPractice("photo-description","опис фотографій","Описуйте, що й кого ви бачите на фотографії.",photoDescriptionCards,"Опис фотографій")
 ];
+const dassSentenceCards=[
+  ["dass-simple-termin","dass-simple","Ich weiß, dass der Termin morgen ist.","Я знаю, що зустріч завтра.","ich / wissen / dass / der Termin / morgen / sein",[mainClause("Ich","weiß"),subordinateClause("dass","der Termin morgen","ist")]],
+  ["dass-simple-zeit","dass-simple","Sie sagt, dass sie heute Zeit hat.","Вона каже, що сьогодні має час.","sie / sagen / dass / sie / heute Zeit / haben",[mainClause("Sie","sagt"),subordinateClause("dass","sie heute Zeit","hat")]],
+  ["dass-simple-kommen","dass-simple","Wir wissen, dass er später kommt.","Ми знаємо, що він прийде пізніше.","wir / wissen / dass / er / später / kommen",[mainClause("Wir","wissen"),subordinateClause("dass","er später","kommt")]],
+  ["dass-separable-anrufen","dass-separable","Ich weiß, dass du heute anrufst.","Я знаю, що ти сьогодні зателефонуєш.","ich / wissen / dass / du / heute / anrufen",[mainClause("Ich","weiß"),subordinateClause("dass","du heute","anrufst")]],
+  ["dass-separable-aufstehen","dass-separable","Sie sagt, dass er früh aufsteht.","Вона каже, що він рано встає.","sie / sagen / dass / er / früh / aufstehen",[mainClause("Sie","sagt"),subordinateClause("dass","er früh","aufsteht")]],
+  ["dass-separable-einkaufen","dass-separable","Wir wissen, dass sie morgen einkauft.","Ми знаємо, що вона завтра робить покупки.","wir / wissen / dass / sie / morgen / einkaufen",[mainClause("Wir","wissen"),subordinateClause("dass","sie morgen","einkauft")]],
+  ["dass-modal-kommen","dass-modal","Ich weiß, dass du morgen kommen kannst.","Я знаю, що ти можеш прийти завтра.","ich / wissen / dass / du / morgen / kommen / können",[mainClause("Ich","weiß"),subordinateClause("dass","du morgen","kommen kannst")]],
+  ["dass-modal-lernen","dass-modal","Sie sagt, dass sie heute lernen muss.","Вона каже, що сьогодні мусить учитися.","sie / sagen / dass / sie / heute / lernen / müssen",[mainClause("Sie","sagt"),subordinateClause("dass","sie heute","lernen muss")]],
+  ["dass-modal-arbeiten","dass-modal","Wir wissen, dass er später arbeiten will.","Ми знаємо, що він хоче працювати пізніше.","wir / wissen / dass / er / später / arbeiten / wollen",[mainClause("Wir","wissen"),subordinateClause("dass","er später","arbeiten will")]]
+].map(([id,targetId,word,translation,promptText,structure])=>({
+  id,targetId,type:"sentence-build",word,translation,promptText,support:translation,structure,
+  category:"WORTFOLGE · NEBENSATZ",practiceVariants:false,
+  explanation:"Після dass відмінюване дієслово стоїть наприкінці підрядного речення; відокремлюваний префікс залишається з дієсловом.",
+  response:{mode:"text",scope:"sentence",accepted:[word],caseSensitive:false,punctuationSensitive:false}
+}));
 const wordOrderStages=[
   lessonStep("word-order-statements-learn","Вивчення прямого порядку слів","Порівняйте речення, де підмет стоїть першим, а відмінюване дієслово — другим.",wordOrderStatementCards,"learn","Прямий порядок слів","Вивчення"),
   lessonStep("word-order-statements-practice","Практика прямого порядку слів","Складіть із німецьких фрагментів розповідні речення з дієсловом на другому місці.",wordOrderStatementPracticeCards,"input","Прямий порядок слів","Практика"),
@@ -3798,7 +3814,8 @@ const wordOrderStages=[
   lessonStep("word-order-inversion-learn","Вивчення інверсії","Почніть із часу або іншого виразу, поставте дієслово другим, а підмет — після нього.",wordOrderInversionCards,"learn","Інверсія","Вивчення"),
   lessonStep("word-order-inversion-practice","Практика інверсії","Складіть із німецьких фрагментів речення, що починаються з часового виразу.",wordOrderInversionPracticeCards,"input","Інверсія","Практика"),
   lessonStep("word-order-questions-learn","Вивчення питальних речень","Порівняйте загальні й спеціальні запитання та знайдіть місце відмінюваного дієслова.",wordOrderQuestionCards,"learn","Запитання","Вивчення"),
-  lessonStep("word-order-questions-practice","Практика питальних речень","Складіть із німецьких фрагментів загальні й спеціальні запитання.",wordOrderQuestionPracticeCards,"input","Запитання","Практика")
+  lessonStep("word-order-questions-practice","Практика питальних речень","Складіть із німецьких фрагментів загальні й спеціальні запитання.",wordOrderQuestionPracticeCards,"input","Запитання","Практика"),
+  ...learnThenPractice("word-order-dass","підрядне речення з dass","Після dass поставте відмінюване дієслово в кінець підрядного речення.",dassSentenceCards,"Підрядне речення · dass")
 ];
 const separableVerbStages=[
   lessonStep("separable-verbs-learn","Вивчення відокремлюваних дієслів","Вивчіть поширені дієслова A1 з відокремлюваними префіксами й повними прикладами головних речень.",separableVerbCards,"learn","Відокремлювані дієслова","Вивчення"),
@@ -4441,6 +4458,90 @@ const vocabStages=(lessonId,chapter,cards,objectives={})=>[
   lessonStep(`${lessonId}-learn`,`Вивчення: ${chapter}`,objectives.learn||"Вивчіть німецькі слова з артиклями, українськими значеннями та прикладами. Звертайте увагу на форми, які змінюються.",cards.filter(card=>card.type!=="recall-reverse"),"learn",chapter,"Вивчення"),
   lessonStep(`${lessonId}-practice`,`Практика: ${chapter}`,objectives.practice||"Напишіть німецьке слово за українським значенням або українське значення за німецьким словом.",cards,"input",chapter,"Практика")
 ];
+// Each example has an authored stable ID; reverse recall is used only in practice.
+function contextualVocabulary({targetId,word,translation,prompt,reverseId,reverseAccepted,examples,explanation,category}){
+  const response=(accepted,scope)=>({mode:"text",scope,accepted,caseSensitive:false,punctuationSensitive:false});
+  const scope=word.includes(" ")?"phrase":"word";
+  const forward=examples.map(([id,example,exampleTranslation])=>({
+    id,targetId,type:"recall",word,translation,promptText:prompt,support:exampleTranslation,
+    example,exampleTranslation,explanation,category,practiceVariants:false,response:response([word],scope)
+  }));
+  return [...forward,{
+    id:reverseId,targetId,type:"recall-reverse",word,translation:reverseAccepted.join(" / "),
+    promptText:word,example:examples[0][1],exampleTranslation:examples[0][2],category,
+    practiceVariants:false,response:response(reverseAccepted,"phrase")
+  }];
+}
+const appointmentActionCards=[
+  ...contextualVocabulary({targetId:"appointment-vereinbaren",word:"einen Termin vereinbaren",translation:"домовитися про зустріч",prompt:"домовитися про зустріч (інфінітив із einen Termin)",reverseId:"appointment-vereinbaren-reverse",reverseAccepted:["домовитися про зустріч","узгодити зустріч"],category:"TERMINE · PLANUNG",explanation:"Vereinbaren означає домовитися про час зустрічі; Termin тут стоїть в Akkusativ.",examples:[
+    ["appointment-vereinbaren-arzt","Ich möchte einen Termin vereinbaren.","Я хочу домовитися про прийом."],
+    ["appointment-vereinbaren-buero","Wir können einen Termin vereinbaren.","Ми можемо домовитися про зустріч."],
+    ["appointment-vereinbaren-morgen","Sie möchte morgen einen Termin vereinbaren.","Вона хоче завтра домовитися про зустріч."]
+  ]}),
+  ...contextualVocabulary({targetId:"appointment-absagen",word:"einen Termin absagen",translation:"скасувати зустріч",prompt:"скасувати зустріч (інфінітив із einen Termin)",reverseId:"appointment-absagen-reverse",reverseAccepted:["скасувати зустріч","скасовувати зустріч"],category:"TERMINE · PLANUNG",explanation:"Absagen означає скасувати; у головному реченні префікс ab відокремлюється.",examples:[
+    ["appointment-absagen-heute","Ich muss einen Termin absagen.","Я мушу скасувати зустріч."],
+    ["appointment-absagen-arzt","Sie will einen Termin absagen.","Вона хоче скасувати прийом."],
+    ["appointment-absagen-morgen","Wir müssen einen Termin absagen.","Ми мусимо скасувати зустріч."]
+  ]}),
+  ...contextualVocabulary({targetId:"appointment-verschieben",word:"einen Termin verschieben",translation:"перенести зустріч",prompt:"перенести зустріч на інший час (інфінітив із einen Termin)",reverseId:"appointment-verschieben-reverse",reverseAccepted:["перенести зустріч","переносити зустріч"],category:"TERMINE · PLANUNG",explanation:"Verschieben означає перенести на інший час, а не скасувати.",examples:[
+    ["appointment-verschieben-bitte","Können wir einen Termin verschieben?","Чи можемо ми перенести зустріч?"],
+    ["appointment-verschieben-morgen","Ich möchte einen Termin verschieben.","Я хочу перенести зустріч."],
+    ["appointment-verschieben-krank","Er muss einen Termin verschieben.","Він мусить перенести зустріч."]
+  ]}),
+  ...contextualVocabulary({targetId:"appointment-schieben",word:"schieben",translation:"штовхати; пересувати",prompt:"штовхати або пересувати (інфінітив)",reverseId:"appointment-schieben-reverse",reverseAccepted:["штовхати","пересувати"],category:"TERMINE · PLANUNG",explanation:"Schieben — штовхати або пересувати; Partizip II — geschoben. Verschieben також може означати перенести зустріч.",examples:[
+    ["appointment-schieben-tisch","Wir können den Tisch schieben.","Ми можемо пересунути стіл."],
+    ["appointment-schieben-wagen","Ich muss den Wagen schieben.","Я мушу штовхати візок."],
+    ["appointment-schieben-stuhl","Sie möchte den Stuhl schieben.","Вона хоче пересунути стілець."]
+  ]}),
+  ...contextualVocabulary({targetId:"appointment-geschoben",word:"geschoben",translation:"пересунув / пересунула",prompt:"Partizip II від schieben",reverseId:"appointment-geschoben-reverse",reverseAccepted:["пересунув","пересунула","штовхав","штовхала"],category:"TERMINE · PLANUNG",explanation:"Schieben → hat geschoben. Не плутайте з verschieben → hat verschoben.",examples:[
+    ["appointment-geschoben-tisch","Ich habe den Tisch geschoben.","Я пересунув / пересунула стіл."],
+    ["appointment-geschoben-wagen","Er hat den Wagen geschoben.","Він штовхав візок."],
+    ["appointment-geschoben-stuhl","Sie hat den Stuhl geschoben.","Вона пересунула стілець."]
+  ]})
+];
+const appointmentMessageCards=[
+  ...contextualVocabulary({targetId:"appointment-feststecken",word:"feststecken",translation:"застрягти",prompt:"застрягти (інфінітив)",reverseId:"appointment-feststecken-reverse",reverseAccepted:["застрягти","застрягати"],category:"TERMINE · NACHRICHT",explanation:"Feststecken — відокремлюване дієслово: Ich stecke im Aufzug fest.",examples:[
+    ["appointment-feststecken-aufzug","Ich kann im Aufzug feststecken.","Я можу застрягти в ліфті."],
+    ["appointment-feststecken-verkehr","Wir können im Verkehr feststecken.","Ми можемо застрягти в заторі."],
+    ["appointment-feststecken-tuer","Die Tür kann feststecken.","Двері можуть застрягти."]
+  ]}),
+  ...contextualVocabulary({targetId:"appointment-wahrscheinlich",word:"wahrscheinlich",translation:"ймовірно",prompt:"ймовірно; скоріше за все",reverseId:"appointment-wahrscheinlich-reverse",reverseAccepted:["ймовірно","скоріше за все","напевно"],category:"TERMINE · NACHRICHT",explanation:"Wahrscheinlich виражає ймовірність, а не певність.",examples:[
+    ["appointment-wahrscheinlich-spaet","Ich komme wahrscheinlich später.","Я, ймовірно, прийду пізніше."],
+    ["appointment-wahrscheinlich-morgen","Sie ist wahrscheinlich morgen da.","Вона, ймовірно, буде тут завтра."],
+    ["appointment-wahrscheinlich-frei","Wir haben wahrscheinlich Zeit.","Ми, ймовірно, маємо час."]
+  ]}),
+  ...contextualVocabulary({targetId:"appointment-bescheid",word:"Bescheid sagen",translation:"повідомити",prompt:"повідомити когось (сталий вираз із Bescheid)",reverseId:"appointment-bescheid-reverse",reverseAccepted:["повідомити","дати знати"],category:"TERMINE · NACHRICHT",explanation:"Jemandem Bescheid sagen — повідомити комусь; адресат стоїть у Dativ.",examples:[
+    ["appointment-bescheid-mir","Kannst du mir Bescheid sagen?","Можеш повідомити мені?"],
+    ["appointment-bescheid-ihm","Bitte sagen Sie ihm Bescheid.","Будь ласка, повідомте йому."],
+    ["appointment-bescheid-uns","Sie möchte uns Bescheid sagen.","Вона хоче повідомити нам."]
+  ]}),
+  ...contextualVocabulary({targetId:"appointment-noch-gar-nicht",word:"noch gar nicht",translation:"ще зовсім не",prompt:"ще зовсім не (три слова)",reverseId:"appointment-noch-gar-nicht-reverse",reverseAccepted:["ще зовсім не","ще взагалі не"],category:"TERMINE · NACHRICHT",explanation:"Noch gar nicht підсилює заперечення: дія ще зовсім не відбулася.",examples:[
+    ["appointment-noch-gar-nicht-gearbeitet","Ich habe heute noch gar nicht gearbeitet.","Я сьогодні ще зовсім не працював / не працювала."],
+    ["appointment-noch-gar-nicht-gelesen","Ich habe den Brief noch gar nicht gelesen.","Я ще зовсім не читав / не читала листа."],
+    ["appointment-noch-gar-nicht-gegessen","Wir haben noch gar nicht gegessen.","Ми ще зовсім не їли."]
+  ]}),
+  ...contextualVocabulary({targetId:"appointment-gearbeitet",word:"gearbeitet",translation:"працював / працювала",prompt:"Partizip II від arbeiten",reverseId:"appointment-gearbeitet-reverse",reverseAccepted:["працював","працювала","працювали"],category:"TERMINE · NACHRICHT",explanation:"Arbeiten → hat gearbeitet: у Perfekt допоміжне haben стоїть у реченні, а gearbeitet — в кінці.",examples:[
+    ["appointment-gearbeitet-heute","Ich habe heute noch nicht gearbeitet.","Я сьогодні ще не працював / не працювала."],
+    ["appointment-gearbeitet-gestern","Sie hat gestern lange gearbeitet.","Вона вчора довго працювала."],
+    ["appointment-gearbeitet-zusammen","Wir haben zusammen gearbeitet.","Ми працювали разом."]
+  ]}),
+  ...contextualVocabulary({targetId:"appointment-geehrte-frau",word:"Sehr geehrte Frau",translation:"Шановна пані",prompt:"формальне звертання до пані перед прізвищем",reverseId:"appointment-geehrte-frau-reverse",reverseAccepted:["шановна пані"],category:"TERMINE · NACHRICHT",explanation:"Sehr geehrte Frau + прізвище — формальне звертання; geehrte тут не означає інфінітив ehren.",examples:[
+    ["appointment-geehrte-frau-1","Sehr geehrte Frau Müller, ich schreibe Ihnen.","Шановна пані Мюллер, я пишу Вам."],
+    ["appointment-geehrte-frau-2","Sehr geehrte Frau Weber, vielen Dank.","Шановна пані Вебер, щиро дякую."],
+    ["appointment-geehrte-frau-3","Sehr geehrte Frau Bauer, ich komme später.","Шановна пані Бауер, я прийду пізніше."]
+  ]})
+];
+const appointmentStages=[
+  lessonStep("appointments-plan-learn","Вивчення: домовленості","Вивчіть слова для домовленості, скасування й перенесення зустрічі.",appointmentActionCards.filter(card=>card.type!=="recall-reverse"),"learn","Домовленості","Вивчення"),
+  lessonStep("appointments-plan-practice","Практика: домовленості","Пригадайте слова й вирази німецькою або їхнє українське значення.",appointmentActionCards,"input","Домовленості","Практика"),
+  lessonStep("appointments-message-learn","Вивчення: повідомлення","Вивчіть слова для повідомлення про затримку та формальне звертання.",appointmentMessageCards.filter(card=>card.type!=="recall-reverse"),"learn","Повідомлення","Вивчення"),
+  lessonStep("appointments-message-practice","Практика: повідомлення","Пригадайте слова й вирази німецькою або їхнє українське значення.",appointmentMessageCards,"input","Повідомлення","Практика")
+];
+const ehrenCards=contextualVocabulary({targetId:"vocab-ehren",word:"ehren",translation:"вшановувати",prompt:"вшановувати (інфінітив)",reverseId:"vocab-ehren-reverse",reverseAccepted:["вшановувати","шанувати"],category:"GESPRÄCHE · GEFÜHLE",explanation:"Ehren означає вшановувати; у звертанні Sehr geehrte Frau вживається інша форма.",examples:[
+  ["vocab-ehren-lehrer","Wir möchten unsere Lehrerin ehren.","Ми хочемо вшанувати нашу вчительку."],
+  ["vocab-ehren-menschen","Sie wollen diese Menschen ehren.","Вони хочуть вшанувати цих людей."],
+  ["vocab-ehren-gaeste","Die Stadt möchte ihre Gäste ehren.","Місто хоче вшанувати своїх гостей."]
+]});
 const vocabLicenseTravelCards=[
   ...vocabPair("vocab-fuehrerschein",{word:"der Führerschein",translation:"водійське посвідчення",accepted:["der Führerschein"],reverseAccepted:["водійське посвідчення","водійські права"],example:"Ich habe den Führerschein.",exampleTranslation:"Я маю водійське посвідчення.",explanation:"Führerschein — чоловічий рід: der. Після haben стоїть Akkusativ: den Führerschein.",category:"FÜHRERSCHEIN · REISEN",noun:nounMeta("masculine","Führerschein")}),
   ...vocabPair("vocab-pruefung",{word:"die Führerscheinprüfung",translation:"іспит на водійське посвідчення",accepted:["die Führerscheinprüfung"],reverseAccepted:["іспит на водійське посвідчення","іспит на водійські права"],example:"Die Führerscheinprüfung war schwer.",exampleTranslation:"Іспит на водійське посвідчення був важкий.",explanation:"Складений іменник має артикль останнього слова: die Prüfung → die Führerscheinprüfung.",category:"FÜHRERSCHEIN · REISEN",noun:nounMeta("feminine","Führerscheinprüfung")}),
@@ -4448,6 +4549,7 @@ const vocabLicenseTravelCards=[
   ...vocabPair("vocab-reisen",{word:"reisen",translation:"подорожувати",promptText:"подорожувати (інфінітив)",accepted:["reisen"],reverseAccepted:["подорожувати"],example:"Wir reisen gern nach Italien.",exampleTranslation:"Ми охоче подорожуємо до Італії.",explanation:"reisen — подорожувати. Не плутайте з die Reise — подорож.",category:"FÜHRERSCHEIN · REISEN"}),
   ...vocabPair("vocab-durch",{word:"durch",translation:"через",accepted:["durch"],reverseAccepted:["через","крізь"],example:"Wir fahren durch den Tunnel.",exampleTranslation:"Ми їдемо через тунель.",explanation:"durch завжди стоїть з Akkusativ: durch den Tunnel, durch die Stadt, durch das Feld.",category:"FÜHRERSCHEIN · REISEN"}),
   ...vocabPair("vocab-schaffen",{word:"schaffen",translation:"впоратися",promptText:"впоратися (інфінітив)",accepted:["schaffen"],reverseAccepted:["впоратися","встигнути"],example:"Das schaffe ich!",exampleTranslation:"Я з цим впораюся!",explanation:"schaffen — впоратися або встигнути. З ich: schaffe, з er/sie/es: schafft.",category:"FÜHRERSCHEIN · REISEN"}),
+  {id:"vocab-schaffen-appointment",targetId:"vocab-schaffen",type:"recall",word:"schaffen",translation:"встигнути",promptText:"встигнути (інфінітив)",support:"Я сьогодні не встигну на зустріч.",example:"Ich schaffe es heute nicht zum Termin.",exampleTranslation:"Я сьогодні не встигну на зустріч.",explanation:"Es zum Termin schaffen означає встигнути на зустріч.",category:"FÜHRERSCHEIN · REISEN",practiceVariants:false,response:{mode:"text",scope:"word",accepted:["schaffen"],caseSensitive:false,punctuationSensitive:false}},
   ...vocabPair("vocab-geschafft",{word:"geschafft",translation:"впорався / впоралася",accepted:["geschafft"],reverseAccepted:["впорався","впоралася"],example:"Ich habe es geschafft!",exampleTranslation:"Я впорався!",explanation:"Partizip II від schaffen — geschafft. Разом із haben: habe … geschafft.",category:"FÜHRERSCHEIN · REISEN"})
 ];
 const vocabPostContractsCards=[
@@ -4516,7 +4618,10 @@ const vocabHamburgPlacesCards=[
 ];
 const vocabLicenseTravelStages=vocabStages("vocab-license-travel","Водійське посвідчення і подорожі",vocabLicenseTravelCards);
 const vocabPostContractsStages=vocabStages("vocab-post-contracts","Пошта і договори",vocabPostContractsCards);
-const vocabTalkFeelingsStages=vocabStages("vocab-talk-feelings","Розмови і почуття",vocabTalkFeelingsCards);
+const vocabTalkFeelingsStages=[
+  ...vocabStages("vocab-talk-feelings","Розмови і почуття",vocabTalkFeelingsCards),
+  ...vocabStages("vocab-ehren","Вшанування",ehrenCards)
+];
 const vocabLifeDailyStages=vocabStages("vocab-life-daily","Життя і щодня",vocabLifeDailyCards);
 const vocabHamburgStages=[
   ...vocabStages("vocab-hamburg-water","Місто й порт",vocabHamburgWaterCards,hamburgVocabularyObjectives),
@@ -4803,7 +4908,7 @@ const deckDefinitions={
         {title:"erwarten і unbedingt",detail:"erwarten вимагає Akkusativ: Ich erwarte dich. Слово unbedingt стоїть перед інфінітивом.",formula:"Ich erwarte dich. · Du musst unbedingt kommen."}
       ]
     },
-    cards:vocabTalkFeelingsCards,stages:vocabTalkFeelingsStages
+    cards:[...vocabTalkFeelingsCards,...ehrenCards],stages:vocabTalkFeelingsStages
   },
   "vocab-life-daily":{
     title:"Everyday life",label:"Everyday life",badge:"L",
@@ -4834,6 +4939,27 @@ const deckDefinitions={
     },
     cards:vocabHamburgCards,stages:vocabHamburgStages
   }
+};
+deckDefinitions["word-order"].cards.push(...dassSentenceCards);
+deckDefinitions["word-order"].guide.rules.push({
+  title:"Підрядне речення з dass",detail:"Dass означає «що» і вводить підрядне речення: перед ним ставимо кому, а відмінюване дієслово переносимо в кінець. Das з однією s може бути артиклем або займенником.",
+  formula:"Ich weiß, dass der Termin morgen ist.",
+  visual:{structure:[mainClause("Ich","weiß"),subordinateClause("dass","der Termin morgen","ist")]}
+});
+deckDefinitions.appointments={
+  title:"Appointments",label:"Appointments",badge:"Termin",
+  tip:"Arrange, cancel or move appointments and explain a delay.",
+  guide:{
+    title:"Домовленості та повідомлення",
+    intro:"Домовляйтеся про зустріч, повідомляйте про зміни та обирайте формальне або неформальне звертання.",
+    rules:[
+      {title:"Домовитися, скасувати чи перенести",detail:"Vereinbaren — домовитися про час, absagen — скасувати, verschieben — перенести на інший час.",formula:"einen Termin vereinbaren · einen Termin absagen · einen Termin verschieben"},
+      {title:"Затримка і повідомлення",detail:"Feststecken — застрягти; es nicht zum Termin schaffen — не встигнути на зустріч. Jemandem Bescheid sagen — повідомити комусь.",formula:"Ich stecke im Aufzug fest. · Bitte sagen Sie ihm Bescheid."},
+      {title:"Формальне й неформальне звертання",detail:"У формальному листі використовуйте Sehr geehrte Frau + прізвище та Sie / Ihnen; знайомій людині можна написати Hallo і du.",formula:"Sehr geehrte Frau Müller, · Hallo Anna,"},
+      {title:"Ще зовсім не",detail:"Noch gar nicht підсилює заперечення. У Perfekt працювати — haben + gearbeitet.",formula:"Ich habe heute noch gar nicht gearbeitet."}
+    ]
+  },
+  cards:[...appointmentActionCards,...appointmentMessageCards],stages:appointmentStages
 };
 if(false){
 let activeDeckId="w-questions",activeStageIndex=0,deck=[...wQuestionStages[0].cards],index=0,flipped=false,completed=0,roundCorrect=0,roundCorrectCards={},roundHadIncorrect=false,roundFinished=false,practiceInputStarted=false,verificationMode=false,verified=false,answerRevealed=false,celebrating=false,studyMode="learn",direction="uk-de";
