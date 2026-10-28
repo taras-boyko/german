@@ -52,13 +52,13 @@ test("every lesson, chapter, phase, outcome, and exercise label is Ukrainian",()
       }
     }
   }
-  assert.equal(stages,201);
+  assert.equal(stages,199);
 });
 
 test("grammar practice explains the deciding rule instead of a generic fallback",()=>{
   const app=runtime();
   const vocabulary=new Set(["w-questions","frequency","time-worksheet-vocabulary","everyday-vocabulary",
-    "travel-transport","giving-directions","vocab-license-travel","vocab-post-contracts","vocab-talk-feelings","vocab-life-daily","vocab-hamburg-city","appointments","past-action-vocabulary"]);
+    "travel-transport","giving-directions","vocab-license-travel","vocab-post-contracts","vocab-talk-feelings","vocab-life-daily","vocab-health","appointments","past-action-vocabulary"]);
   const vocabularyCategories=/^(FREIZEIT · (ORT|AKTION|WORTSCHATZ|BESCHREIBUNG|MENGE|ZEIT)|FOTOBESCHREIBUNG)/;
   const targets=new Set();
   for(const [lessonId,definition] of Object.entries(app.definitions)){
@@ -90,7 +90,7 @@ test("Ukrainian counts handle zero, singular, plural, teens, and compound number
 
 test("localization preserves the pre-localization identities, German content, answers and progression",()=>{
   const app=runtime();
-  const snapshot=Object.entries(app.definitions).filter(([lessonId])=>!["sollen","possessive-cases","temporal-prepositions","werden","mit-ohne","indefinite-articles","reflexive-pronouns","vocab-license-travel","vocab-post-contracts","vocab-talk-feelings","vocab-life-daily","vocab-hamburg-city","appointments","past-action-vocabulary"].includes(lessonId)).map(([lessonId,definition])=>({
+  const snapshot=Object.entries(app.definitions).filter(([lessonId])=>!["sollen","possessive-cases","temporal-prepositions","werden","mit-ohne","indefinite-articles","reflexive-pronouns","vocab-license-travel","vocab-post-contracts","vocab-talk-feelings","vocab-life-daily","vocab-health","appointments","past-action-vocabulary"].includes(lessonId)).map(([lessonId,definition])=>({
     lessonId,stages:definition.stages.filter(stage=>!stage.id.startsWith("wollen-")&&!stage.id.startsWith("word-order-dass-")).map(stage=>({
       id:stage.id,mode:stage.mode,progressId:stage.progressId,
       cards:app.variantsForStage(stage).filter(card=>!/^pronoun-(?:accusative|dative)-[^:]+-context-[a-z0-9-]+$/.test(card.id)).map(card=>({

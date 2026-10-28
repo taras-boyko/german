@@ -4454,22 +4454,23 @@ function vocabPair(targetId,{word,translation,promptText=translation,accepted,re
   const reverse={id:`${targetId}-reverse`,targetId,type:"recall-reverse",...shared,translation:reverseAccepted.join(" / "),promptText:word,response:response(reverseAccepted,"word")};
   return [forward,reverse];
 }
-const vocabStages=(lessonId,chapter,cards,objectives={})=>[
-  lessonStep(`${lessonId}-learn`,`Вивчення: ${chapter}`,objectives.learn||"Вивчіть німецькі слова з артиклями, українськими значеннями та прикладами. Звертайте увагу на форми, які змінюються.",cards.filter(card=>card.type!=="recall-reverse"),"learn",chapter,"Вивчення"),
-  lessonStep(`${lessonId}-practice`,`Практика: ${chapter}`,objectives.practice||"Напишіть німецьке слово за українським значенням або українське значення за німецьким словом.",cards,"input",chapter,"Практика")
+const vocabStages=(lessonId,chapter,cards)=>[
+  lessonStep(`${lessonId}-learn`,`Вивчення: ${chapter}`,"Вивчіть німецькі слова з артиклями, українськими значеннями та прикладами. Звертайте увагу на форми, які змінюються.",cards.filter(card=>card.type!=="recall-reverse"),"learn",chapter,"Вивчення"),
+  lessonStep(`${lessonId}-practice`,`Практика: ${chapter}`,"Напишіть німецьке слово за українським значенням або українське значення за німецьким словом.",cards,"input",chapter,"Практика")
 ];
 // Each example has an authored stable ID; reverse recall is used only in practice.
-function contextualVocabulary({targetId,word,translation,prompt,reverseId,reverseAccepted,examples,explanation,category}){
+function contextualVocabulary({targetId,word,translation,prompt,reverseId,reverseAccepted,examples,explanation,category,noun}){
   const response=(accepted,scope)=>({mode:"text",scope,accepted,caseSensitive:false,punctuationSensitive:false});
   const scope=word.includes(" ")?"phrase":"word";
+  const shared=noun?{noun}:{};
   const forward=examples.map(([id,example,exampleTranslation])=>({
     id,targetId,type:"recall",word,translation,promptText:prompt,support:exampleTranslation,
-    example,exampleTranslation,explanation,category,practiceVariants:false,response:response([word],scope)
+    example,exampleTranslation,explanation,category,practiceVariants:false,response:response([word],scope),...shared
   }));
   return [...forward,{
     id:reverseId,targetId,type:"recall-reverse",word,translation:reverseAccepted.join(" / "),
     promptText:word,example:examples[0][1],exampleTranslation:examples[0][2],category,
-    practiceVariants:false,response:response(reverseAccepted,"phrase")
+    practiceVariants:false,response:response(reverseAccepted,"phrase"),...shared
   }];
 }
 // The example IDs are stable across both directions of the same vocabulary target.
@@ -4727,46 +4728,6 @@ const vocabLifeDailyCards=[
   ...vocabPair("vocab-darf",{word:"darf",translation:"можна",cloze:{promptText:"___ ich hier sitzen?",support:"Можна тут сісти?"},accepted:["darf"],reverseAccepted:["можу","можна","може"],example:"Darf ich hier sitzen?",exampleTranslation:"Можна тут сісти?",explanation:"dürfen — мати дозвіл. З ich і er/sie/es: darf; з du: darfst.",category:"ALLTAG · LEBEN"}),
   ...vocabPair("vocab-lied",{word:"das Lied",translation:"пісня",accepted:["das Lied"],reverseAccepted:["пісня"],example:"Ich höre das Lied gern.",exampleTranslation:"Я охоче слухаю цю пісню.",explanation:"Lied — середній рід: das.",category:"ALLTAG · LEBEN",noun:nounMeta("neuter","Lied")})
 ];
-const hamburgVocabularyObjectives={
-  learn:"Вивчіть слова й вирази за українськими значеннями та прикладами. Запам’ятовуйте артиклі й форми іменників.",
-  practice:"Чергуйте два напрями пригадування: українська підказка → німецьке слово та німецьке слово → українське значення. У кожному підході ціль з’являється в одному напрямі."
-};
-const vocabHamburgWaterCards=[
-  ...vocabPair("vocab-hamburg-tor",{word:"das Tor",translation:"брама; ворота",accepted:["das Tor"],reverseAccepted:["брама","ворота"],example:"Hamburg ist das Tor zur Welt.",exampleTranslation:"Гамбург — брама у світ.",explanation:"Das Tor означає «брама» або «ворота»; das Tor zur Welt — «брама у світ».",category:"WORTSCHATZ",noun:nounMeta("neuter","Tor")}),
-  ...vocabPair("vocab-hamburg-spannend",{word:"spannend",translation:"цікавий; захопливий",accepted:["spannend"],reverseAccepted:["цікавий","захопливий"],example:"Der Hafen ist besonders spannend.",exampleTranslation:"Порт особливо цікавий.",explanation:"spannend описує щось цікаве або захопливе.",category:"WORTSCHATZ"}),
-  ...vocabPair("vocab-hamburg-hafen",{word:"der Hafen",translation:"порт; гавань",accepted:["der Hafen"],reverseAccepted:["порт","гавань"],example:"Der Hafen liegt an der Elbe.",exampleTranslation:"Порт розташований на Ельбі.",explanation:"Hafen — чоловічий рід: der.",category:"WORTSCHATZ",noun:nounMeta("masculine","Hafen")}),
-  ...vocabPair("vocab-hamburg-speicherstadt",{word:"die Speicherstadt",translation:"Шпайхерштадт; складський район Гамбурга",accepted:["die Speicherstadt"],reverseAccepted:["Шпайхерштадт","складський район Гамбурга"],example:"Die Speicherstadt liegt nahe der Elbe.",exampleTranslation:"Шпайхерштадт розташована неподалік від Ельби.",explanation:"Speicherstadt — назва історичного складського району Гамбурга.",category:"WORTSCHATZ",noun:nounMeta("feminine","Speicherstadt")}),
-  ...vocabPair("vocab-hamburg-lagern",{word:"lagern",translation:"зберігати; зберігатися",promptText:"зберігати на складі (інфінітив)",accepted:["lagern"],reverseAccepted:["зберігати","зберігатися","складувати"],example:"Dort lagern Waren von den Schiffen.",exampleTranslation:"Там зберігають товари з кораблів.",explanation:"lagern — зберігати товари або перебувати на зберіганні.",category:"WORTSCHATZ"}),
-  ...vocabPair("vocab-hamburg-ausstellung",{word:"die Ausstellung / die Ausstellungen",translation:"виставка; виставки",accepted:["die Ausstellung","die Ausstellungen"],reverseAccepted:["виставка","виставки"],example:"In Hamburg gibt es viele Ausstellungen.",exampleTranslation:"У Гамбурзі є багато виставок.",explanation:"Ausstellung — виставка; множина: Ausstellungen.",category:"WORTSCHATZ",noun:nounMeta("feminine","Ausstellung",{plural:"Ausstellungen",exampleWord:"",pluralExampleWord:"Ausstellungen"})}),
-  ...vocabPair("vocab-hamburg-lesung",{word:"die Lesung / die Lesungen",translation:"літературне читання; літературні читання",accepted:["die Lesung","die Lesungen"],reverseAccepted:["літературне читання","публічне читання","літературні читання"],example:"In Hamburg gibt es auch Lesungen.",exampleTranslation:"У Гамбурзі також відбуваються літературні читання.",explanation:"Lesung — публічне читання тексту, а не лекція.",category:"WORTSCHATZ",noun:nounMeta("feminine","Lesung",{plural:"Lesungen",exampleWord:"",pluralExampleWord:"Lesungen"})})
-];
-const vocabHamburgAboveCards=[
-  ...vocabPair("vocab-hamburg-nennen",{word:"nennen",translation:"називати",promptText:"називати (інфінітив)",accepted:["nennen"],reverseAccepted:["називати"],example:"Die Hamburger nennen die Kirche St. Michaelis „Michel“.",exampleTranslation:"Гамбуржці називають церкву святого Михаеля «Міхелем».",explanation:"nennen означає «називати когось або щось певним ім’ям».",category:"WORTSCHATZ"}),
-  ...vocabPair("vocab-hamburg-kirche",{word:"die Kirche",translation:"церква",accepted:["die Kirche"],reverseAccepted:["церква"],example:"Die Kirche ist sehr alt.",exampleTranslation:"Церква дуже стара.",explanation:"Kirche — жіночий рід: die.",category:"WORTSCHATZ",noun:nounMeta("feminine","Kirche")}),
-  ...vocabPair("vocab-hamburg-wahrzeichen",{word:"das Wahrzeichen",translation:"символ; визначна пам’ятка",accepted:["das Wahrzeichen"],reverseAccepted:["символ","визначна пам’ятка"],example:"Die Kirche St. Michaelis ist das Wahrzeichen von Hamburg.",exampleTranslation:"Церква святого Михаеля — символ Гамбурга.",explanation:"Wahrzeichen — відома споруда або місце, що символізує місто.",category:"WORTSCHATZ",noun:nounMeta("neuter","Wahrzeichen")}),
-  ...vocabPair("vocab-hamburg-blick",{word:"der Blick",translation:"вид; краєвид",accepted:["der Blick"],reverseAccepted:["вид","краєвид"],example:"Der Blick vom Kirchturm auf die Stadt ist toll.",exampleTranslation:"Краєвид на місто з церковної вежі чудовий.",explanation:"Blick auf etwas — вид на щось.",category:"WORTSCHATZ",noun:nounMeta("masculine","Blick")}),
-  ...vocabPair("vocab-hamburg-kirchturm",{word:"der Kirchturm",translation:"церковна вежа; дзвіниця",accepted:["der Kirchturm"],reverseAccepted:["церковна вежа","дзвіниця"],example:"Der Kirchturm ist 132 Meter hoch.",exampleTranslation:"Церковна вежа заввишки 132 метри.",explanation:"Kirchturm — вежа церкви.",category:"WORTSCHATZ",noun:nounMeta("masculine","Kirchturm")}),
-  ...vocabPair("vocab-hamburg-einfach",{word:"einfach",translation:"просто",accepted:["einfach"],reverseAccepted:["просто"],example:"Der Blick vom Kirchturm ist einfach toll.",exampleTranslation:"Краєвид із церковної вежі просто чудовий.",explanation:"У цьому реченні einfach підсилює оцінку: «просто чудовий».",category:"WORTSCHATZ"}),
-  ...vocabPair("vocab-hamburg-toll",{word:"toll",translation:"чудовий; класний",accepted:["toll"],reverseAccepted:["чудовий","класний"],example:"Der Blick vom Kirchturm ist toll.",exampleTranslation:"Краєвид із церковної вежі чудовий.",explanation:"toll — розмовне позитивне слово зі значенням «чудовий», «класний».",category:"WORTSCHATZ"})
-];
-const vocabHamburgEveningCards=[
-  ...vocabPair("vocab-hamburg-ueberall",{word:"überall",translation:"скрізь; всюди",accepted:["überall"],reverseAccepted:["скрізь","всюди"],example:"In Hamburg gibt es überall kleine Cafés.",exampleTranslation:"У Гамбурзі всюди є маленькі кав’ярні.",explanation:"überall означає «у кожному місці», «скрізь».",category:"WORTSCHATZ"}),
-  ...vocabPair("vocab-hamburg-besonders",{word:"besonders",translation:"особливо",accepted:["besonders"],reverseAccepted:["особливо"],example:"Besonders gern mag ich die Kneipen am Großneumarkt.",exampleTranslation:"Особливо мені подобаються паби біля Гросноймаркта.",explanation:"besonders підкреслює, що щось вирізняється серед іншого.",category:"WORTSCHATZ"}),
-  ...vocabPair("vocab-hamburg-kneipe",{word:"die Kneipe / die Kneipen",translation:"паб; бар",accepted:["die Kneipe","die Kneipen"],reverseAccepted:["паб","бар"],example:"In Hamburg gibt es viele Kneipen.",exampleTranslation:"У Гамбурзі є багато пабів.",explanation:"Kneipe — невеликий паб або бар; множина: Kneipen.",category:"WORTSCHATZ",noun:nounMeta("feminine","Kneipe",{plural:"Kneipen",exampleWord:"",pluralExampleWord:"Kneipen"})}),
-  ...vocabPair("vocab-hamburg-platz",{word:"der Platz",translation:"площа; майдан",accepted:["der Platz"],reverseAccepted:["площа","майдан"],example:"Der Großneumarkt ist ein Platz in Hamburg.",exampleTranslation:"Гросноймаркт — площа в Гамбурзі.",explanation:"Platz може означати міську площу або відкритий майдан.",category:"WORTSCHATZ",noun:nounMeta("masculine","Platz")}),
-  ...vocabPair("vocab-hamburg-theaterauffuehrung",{word:"die Theateraufführung / die Theateraufführungen",translation:"театральна вистава; театральні вистави",accepted:["die Theateraufführung","die Theateraufführungen"],reverseAccepted:["театральна вистава","вистава","театральні вистави","вистави"],example:"In Hamburg gibt es viele Theateraufführungen.",exampleTranslation:"У Гамбурзі відбуваються численні театральні вистави.",explanation:"Theateraufführung — театральна вистава; множина: Theateraufführungen.",category:"WORTSCHATZ",noun:nounMeta("feminine","Theateraufführung",{plural:"Theateraufführungen",exampleWord:"",pluralExampleWord:"Theateraufführungen"})}),
-  ...vocabPair("vocab-hamburg-unbedingt",{word:"unbedingt",translation:"обов’язково; неодмінно",accepted:["unbedingt"],reverseAccepted:["обов’язково","неодмінно"],example:"Ich möchte unbedingt nach Hamburg fahren.",exampleTranslation:"Я неодмінно хочу поїхати до Гамбурга.",explanation:"unbedingt підсилює бажання: «обов’язково», «неодмінно».",category:"WORTSCHATZ"}),
-  ...vocabPair("vocab-hamburg-tipp",{word:"der Tipp / die Tipps",translation:"порада; поради",accepted:["der Tipp","die Tipps"],reverseAccepted:["порада","поради"],example:"Danke für die Tipps, Jan!",exampleTranslation:"Дякую за поради, Яне!",explanation:"Tipp — порада; множина: Tipps.",category:"WORTSCHATZ",noun:nounMeta("masculine","Tipp",{plural:"Tipps",exampleWord:"",pluralExampleWord:"Tipps"})})
-];
-const vocabHamburgPlacesCards=[
-  ...vocabPair("vocab-hamburg-geschaeft-laden",{word:"das Geschäft / der Laden",translation:"магазин; крамниця",promptText:"місце, де можна робити покупки",accepted:["das Geschäft","der Laden"],reverseAccepted:["магазин","крамниця"],example:"Ich bin in einem Geschäft.",exampleTranslation:"Я в магазині.",explanation:"Geschäft має артикль das, Laden — der; обидва слова означають магазин.",category:"PLACE"}),
-  ...vocabPair("vocab-hamburg-bibliothek",{word:"die Bibliothek",translation:"бібліотека",promptText:"Я шукаю книжки, але не купую їх.",accepted:["die Bibliothek"],reverseAccepted:["бібліотека"],example:"In der Bibliothek suche ich Bücher, aber ich kaufe sie nicht.",exampleTranslation:"У бібліотеці я шукаю книжки, але не купую їх.",explanation:"У Bibliothek можна читати й позичати книжки, не купуючи їх.",category:"PLACE",noun:nounMeta("feminine","Bibliothek")}),
-  ...vocabPair("vocab-hamburg-schloss",{word:"das Schloss",translation:"замок; палац",promptText:"велика історична будівля, яку відвідують у відпустці, але в якій не живуть",accepted:["das Schloss"],reverseAccepted:["замок","палац"],example:"Im Urlaub sehen wir uns das Schloss an.",exampleTranslation:"У відпустці ми оглядаємо замок.",explanation:"У цьому контексті Schloss — замок або палац, який відвідують як пам’ятку.",category:"PLACE",noun:nounMeta("neuter","Schloss")}),
-  ...vocabPair("vocab-hamburg-park",{word:"der Park",translation:"парк",promptText:"місце в місті, де можна гуляти серед дерев, але це не ліс",accepted:["der Park"],reverseAccepted:["парк"],example:"Der Park liegt mitten in der Stadt.",exampleTranslation:"Парк розташований у центрі міста.",explanation:"У міському парку можна гуляти серед дерев.",category:"PLACE",noun:nounMeta("masculine","Park")}),
-  ...vocabPair("vocab-hamburg-markt",{word:"der Markt",translation:"ринок",promptText:"місце в центрі міста, де щочетверга продають свіжі фрукти й овочі",accepted:["der Markt"],reverseAccepted:["ринок"],example:"Am Donnerstag kaufe ich auf dem Markt Obst und Gemüse.",exampleTranslation:"У четвер я купую на ринку фрукти й овочі.",explanation:"Auf dem Markt люди купують свіжі продукти.",category:"PLACE",noun:nounMeta("masculine","Markt")}),
-  ...vocabPair("vocab-hamburg-turm",{word:"der Turm",translation:"вежа",promptText:"загальна назва високої споруди, з якої можна побачити місто згори",accepted:["der Turm"],reverseAccepted:["вежа"],example:"Der Turm ist 132 Meter hoch.",exampleTranslation:"Вежа заввишки 132 метри.",explanation:"Turm — загальна назва вежі; Kirchturm уточнює, що це вежа церкви.",category:"PLACE",noun:nounMeta("masculine","Turm")}),
-  ...vocabPair("vocab-hamburg-fluss",{word:"der Fluss",translation:"річка",promptText:"природна водойма з течією, у якій можна плавати; це не море",accepted:["der Fluss"],reverseAccepted:["річка"],example:"Bei schönem Wetter schwimme ich im Fluss.",exampleTranslation:"У гарну погоду я плаваю в річці.",explanation:"Fluss — річка з течією; не плутайте з морем.",category:"PLACE",noun:nounMeta("masculine","Fluss")})
-];
 const vocabLicenseTravelStages=vocabStages("vocab-license-travel","Водійське посвідчення і подорожі",vocabLicenseTravelCards);
 const vocabPostContractsStages=vocabStages("vocab-post-contracts","Пошта і договори",vocabPostContractsCards);
 const vocabTalkFeelingsStages=[
@@ -4774,13 +4735,120 @@ const vocabTalkFeelingsStages=[
   ...vocabStages("vocab-ehren","Вшанування",ehrenCards)
 ];
 const vocabLifeDailyStages=vocabStages("vocab-life-daily","Життя і щодня",vocabLifeDailyCards);
-const vocabHamburgStages=[
-  ...vocabStages("vocab-hamburg-water","Місто й порт",vocabHamburgWaterCards,hamburgVocabularyObjectives),
-  ...vocabStages("vocab-hamburg-above","Місто згори",vocabHamburgAboveCards,hamburgVocabularyObjectives),
-  ...vocabStages("vocab-hamburg-evening","Вечір у Гамбурзі",vocabHamburgEveningCards,hamburgVocabularyObjectives),
-  ...vocabStages("vocab-hamburg-places","Місця в місті",vocabHamburgPlacesCards,hamburgVocabularyObjectives)
+const vocabHealthSymptomsCards=[
+  ...contextualVocabulary({targetId:"vocab-husten",word:"der Husten",translation:"кашель",prompt:"кашель (з артиклем)",reverseId:"vocab-husten-reverse",reverseAccepted:["кашель"],category:"GESUNDHEIT · SYMPTOME",noun:nounMeta("masculine","Husten"),explanation:"Husten — кашель, чоловічий рід: der Husten. Після haben у знахідному відмінку: einen Husten.",examples:[
+    ["vocab-husten-woche","Ich habe seit einer Woche einen Husten.","У мене вже тиждень кашель."],
+    ["vocab-husten-nachts","Der Husten wird nachts oft schlimmer.","Кашель вночі часто посилюється."],
+    ["vocab-husten-tee","Gegen den Husten hilft warmer Tee.","Від кашлю допомагає теплий чай."]
+  ]}),
+  ...contextualVocabulary({targetId:"vocab-fieber",word:"das Fieber",translation:"температура",prompt:"температура при хворобі (з артиклем)",reverseId:"vocab-fieber-reverse",reverseAccepted:["температура","жар"],category:"GESUNDHEIT · SYMPTOME",noun:nounMeta("neuter","Fieber"),explanation:"Fieber — температура при хворобі, середній рід: das Fieber. Артикль das не змінюється.",examples:[
+    ["vocab-fieber-hoch","Ich habe hohes Fieber.","У мене висока температура."],
+    ["vocab-fieber-seit","Das Kind hat seit gestern Fieber.","У дитини з учора температура."],
+    ["vocab-fieber-kein","Hast du kein Fieber?","У тебе немає температури?"]
+  ]}),
+  ...contextualVocabulary({targetId:"vocab-schnupfen",word:"der Schnupfen",translation:"нежить",prompt:"нежить (з артиклем)",reverseId:"vocab-schnupfen-reverse",reverseAccepted:["нежить"],category:"GESUNDHEIT · SYMPTOME",noun:nounMeta("masculine","Schnupfen"),explanation:"Schnupfen — нежить, чоловічий рід: der Schnupfen. Після haben: einen Schnupfen.",examples:[
+    ["vocab-schnupfen-habe","Ich habe einen Schnupfen.","У мене нежить."],
+    ["vocab-schnupfen-kind","Das Kind hat einen Schnupfen.","У дитини нежить."],
+    ["vocab-schnupfen-erkaeltung","Der Schnupfen kommt oft mit einer Erkältung.","Нежить часто буває разом із застудою."]
+  ]}),
+  ...contextualVocabulary({targetId:"vocab-erkaeltung",word:"die Erkältung",translation:"застуда",prompt:"застуда (з артиклем)",reverseId:"vocab-erkaeltung-reverse",reverseAccepted:["застуда","простуда"],category:"GESUNDHEIT · SYMPTOME",noun:nounMeta("feminine","Erkältung"),explanation:"Erkältung — застуда, жіночий рід: die Erkältung. Після bekommen: eine Erkältung.",examples:[
+    ["vocab-erkaeltung-winter","Im Winter bekomme ich oft eine Erkältung.","Взимку я часто застуджуюся."],
+    ["vocab-erkaeltung-bett","Er bleibt mit einer Erkältung im Bett.","Він лежить у ліжку із застудою."],
+    ["vocab-erkaeltung-vorbei","Die Erkältung ist endlich vorbei.","Застуда нарешті минула."]
+  ]}),
+  ...contextualVocabulary({targetId:"vocab-hals",word:"der Hals",translation:"горло",prompt:"горло (з артиклем)",reverseId:"vocab-hals-reverse",reverseAccepted:["горло","шия"],category:"GESUNDHEIT · SYMPTOME",noun:nounMeta("masculine","Hals"),explanation:"Hals — горло (або шия), чоловічий рід: der Hals. Напрямок «у горло» — in den Hals.",examples:[
+    ["vocab-hals-weh","Mein Hals tut weh.","У мене болить горло."],
+    ["vocab-hals-trocken","Ich habe einen trockenen Hals.","У мене сухе горло."],
+    ["vocab-hals-arzt","Der Arzt schaut mir in den Hals.","Лікар дивиться мені в горло."]
+  ]}),
+  ...contextualVocabulary({targetId:"vocab-kopf",word:"der Kopf",translation:"голова",prompt:"голова (з артиклем)",reverseId:"vocab-kopf-reverse",reverseAccepted:["голова"],category:"GESUNDHEIT · SYMPTOME",noun:nounMeta("masculine","Kopf"),explanation:"Kopf — голова, чоловічий рід: der Kopf. Після auf у напрямку — auf den Kopf.",examples:[
+    ["vocab-kopf-weh","Mein Kopf tut weh.","У мене болить голова."],
+    ["vocab-kopf-schwer","Ich habe einen schweren Kopf.","У мене важка голова."],
+    ["vocab-kopf-hand","Sie legt die Hand auf den Kopf.","Вона кладе руку на голову."]
+  ]}),
+  ...contextualVocabulary({targetId:"vocab-schmerzen",word:"die Schmerzen",translation:"біль",prompt:"біль (лише множина)",reverseId:"vocab-schmerzen-reverse",reverseAccepted:["біль","болі"],category:"GESUNDHEIT · SYMPTOME",noun:nounMeta("plural","Schmerzen"),explanation:"Schmerzen — біль; завжди в множині з артиклем die або без нього після haben.",examples:[
+    ["vocab-schmerzen-stark","Ich habe starke Schmerzen.","У мене сильний біль."],
+    ["vocab-schmerzen-bauch","Er hat Schmerzen im Bauch.","У нього біль у животі."],
+    ["vocab-schmerzen-keine","Hast du keine Schmerzen mehr?","У тебе вже немає болю?"]
+  ]}),
+  ...contextualVocabulary({targetId:"vocab-schlimm",word:"schlimm",translation:"поганий, сильний",prompt:"поганий, сильний (прикметник)",reverseId:"vocab-schlimm-reverse",reverseAccepted:["поганий","сильний","серйозний"],category:"GESUNDHEIT · SYMPTOME",explanation:"schlimm — поганий, сильний. У порівнянні: schlimmer, у значенні «дуже»: sehr schlimm.",examples:[
+    ["vocab-schlimm-husten","Der Husten ist sehr schlimm.","Кашель дуже сильний."],
+    ["vocab-schlimm-nicht","Das ist nicht so schlimm.","Це не так страшно."],
+    ["vocab-schlimm-glueck","Zum Glück ist es nicht schlimm.","На щастя, це не страшно."]
+  ]})
 ];
-const vocabHamburgCards=[...vocabHamburgWaterCards,...vocabHamburgAboveCards,...vocabHamburgEveningCards,...vocabHamburgPlacesCards];
+const vocabHealthSymptomsStages=vocabStages("vocab-health-symptoms","Симптоми і хвороби",vocabHealthSymptomsCards);
+const vocabDoctorVisitCards=[
+  ...contextualVocabulary({targetId:"vocab-praxis",word:"die Praxis",translation:"кабінет лікаря",prompt:"кабінет лікаря (з артиклем)",reverseId:"vocab-praxis-reverse",reverseAccepted:["кабінет лікаря","приймальня"],category:"GESUNDHEIT · ARZT",noun:nounMeta("feminine","Praxis"),explanation:"Praxis — кабінет лікаря, жіночий рід: die Praxis. У прикладах — з in die Praxis.",examples:[
+    ["vocab-praxis-stock","Die Praxis ist im zweiten Stock.","Кабінет лікаря на другому поверсі."],
+    ["vocab-praxis-offen","Die Praxis ist heute bis 18 Uhr offen.","Кабінет лікаря сьогодні відчинений до 18:00."],
+    ["vocab-praxis-gehen","Ich gehe heute in die Praxis.","Я сьогодні йду до лікаря."]
+  ]}),
+  ...contextualVocabulary({targetId:"vocab-dran-sein",word:"dran sein",translation:"бути на черзі",prompt:"бути на черзі (dran sein)",reverseId:"vocab-dran-sein-reverse",reverseAccepted:["бути на черзі","бути наступним"],category:"GESUNDHEIT · ARZT",explanation:"dran sein — бути на черзі. Sie sind jetzt dran: тепер ваша черга.",examples:[
+    ["vocab-dran-sein-jetzt","Sie sind jetzt dran.","Тепер ваша черга."],
+    ["vocab-dran-sein-wer","Wer ist hier dran?","Хто тут на черзі?"],
+    ["vocab-dran-sein-nach","Ich bin nach Ihnen dran.","Я після вас."]
+  ]}),
+  ...contextualVocabulary({targetId:"vocab-nett",word:"nett",translation:"милий, приємний",prompt:"милий, приємний (прикметник)",reverseId:"vocab-nett-reverse",reverseAccepted:["милий","приємний","люб'язний"],category:"GESUNDHEIT · ARZT",explanation:"nett — милий, приємний. Ввічлива похвала: Das ist nett von Ihnen.",examples:[
+    ["vocab-nett-arzt","Der Arzt ist sehr nett.","Лікар дуже приємний."],
+    ["vocab-nett-frau","Die Frau an der Anmeldung war nett.","Жінка на реєстратурі була приємною."],
+    ["vocab-nett-danke","Danke, das ist nett von Ihnen.","Дякую, це мило з вашого боку."]
+  ]}),
+  ...contextualVocabulary({targetId:"vocab-ausruhen",word:"sich ausruhen",translation:"відпочивати",prompt:"відпочивати (sich ausruhen)",reverseId:"vocab-ausruhen-reverse",reverseAccepted:["відпочивати","відпочити"],category:"GESUNDHEIT · ARZT",explanation:"sich ausruhen — відпочивати. Займенник sich змінюється: ich mich, du dich.",examples:[
+    ["vocab-ausruhen-muss","Ich muss mich ausruhen.","Мені треба відпочити."],
+    ["vocab-ausruhen-woche","Sie sollen sich eine Woche ausruhen.","Вам варто відпочивати тиждень."],
+    ["vocab-ausruhen-zuhause","Du solltest dich zu Hause ausruhen.","Тобі варто відпочити вдома."]
+  ]}),
+  ...contextualVocabulary({targetId:"vocab-froh",word:"froh",translation:"радий",prompt:"радий (прикметник)",reverseId:"vocab-froh-reverse",reverseAccepted:["радий","рада"],category:"GESUNDHEIT · ARZT",explanation:"froh — радий. Після froh часто стоїть dass-речення або über + Akkusativ.",examples:[
+    ["vocab-froh-kommen","Ich bin froh, dass Sie kommen.","Я радий, що ви прийдете."],
+    ["vocab-froh-hilfe","Wir sind sehr froh über die Hilfe.","Ми дуже раді допомозі."],
+    ["vocab-froh-gesund","Sie ist froh, wieder gesund zu sein.","Вона рада, що знову здорова."]
+  ]}),
+  ...contextualVocabulary({targetId:"vocab-fuehren-zu",word:"führen zu",translation:"призводити до",prompt:"призводити до (führen zu)",reverseId:"vocab-fuehren-zu-reverse",reverseAccepted:["призводити до","вести до"],category:"GESUNDHEIT · ARZT",explanation:"führen zu — призводити до чогось. Після zu стоїть Dativ: zu Stress, zu Fehlern.",examples:[
+    ["vocab-fuehren-zu-krankheit","Zu wenig Schlaf kann zu Krankheiten führen.","Недосип може призвести до хвороб."],
+    ["vocab-fuehren-zu-stress","Das führt oft zu Stress.","Це часто призводить до стресу."],
+    ["vocab-fuehren-zu-fehler","Diese Entscheidung kann zu Fehlern führen.","Це рішення може призвести до помилок."]
+  ]}),
+  ...contextualVocabulary({targetId:"vocab-messen",word:"messen",translation:"міряти",prompt:"міряти (інфінітив)",reverseId:"vocab-messen-reverse",reverseAccepted:["міряти","вимірювати"],category:"GESUNDHEIT · ARZT",explanation:"messen — міряти. У формах er/sie/es голосна e змінюється на i: er misst.",examples:[
+    ["vocab-messen-fieber","Ich messe das Fieber morgens.","Я міряю температуру вранці."],
+    ["vocab-messen-blutdruck","Die Krankenschwester misst den Blutdruck.","Медсестра міряє тиск."],
+    ["vocab-messen-arzt","Der Arzt misst mir den Puls.","Лікар перевіряє мені пульс."]
+  ]})
+];
+const vocabDoctorVisitStages=vocabStages("vocab-doctor-visit","У лікаря",vocabDoctorVisitCards);
+const vocabPharmacyCards=[
+  ...contextualVocabulary({targetId:"vocab-apotheke",word:"die Apotheke",translation:"аптека",prompt:"аптека (з артиклем)",reverseId:"vocab-apotheke-reverse",reverseAccepted:["аптека"],category:"GESUNDHEIT · APOTHEKE",noun:nounMeta("feminine","Apotheke"),explanation:"Apotheke — аптека, жіночий рід: die Apotheke. Після zu: zur Apotheke.",examples:[
+    ["vocab-apotheke-gehen","Ich gehe zur Apotheke.","Я йду до аптеки."],
+    ["vocab-apotheke-ecke","Die Apotheke ist gleich um die Ecke.","Аптека прямо за рогом."],
+    ["vocab-apotheke-rezept","Mit dem Rezept bekomme ich die Tabletten in der Apotheke.","За рецептом я отримаю таблетки в аптеці."]
+  ]}),
+  ...contextualVocabulary({targetId:"vocab-rezept",word:"das Rezept",translation:"рецепт",prompt:"рецепт (з артиклем)",reverseId:"vocab-rezept-reverse",reverseAccepted:["рецепт"],category:"GESUNDHEIT · APOTHEKE",noun:nounMeta("neuter","Rezept"),explanation:"Rezept — рецепт, середній рід: das Rezept. Множина: die Rezepte.",examples:[
+    ["vocab-rezept-arzt","Der Arzt schreibt mir ein Rezept.","Лікар виписує мені рецепт."],
+    ["vocab-rezept-brauche","Ich brauche ein Rezept für die Tabletten.","Мені потрібен рецепт на таблетки."],
+    ["vocab-rezept-bringen","Bringen Sie das Rezept in die Apotheke.","Принесіть рецепт в аптеку."]
+  ]}),
+  ...contextualVocabulary({targetId:"vocab-tabletten",word:"die Tabletten",translation:"таблетки",prompt:"таблетки (лише множина)",reverseId:"vocab-tabletten-reverse",reverseAccepted:["таблетки","пігулки"],category:"GESUNDHEIT · APOTHEKE",noun:nounMeta("plural","Tabletten"),explanation:"Tabletten — таблетки, завжди в множині: die Tabletten.",examples:[
+    ["vocab-tabletten-helfen","Die Tabletten helfen mir gut.","Таблетки мені добре допомагають."],
+    ["vocab-tabletten-zwei","Ich nehme zwei Tabletten am Tag.","Я приймаю дві таблетки на день."],
+    ["vocab-tabletten-schmerz","Nehmen Sie diese Tabletten gegen die Schmerzen.","Приймайте ці таблетки від болю."]
+  ]}),
+  ...contextualVocabulary({targetId:"vocab-salbe",word:"die Salbe",translation:"мазь",prompt:"мазь (з артиклем)",reverseId:"vocab-salbe-reverse",reverseAccepted:["мазь"],category:"GESUNDHEIT · APOTHEKE",noun:nounMeta("feminine","Salbe"),explanation:"Salbe — мазь, жіночий рід: die Salbe. Її наносять: die Salbe auftragen.",examples:[
+    ["vocab-salbe-hand","Ich brauche eine Salbe für die Hand.","Мені потрібна мазь для руки."],
+    ["vocab-salbe-ohne","Die Salbe bekommt man ohne Rezept.","Цю мазь можна купити без рецепта."],
+    ["vocab-salbe-auftragen","Tragen Sie die Salbe zweimal täglich auf.","Наносьте мазь двічі на день."]
+  ]}),
+  ...contextualVocabulary({targetId:"vocab-auftragen",word:"auftragen",translation:"наносити",prompt:"наносити (інфінітив)",reverseId:"vocab-auftragen-reverse",reverseAccepted:["наносити","намазувати"],category:"GESUNDHEIT · APOTHEKE",explanation:"auftragen — наносити на шкіру. Відокремлюване дієслово: Tragen Sie die Salbe auf. Partizip II — aufgetragen.",examples:[
+    ["vocab-auftragen-abend","Du trägst die Salbe am Abend auf.","Ти наносиш мазь увечері."],
+    ["vocab-auftragen-duenn","Tragen Sie die Creme dünn auf.","Наносьте крем тонким шаром."],
+    ["vocab-auftragen-morgens","Ich trage die Creme morgens auf.","Я наношу крем вранці."]
+  ]}),
+  ...contextualVocabulary({targetId:"vocab-gegen",word:"gegen",translation:"від; проти",prompt:"від, проти (прийменник)",reverseId:"vocab-gegen-reverse",reverseAccepted:["від","проти"],category:"GESUNDHEIT · APOTHEKE",explanation:"gegen — від, проти. Після gegen стоїть Akkusativ: gegen den Husten.",examples:[
+    ["vocab-gegen-husten","Was hilft gegen den Husten?","Що допомагає від кашлю?"],
+    ["vocab-gegen-halsschmerzen","Was nehmen Sie gegen Halsschmerzen?","Що ви приймаєте від болю в горлі?"],
+    ["vocab-gegen-kopfschmerzen","Ich nehme Tabletten gegen Kopfschmerzen.","Я приймаю таблетки від головного болю."]
+  ]})
+];
+const vocabPharmacyStages=vocabStages("vocab-pharmacy","В аптеці",vocabPharmacyCards);
 const sollenParadigm=verbParadigm("sollen","soll| soll|st soll| soll|en soll|t soll|en","ich = er/sie/es");
 const sollenResponse=(answer,scope="word")=>({mode:"text",scope,accepted:[answer],caseSensitive:false,punctuationSensitive:false});
 // Each group is one skill target; its explicitly named variants provide different contexts.
@@ -5208,18 +5276,23 @@ const deckDefinitions={
     },
     cards:vocabLifeDailyCards,stages:vocabLifeDailyStages
   },
-  "vocab-hamburg-city":{
-    title:"Hamburg and city places",label:"Hamburg and city places",badge:"HH",
-    tip:"Вивчайте іменники з артиклями, а в практиці чергуйте українсько-німецький і німецько-український напрями.",
+  "vocab-health":{
+    title:"Health, doctor and pharmacy",label:"Health, doctor and pharmacy",badge:"Arzt",
+    tip:"Describe symptoms with haben: ich habe einen Husten, Fieber, Schnupfen.",
     guide:{
-      title:"Гамбург і міські місця",
-      intro:"Вивчайте слова й вирази за прикладами. Іменники запам’ятовуйте разом з артиклем і, де зазначено, множиною.",
+      title:"Здоров’я: лікар і аптека",
+      intro:"Ці слова допомагають описати самопочуття, поговорити з лікарем і купити ліки. Звертайте увагу на haben з артиклем, множину Schmerzen, dran sein, führen zu та gegen з Akkusativ.",
       rules:[
-        {title:"Артикль є частиною іменника",detail:"Звертайте увагу на артикль і форму множини, коли запам’ятовуєте назву місця або предмета."},
-        {title:"Підказки описують контекст",detail:"Знайдіть у підказці ознаку місця, дії чи враження й пригадайте відповідне німецьке слово."}
+        {title:"haben + симптом",detail:"Симптоми описують з дієсловом haben. Чоловічий рід у знахідному відмінку змінює der на einen.",formula:"Ich habe einen Husten. · Ich habe Fieber."},
+        {title:"die Schmerzen — лише множина",detail:"Schmerzen завжди в множині, тож і прикметник стоїть у множині: starke Schmerzen.",formula:"Ich habe starke Schmerzen."},
+        {title:"dran sein — бути на черзі",detail:"Dran sein означає «бути на черзі». Sie sind jetzt dran — тепер ваша черга.",formula:"Sie sind jetzt dran."},
+        {title:"führen zu + Dativ",detail:"Після zu стоїть Dativ. Без артикля: zu Stress, zu Fehlern.",formula:"Das führt zu Stress."},
+        {title:"gegen + Akkusativ",detail:"Gegen означає «від» або «проти» і вимагає Akkusativ: gegen den Husten, gegen die Schmerzen.",formula:"Was hilft gegen den Husten?"},
+        {title:"zur Apotheke",detail:"Після zu стоїть Dativ. Zu + der скорочується до zur.",formula:"Ich gehe zur Apotheke."}
       ]
     },
-    cards:vocabHamburgCards,stages:vocabHamburgStages
+    cards:[...vocabHealthSymptomsCards,...vocabDoctorVisitCards,...vocabPharmacyCards],
+    stages:[...vocabHealthSymptomsStages,...vocabDoctorVisitStages,...vocabPharmacyStages]
   }
 };
 deckDefinitions["word-order"].cards.push(...dassSentenceCards);
