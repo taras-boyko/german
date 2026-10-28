@@ -4962,6 +4962,229 @@ const sollenStages=[
   lessonStep("sollen-choice-learn","Порівняння модальних дієслів","Порівняйте чужі прохання, вміння, вподобання й власні наміри.",sollenChoiceCards,"learn","Вибір модального дієслова","Вивчення"),
   lessonStep("sollen-choice-practice","Вибір модального дієслова","За контекстом введіть потрібну форму одного з чотирьох дієслів.",sollenChoiceCards,"input","Вибір модального дієслова","Практика")
 ];
+// Imperativ: Sie, du and ihr. Each group is one teachable form; its variants change the context or addressee, not the target form.
+const imperativResponse=(accepted,scope="word")=>({mode:"text",scope,accepted,caseSensitive:false,punctuationSensitive:false});
+function imperativClozes(groups,category){
+  return groups.flatMap(({targetId,answer,alternatives=[],explanation,variants})=>variants.map(([id,promptText,translation,support,variantAnswer=answer])=>({
+    id,targetId,type:"cloze",word:variantAnswer,translation,promptText,support,
+    example:promptText.replace("___",variantAnswer),exampleTranslation:translation,
+    explanation,category,practiceVariants:false,
+    response:imperativResponse([variantAnswer,...(variantAnswer===answer?alternatives:[])],variantAnswer.includes(" ")?"phrase":"word")
+  })));
+}
+function imperativOrderCards(groups,category){
+  return groups.flatMap(({targetId,explanation,variants})=>variants.map(([id,word,translation,structure])=>({
+    id,targetId,type:"sentence-build",word,translation,promptText:structure[0].map(slot=>slot.text).reverse().join(" / "),
+    support:`${translation} Почни з «${structure[0][0].text}».`,example:word,exampleTranslation:translation,
+    explanation,structure,category,practiceVariants:false,response:imperativResponse([word],"sentence")
+  })));
+}
+const imperativSieFormCards=imperativClozes([
+  {targetId:"imperativ-sie-regular",answer:"Warten Sie",explanation:"Для Sie беремо інфінітив і ставимо Sie після нього: warten → Warten Sie.",variants:[
+    ["imperativ-sie-warten-moment","___ bitte einen Moment!","Зачекайте, будь ласка, хвилинку!","Ввічлива вказівка одній людині."],
+    ["imperativ-sie-warten-arzt","___ bitte hier, der Arzt kommt gleich.","Зачекайте тут, лікар прийде зараз.","Вказівка в поліклініці."],
+    ["imperativ-sie-warten-kasse","___ bitte an der Kasse, ich komme gleich.","Зачекайте, будь ласка, на касі, я зараз прийду.","Вказівка продавцю."]]},
+  {targetId:"imperativ-sie-no-vowel-change",answer:"Nehmen Sie",explanation:"Для Sie голосний не змінюється, навіть якщо в du він змінюється: nehmen → Nehmen Sie, а не nimm.",variants:[
+    ["imperativ-sie-nehmen-platz","___ bitte Platz.","Сідайте, будь ласка.","Запрошення сісти."],
+    ["imperativ-sie-nehmen-bus","___ den Bus zum Bahnhof.","Їдьте автобусом до вокзалу.","Порада, як дістатися."],
+    ["imperativ-sie-nehmen-tabletten","___ diese Tabletten zweimal am Tag.","Приймайте ці таблетки двічі на день.","Вказівка лікаря."]]},
+  {targetId:"imperativ-sie-sein",answer:"Seien Sie",explanation:"Sein має особливу форму для Sie: Seien Sie, а не Sein Sie.",variants:[
+    ["imperativ-sie-sein-puenktlich","___ bitte pünktlich!","Будьте, будь ласка, пунктуальні!","Ввічлива вимога."],
+    ["imperativ-sie-sein-vorsichtig","___ beim Fahren vorsichtig!","Будьте обережні за кермом!","Порада водієві."],
+    ["imperativ-sie-sein-ehrlich","___ bitte ehrlich zu mir.","Будьте, будь ласка, чесні зі мною.","Прохання до співрозмовника."]]},
+  {targetId:"imperativ-sie-haben",answer:"Haben Sie",explanation:"Для Sie форма haben збігається з інфінітивом: Haben Sie.",variants:[
+    ["imperativ-sie-haben-geduld","___ bitte Geduld.","Майте, будь ласка, терпіння.","Заспокійлива порада."],
+    ["imperativ-sie-haben-angst","___ keine Angst, es ist alles in Ordnung.","Не хвилюйтеся, все гаразд.","Підбадьорення."],
+    ["imperativ-sie-haben-tag","___ einen schönen Tag!","Гарного вам дня!","Побажання на прощання."]]},
+  {targetId:"imperativ-sie-werden",answer:"Werden Sie",explanation:"Для Sie форма werden збігається з інфінітивом: Werden Sie.",variants:[
+    ["imperativ-sie-werden-gesund","___ bald wieder gesund!","Одужуйте швидше!","Побажання хворому."],
+    ["imperativ-sie-werden-boese","___ bitte nicht böse!","Не сердьтеся, будь ласка!","Прохання заспокоїтися."],
+    ["imperativ-sie-werden-laut","___ bitte nicht so laut!","Не шуміть, будь ласка!","Прохання в коридорі."]]}
+],"IMPERATIV · SIE · FORMEN");
+const imperativSieSituationCards=imperativClozes([
+  {targetId:"imperativ-sie-situation-directions",answer:"Gehen Sie",explanation:"Для Sie беремо інфінітив gehen: Gehen Sie — ввічлива вказівка дороги.",variants:[
+    ["imperativ-sie-directions-geradeaus","Entschuldigung, wo ist der Bahnhof? ___ hier geradeaus.","Вибачте, де вокзал? Ідіть тут прямо.","Ввічливо покажіть дорогу незнайомцю."],
+    ["imperativ-sie-directions-links","Wo ist die Apotheke? ___ bis zur Kreuzung und dann links.","Де аптека? Ідіть до перехрестя і потім ліворуч.","Вказівка на вулиці."],
+    ["imperativ-sie-directions-minuten","Wo ist die Bank? ___ zwei Minuten bis zur Ampel.","Де банк? Ідіть дві хвилини до світлофора.","Вказівка на вулиці."]]},
+  {targetId:"imperativ-sie-situation-doctor",answer:"Machen Sie",explanation:"Для Sie беремо інфінітив machen: Machen Sie — вказівка лікаря на прийомі.",variants:[
+    ["imperativ-sie-doctor-mund","Guten Tag, Herr Becker. ___ bitte den Mund auf.","Добрий день, пане Беккер. Відкрийте, будь ласка, рот.","Вказівка лікаря на прийомі."],
+    ["imperativ-sie-doctor-oberkoerper","Die Untersuchung beginnt jetzt. ___ bitte den Oberkörper frei.","Починаємо огляд. Оголіть, будь ласка, верхню частину тіла.","Вказівка перед оглядом."],
+    ["imperativ-sie-doctor-tuer","Guten Morgen, Frau Klein. ___ bitte die Tür zu, es zieht.","Доброго ранку, пані Кляйн. Зачиніть, будь ласка, двері, тут протяг.","Вказівка в кабінеті."]]},
+  {targetId:"imperativ-sie-situation-shop",answer:"Probieren Sie",explanation:"Для Sie беремо інфінітив probieren: Probieren Sie — ввічлива порада продавця.",variants:[
+    ["imperativ-sie-shop-anprobe","Die Umkleide ist dort hinten. ___ die Hose bitte an.","Примірочна ззаду. Примірте, будь ласка, штани.","Вказівка продавця в магазині."],
+    ["imperativ-sie-shop-kleid","Das Kleid ist schön. ___ es doch an.","Сукня гарна. Примірте її ж.","Порада продавця."],
+    ["imperativ-sie-shop-schuhe","Ihre Größe ist 42. ___ bitte die Schuhe an.","Ваш розмір 42. Примірте, будь ласка, взуття.","Вказівка продавця."]]},
+  {targetId:"imperativ-sie-situation-hotel",answer:"Zeigen Sie",explanation:"Для Sie беремо інфінітив zeigen: Zeigen Sie — прохання до персоналу готелю.",variants:[
+    ["imperativ-sie-hotel-pass","Guten Abend. ___ mir bitte Ihren Pass.","Добрий вечір. Покажіть мені, будь ласка, ваш паспорт.","Адміністратор готелю звертається до гостя."],
+    ["imperativ-sie-hotel-plan","Ich finde das Restaurant nicht. ___ mir bitte die Stelle auf dem Plan.","Я не можу знайти ресторан. Покажіть мені, будь ласка, це місце на плані.","Гість просить допомоги персоналу."],
+    ["imperativ-sie-hotel-weg","Ich weiß nicht, wo der Fahrstuhl ist. ___ mir bitte den Weg.","Я не знаю, де ліфт. Покажіть мені, будь ласка, дорогу.","Гість просить допомоги персоналу."]]},
+  {targetId:"imperativ-sie-situation-office",answer:"Füllen Sie",explanation:"Для Sie беремо інфінітив füllen: Füllen Sie — вказівка заповнити документ; aus стоїть у кінці.",variants:[
+    ["imperativ-sie-office-formular","Das Formular liegt dort. ___ es bitte aus.","Формуляр лежить там. Заповніть його, будь ласка.","Вказівка в офісі."],
+    ["imperativ-sie-office-felder","Die Anmeldung ist online. ___ bitte alle Felder aus.","Реєстрація онлайн. Заповніть, будь ласка, усі поля.","Вказівка на сайті або в офісі."],
+    ["imperativ-sie-office-daten","Ich brauche Ihre Daten. ___ bitte das Anmeldeformular aus.","Мені потрібні ваші дані. Заповніть, будь ласка, реєстраційний формуляр.","Вказівка адміністратора."]]}
+],"IMPERATIV · SIE · GEBRAUCH");
+const imperativSieOrderCards=imperativOrderCards([
+  {targetId:"imperativ-sie-order-verb-first",explanation:"Дієслово стоїть на першому місці, Sie одразу за ним, а bitte йде після дієслова.",variants:[
+    ["imperativ-sie-order-warten","Warten Sie bitte einen Moment.","Зачекайте, будь ласка, хвилинку.",[verbFirstClause("Warten Sie","bitte","einen Moment")]],
+    ["imperativ-sie-order-sprechen","Sprechen Sie bitte langsamer.","Говоріть, будь ласка, повільніше.",[verbFirstClause("Sprechen Sie","bitte","langsamer")]],
+    ["imperativ-sie-order-zeigen","Zeigen Sie bitte Ihren Pass.","Покажіть, будь ласка, ваш паспорт.",[verbFirstClause("Zeigen Sie","bitte","Ihren Pass")]]]},
+  {targetId:"imperativ-sie-order-object-place",explanation:"Після дієслова стоїть доповнення (Unterlagen, Straße, Treppe), а місце — наприкінці речення.",variants:[
+    ["imperativ-sie-order-unterlagen","Legen Sie die Unterlagen auf den Tisch.","Покладіть документи на стіл.",[verbFirstClause("Legen Sie","die Unterlagen","auf den Tisch")]],
+    ["imperativ-sie-order-strasse","Nehmen Sie die zweite Straße links.","Поверніть ліворуч на другій вулиці.",[verbFirstClause("Nehmen Sie","die zweite Straße","links")]],
+    ["imperativ-sie-order-treppe","Gehen Sie die Treppe hinauf.","Ідіть сходами нагору.",[verbFirstClause("Gehen Sie","die Treppe","hinauf")]]]},
+  {targetId:"imperativ-sie-order-doch",explanation:"Doch стоїть після дієслова й робить вказівку м’якшою; доповнення йде за doch.",variants:[
+    ["imperativ-sie-order-doch-kommen","Kommen Sie doch herein.","Заходьте ж.",[verbFirstClause("Kommen Sie","doch","herein")]],
+    ["imperativ-sie-order-doch-tee","Trinken Sie doch noch einen Tee.","Вип’єте ж ще чаю.",[verbFirstClause("Trinken Sie","doch","noch einen Tee")]],
+    ["imperativ-sie-order-doch-kuchen","Probieren Sie doch den Kuchen.","Спробуйте ж торт.",[verbFirstClause("Probieren Sie","doch","den Kuchen")]]]},
+  {targetId:"imperativ-sie-order-bitte",explanation:"Bitte стоїть перед дієсловом, тому дієслово йде другим: Bitte warten Sie hier.",variants:[
+    ["imperativ-sie-order-bitte-warten","Bitte warten Sie einen Moment.","Зачекайте, будь ласка, хвилинку.",[mainClause("Bitte","warten Sie","","einen Moment")]],
+    ["imperativ-sie-order-bitte-kommen","Bitte kommen Sie morgen pünktlich.","Будь ласка, приходьте завтра вчасно.",[mainClause("Bitte","kommen Sie","morgen","pünktlich")]],
+    ["imperativ-sie-order-bitte-bleiben","Bitte bleiben Sie hier.","Залишайтеся тут, будь ласка.",[mainClause("Bitte","bleiben Sie","","hier")]]]},
+  {targetId:"imperativ-sie-order-nicht",explanation:"Nicht стоїть перед тим, що заперечується (nicht so laut), або наприкінці речення (hier nicht).",variants:[
+    ["imperativ-sie-order-nicht-parken","Parken Sie hier nicht.","Тут не паркуйтеся.",[verbFirstClause("Parken Sie","hier","nicht")]],
+    ["imperativ-sie-order-nicht-laut","Sprechen Sie nicht so laut.","Не говоріть так голосно.",[verbFirstClause("Sprechen Sie","nicht","so laut")]],
+    ["imperativ-sie-order-nicht-rauchen","Rauchen Sie hier nicht.","Тут не куріть.",[verbFirstClause("Rauchen Sie","hier","nicht")]]]},
+  {targetId:"imperativ-sie-order-separable",explanation:"Відокремлюваний префікс (aus, ein) стоїть наприкінці речення, а дієслово — на першому місці.",variants:[
+    ["imperativ-sie-order-licht","Schalten Sie bitte das Licht aus.","Вимкніть, будь ласка, світло.",[verbFirstClause("Schalten Sie","bitte das Licht","aus")]],
+    ["imperativ-sie-order-name","Tragen Sie bitte Ihren Namen ein.","Запишіть, будь ласка, своє ім’я.",[verbFirstClause("Tragen Sie","bitte Ihren Namen","ein")]],
+    ["imperativ-sie-order-tisch","Räumen Sie bitte Ihren Tisch auf.","Приберіть, будь ласка, свій стіл.",[verbFirstClause("Räumen Sie","bitte Ihren Tisch","auf")]]]}
+],"IMPERATIV · SATZBAU");
+const imperativSieCards=[...imperativSieFormCards,...imperativSieSituationCards,...imperativSieOrderCards];
+const imperativSieStages=[
+  lessonStep("imperativ-sie-forms-learn","Форми Sie","Прочитайте, як Sie-форма збігається з інфінітивом і як виглядають sein, haben і werden.",imperativSieFormCards,"learn","Форми Sie","Вивчення"),
+  lessonStep("imperativ-sie-forms-practice","Практика форм Sie","Введіть Sie-форму дієслова за контекстом.",imperativSieFormCards,"input","Форми Sie","Практика"),
+  lessonStep("imperativ-sie-situations-learn","Вказівки в ситуаціях","Прочитайте ввічливі вказівки в магазині, у лікаря, готелі та офісі.",imperativSieSituationCards,"learn","Вказівки в ситуаціях","Вивчення"),
+  lessonStep("imperativ-sie-situations-practice","Практика вказівок","Доповніть вказівку за ситуацією.",imperativSieSituationCards,"input","Вказівки в ситуаціях","Практика"),
+  lessonStep("imperativ-sie-order-learn","Порядок слів в Imperativ Sie","Порівняйте дієслово на першому місці з bitte, doch, nicht і відокремлюваним префіксом.",imperativSieOrderCards,"learn","Порядок слів","Вивчення"),
+  lessonStep("imperativ-sie-order-practice","Речення з Imperativ Sie","Складіть речення з фрагментів, починаючи з указаного слова.",imperativSieOrderCards,"input","Порядок слів","Практика")
+];
+const imperativDuFormCards=imperativClozes([
+  {targetId:"imperativ-du-stem",answer:"Komm",explanation:"Для du без закінчення: основа kommen → komm.",variants:[
+    ["imperativ-du-komm-her","___ bitte her!","Підійди, будь ласка, сюди!","Звернення до однієї людини на ти."],
+    ["imperativ-du-komm-kino","___ doch mit ins Kino!","Ходи ж зі мною в кіно!","Запрошення другові на ти."],
+    ["imperativ-du-komm-frueh","___ morgen früher!","Приходь завтра раніше!","Прохання другові на ти."]]},
+  {targetId:"imperativ-du-e-stem",answer:"Warte",explanation:"Основа warten закінчується на -t, тому для du додаємо -e: warte.",variants:[
+    ["imperativ-du-warte-moment","___ einen Moment!","Почекай хвилинку!","Звернення до однієї людини на ти."],
+    ["imperativ-du-warte-mich","___ auf mich!","Почекай на мене!","Прохання другові на ти."],
+    ["imperativ-du-warte-fertig","___ bitte, ich bin gleich fertig!","Почекай, будь ласка, я скоро буду готовий!","Прохання сестрі на ти."]]},
+  {targetId:"imperativ-du-entschuldige",answer:"Entschuldige",explanation:"Дієслова на -igen у du-формі отримують -e: entschuldige.",variants:[
+    ["imperativ-du-entschuldige-weg","___ bitte, wo ist der Bahnhof?","Вибач, будь ласка, де вокзал?","Звернення до ровесника на ти."],
+    ["imperativ-du-entschuldige-spaet","___, dass ich zu spät bin!","Вибач, що я запізнився!","Вибачення перед другом."],
+    ["imperativ-du-entschuldige-fehler","___ bitte, das war mein Fehler!","Вибач, будь ласка, це була моя помилка!","Вибачення перед братом."]]},
+  {targetId:"imperativ-du-nimm",answer:"Nimm",explanation:"У du-формі nehmen змінює e на i (du nimmst), тому імператив — nimm.",variants:[
+    ["imperativ-du-nimm-bus","___ den Bus!","Їдь автобусом!","Порада другові на ти."],
+    ["imperativ-du-nimm-schirm","___ bitte einen Regenschirm mit!","Візьми, будь ласка, парасольку із собою!","Порада перед дорогою на ти."],
+    ["imperativ-du-nimm-geschenk","___ dieses kleine Geschenk von mir!","Візьми цей маленький подарунок від мене!","Звернення до мами на ти."]]},
+  {targetId:"imperativ-du-lies",answer:"Lies",explanation:"У du-формі lesen змінює e на ie (du liest), тому імператив — lies.",variants:[
+    ["imperativ-du-lies-text","___ bitte den Text laut vor!","Прочитай, будь ласка, текст вголос!","Прохання на уроці на ти."],
+    ["imperativ-du-lies-buch","___ das Buch bis morgen!","Прочитай книжку до завтра!","Завдання від учителя на ти."],
+    ["imperativ-du-lies-nicht","___ nicht so laut!","Не читай так голосно!","Зауваження однокласникові на ти."]]},
+  {targetId:"imperativ-du-sieh",answer:"Sieh",explanation:"У du-формі sehen змінює e на ie (du siehst), тому імператив — sieh.",variants:[
+    ["imperativ-du-sieh-mal","___ mal, da ist ein Vogel!","Дивись, там птах!","Звернення на ти, щоб привернути увагу."],
+    ["imperativ-du-sieh-film","___ dir den Film heute Abend an!","Подивись сьогодні ввечері фільм!","Порада другові на ти."],
+    ["imperativ-du-sieh-bild","___ dir das Bild genau an!","Уважно подивись на картину!","Порада другові на ти."]]},
+  {targetId:"imperativ-du-fahr",answer:"Fahr",explanation:"Від fahren у du-формі a → ä (du fährst), але імператив без umlaut і без -st: fahr.",variants:[
+    ["imperativ-du-fahr-langsam","___ langsam nach Hause!","Їдь додому повільно!","Порада другові на ти."],
+    ["imperativ-du-fahr-vorsichtig","___ bitte vorsichtig, die Straße ist glatt.","Їдь, будь ласка, обережно, дорога слизька.","Порада на дорозі на ти."],
+    ["imperativ-du-fahr-garage","___ den Wagen in die Garage!","Заведи машину в гараж!","Прохання братові на ти."]]}
+],"IMPERATIV · DU · FORMEN");
+const imperativDuSpecialCards=imperativClozes([
+  {targetId:"imperativ-du-sein",answer:"Sei",explanation:"Для du від sein — sei: без -st і без -e.",variants:[
+    ["imperativ-du-sei-ruhig","___ bitte ruhig!","Будь, будь ласка, тихіше!","Прохання другові на ти."],
+    ["imperativ-du-sei-puenktlich","___ pünktlich, sonst verpasst du den Bus!","Будь вчасно, інакше пропустиш автобус!","Попередження другові на ти."],
+    ["imperativ-du-sei-ehrlich","___ ehrlich zu mir!","Будь чесним зі мною!","Прохання другові на ти."]]},
+  {targetId:"imperativ-du-haben",answer:"Hab",alternatives:["Habe"],explanation:"Для du від haben — hab (розмовна форма); повна форма habe теж правильна.",variants:[
+    ["imperativ-du-hab-angst","___ keine Angst!","Не бійся!","Підбадьорення другові на ти."],
+    ["imperativ-du-hab-tag","___ einen schönen Tag!","Гарного тобі дня!","Побажання на прощання на ти."],
+    ["imperativ-du-hab-geduld","___ etwas Geduld!","Май трохи терпіння!","Заспокійлива порада другові на ти."]]},
+  {targetId:"imperativ-du-werden",answer:"Werd",alternatives:["Werde"],explanation:"Для du від werden — werd (розмовна форма); повна форма werde теж правильна.",variants:[
+    ["imperativ-du-werd-boese","___ nicht böse!","Не сердься!","Прохання другові на ти."],
+    ["imperativ-du-werd-gesund","___ bald wieder gesund!","Одужуй швидше!","Побажання другові на ти."],
+    ["imperativ-du-werd-erwachsen","___ endlich erwachsen!","Нарешті подорослій!","Зауваження молодшому братові на ти."]]}
+],"IMPERATIV · DU · SONDERFÄLLE");
+const imperativIhrCards=imperativClozes([
+  {targetId:"imperativ-ihr-wartet",answer:"Wartet",explanation:"Для ihr беремо форму ihr-Präsens без ihr: ihr wartet → Wartet.",variants:[
+    ["imperativ-ihr-wartet-hier","___ bitte hier!","Зачекайте, будь ласка, тут!","Звернення до кількох людей: ihr."],
+    ["imperativ-ihr-wartet-moment","___ einen Moment!","Зачекайте хвилинку!","Звернення до кількох людей: ihr."],
+    ["imperativ-ihr-wartet-bus","___ auf den Bus!","Чекайте на автобус!","Звернення до кількох людей: ihr."]]},
+  {targetId:"imperativ-ihr-nehmt",answer:"Nehmt",explanation:"Для ihr у nehmen немає зміни голосного: ihr nehmt → Nehmt, на відміну від du nimm.",variants:[
+    ["imperativ-ihr-nehmt-kuchen","___ noch ein Stück Kuchen!","Візьміть ще шматочок торта!","Звернення до кількох людей: ihr."],
+    ["imperativ-ihr-nehmt-platz","___ bitte Platz!","Сідайте, будь ласка!","Звернення до кількох людей: ihr."],
+    ["imperativ-ihr-nehmt-buecher","___ eure Bücher mit!","Візьміть свої книжки із собою!","Звернення до кількох людей: ihr."]]},
+  {targetId:"imperativ-ihr-seid",answer:"Seid",explanation:"Для ihr від sein — seid, як у ihr seid.",variants:[
+    ["imperativ-ihr-seid-leise","___ bitte leise!","Будьте, будь ласка, тихо!","Звернення до кількох людей: ihr."],
+    ["imperativ-ihr-seid-puenktlich","___ pünktlich zur Probe!","Будьте вчасно на репетиції!","Звернення до кількох людей: ihr."],
+    ["imperativ-ihr-seid-vorsichtig","___ vorsichtig auf der Straße!","Будьте обережні на дорозі!","Звернення до кількох людей: ihr."]]},
+  {targetId:"imperativ-ihr-habt",answer:"Habt",explanation:"Для ihr від haben — habt, як у ihr habt.",variants:[
+    ["imperativ-ihr-habt-angst","___ keine Angst!","Не бійтеся!","Звернення до кількох людей: ihr."],
+    ["imperativ-ihr-habt-geduld","___ etwas Geduld mit mir!","Майте трохи терпіння зі мною!","Звернення до кількох людей: ihr."],
+    ["imperativ-ihr-habt-spass","___ viel Spaß!","Гарно розважайтеся!","Звернення до кількох людей: ihr."]]},
+  {targetId:"imperativ-ihr-werdet",answer:"Werdet",explanation:"Для ihr від werden — werdet, як у ihr werdet.",variants:[
+    ["imperativ-ihr-werdet-laut","___ bitte nicht so laut!","Не шуміть, будь ласка!","Звернення до кількох людей: ihr."],
+    ["imperativ-ihr-werdet-fertig","___ bald fertig!","Закінчуйте швидше!","Звернення до кількох людей: ihr."],
+    ["imperativ-ihr-werdet-erwachsen","___ endlich erwachsen!","Нарешті подорослішайте!","Звернення до кількох людей: ihr."]]}
+],"IMPERATIV · IHR · FORMEN");
+const imperativAnredeCards=imperativClozes([
+  {targetId:"imperativ-anrede-helfen",explanation:"Звернення визначає форму: du — Hilf, ihr — Helft, Sie — Helfen Sie.",variants:[
+    ["imperativ-anrede-helfen-du","Mama, ___ mir bitte beim Kochen!","Мамо, допоможи мені, будь ласка, з готуванням!","Звернення до однієї близької людини: du.","Hilf"],
+    ["imperativ-anrede-helfen-ihr","Kinder, ___ mir bitte beim Tragen!","Діти, допоможіть мені, будь ласка, з носінням!","Звернення до кількох людей: ihr.","Helft"],
+    ["imperativ-anrede-helfen-sie","Herr Becker, ___ mir bitte beim Tragen!","Пане Беккер, допоможіть мені, будь ласка, з носінням!","Звернення до однієї людини на Sie.","Helfen Sie"]]},
+  {targetId:"imperativ-anrede-kommen",explanation:"Звернення визначає форму: du — Komm, ihr — Kommt, Sie — Kommen Sie.",variants:[
+    ["imperativ-anrede-kommen-du","Tom, ___ bitte morgen früher!","Томе, приходь, будь ласка, завтра раніше!","Звернення до друга: du.","Komm"],
+    ["imperativ-anrede-kommen-ihr","Jungs, ___ bitte pünktlich zum Essen!","Хлопці, приходьте, будь ласка, вчасно на обід!","Звернення до кількох людей: ihr.","Kommt"],
+    ["imperativ-anrede-kommen-sie","Frau Schmidt, ___ bitte pünktlich zur Besprechung!","Пані Шмідт, приходьте, будь ласка, вчасно на нараду!","Звернення до однієї людини на Sie.","Kommen Sie"]]},
+  {targetId:"imperativ-anrede-warten",explanation:"Звернення визначає форму: du — Warte, ihr — Wartet, Sie — Warten Sie.",variants:[
+    ["imperativ-anrede-warten-du","Tom, ___ kurz auf mich!","Томе, почекай мене трохи!","Звернення до друга: du.","Warte"],
+    ["imperativ-anrede-warten-ihr","Jungs, ___ hier auf mich!","Хлопці, чекайте тут на мене!","Звернення до кількох людей: ihr.","Wartet"],
+    ["imperativ-anrede-warten-sie","Frau Schmidt, ___ bitte einen Moment!","Пані Шмідт, зачекайте, будь ласка, хвилинку!","Звернення до однієї людини на Sie.","Warten Sie"]]},
+  {targetId:"imperativ-anrede-sprechen",explanation:"Звернення визначає форму: du — Sprich (e → i), ihr — Sprecht, Sie — Sprechen Sie.",variants:[
+    ["imperativ-anrede-sprechen-du","Anna, ___ bitte etwas langsamer!","Анно, говори, будь ласка, трохи повільніше!","Звернення до подруги: du.","Sprich"],
+    ["imperativ-anrede-sprechen-ihr","Kinder, ___ bitte nicht so laut!","Діти, говоріть, будь ласка, не так голосно!","Звернення до кількох людей: ihr.","Sprecht"],
+    ["imperativ-anrede-sprechen-sie","Herr Becker, ___ bitte etwas langsamer!","Пане Беккер, говоріть, будь ласка, трохи повільніше!","Звернення до однієї людини на Sie.","Sprechen Sie"]]},
+  {targetId:"imperativ-anrede-nehmen",explanation:"Звернення визначає форму: du — Nimm (e → i), ihr — Nehmt (без зміни голосного), Sie — Nehmen Sie.",variants:[
+    ["imperativ-anrede-nehmen-du","Mama, ___ dieses kleine Geschenk von mir!","Мамо, візьми цей маленький подарунок від мене!","Звернення до мами: du.","Nimm"],
+    ["imperativ-anrede-nehmen-ihr","Kinder, ___ noch ein Stück Kuchen!","Діти, візьміть ще шматочок торта!","Звернення до кількох людей: ihr.","Nehmt"],
+    ["imperativ-anrede-nehmen-sie","Frau Schmidt, ___ bitte Platz!","Пані Шмідт, сідайте, будь ласка!","Звернення до однієї людини на Sie.","Nehmen Sie"]]}
+],"IMPERATIV · ANREDE");
+const imperativDuOrderCards=imperativOrderCards([
+  {targetId:"imperativ-du-order-verb-first",explanation:"У формі du дієслово стоїть першим, а bitte — після нього: Komm bitte her.",variants:[
+    ["imperativ-du-order-komm","Komm bitte her.","Підійди, будь ласка, сюди.",[verbFirstClause("Komm","bitte","her")]],
+    ["imperativ-du-order-warte","Warte bitte hier.","Почекай, будь ласка, тут.",[verbFirstClause("Warte","bitte","hier")]],
+    ["imperativ-du-order-sag","Sag bitte die Wahrheit.","Скажи, будь ласка, правду.",[verbFirstClause("Sag","bitte","die Wahrheit")]]]},
+  {targetId:"imperativ-du-order-doch",explanation:"Doch стоїть після дієслова й робить вказівку м’якшою: Komm doch herein.",variants:[
+    ["imperativ-du-order-doch-herein","Komm doch herein.","Заходь же.",[verbFirstClause("Komm","doch","herein")]],
+    ["imperativ-du-order-doch-essen","Iss doch noch etwas.","Їж же ще щось.",[verbFirstClause("Iss","doch","noch etwas")]],
+    ["imperativ-du-order-doch-hausaufgaben","Mach doch deine Hausaufgaben.","Зроби ж свою домашню роботу.",[verbFirstClause("Mach","doch","deine Hausaufgaben")]]]},
+  {targetId:"imperativ-du-order-nicht",explanation:"Nicht стоїть перед тим, що заперечується (nicht so schnell), або наприкінці речення (den Schlüssel nicht).",variants:[
+    ["imperativ-du-order-nicht-laufen","Lauf nicht so schnell.","Не біжи так швидко.",[verbFirstClause("Lauf","nicht","so schnell")]],
+    ["imperativ-du-order-nicht-essen","Iss nicht so schnell.","Не їж так швидко.",[verbFirstClause("Iss","nicht","so schnell")]],
+    ["imperativ-du-order-nicht-vergiss","Vergiss den Schlüssel nicht.","Не забудь ключ.",[verbFirstClause("Vergiss","den Schlüssel","nicht")]]]},
+  {targetId:"imperativ-du-order-separable",explanation:"Відокремлюваний префікс (mit, zu, an) стоїть наприкінці речення.",variants:[
+    ["imperativ-du-order-nimm","Nimm das Buch mit.","Візьми книжку із собою.",[verbFirstClause("Nimm","das Buch","mit")]],
+    ["imperativ-du-order-mach","Mach bitte die Tür zu.","Зачини, будь ласка, двері.",[verbFirstClause("Mach","bitte die Tür","zu")]],
+    ["imperativ-du-order-ruf","Ruf mich später an.","Зателефонуй мені пізніше.",[verbFirstClause("Ruf","mich später","an")]]]},
+  {targetId:"imperativ-du-order-pronoun",explanation:"Займенник у давальному відмінку (mir) стоїть перед іменником у знахідному (das Buch).",variants:[
+    ["imperativ-du-order-gib","Gib mir das Buch.","Дай мені книжку.",[verbFirstClause("Gib","mir","das Buch")]],
+    ["imperativ-du-order-zeig","Zeig mir dein Heft.","Покажи мені свій зошит.",[verbFirstClause("Zeig","mir","dein Heft")]],
+    ["imperativ-du-order-erklaer","Erkläre mir das Wort.","Поясни мені це слово.",[verbFirstClause("Erkläre","mir","das Wort")]]]},
+  {targetId:"imperativ-ihr-order-verb-first",explanation:"У формі ihr дієслово стоїть першим, а bitte — після нього: Wartet bitte hier.",variants:[
+    ["imperativ-ihr-order-wartet","Wartet bitte hier.","Зачекайте, будь ласка, тут.",[verbFirstClause("Wartet","bitte","hier")]],
+    ["imperativ-ihr-order-seid","Seid bitte leise.","Будьте, будь ласка, тихо.",[verbFirstClause("Seid","bitte","leise")]],
+    ["imperativ-ihr-order-nehmt","Nehmt bitte eure Bücher mit.","Візьміть, будь ласка, свої книжки.",[verbFirstClause("Nehmt","bitte eure Bücher","mit")]]]}
+],"IMPERATIV · SATZBAU");
+const imperativDuCards=[...imperativDuFormCards,...imperativDuSpecialCards,...imperativIhrCards,...imperativAnredeCards,...imperativDuOrderCards];
+const imperativDuStages=[
+  lessonStep("imperativ-du-forms-learn","Форми du","Прочитайте основи du-форм: без -e, з -e і зі зміною голосного.",imperativDuFormCards,"learn","Форми du","Вивчення"),
+  lessonStep("imperativ-du-forms-practice","Практика форм du","Введіть du-форму за основою дієслова.",imperativDuFormCards,"input","Форми du","Практика"),
+  lessonStep("imperativ-du-special-learn","Особливі форми du","Порівняйте sei, hab і werd з їхніми інфінітивами.",imperativDuSpecialCards,"learn","Особливі форми du","Вивчення"),
+  lessonStep("imperativ-du-special-practice","Практика особливих форм du","Введіть du-форму sein, haben або werden.",imperativDuSpecialCards,"input","Особливі форми du","Практика"),
+  lessonStep("imperativ-ihr-learn","Форми ihr","Порівняйте ihr-форму Präsens з імперативом без ihr.",imperativIhrCards,"learn","Форма ihr","Вивчення"),
+  lessonStep("imperativ-ihr-practice","Практика форм ihr","Введіть ihr-форму за контекстом.",imperativIhrCards,"input","Форма ihr","Практика"),
+  lessonStep("imperativ-anrede-learn","Звернення і форма","Порівняйте du, ihr і Sie для одного дієслова.",imperativAnredeCards,"learn","Звернення","Вивчення"),
+  lessonStep("imperativ-anrede-practice","Практика звернення","Оберіть форму за тим, до кого звертаються.",imperativAnredeCards,"input","Звернення","Практика"),
+  lessonStep("imperativ-du-order-learn","Порядок слів у du і ihr","Порівняйте дієслово на першому місці з doch, nicht, префіксом і займенником.",imperativDuOrderCards,"learn","Порядок слів","Вивчення"),
+  lessonStep("imperativ-du-order-practice","Речення з du і ihr","Складіть речення з фрагментів, починаючи з указаного слова.",imperativDuOrderCards,"input","Порядок слів","Практика")
+];
 const deckDefinitions={
   "w-questions":{title:"W-Fragen",label:"W-Fragen",badge:"W",tip:"W-questions always come first in a question, followed by the verb.",guide:{title:"W-Fragen: запитання",intro:"Оберіть питальне слово відповідно до потрібної інформації, а потім побудуйте речення навколо відмінюваного дієслова.",rules:[{detail:"Питальне слово стоїть на першому місці, а відмінюване дієслово — на другому: Wo wohnst du?",visual:{structure:[mainClause("Wo","wohnst","du")]}},{detail:"Підмет зазвичай стоїть після дієслова: Wann kommt ihr? Решта інформації йде далі.",visual:{structure:[mainClause("Wann","kommt","ihr")]}},"Використовуйте wo для місця, wohin для руху до місця, а woher — для місця, звідки хтось прибуває.","На W-Fragen не можна відповісти лише ja або nein: вони потребують конкретної інформації."]},cards,stages:wQuestionStages},
   pronouns:{title:"Personal pronouns",label:"Personal pronouns",badge:"ich",tip:"Use the pronoun that matches the person or people you are talking about.",guide:{title:"Особові займенники",intro:"Німецькі особові займенники показують, хто говорить, до кого звертаються або про кого йдеться.",rules:["ich, du, er/sie/es, wir, ihr, sie відповідають особі або групі в реченні.","Пишіть Sie з великої літери для ввічливого «Ви» в однині або множині; sie означає «вона» або «вони».","Займенник визначає форму дієслова: ich bin, du bist, wir sind.","Оберіть ihr для неформального звертання до кількох людей."]},cards:pronounCards,stages:pronounStages},
@@ -5094,6 +5317,40 @@ const deckDefinitions={
       ]
     },
     cards:sollenCards,stages:sollenStages
+  },
+  "imperativ-sie":{
+    title:"Der Imperativ: Sie-Form",label:"Imperativ · Sie",badge:"Sie",
+    tip:"Для ввічливого звернення на Sie беріть інфінітив і ставте Sie після нього: Warten Sie.",
+    guide:{
+      title:"Imperativ для Sie",
+      intro:"Imperativ — форма вказівки, прохання або наказу. Для ввічливого звернення на Sie форма майже завжди збігається з інфінітивом, після якого стоїть Sie.",
+      rules:[
+        {title:"Sie-форма = інфінітив + Sie",detail:"Беріть інфінітив дієслова й ставте Sie після нього. Для Sie голосний не змінюється.",table:{columns:[{label:"Imperativ Sie"}],rows:[{label:"warten",cells:["Warten Sie"]},{label:"nehmen",cells:["Nehmen Sie"]},{label:"sein",cells:["Seien Sie"]},{label:"haben",cells:["Haben Sie"]},{label:"werden",cells:["Werden Sie"]}],highlights:[{row:2,column:0}],note:"Sein — єдиний виняток: Seien Sie."}},
+        {title:"Голосний не змінюється",detail:"У du nehmen стає nimm, але для Sie голосний лишається: Nehmen Sie, а не nimm. Так само sehen → Sehen Sie.",formula:"nehmen → Nehmen Sie (не nimm)"},
+        {title:"Haben і werden у вказівці",detail:"Haben і werden мають ту саму форму, що й інфінітив. У ввічливому звертанні це звучить так: Werden Sie bald wieder gesund! — «Одужуйте швидше!»",formula:"haben → Haben Sie · werden → Werden Sie"},
+        {title:"Ввічливі вказівки в ситуаціях",detail:"Sie-форма природна в магазині, у лікаря, у готелі й на вулиці: Probieren Sie es an. Machen Sie bitte den Mund auf. Gehen Sie geradeaus."},
+        {title:"Дієслово на першому місці",detail:"У вказівці дієслово стоїть першим, а Sie — одразу за ним. Bitte може стояти перед дієсловом або після нього, у такому разі дієслово йде другим.",formula:"Warten Sie bitte einen Moment.",visual:{structure:[verbFirstClause("Warten Sie","bitte","einen Moment")]}},
+        {title:"Doch, nicht і відокремлюваний префікс",detail:"Doch після дієслова робить вказівку м’якшою. Nicht стоїть перед запереченим словом або наприкінці речення. Префікс відокремлюваного дієслова (aus, ein) стоїть наприкінці.",formula:"Kommen Sie doch herein. · Sprechen Sie nicht so laut. · Schalten Sie das Licht aus."}
+      ]
+    },
+    cards:imperativSieCards,stages:imperativSieStages
+  },
+  "imperativ-du":{
+    title:"Der Imperativ: du und ihr",label:"Imperativ · du · ihr",badge:"du",
+    tip:"Для du беріть основу дієслова без -st: komm, warte, nimm. Для ihr беріть ihr-форму без ihr: wartet, nehmt.",
+    guide:{
+      title:"Imperativ для du і ihr",
+      intro:"Раніше ви вчили Sie-форму. Тепер — звернення на ти (du) і до кількох людей (ihr). Для du -st зникає, а в деяких дієсловах голосний змінюється так само, як у Präsens.",
+      rules:[
+        {title:"du-форма: основа без -st",detail:"Беріть основу дієслова без закінчення -st. Голосний змінюється лише в тих дієсловах, де він змінюється у du-Präsens.",table:{columns:[{label:"du-Imperativ"}],rows:[{label:"kommen",cells:["Komm"]},{label:"warten",cells:["Warte"]},{label:"nehmen",cells:["Nimm"]},{label:"lesen",cells:["Lies"]},{label:"sehen",cells:["Sieh"]},{label:"fahren",cells:["Fahr"]}],highlights:[{row:2,column:0},{row:3,column:0},{row:4,column:0}],note:"Nimm, lies і sieh змінюють голосний. Fahren втрачає umlaut: Fahr, а не Fähr."}},
+        {title:"-e після -t, -d, -ig і -ern",detail:"Якщо основа закінчується на -t, -d, -ig або -ern, для du додаємо -e, щоб було зручно вимовляти.",formula:"arbeiten → Arbeite · entschuldigen → Entschuldige · erklären → Erkläre"},
+        {title:"Sonderfälle sein, haben, werden",detail:"Ці дієслова мають коротші форми для du.",table:{columns:[{label:"du-Imperativ"}],rows:[{label:"sein",cells:["Sei"]},{label:"haben",cells:["Hab / Habe"]},{label:"werden",cells:["Werd / Werde"]}],note:"Sei, hab і werd — коротші розмовні форми; habe і werde теж правильні."}},
+        {title:"ihr-форма: ihr-Präsens без ihr",detail:"Для ihr беріть форму ihr-Präsens і не ставте ihr перед нею. Голосний у nehmen не змінюється, на відміну від du.",formula:"ihr wartet → Wartet · ihr nehmt → Nehmt · ihr seid → Seid"},
+        {title:"Звернення визначає форму",detail:"Одне й те саме дієслово має три форми залежно від того, до кого звертаються. Займенники du і ihr зазвичай не пишемо, бо форма дієслова вже показує адресата.",table:{columns:[{label:"du"},{label:"ihr"},{label:"Sie"}],rows:[{label:"warten",cells:["Warte","Wartet","Warten Sie"]},{label:"nehmen",cells:["Nimm","Nehmt","Nehmen Sie"]},{label:"sprechen",cells:["Sprich","Sprecht","Sprechen Sie"]}],highlights:[{row:1,column:0},{row:2,column:0}],note:"Nehmen і sprechen змінюють голосний у du: Nimm, Sprich."}},
+        {title:"Порядок слів",detail:"Як і в Sie, дієслово стоїть першим. Займенник у давальному відмінку стоїть перед іменником у знахідному. Doch і nicht працюють так само, як у Sie.",formula:"Gib mir das Buch. · Komm doch herein. · Lauf nicht so schnell.",visual:{structure:[verbFirstClause("Gib","mir","das Buch")]}}
+      ]
+    },
+    cards:imperativDuCards,stages:imperativDuStages
   },
   frequency:{title:"Frequency adverbs",label:"Frequency adverbs",badge:"oft",tip:"Frequency adverbs such as oft and nie normally stay in the middle of the sentence after the conjugated verb.",guide:{title:"Прислівники частоти",intro:"Прислівники частоти показують, як часто щось відбувається. Вони не змінюють форму й зазвичай стоять у середині речення.",rules:[{title:"Вивчайте шкалу частоти",detail:"Від найбільшої до найменшої частоти: immer, fast immer, meistens, oft, manchmal, selten, fast nie, nie.",formula:"immer → oft → manchmal → selten → nie",visual:{frequency:{scale:frequencyScale}}},{title:"Ставте прислівник після відмінюваного дієслова",detail:"У простому реченні прислівник частоти зазвичай стоїть після дієслова.",formula:"Ich lerne oft Deutsch.",visual:{structure:[mainClause("Ich","lerne","oft Deutsch")]}},{title:"Зберігайте дієслово на другому місці",detail:"Якщо речення починається з часу, підмет і прислівник ідуть після відмінюваного дієслова.",formula:"Am Sonntag lese ich manchmal ein Buch.",visual:{structure:[mainClause("Am Sonntag","lese","ich manchmal ein Buch")]}},{title:"Використовуйте nie без nicht",detail:"Nie уже означає заперечення «ніколи», тому в таких реченнях nicht не потрібне.",formula:"Wir essen nie Fleisch."}]},cards:frequencyCards,stages:frequencyStages},
   "local-prepositions":{title:"Local prepositions: Dativ & Akkusativ",label:"Local prepositions",badge:"Wo?",tip:"Ask Wo? for a position and Wohin? for a destination. The question decides Dativ or Akkusativ.",guide:{title:"Локальні прийменники: Dativ чи Akkusativ?",intro:"In, an, auf, über, unter, vor, hinter, neben і zwischen можуть стояти з двома відмінками. Відмінок визначає не сам прийменник, а значення: місце чи напрямок.",rules:[{title:"1. Запитайте Wo?",detail:"Якщо щось уже перебуває в певному місці, вживайте Dativ.",formula:"Das Buch liegt in der Schublade. · Die Vase steht auf dem Tisch.",visual:{scenes:[{kind:"drawer",motion:false,cue:"Wo?",text:"Das Buch liegt in der Schublade."},{kind:"table",motion:false,cue:"Wo?",text:"Die Vase steht auf dem Tisch."}]}},{title:"2. Запитайте Wohin?",detail:"Якщо хтось або щось рухається до місця, вживайте Akkusativ.",formula:"Er legt das Buch in die Schublade. · Ich stelle die Vase auf den Tisch.",visual:{scenes:[{kind:"drawer",motion:true,cue:"Wohin?",text:"Er legt das Buch in die Schublade."},{kind:"table",motion:true,cue:"Wohin?",text:"Ich stelle die Vase auf den Tisch."}]}},{title:"3. Помічайте артикль",detail:"У чоловічому роді Dativ dem і Akkusativ den добре показують різницю. У жіночому та середньому роді Akkusativ збігається з Nominativ (die, das), тому змінюється лише Dativ: der, dem.",formula:"Wo? → Dativ · Wohin? → Akkusativ",table:{columns:genderColumns,rows:[nominativeArticleRow,{label:"Wohin?",title:"Akkusativ",cells:definiteArticles.accusative},{label:"Wo?",title:"Dativ",cells:definiteArticles.dative}],highlights:[{row:1,column:0},{row:2,column:0},{row:2,column:1},{row:2,column:2},{row:2,column:3}],note:"Виділено зміни порівняно з Nominativ: Wohin? змінює лише чоловічий рід, Wo? — усі артиклі."}},{title:"4. Вивчайте дієслово разом зі значенням",detail:"Liegen, stehen, sitzen і hängen часто описують місце; legen, stellen, sich setzen і hängen часто описують напрямок.",formula:"Der Hund liegt unter dem Stuhl. · Der Hund läuft unter den Stuhl.",visual:{scenes:[{kind:"chair",motion:false,cue:"Wo?",text:"Der Hund liegt unter dem Stuhl."},{kind:"chair",motion:true,cue:"Wohin?",text:"Der Hund läuft unter den Stuhl."}]}},

@@ -559,9 +559,11 @@ const structureCoverage={
   sollen:stage=>/^sollen-order-/.test(stage.id),
   perfekt:(stage,card)=>card.id.startsWith("perfekt-frame-"),
   "temporal-prepositions":(stage,card)=>card.type==="sentence-build",
-  "mit-ohne":(stage,card)=>card.type==="sentence-build"
+  "mit-ohne":(stage,card)=>card.type==="sentence-build",
+  "imperativ-sie":(stage,card)=>card.type==="sentence-build",
+  "imperativ-du":(stage,card)=>card.type==="sentence-build"
 };
-const structureCounts={"separable-verbs":28,"word-order":55,koennen:35,sollen:24,perfekt:12,"temporal-prepositions":30,"mit-ohne":12};
+const structureCounts={"separable-verbs":28,"word-order":55,koennen:35,sollen:24,perfekt:12,"temporal-prepositions":30,"mit-ohne":12,"imperativ-sie":36,"imperativ-du":36};
 
 test("sentence structures are explicit, ordered and rebuild the card's sentence",()=>{
   const {app}=runtime();
@@ -983,7 +985,7 @@ test("guide tables are well formed across lessons",()=>{
       for(const {row,column} of table.highlights||[])assert.ok(table.rows[row]&&table.columns[column],`${lessonId}: highlight ${row}/${column}`);
     }
   }
-  assert.deepEqual(withTables.sort(),["conjugation","dative-verbs","es-gibt-leisure","haben","indefinite-articles","koennen","local-prepositions","mit-ohne","personal-pronoun-cases","possessive-cases","possessives","reflexive-pronouns","sein","sollen","strong-verbs","temporal-prepositions","travel-transport","werden"]);
+  assert.deepEqual(withTables.sort(),["conjugation","dative-verbs","es-gibt-leisure","haben","imperativ-du","imperativ-sie","indefinite-articles","koennen","local-prepositions","mit-ohne","personal-pronoun-cases","possessive-cases","possessives","reflexive-pronouns","sein","sollen","strong-verbs","temporal-prepositions","travel-transport","werden"]);
   const card=app.definitions["personal-pronoun-cases"].stages[0].cards[0];
   app.renderCard("personal-pronoun-cases",0,card);
   const table=descendants(elements.get("deck-guide-rules")).find(node=>node.tagName==="TABLE");
@@ -1017,7 +1019,9 @@ const ruleVisualCoverage={
   "time-worksheet-vocabulary":["1:pictures"],
   "es-gibt-leisure":["3:pictures"],
   werden:["4:structure"],
-  "mit-ohne":["10:structure"]
+  "mit-ohne":["10:structure"],
+  "imperativ-sie":["5:structure"],
+  "imperativ-du":["6:structure"]
 };
 
 function ruleText(rule){

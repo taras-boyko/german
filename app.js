@@ -22,6 +22,8 @@ const lessonCatalog={
   "present-practice":{title:"Теперішній час: практика",germanTitle:"Präsens üben",outcome:"Пригадувати форми теперішнього часу за контекстом і значенням.",className:"Морфологія"},
   koennen:{title:"Модальні дієслова",germanTitle:"Modalverben",outcome:"Уживати können, mögen, möchten і wollen у корисних реченнях.",className:"Граматика"},
   sollen:{title:"Модальне дієслово sollen",germanTitle:"Das Modalverb sollen",outcome:"Передавати прохання й приписи, запитувати поради та розрізняти sollen і інші модальні дієслова.",className:"Граматика",level:"A1"},
+  "imperativ-sie":{title:"Імператив: Sie",germanTitle:"Der Imperativ: Sie-Form",outcome:"Утворювати ввічливу вказівку на Sie: Warten Sie, Nehmen Sie, Seien Sie, і ставити дієслово на перше місце.",className:"Граматика",level:"A1"},
+  "imperativ-du":{title:"Імператив: du і ihr",germanTitle:"Der Imperativ: du und ihr",outcome:"Утворювати вказівки на du і ihr, включно з особливими формами sein, haben і werden, і вибирати форму за адресатом.",className:"Граматика",level:"A2"},
   haben:{title:"Мати, отримувати, потребувати",germanTitle:"Haben, bekommen, brauchen",outcome:"Розрізняти значення й форми haben, bekommen і brauchen.",className:"Граматика"},
   "word-order":{title:"Порядок слів",germanTitle:"Wortstellung",outcome:"Будувати розповідні й питальні речення з правильним порядком слів.",className:"Синтаксис"},
   "separable-verbs":{title:"Дієслова з відокремлюваними префіксами",germanTitle:"Trennbare Verben",outcome:"Правильно розміщувати відокремлювані префікси в різних типах речень.",className:"Синтаксис"},
@@ -115,7 +117,8 @@ const categoryLabels={
   "FÜHRERSCHEIN":"Водійське посвідчення","REISEN":"Подорожі","POST":"Пошта","VERTRÄGE":"Договори",
   "GESPRÄCHE":"Розмови","GEFÜHLE":"Почуття","LEBEN":"Життя",
   "TERMINE":"Домовленості","PLANUNG":"Планування","NACHRICHT":"Повідомлення",
-  "GESUNDHEIT":"Здоров'я","SYMPTOME":"Симптоми","ARZT":"Лікар","APOTHEKE":"Аптека"
+  "GESUNDHEIT":"Здоров'я","SYMPTOME":"Симптоми","ARZT":"Лікар","APOTHEKE":"Аптека",
+  "IMPERATIV":"Імператив","SIE":"Sie","DU":"du","IHR":"ihr","SONDERFÄLLE":"Особливі форми","ANREDE":"Звернення"
 };
 function categoryLabel(category){
   return category.split(" · ").map(part=>categoryLabels[part]||part).join(" · ");

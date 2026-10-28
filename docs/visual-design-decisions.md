@@ -219,7 +219,7 @@ appear exactly once in the example.
 
 **Encodes:** German word order — position 1, the verb in position 2, the middle
 field, and the end of the sentence (separable prefix, infinitive, participle).
-**Applies to:** word order, separable verbs, modal verbs, Perfekt sentence builds.
+**Applies to:** word order, separable verbs, modal verbs, Perfekt sentence builds, imperative sentence builds.
 **Visible:** learn (rule cards); after Check on sentence-build cards.
 
 ![Sentence structure options](visual-design-options/05-sentence-structure.png)
@@ -670,6 +670,8 @@ phase. Check them before treating the rollout as final.
 | haben | Every card (haben, bekommen, brauchen) | — | haben vs bekommen vs brauchen |
 | koennen | Form cards (können, mögen, möchten); `ö → a` marked | — | können vs mögen vs möchten |
 | sollen | Present-tense form cards; no stem-vowel change | — | Six present-tense forms; ich and er/sie/es match |
+| imperativ-sie | — | — | Imperativ Sie forms (rule 1) |
+| imperativ-du | — | — | du and ihr forms (rules 1, 3, 5) |
 | personal-pronoun-cases | Every card; Nom. / Akk. / Dat. pronoun strip | — | Akkusativ / Dativ by person (Phase 1) |
 | reflexive-pronouns | Every card; Akk. / Dat. pronoun strip | — | Akkusativ / Dativ by person (Phase 1) |
 | perfekt | — | Frame and haben-or-sein stages | — |
@@ -685,6 +687,8 @@ Position boxes (5) appear on learn cards and after Check on sentence builds.
 | word-order | Rule cards and dass sentence examples | Sentence builds, including dass clauses |
 | koennen | 4 word-order rule cards | 21 (word-order practice stage) |
 | sollen | Word-order examples | Word-order sentence builds |
+| imperativ-sie | All 18 order cards | The same 18 in practice |
+| imperativ-du | All 18 order cards | The same 18 in practice |
 | perfekt | 6 frame cards | The same 6 frames in practice |
 | temporal-prepositions | 15 sentence cards | The same 15 in practice |
 
@@ -743,18 +747,18 @@ reaches them.
 
 ### Phase 6 coverage
 
-The library is one screen, so Phase 6 had no pilot lesson. It groups all 31 lessons:
+The library is one screen, so Phase 6 had no pilot lesson. It groups all 41 lessons:
 
 | Class | Lessons |
 |---|---|
-| Лексика (8) | w-questions, pronouns, frequency, time-worksheet-vocabulary, everyday-vocabulary, travel-transport, giving-directions, dative-verbs |
+| Лексика (15) | w-questions, pronouns, frequency, time-worksheet-vocabulary, everyday-vocabulary, past-action-vocabulary, appointments, travel-transport, giving-directions, dative-verbs, vocab-license-travel, vocab-post-contracts, vocab-talk-feelings, vocab-life-daily, vocab-health |
 | Морфологія (14) | personal-pronoun-cases, reflexive-pronouns, indefinite-articles, possessives, possessive-cases, sein, werden, conjugation, strong-verbs, past-verbs, past-verbs-a2, past-verbs-b1, perfekt, present-practice |
-| Граматика (7) | koennen, haben, local-prepositions, time-expressions, temporal-prepositions, es-gibt-leisure, mit-ohne |
+| Граматика (10) | koennen, sollen, imperativ-sie, imperativ-du, haben, local-prepositions, time-expressions, temporal-prepositions, mit-ohne, es-gibt-leisure |
 | Синтаксис (2) | word-order, separable-verbs |
 
 ### Phase 7 coverage
 
-41 guide rules in 20 lessons carry an illustration (rule numbers as shown in the
+45 guide rules in 23 lessons carry an illustration (rule numbers as shown in the
 guide).
 
 | Lesson | Rule: illustration |
@@ -767,6 +771,8 @@ guide).
 | past-verbs, past-verbs-a2, past-verbs-b1 | The "Haben або sein" rule (panel, neither marked) |
 | koennen | 3 `Ich kann schwimmen` (boxes) |
 | sollen | 6 `Du sollst das Licht ausschalten` (boxes) |
+| imperativ-sie | 5 `Warten Sie bitte einen Moment` (boxes) |
+| imperativ-du | 6 `Gib mir das Buch` (boxes) |
 | werden | 4 `Ich werde Lehrer` (boxes) |
 | strong-verbs | 4 `Der Kurs fängt um neun Uhr an` (boxes) |
 | everyday-vocabulary | 2 `Der Kurs fängt um neun Uhr an` (boxes); 3 der Kräutertee, die Süßigkeiten, der Brei (pictures) |
@@ -830,6 +836,7 @@ An idea marked as a conflict also needs a change to the Constitution.
 | 2026-10-12 | Learner | Design rules recorded | The colour roles, active versus inactive items, decorative parts, reduced motion, giveaways and each component's details moved into the Constitution. The ideas that were never built are listed in [Ideas not built](#ideas-not-built) |
 | 2026-10-15 | Learner request | 12 | Phase 7: rule guides illustrated with the approved components (boxes, haben/sein, frequency bar, clocks, scenes, pictures); an illustration that would reveal the answer waits for Check. See [Phase 7 coverage](#phase-7-coverage). Awaiting review |
 | 2026-10-27 | Provisional | reflexive-pronouns: Phase 1 and 2 strip and guide table; class Морфологія; purple accent | New lesson for sich and similar forms (Akkusativ and Dativ). The class and accent were chosen without learner review. Awaiting review |
+| 2026-10-28 | Provisional | imperativ-sie: Phase 2 guide table, Phase 3 sentence builds, Phase 7 boxes; imperativ-du: Phase 2 guide tables, Phase 3 sentence builds, Phase 7 boxes; class Граматика | New lessons from Imperativ_Sie.docx: Sie form at A1, du and ihr at A2. The split and the class were chosen without learner review. Awaiting review |
 
 ## Review notes
 
