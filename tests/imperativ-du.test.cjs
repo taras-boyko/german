@@ -28,9 +28,14 @@ const duAnswers=new Map([
   ["imperativ-du-lies","Lies"],
   ["imperativ-du-sieh","Sieh"],
   ["imperativ-du-fahr","Fahr"],
+  ["imperativ-du-lauf","Lauf"],
+  ["imperativ-du-schlaf","Schlaf"],
+  ["imperativ-du-gib","Gib"],
+  ["imperativ-du-mach","Mach"],
+  ["imperativ-du-telefonier","Telefonier"],
   ["imperativ-du-sein","Sei"],
   ["imperativ-du-haben","Hab"],
-  ["imperativ-du-werden","Werd"],
+  ["imperativ-du-werden","Werde"],
 ]);
 
 const ihrAnswers=new Map([
@@ -39,6 +44,8 @@ const ihrAnswers=new Map([
   ["imperativ-ihr-seid","Seid"],
   ["imperativ-ihr-habt","Habt"],
   ["imperativ-ihr-werdet","Werdet"],
+  ["imperativ-ihr-macht","Macht"],
+  ["imperativ-ihr-raeumt","Räumt"],
 ]);
 
 const anredeForms=new Map([
@@ -49,14 +56,14 @@ const anredeForms=new Map([
   ["imperativ-anrede-nehmen",["Nimm","Nehmt","Nehmen Sie"]],
 ]);
 
-test("the du and ihr lesson has 78 unique cards in five learn and input passes",()=>{
+test("the du and ihr lesson has 99 unique cards in six learn and input passes",()=>{
   const app=runtime(),lesson=app.deckDefinitions[lessonId];
-  assert.equal(lesson.cards.length,78);
+  assert.equal(lesson.cards.length,99);
   assert.equal(new Set(lesson.cards.map(card=>card.id)).size,lesson.cards.length);
-  assert.equal(lesson.stages.length,10);
+  assert.equal(lesson.stages.length,12);
   assert.equal(app.lessonCatalog[lessonId].className,"Граматика");
   assert.equal(app.lessonCatalog[lessonId].level,"A2");
-  assert.equal(app.lessonCoverage(lessonId).total,26);
+  assert.equal(app.lessonCoverage(lessonId).total,33);
 });
 
 test("every chapter pairs a learn pass with an input pass over the same cards",()=>{
@@ -87,7 +94,7 @@ test("each pass has three variants per target and a closed or normal target coun
 test("du forms drop -st, take -e after -t, -d, -ig and -ern, and keep vowel changes",()=>{
   const lesson=runtime().deckDefinitions[lessonId];
   const cloze=lesson.cards.filter(card=>card.type==="cloze"&&duAnswers.has(card.targetId));
-  assert.equal(cloze.length,30);
+  assert.equal(cloze.length,45);
   for(const card of cloze){
     const answer=card.response.accepted[0];
     assert.equal(answer,duAnswers.get(card.targetId),card.id);
@@ -102,7 +109,7 @@ test("du forms drop -st, take -e after -t, -d, -ig and -ern, and keep vowel chan
 test("ihr forms are the ihr present without the pronoun",()=>{
   const lesson=runtime().deckDefinitions[lessonId];
   const cards=lesson.cards.filter(card=>ihrAnswers.has(card.targetId));
-  assert.equal(cards.length,15);
+  assert.equal(cards.length,21);
   for(const card of cards){
     assert.equal(card.response.accepted[0],ihrAnswers.get(card.targetId),card.id);
     assert.equal(card.response.accepted[0].split(" ").length,1,card.id);
@@ -176,7 +183,8 @@ test("sampling covers each target, rotates variants and restores saved passes",(
     const collection=stage.mode==="input"?"masteredTargets":"learnedTargets";
     for(let i=0;i<3;i++){
       const pass=app.samplePass(lessonId,stage);
-      assert.equal(pass.length,targets.size,stage.id);
+      // A stage can hold up to 9 targets, so one pass shows at least 5 and the rest rotate in later passes.
+      assert.ok(pass.length>=Math.min(5,targets.size)&&pass.length<=targets.size,stage.id);
       assert.equal(new Set(pass.map(card=>card.targetId)).size,pass.length);
       for(const card of pass){
         const variants=seen.get(card.targetId)||new Set();

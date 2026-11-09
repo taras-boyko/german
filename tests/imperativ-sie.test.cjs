@@ -26,6 +26,7 @@ const formAnswers=new Map([
   ["imperativ-sie-sein","Seien Sie"],
   ["imperativ-sie-haben","Haben Sie"],
   ["imperativ-sie-werden","Werden Sie"],
+  ["imperativ-sie-setzen","Setzen Sie"],
 ]);
 
 const situationAnswers=new Map([
@@ -34,16 +35,17 @@ const situationAnswers=new Map([
   ["imperativ-sie-situation-shop","Probieren Sie"],
   ["imperativ-sie-situation-hotel","Zeigen Sie"],
   ["imperativ-sie-situation-office","Füllen Sie"],
+  ["imperativ-sie-situation-class","Machen Sie"],
 ]);
 
-test("the Sie lesson has 48 unique cards in six learn and input passes",()=>{
+test("the Sie lesson has 57 unique cards in six learn and input passes",()=>{
   const app=runtime(),lesson=app.deckDefinitions[lessonId];
-  assert.equal(lesson.cards.length,48);
+  assert.equal(lesson.cards.length,57);
   assert.equal(new Set(lesson.cards.map(card=>card.id)).size,lesson.cards.length);
   assert.equal(lesson.stages.length,6);
   assert.equal(app.lessonCatalog[lessonId].className,"Граматика");
   assert.equal(app.lessonCatalog[lessonId].level,"A1");
-  assert.equal(app.lessonCoverage(lessonId).total,16);
+  assert.equal(app.lessonCoverage(lessonId).total,19);
 });
 
 test("every chapter pairs a learn pass with an input pass over the same cards",()=>{

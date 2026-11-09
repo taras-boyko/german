@@ -350,7 +350,8 @@ test("verb cards carry a person strip whose active tile is the answer form",()=>
         const label=`${stage.id}: ${card.word}`;
         covered[lessonId]=(covered[lessonId]||0)+1;
         assert.equal(paradigm.forms,true,label);
-        assert.deepEqual(Array.from(paradigm.rows,row=>[row.label,row.title]),[["Präs.","Präsens"]],label);
+        const tense=lessonId==="praeteritum-haben-sein"?["Prät.","Präteritum"]:["Präs.","Präsens"];
+        assert.deepEqual(Array.from(paradigm.rows,row=>[row.label,row.title]),[tense],label);
         const forms=paradigm.rows[0].cells;
         assert.deepEqual(forms[paradigm.active.column],answerParts,label);
         // A vowel is marked only for a vowel change, exactly where the stem differs from the wir stem.
@@ -375,7 +376,7 @@ test("verb cards carry a person strip whose active tile is the answer form",()=>
       }
     }
   }
-  assert.deepEqual(covered,{sein:22,conjugation:66,"strong-verbs":120,koennen:48,haben:54,werden:24,sollen:36});
+  assert.deepEqual(covered,{sein:22,conjugation:66,"strong-verbs":120,"praeteritum-haben-sein":114,koennen:48,haben:54,werden:24,sollen:36});
   for(const stage of app.definitions["strong-verbs"].stages)assert.equal(stage.cards.length,42,stage.id);
 });
 
@@ -561,9 +562,10 @@ const structureCoverage={
   "temporal-prepositions":(stage,card)=>card.type==="sentence-build",
   "mit-ohne":(stage,card)=>card.type==="sentence-build",
   "imperativ-sie":(stage,card)=>card.type==="sentence-build",
-  "imperativ-du":(stage,card)=>card.type==="sentence-build"
+  "imperativ-du":(stage,card)=>card.type==="sentence-build",
+  "praeteritum-haben-sein":(stage,card)=>card.type==="sentence-build"
 };
-const structureCounts={"separable-verbs":28,"word-order":55,koennen:35,sollen:24,perfekt:12,"temporal-prepositions":30,"mit-ohne":12,"imperativ-sie":36,"imperativ-du":36};
+const structureCounts={"separable-verbs":28,"word-order":55,koennen:35,sollen:24,perfekt:12,"temporal-prepositions":30,"mit-ohne":12,"imperativ-sie":42,"imperativ-du":36,"praeteritum-haben-sein":36};
 
 test("sentence structures are explicit, ordered and rebuild the card's sentence",()=>{
   const {app}=runtime();
@@ -985,7 +987,7 @@ test("guide tables are well formed across lessons",()=>{
       for(const {row,column} of table.highlights||[])assert.ok(table.rows[row]&&table.columns[column],`${lessonId}: highlight ${row}/${column}`);
     }
   }
-  assert.deepEqual(withTables.sort(),["conjugation","dative-verbs","es-gibt-leisure","haben","imperativ-du","imperativ-sie","indefinite-articles","koennen","local-prepositions","mit-ohne","personal-pronoun-cases","possessive-cases","possessives","reflexive-pronouns","sein","sollen","strong-verbs","temporal-prepositions","travel-transport","werden"]);
+  assert.deepEqual(withTables.sort(),["conjugation","dative-verbs","es-gibt-leisure","haben","imperativ-du","imperativ-sie","indefinite-articles","koennen","local-prepositions","mit-ohne","personal-pronoun-cases","possessive-cases","possessives","praeteritum-haben-sein","reflexive-pronouns","sein","sollen","strong-verbs","temporal-prepositions","travel-transport","werden"]);
   const card=app.definitions["personal-pronoun-cases"].stages[0].cards[0];
   app.renderCard("personal-pronoun-cases",0,card);
   const table=descendants(elements.get("deck-guide-rules")).find(node=>node.tagName==="TABLE");
@@ -1005,6 +1007,7 @@ const ruleVisualCoverage={
   frequency:["1:frequency","2:structure","3:structure"],
   perfekt:["1:structure","2:auxiliary","3:auxiliary"],
   "past-verbs":["2:auxiliary"],
+  "praeteritum-haben-sein":["7:structure"],
   "past-verbs-a2":["3:auxiliary"],
   "past-verbs-b1":["3:auxiliary"],
   koennen:["3:structure"],

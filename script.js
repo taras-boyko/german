@@ -1292,15 +1292,15 @@ function verbForm(notation){
   return start<0?{stem,ending}:{stem,ending,vowel:{start,end:marked.indexOf("]")-1}};
 }
 const verbPersons=["ich","du","er/sie/es","wir","ihr","sie/Sie"];
-// Six present-tense forms from ich to sie/Sie; change names what to notice, e.g. "a → ä".
+// Six forms from ich to sie/Sie; change names what to notice, e.g. "a → ä".
 function verbParadigm(verb,notation,change=""){
   return {verb,change,forms:notation.split(" ").map(verbForm)};
 }
-function withVerbParadigm(card,{verb,change,forms},person){
+function withVerbParadigm(card,{verb,change,forms},person,tense={label:"Präs.",title:"Präsens"}){
   return {
     ...card,
     answerParts:forms[person],
-    paradigm:{title:[verb,change].filter(Boolean).join(" · "),forms:true,columns:verbPersons.map(label=>({label})),rows:[{label:"Präs.",title:"Präsens",cells:forms}],active:{row:0,column:person}}
+    paradigm:{title:[verb,change].filter(Boolean).join(" · "),forms:true,columns:verbPersons.map(label=>({label})),rows:[{...tense,cells:forms}],active:{row:0,column:person}}
   };
 }
 // Cards run ich → sie/Sie, six per paradigm, unless persons gives each card's person index.
@@ -4999,7 +4999,11 @@ const imperativSieFormCards=imperativClozes([
   {targetId:"imperativ-sie-werden",answer:"Werden Sie",explanation:"Для Sie форма werden збігається з інфінітивом: Werden Sie.",variants:[
     ["imperativ-sie-werden-gesund","___ bald wieder gesund!","Одужуйте швидше!","Побажання хворому."],
     ["imperativ-sie-werden-boese","___ bitte nicht böse!","Не сердьтеся, будь ласка!","Прохання заспокоїтися."],
-    ["imperativ-sie-werden-laut","___ bitte nicht so laut!","Не шуміть, будь ласка!","Прохання в коридорі."]]}
+    ["imperativ-sie-werden-laut","___ bitte nicht so laut!","Не шуміть, будь ласка!","Прохання в коридорі."]]},
+  {targetId:"imperativ-sie-setzen",answer:"Setzen Sie",explanation:"Для Sie беремо інфінітив setzen, а sich стоїть після Sie: Setzen Sie sich — ввічливе запрошення сісти.",variants:[
+    ["imperativ-sie-setzen-sich","___ sich bitte!","Сідайте, будь ласка!","Ввічливе запрошення сісти."],
+    ["imperativ-sie-setzen-klein","Frau Klein, ___ sich bitte ans Fenster!","Пані Кляйн, сідайте, будь ласка, біля вікна!","Запрошення сісти одній людині на Sie."],
+    ["imperativ-sie-setzen-gast","Guten Tag, ___ sich bitte hier drüben!","Добрий день, сідайте, будь ласка, тут!","Запрошення гостя сісти."]]}
 ],"IMPERATIV · SIE · FORMEN");
 const imperativSieSituationCards=imperativClozes([
   {targetId:"imperativ-sie-situation-directions",answer:"Gehen Sie",explanation:"Для Sie беремо інфінітив gehen: Gehen Sie — ввічлива вказівка дороги.",variants:[
@@ -5021,7 +5025,11 @@ const imperativSieSituationCards=imperativClozes([
   {targetId:"imperativ-sie-situation-office",answer:"Füllen Sie",explanation:"Для Sie беремо інфінітив füllen: Füllen Sie — вказівка заповнити документ; aus стоїть у кінці.",variants:[
     ["imperativ-sie-office-formular","Das Formular liegt dort. ___ es bitte aus.","Формуляр лежить там. Заповніть його, будь ласка.","Вказівка в офісі."],
     ["imperativ-sie-office-felder","Die Anmeldung ist online. ___ bitte alle Felder aus.","Реєстрація онлайн. Заповніть, будь ласка, усі поля.","Вказівка на сайті або в офісі."],
-    ["imperativ-sie-office-daten","Ich brauche Ihre Daten. ___ bitte das Anmeldeformular aus.","Мені потрібні ваші дані. Заповніть, будь ласка, реєстраційний формуляр.","Вказівка адміністратора."]]}
+    ["imperativ-sie-office-daten","Ich brauche Ihre Daten. ___ bitte das Anmeldeformular aus.","Мені потрібні ваші дані. Заповніть, будь ласка, реєстраційний формуляр.","Вказівка адміністратора."]]},
+  {targetId:"imperativ-sie-situation-class",answer:"Machen Sie",explanation:"Для Sie беремо інфінітив machen: Machen Sie — вказівка вчителя в класі.",variants:[
+    ["imperativ-sie-class-aufgabe","Die Aufgabe ist einfach. ___ diese Aufgabe bitte!","Завдання просте. Виконайте, будь ласка, це завдання!","Вказівка вчителя в класі."],
+    ["imperativ-sie-class-uebung","Die Übung war nicht gut. ___ die Übung bitte noch einmal!","Вправа вийшла не дуже. Виконайте, будь ласка, її ще раз!","Вказівка вчителя в класі."],
+    ["imperativ-sie-class-augen","Die Musik beginnt jetzt. ___ bitte die Augen zu!","Музика починається. Заплющте, будь ласка, очі!","Вказівка вчителя перед вправою."]]}
 ],"IMPERATIV · SIE · GEBRAUCH");
 const imperativSieOrderCards=imperativOrderCards([
   {targetId:"imperativ-sie-order-verb-first",explanation:"Дієслово стоїть на першому місці, Sie одразу за ним, а bitte йде після дієслова.",variants:[
@@ -5047,7 +5055,11 @@ const imperativSieOrderCards=imperativOrderCards([
   {targetId:"imperativ-sie-order-separable",explanation:"Відокремлюваний префікс (aus, ein) стоїть наприкінці речення, а дієслово — на першому місці.",variants:[
     ["imperativ-sie-order-licht","Schalten Sie bitte das Licht aus.","Вимкніть, будь ласка, світло.",[verbFirstClause("Schalten Sie","bitte das Licht","aus")]],
     ["imperativ-sie-order-name","Tragen Sie bitte Ihren Namen ein.","Запишіть, будь ласка, своє ім’я.",[verbFirstClause("Tragen Sie","bitte Ihren Namen","ein")]],
-    ["imperativ-sie-order-tisch","Räumen Sie bitte Ihren Tisch auf.","Приберіть, будь ласка, свій стіл.",[verbFirstClause("Räumen Sie","bitte Ihren Tisch","auf")]]]}
+    ["imperativ-sie-order-tisch","Räumen Sie bitte Ihren Tisch auf.","Приберіть, будь ласка, свій стіл.",[verbFirstClause("Räumen Sie","bitte Ihren Tisch","auf")]]]},
+  {targetId:"imperativ-sie-order-pronoun",explanation:"Після дієслова стоїть займенник у давальному відмінку (mir), а потім іменник у знахідному: mir den Kugelschreiber.",variants:[
+    ["imperativ-sie-order-kugelschreiber","Geben Sie mir den Kugelschreiber bitte.","Дайте мені, будь ласка, ручку.",[verbFirstClause("Geben Sie","mir den Kugelschreiber","bitte")]],
+    ["imperativ-sie-order-erklaeren","Erklären Sie mir bitte das Wort.","Поясніть мені, будь ласка, це слово.",[verbFirstClause("Erklären Sie","mir bitte das Wort")]],
+    ["imperativ-sie-order-adresse","Schreiben Sie mir bitte Ihre Adresse.","Напишіть мені, будь ласка, свою адресу.",[verbFirstClause("Schreiben Sie","mir bitte Ihre Adresse")]]]}
 ],"IMPERATIV · SATZBAU");
 const imperativSieCards=[...imperativSieFormCards,...imperativSieSituationCards,...imperativSieOrderCards];
 const imperativSieStages=[
@@ -5086,7 +5098,15 @@ const imperativDuFormCards=imperativClozes([
   {targetId:"imperativ-du-fahr",answer:"Fahr",explanation:"Від fahren у du-формі a → ä (du fährst), але імператив без umlaut і без -st: fahr.",variants:[
     ["imperativ-du-fahr-langsam","___ langsam nach Hause!","Їдь додому повільно!","Порада другові на ти."],
     ["imperativ-du-fahr-vorsichtig","___ bitte vorsichtig, die Straße ist glatt.","Їдь, будь ласка, обережно, дорога слизька.","Порада на дорозі на ти."],
-    ["imperativ-du-fahr-garage","___ den Wagen in die Garage!","Заведи машину в гараж!","Прохання братові на ти."]]}
+    ["imperativ-du-fahr-garage","___ den Wagen in die Garage!","Заведи машину в гараж!","Прохання братові на ти."]]},
+  {targetId:"imperativ-du-lauf",answer:"Lauf",explanation:"Від laufen у du-формі a → ä (du läufst), але імператив без umlaut і без -st: lauf.",variants:[
+    ["imperativ-du-lauf-schule","___ schnell zur Schule, sonst kommst du zu spät!","Біжи швидко до школи, інакше запізнишся!","Порада другові на ти."],
+    ["imperativ-du-lauf-rasen","___ bitte nicht auf dem Rasen!","Будь ласка, не бігай по газону!","Прохання дитині на ти."],
+    ["imperativ-du-lauf-flur","___ nicht im Flur!","Не бігай у коридорі!","Зауваження дитині на ти."]]},
+  {targetId:"imperativ-du-schlaf",answer:"Schlaf",explanation:"Від schlafen у du-формі a → ä (du schläfst), але імператив без umlaut і без -st: schlaf.",variants:[
+    ["imperativ-du-schlaf-gut","Gute Nacht, Mama. ___ gut!","Доброї ночі, мамо. Спи добре!","Побажання на ніч другові на ти."],
+    ["imperativ-du-schlaf-frueh","___ heute früher, du bist müde!","Лягай сьогодні раніше, ти втомився!","Порада братові на ти."],
+    ["imperativ-du-schlaf-weiter","Es ist noch früh. ___ ruhig weiter!","Ще рано. Спи собі далі!","Побажання другові на ти."]]}
 ],"IMPERATIV · DU · FORMEN");
 const imperativDuSpecialCards=imperativClozes([
   {targetId:"imperativ-du-sein",answer:"Sei",explanation:"Для du від sein — sei: без -st і без -e.",variants:[
@@ -5097,7 +5117,7 @@ const imperativDuSpecialCards=imperativClozes([
     ["imperativ-du-hab-angst","___ keine Angst!","Не бійся!","Підбадьорення другові на ти."],
     ["imperativ-du-hab-tag","___ einen schönen Tag!","Гарного тобі дня!","Побажання на прощання на ти."],
     ["imperativ-du-hab-geduld","___ etwas Geduld!","Май трохи терпіння!","Заспокійлива порада другові на ти."]]},
-  {targetId:"imperativ-du-werden",answer:"Werd",alternatives:["Werde"],explanation:"Для du від werden — werd (розмовна форма); повна форма werde теж правильна.",variants:[
+  {targetId:"imperativ-du-werden",answer:"Werde",alternatives:["Werd"],explanation:"Для du від werden — werde; коротка розмовна форма werd теж правильна.",variants:[
     ["imperativ-du-werd-boese","___ nicht böse!","Не сердься!","Прохання другові на ти."],
     ["imperativ-du-werd-gesund","___ bald wieder gesund!","Одужуй швидше!","Побажання другові на ти."],
     ["imperativ-du-werd-erwachsen","___ endlich erwachsen!","Нарешті подорослій!","Зауваження молодшому братові на ти."]]}
@@ -5122,7 +5142,15 @@ const imperativIhrCards=imperativClozes([
   {targetId:"imperativ-ihr-werdet",answer:"Werdet",explanation:"Для ihr від werden — werdet, як у ihr werdet.",variants:[
     ["imperativ-ihr-werdet-laut","___ bitte nicht so laut!","Не шуміть, будь ласка!","Звернення до кількох людей: ihr."],
     ["imperativ-ihr-werdet-fertig","___ bald fertig!","Закінчуйте швидше!","Звернення до кількох людей: ihr."],
-    ["imperativ-ihr-werdet-erwachsen","___ endlich erwachsen!","Нарешті подорослішайте!","Звернення до кількох людей: ihr."]]}
+    ["imperativ-ihr-werdet-erwachsen","___ endlich erwachsen!","Нарешті подорослішайте!","Звернення до кількох людей: ihr."]]},
+  {targetId:"imperativ-ihr-macht",answer:"Macht",explanation:"Для ihr беремо форму ihr-Präsens без ihr: ihr macht → Macht.",variants:[
+    ["imperativ-ihr-macht-aufgabe","___ die Hausaufgabe!","Робіть домашнє завдання!","Звернення до кількох учнів: ihr."],
+    ["imperativ-ihr-macht-fenster","___ bitte das Fenster zu!","Зачиніть, будь ласка, вікно!","Звернення до кількох людей: ihr."],
+    ["imperativ-ihr-macht-laerm","___ bitte keinen Lärm!","Не шумійте, будь ласка!","Звернення до кількох людей: ihr."]]},
+  {targetId:"imperativ-ihr-raeumt",answer:"Räumt",explanation:"Для ihr беремо форму ihr-Präsens без ihr: ihr räumt → Räumt.",variants:[
+    ["imperativ-ihr-raeumt-zimmer","___ das Zimmer auf bitte!","Приберіть, будь ласка, кімнату!","Звернення до кількох дітей: ihr."],
+    ["imperativ-ihr-raeumt-sachen","___ eure Sachen weg!","Приберіть свої речі!","Звернення до кількох дітей: ihr."],
+    ["imperativ-ihr-raeumt-tisch","___ bitte den Tisch ab!","Приберіть, будь ласка, зі столу!","Звернення до кількох людей: ihr."]]}
 ],"IMPERATIV · IHR · FORMEN");
 const imperativAnredeCards=imperativClozes([
   {targetId:"imperativ-anrede-helfen",explanation:"Звернення визначає форму: du — Hilf, ihr — Helft, Sie — Helfen Sie.",variants:[
@@ -5146,6 +5174,20 @@ const imperativAnredeCards=imperativClozes([
     ["imperativ-anrede-nehmen-ihr","Kinder, ___ noch ein Stück Kuchen!","Діти, візьміть ще шматочок торта!","Звернення до кількох людей: ihr.","Nehmt"],
     ["imperativ-anrede-nehmen-sie","Frau Schmidt, ___ bitte Platz!","Пані Шмідт, сідайте, будь ласка!","Звернення до однієї людини на Sie.","Nehmen Sie"]]}
 ],"IMPERATIV · ANREDE");
+const imperativDuPositionCards=imperativClozes([
+  {targetId:"imperativ-du-gib",answer:"Gib",explanation:"Від geben у du-формі e → i, без -st: gib. Дієслово стоїть першим, а mir одразу за ним.",variants:[
+    ["imperativ-du-gib-salz","___ mir bitte das Salz!","Передай мені, будь ласка, сіль!","Прохання за столом другові на ти."],
+    ["imperativ-du-gib-stift","___ mir bitte deinen Stift!","Дай мені, будь ласка, свою ручку!","Прохання однокласникові на ти."],
+    ["imperativ-du-gib-zeit","Ich habe keine Zeit. ___ mir bitte noch fünf Minuten!","У мене немає часу. Дай мені, будь ласка, ще п’ять хвилин!","Прохання другові на ти."]]},
+  {targetId:"imperativ-du-mach",answer:"Mach",explanation:"Від machen у du-формі без -st і без -e: mach. Дієслово стоїть першим, а доповнення йде після нього.",variants:[
+    ["imperativ-du-mach-licht","___ bitte das Licht aus!","Вимкни, будь ласка, світло!","Прохання другові на ти."],
+    ["imperativ-du-mach-zimmer","___ bitte dein Zimmer sauber!","Прибери, будь ласка, свою кімнату!","Прохання дитині на ти."],
+    ["imperativ-du-mach-laerm","___ bitte keinen Lärm!","Не шуми, будь ласка!","Прохання дитині на ти."]]},
+  {targetId:"imperativ-du-telefonier",answer:"Telefonier",alternatives:["Telefoniere"],explanation:"Дієслова на -ieren у du-імперативі мають -ier: telefonier. Повна форма telefoniere теж правильна.",variants:[
+    ["imperativ-du-telefonier-abend","___ mit mir heute Abend!","Зателефонуй мені сьогодні ввечері!","Прохання другові на ти."],
+    ["imperativ-du-telefonier-oma","___ bitte mal mit Oma!","Поговори, будь ласка, з бабусею по телефону!","Прохання внукові на ти."],
+    ["imperativ-du-telefonier-nicht","___ bitte nicht den ganzen Abend!","Не телефонуй, будь ласка, цілий вечір!","Зауваження другові на ти."]]}
+],"IMPERATIV · DU · FORMEN");
 const imperativDuOrderCards=imperativOrderCards([
   {targetId:"imperativ-du-order-verb-first",explanation:"У формі du дієслово стоїть першим, а bitte — після нього: Komm bitte her.",variants:[
     ["imperativ-du-order-komm","Komm bitte her.","Підійди, будь ласка, сюди.",[verbFirstClause("Komm","bitte","her")]],
@@ -5172,7 +5214,7 @@ const imperativDuOrderCards=imperativOrderCards([
     ["imperativ-ihr-order-seid","Seid bitte leise.","Будьте, будь ласка, тихо.",[verbFirstClause("Seid","bitte","leise")]],
     ["imperativ-ihr-order-nehmt","Nehmt bitte eure Bücher mit.","Візьміть, будь ласка, свої книжки.",[verbFirstClause("Nehmt","bitte eure Bücher","mit")]]]}
 ],"IMPERATIV · SATZBAU");
-const imperativDuCards=[...imperativDuFormCards,...imperativDuSpecialCards,...imperativIhrCards,...imperativAnredeCards,...imperativDuOrderCards];
+const imperativDuCards=[...imperativDuFormCards,...imperativDuSpecialCards,...imperativIhrCards,...imperativAnredeCards,...imperativDuPositionCards,...imperativDuOrderCards];
 const imperativDuStages=[
   lessonStep("imperativ-du-forms-learn","Форми du","Прочитайте основи du-форм: без -e, з -e і зі зміною голосного.",imperativDuFormCards,"learn","Форми du","Вивчення"),
   lessonStep("imperativ-du-forms-practice","Практика форм du","Введіть du-форму за основою дієслова.",imperativDuFormCards,"input","Форми du","Практика"),
@@ -5182,8 +5224,152 @@ const imperativDuStages=[
   lessonStep("imperativ-ihr-practice","Практика форм ihr","Введіть ihr-форму за контекстом.",imperativIhrCards,"input","Форма ihr","Практика"),
   lessonStep("imperativ-anrede-learn","Звернення і форма","Порівняйте du, ihr і Sie для одного дієслова.",imperativAnredeCards,"learn","Звернення","Вивчення"),
   lessonStep("imperativ-anrede-practice","Практика звернення","Оберіть форму за тим, до кого звертаються.",imperativAnredeCards,"input","Звернення","Практика"),
+  lessonStep("imperativ-du-position-learn","Дієслово на першому місці","Прочитайте, як імператив ставить дієслово на перше місце: Gib mir das Salz.",imperativDuPositionCards,"learn","Позиція I","Вивчення"),
+  lessonStep("imperativ-du-position-practice","Практика позиції I","Введіть du-форму дієслова, яка стоїть на першому місці речення.",imperativDuPositionCards,"input","Позиція I","Практика"),
   lessonStep("imperativ-du-order-learn","Порядок слів у du і ihr","Порівняйте дієслово на першому місці з doch, nicht, префіксом і займенником.",imperativDuOrderCards,"learn","Порядок слів","Вивчення"),
   lessonStep("imperativ-du-order-practice","Речення з du і ihr","Складіть речення з фрагментів, починаючи з указаного слова.",imperativDuOrderCards,"input","Порядок слів","Практика")
+];
+const praeteritumParadigms={
+  sein:verbParadigm("sein","war| war|st war| war|en war|t war|en","ich = er/sie/es"),
+  haben:verbParadigm("haben","hatt|e hatt|est hatt|e hatt|en hatt|et hatt|en","ich = er/sie/es")
+};
+function praeteritumClozes(groups,category){
+  return groups.flatMap(({targetId,verb,person,explanation,variants})=>variants.map(([id,promptText,translation,cardVerb=verb,cardPerson=person])=>{
+    const paradigm=praeteritumParadigms[cardVerb],parts=paradigm.forms[cardPerson],answer=parts.stem+parts.ending;
+    const exampleAnswer=promptText.startsWith("___")?answer[0].toUpperCase()+answer.slice(1):answer;
+    const card={
+      id,targetId,type:"cloze",word:`${verbPersons[cardPerson]} ${answer}`,translation,promptText,support:translation,
+      example:promptText.replace("___",exampleAnswer),exampleTranslation:translation,
+      explanation:`${explanation} Форма ${verbPersons[cardPerson]}: ${answer}.`,
+      category,practiceVariants:false,response:modalResponse([answer])
+    };
+    return withVerbParadigm(card,paradigm,cardPerson,{label:"Prät.",title:"Präteritum"});
+  }));
+}
+const praeteritumSeinCards=praeteritumClozes([
+  {targetId:"praeteritum-sein-ich",verb:"sein",person:0,explanation:"Для ich форма sein у Präteritum збігається з формою er/sie/es.",variants:[
+    ["praeteritum-sein-ich-jung","Ich ___ früher jung.","Раніше я був / була молодим / молодою."],
+    ["praeteritum-sein-ich-zuhause","Gestern ___ ich zu Hause.","Учора я був / була вдома."],
+    ["praeteritum-sein-ich-berlin","Letztes Jahr ___ ich oft in Berlin.","Торік я часто був / була в Берліні."]]},
+  {targetId:"praeteritum-sein-du",verb:"sein",person:1,explanation:"Для du до war додаємо -st.",variants:[
+    ["praeteritum-sein-du-muede","Du ___ gestern sehr müde.","Учора ти був / була дуже стомлений / стомлена."],
+    ["praeteritum-sein-du-krank","___ du letzte Woche krank?","Ти хворів / хворіла минулого тижня?"],
+    ["praeteritum-sein-du-neugierig","Als Kind ___ du sehr neugierig.","У дитинстві ти був / була дуже допитливим / допитливою."]]},
+  {targetId:"praeteritum-sein-er",verb:"sein",person:2,explanation:"Для er, sie, es і підмета в однині вживаємо ту саму форму, що й для ich.",variants:[
+    ["praeteritum-sein-sie-krank","Sie ___ gestern krank.","Учора вона хворіла."],
+    ["praeteritum-sein-wetter-herrlich","Das Wetter ___ herrlich.","Погода була чудовою."],
+    ["praeteritum-sein-es-kalt","Es ___ draußen kalt.","Надворі було холодно."]]},
+  {targetId:"praeteritum-sein-wir",verb:"sein",person:3,explanation:"Для wir до war додаємо -en.",variants:[
+    ["praeteritum-sein-wir-italien","Letztes Jahr ___ wir in Italien im Urlaub.","Торік ми були у відпустці в Італії."],
+    ["praeteritum-sein-wir-bibliothek","Wir ___ vor zwei Jahren oft in der Bibliothek.","Два роки тому ми часто були в бібліотеці."],
+    ["praeteritum-sein-wir-kinder","Als Kinder ___ wir immer neugierig.","У дитинстві ми завжди були допитливими."]]},
+  {targetId:"praeteritum-sein-ihr",verb:"sein",person:4,explanation:"Для ihr до war додаємо -t.",variants:[
+    ["praeteritum-sein-ihr-puenktlich","Ihr ___ gestern pünktlich.","Учора ви були пунктуальними."],
+    ["praeteritum-sein-ihr-park","___ ihr früher oft im Park?","Ви раніше часто були в парку?"],
+    ["praeteritum-sein-ihr-zuhause","Ihr ___ am Wochenende zu Hause.","На вихідних ви були вдома."]]},
+  {targetId:"praeteritum-sein-sie",verb:"sein",person:5,explanation:"Для sie (вони) і ввічливого Sie форма така сама, як для wir.",variants:[
+    ["praeteritum-sein-freunde-park","Meine Freunde ___ früher jeden Nachmittag im Park.","Раніше мої друзі щодня після обіду були в парку."],
+    ["praeteritum-sein-sie-berlin","Sie ___ gestern in Berlin.","Учора Ви були в Берліні."],
+    ["praeteritum-sein-besitzer","Die Besitzer ___ sehr freundlich.","Господарі були дуже привітними."]]}
+],"PRÄTERITUM · FORMEN");
+const praeteritumHabenCards=praeteritumClozes([
+  {targetId:"praeteritum-haben-ich",verb:"haben",person:0,explanation:"Для ich форма haben у Präteritum збігається з формою er/sie/es.",variants:[
+    ["praeteritum-haben-ich-auto","Ich ___ damals kein eigenes Auto.","Тоді в мене не було власного автомобіля."],
+    ["praeteritum-haben-ich-handy","Früher ___ ich ein Handy.","Раніше в мене був мобільний телефон."],
+    ["praeteritum-haben-ich-zeit","Gestern ___ ich keine Zeit.","Учора в мене не було часу."]]},
+  {targetId:"praeteritum-haben-du",verb:"haben",person:1,explanation:"Для du до основи hatt додаємо -est.",variants:[
+    ["praeteritum-haben-du-glueck","Du ___ gestern viel Glück.","Учора тобі дуже пощастило."],
+    ["praeteritum-haben-du-fahrrad","___ du früher ein Fahrrad?","Раніше в тебе був велосипед?"],
+    ["praeteritum-haben-du-hund","Als Kind ___ du einen Hund.","У дитинстві в тебе був собака."]]},
+  {targetId:"praeteritum-haben-er",verb:"haben",person:2,explanation:"Для er, sie, es і підмета в однині вживаємо ту саму форму, що й для ich.",variants:[
+    ["praeteritum-haben-hund-hunger","Der Hund ___ Hunger.","Собака був голодний."],
+    ["praeteritum-haben-sie-hund","Sie ___ früher einen Hund.","Раніше в неї був собака."],
+    ["praeteritum-haben-haus-fenster","Das Haus ___ viele Fenster.","Будинок мав багато вікон."]]},
+  {targetId:"praeteritum-haben-wir",verb:"haben",person:3,explanation:"Для wir до основи hatt додаємо -en.",variants:[
+    ["praeteritum-haben-wir-spass","Wir ___ viel Spaß im Kino.","Ми добре провели час у кіно."],
+    ["praeteritum-haben-wir-karten","Mein Bruder und ich ___ ein Kartenspiel.","У мого брата й мене була карткова гра."],
+    ["praeteritum-haben-wir-pruefung","Wir ___ letzte Woche eine Deutschprüfung.","Минулого тижня в нас був іспит з німецької."]]},
+  {targetId:"praeteritum-haben-ihr",verb:"haben",person:4,explanation:"Для ihr до основи hatt додаємо -et.",variants:[
+    ["praeteritum-haben-ihr-wetter","Ihr ___ wirklich Glück mit dem Wetter.","Вам справді пощастило з погодою."],
+    ["praeteritum-haben-ihr-haus","___ ihr früher ein schönes Haus?","У вас раніше був гарний будинок?"],
+    ["praeteritum-haben-ihr-zeit","Ihr ___ gestern viel Zeit.","Учора у вас було багато часу."]]},
+  {targetId:"praeteritum-haben-sie",verb:"haben",person:5,explanation:"Для sie (вони) і ввічливого Sie форма така сама, як для wir.",variants:[
+    ["praeteritum-haben-kinder-hunger","Die Kinder ___ Hunger.","Діти були голодні."],
+    ["praeteritum-haben-freunde-buecher","Meine Freunde ___ früher viele Bücher.","Раніше в моїх друзів було багато книжок."],
+    ["praeteritum-haben-sie-termin","Sie ___ gestern einen Termin.","Учора у Вас була домовлена зустріч."]]}
+],"PRÄTERITUM · FORMEN");
+const praeteritumChoiceCards=praeteritumClozes([
+  {targetId:"praeteritum-choice-place",explanation:"Місце перебування описує sein у минулому часі.",variants:[
+    ["praeteritum-choice-italien","Letztes Jahr ___ wir in Italien im Urlaub.","Торік ми були у відпустці в Італії.","sein",3],
+    ["praeteritum-choice-zuhause","Gestern ___ ich zu Hause.","Учора я був / була вдома.","sein",0],
+    ["praeteritum-choice-bibliothek","Vor zwei Jahren ___ du oft in der Bibliothek.","Два роки тому ти часто був / була в бібліотеці.","sein",1]]},
+  {targetId:"praeteritum-choice-condition",explanation:"Стан або ознаку з прикметником описує sein у минулому часі.",variants:[
+    ["praeteritum-choice-film","Der Film ___ sehr spannend.","Фільм був дуже захопливим.","sein",2],
+    ["praeteritum-choice-muede","Gestern ___ du sehr müde.","Учора ти був / була дуже стомлений / стомлена.","sein",1],
+    ["praeteritum-choice-neugierig","Als Kinder ___ wir neugierig.","У дитинстві ми були допитливими.","sein",3]]},
+  {targetId:"praeteritum-choice-weather",explanation:"Погоду й температуру з прикметником описує sein.",variants:[
+    ["praeteritum-choice-kalt","Letzten Winter ___ es sehr kalt.","Минулої зими було дуже холодно.","sein",2],
+    ["praeteritum-choice-winter","Früher ___ die Winter kälter.","Раніше зими були холоднішими.","sein",5],
+    ["praeteritum-choice-wetter","Das Wetter ___ gestern herrlich.","Учора погода була чудовою.","sein",2]]},
+  {targetId:"praeteritum-choice-possession",explanation:"Наявність або належність чогось виражає haben.",variants:[
+    ["praeteritum-choice-fenster","Das alte Haus ___ viele schöne Fenster.","Старий будинок мав багато гарних вікон.","haben",2],
+    ["praeteritum-choice-fahrrad","In meiner Kindheit ___ ich ein rotes Fahrrad.","У дитинстві в мене був червоний велосипед.","haben",0],
+    ["praeteritum-choice-kamin","Die Hütte ___ einen Kamin.","У хатинці був камін.","haben",2]]},
+  {targetId:"praeteritum-choice-time",explanation:"Наявність часу виражає haben: Zeit haben.",variants:[
+    ["praeteritum-choice-keine-zeit","Gestern ___ ich keine Zeit.","Учора в мене не було часу.","haben",0],
+    ["praeteritum-choice-viel-zeit","Letzte Woche ___ wir viel Zeit.","Минулого тижня в нас було багато часу.","haben",3],
+    ["praeteritum-choice-nachmittag","Früher ___ ihr jeden Nachmittag Zeit.","Раніше у вас був час щодня після обіду.","haben",4]]},
+  {targetId:"praeteritum-choice-experience",explanation:"Німецькі вирази Hunger, Glück і Spaß утворюються з haben.",variants:[
+    ["praeteritum-choice-glueck","Ihr ___ wirklich Glück mit dem Wetter.","Вам справді пощастило з погодою.","haben",4],
+    ["praeteritum-choice-hunger","Der Hund ___ Hunger.","Собака був голодний.","haben",2],
+    ["praeteritum-choice-spass","Mein Bruder und ich ___ viel Spaß beim Skifahren.","Ми з братом весело каталися на лижах.","haben",3]]},
+  {targetId:"praeteritum-choice-story",explanation:"У розповіді обери дієслово за змістом: місце чи ознака — sein, наявність речі — haben.",variants:[
+    ["praeteritum-story-abends","Im Urlaub in den Bergen ___ wir abends in einer kleinen Hütte.","Під час відпустки в горах ми ввечері були в маленькій хатинці.","sein",3],
+    ["praeteritum-story-besitzer","In der Hütte ___ die Besitzer sehr freundlich.","У хатинці господарі були дуже привітними.","sein",5],
+    ["praeteritum-story-karten","Im Urlaub ___ meine Schwester und ich ein Kartenspiel.","У відпустці в нас із сестрою була карткова гра.","haben",3]]}
+],"PRÄTERITUM · LÜCKENTEXT");
+function praeteritumSentences(groups){
+  return groups.flatMap(({targetId,explanation,variants})=>variants.map(({id,word,translation,promptText,support,structure})=>({
+    id,targetId,type:"sentence-build",word,translation,promptText,support,example:word,exampleTranslation:translation,
+    explanation,structure,category:"PRÄTERITUM · SATZBAU",practiceVariants:false,response:modalResponse([word],"sentence")
+  })));
+}
+const praeteritumSentenceCards=praeteritumSentences([
+  {targetId:"praeteritum-sentence-transform-sein",explanation:"Постав форму sein у Präteritum за підметом, решту речення залиш без змін.",variants:[
+    {id:"praeteritum-transform-du-muede",promptText:"Du bist müde.",word:"Du warst müde.",translation:"Ти був / була стомлений / стомлена.",support:"Постав дієслово у Präteritum; інші слова не змінюй.",structure:[mainClause("Du","warst","müde")]},
+    {id:"praeteritum-transform-es-kalt",promptText:"Es ist kalt draußen.",word:"Es war kalt draußen.",translation:"Надворі було холодно.",support:"Постав дієслово у Präteritum; інші слова не змінюй.",structure:[mainClause("Es","war","kalt draußen")]},
+    {id:"praeteritum-transform-wir-schule",promptText:"Wir sind in der Schule.",word:"Wir waren in der Schule.",translation:"Ми були в школі.",support:"Постав дієслово у Präteritum; інші слова не змінюй.",structure:[mainClause("Wir","waren","in der Schule")]}]},
+  {targetId:"praeteritum-sentence-transform-haben",explanation:"Постав форму haben у Präteritum за підметом, решту речення залиш без змін.",variants:[
+    {id:"praeteritum-transform-sie-hund",promptText:"Sie hat einen Hund.",word:"Sie hatte einen Hund.",translation:"У неї був собака.",support:"Постав дієслово у Präteritum; інші слова не змінюй.",structure:[mainClause("Sie","hatte","einen Hund")]},
+    {id:"praeteritum-transform-wir-hunger",promptText:"Wir haben Hunger.",word:"Wir hatten Hunger.",translation:"Ми були голодні.",support:"Постав дієслово у Präteritum; інші слова не змінюй.",structure:[mainClause("Wir","hatten","Hunger")]},
+    {id:"praeteritum-transform-ihr-haus",promptText:"Ihr habt ein schönes Haus.",word:"Ihr hattet ein schönes Haus.",translation:"У вас був гарний будинок.",support:"Постав дієслово у Präteritum; інші слова не змінюй.",structure:[mainClause("Ihr","hattet","ein schönes Haus")]}]},
+  {targetId:"praeteritum-sentence-subject-first",explanation:"Коли підмет стоїть першим, відмінюване дієслово стоїть на другому місці.",variants:[
+    {id:"praeteritum-order-wir-wohnung",promptText:"eine neue Wohnung / Wir / hatten",word:"Wir hatten eine neue Wohnung.",translation:"Ми мали нову квартиру.",support:"Ми мали нову квартиру. Почни з «Wir».",structure:[mainClause("Wir","hatten","eine neue Wohnung")]},
+    {id:"praeteritum-order-ich-fahrrad",promptText:"ein rotes Fahrrad / hatte / Ich",word:"Ich hatte ein rotes Fahrrad.",translation:"У мене був червоний велосипед.",support:"У мене був червоний велосипед. Почни з «Ich».",structure:[mainClause("Ich","hatte","ein rotes Fahrrad")]},
+    {id:"praeteritum-order-kinder-schule",promptText:"in der Schule / Die Kinder / waren",word:"Die Kinder waren in der Schule.",translation:"Діти були в школі.",support:"Діти були в школі. Почни з «Die Kinder».",structure:[mainClause("Die Kinder","waren","in der Schule")]}]},
+  {targetId:"praeteritum-sentence-time-first",explanation:"Обставина часу займає перше місце, дієслово — друге, а підмет іде після нього.",variants:[
+    {id:"praeteritum-order-jahr-berge",promptText:"wir / in den Bergen / waren / Letztes Jahr",word:"Letztes Jahr waren wir in den Bergen.",translation:"Минулого року ми були в горах.",support:"Минулого року ми були в горах. Почни з «Letztes Jahr».",structure:[mainClause("Letztes Jahr","waren","wir in den Bergen")]},
+    {id:"praeteritum-order-gestern-zeit",promptText:"keine Zeit / ich / hatte / Gestern",word:"Gestern hatte ich keine Zeit.",translation:"Учора в мене не було часу.",support:"Учора в мене не було часу. Почни з «Gestern».",structure:[mainClause("Gestern","hatte","ich keine Zeit")]},
+    {id:"praeteritum-order-woche-wetter",promptText:"das Wetter / war / schön / Letzte Woche",word:"Letzte Woche war das Wetter schön.",translation:"Минулого тижня погода була гарною.",support:"Минулого тижня погода була гарною. Почни з «Letzte Woche».",structure:[mainClause("Letzte Woche","war","das Wetter schön")]}]},
+  {targetId:"praeteritum-sentence-translate-sein",explanation:"Місце або ознаку в минулому передає sein; форма узгоджується з підметом. У запитанні без питального слова дієслово стоїть першим.",variants:[
+    {id:"praeteritum-translate-haus",promptText:"Будинок був дуже затишним.",word:"Das Haus war sehr gemütlich.",translation:"Будинок був дуже затишним.",support:"Використай «das Haus» і «sehr gemütlich»; почни з «Das Haus».",structure:[mainClause("Das Haus","war","sehr gemütlich")]},
+    {id:"praeteritum-translate-muede",promptText:"Ти був / була стомлений / стомлена вчора?",word:"Warst du gestern müde?",translation:"Ти був / була стомлений / стомлена вчора?",support:"Використай «du», «gestern» і «müde»; почни з дієслова.",structure:[verbFirstClause("Warst","du gestern müde")]},
+    {id:"praeteritum-translate-winter",promptText:"Ця зима була дуже холодною.",word:"Dieser Winter war sehr kalt.",translation:"Ця зима була дуже холодною.",support:"Використай «dieser Winter» і «sehr kalt»; почни з «Dieser Winter».",structure:[mainClause("Dieser Winter","war","sehr kalt")]}]},
+  {targetId:"praeteritum-sentence-translate-haben",explanation:"Наявність речі, часу або ідеї в минулому передає haben; форма узгоджується з підметом.",variants:[
+    {id:"praeteritum-translate-hund",promptText:"Вона мала собаку.",word:"Sie hatte einen Hund.",translation:"Вона мала собаку.",support:"Використай «sie» і «einen Hund»; почни з «Sie».",structure:[mainClause("Sie","hatte","einen Hund")]},
+    {id:"praeteritum-translate-zeit",promptText:"Учора в мене не було часу.",word:"Gestern hatte ich keine Zeit.",translation:"Учора в мене не було часу.",support:"Використай «gestern», «ich» і «keine Zeit»; почни з «Gestern».",structure:[mainClause("Gestern","hatte","ich keine Zeit")]},
+    {id:"praeteritum-translate-idee",promptText:"Я мав / мала чудову ідею для проєкту.",word:"Ich hatte eine tolle Idee für das Projekt.",translation:"Я мав / мала чудову ідею для проєкту.",support:"Використай «ich», «eine tolle Idee» і «für das Projekt»; почни з «Ich».",structure:[mainClause("Ich","hatte","eine tolle Idee für das Projekt")]}]}
+]);
+const praeteritumCards=[...praeteritumSeinCards,...praeteritumHabenCards,...praeteritumChoiceCards,...praeteritumSentenceCards];
+const praeteritumStages=[
+  lessonStep("praeteritum-sein-learn","Форми sein у минулому","Вивчіть шість форм sein у реченнях про місце й стан.",praeteritumSeinCards,"learn","Форми sein","Вивчення"),
+  lessonStep("praeteritum-sein-practice","Практика форм sein","Введіть форму sein у Präteritum за підметом.",praeteritumSeinCards,"input","Форми sein","Практика"),
+  lessonStep("praeteritum-haben-learn","Форми haben у минулому","Вивчіть шість форм haben у реченнях про минуле.",praeteritumHabenCards,"learn","Форми haben","Вивчення"),
+  lessonStep("praeteritum-haben-practice","Практика форм haben","Введіть форму haben у Präteritum за підметом.",praeteritumHabenCards,"input","Форми haben","Практика"),
+  lessonStep("praeteritum-choice-learn","Місце, стан і наявність","Порівняйте речення про місця, стани, речі та відпустку.",praeteritumChoiceCards,"learn","Вибір за змістом","Вивчення"),
+  lessonStep("praeteritum-choice-practice","Практика вибору за змістом","За змістом введіть форму haben або sein у Präteritum.",praeteritumChoiceCards,"input","Вибір за змістом","Практика"),
+  lessonStep("praeteritum-sentences-learn","Речення про минуле","Порівняйте перетворення з Präsens, порядок слів і переклад.",praeteritumSentenceCards,"learn","Речення про минуле","Вивчення"),
+  lessonStep("praeteritum-sentences-practice","Побудова речень про минуле","Перетворіть, складіть або перекладіть повне речення за підказкою.",praeteritumSentenceCards,"input","Речення про минуле","Практика")
 ];
 const deckDefinitions={
   "w-questions":{title:"W-Fragen",label:"W-Fragen",badge:"W",tip:"W-questions always come first in a question, followed by the verb.",guide:{title:"W-Fragen: запитання",intro:"Оберіть питальне слово відповідно до потрібної інформації, а потім побудуйте речення навколо відмінюваного дієслова.",rules:[{detail:"Питальне слово стоїть на першому місці, а відмінюване дієслово — на другому: Wo wohnst du?",visual:{structure:[mainClause("Wo","wohnst","du")]}},{detail:"Підмет зазвичай стоїть після дієслова: Wann kommt ihr? Решта інформації йде далі.",visual:{structure:[mainClause("Wann","kommt","ihr")]}},"Використовуйте wo для місця, wohin для руху до місця, а woher — для місця, звідки хтось прибуває.","На W-Fragen не можна відповісти лише ja або nein: вони потребують конкретної інформації."]},cards,stages:wQuestionStages},
@@ -5294,6 +5480,27 @@ const deckDefinitions={
   conjugation:{title:"Verb conjugation",label:"Verb conjugation",badge:"V",tip:"Weak verbs take regular endings: -e, -st, -t, -en, -t, -en. After a stem ending in -t or -d, add an extra e.",guide:{title:"Слабкі дієслова в Präsens",intro:"Візьміть основу дієслова й доберіть закінчення, що відповідає підмету.",rules:[{title:"Використовуйте регулярні закінчення",detail:"Більшість слабких дієслів відмінюються за однаковою схемою від ich до sie/Sie.",formula:"ich -e · du -st · er/sie/es -t · wir -en · ihr -t · sie/Sie -en"},{title:"Додавайте додаткове -e",detail:"Якщо основа закінчується на -t, -d або приголосний + -m/-n, додайте e перед закінченням.",formula:"du arbeitest · er arbeitet · ihr arbeitet",table:{columns:[{label:"mach-"},{label:"arbeit-"}],rows:[{label:"ich",cells:["-e","-e"]},{label:"du",cells:["-st","-est"]},{label:"er/sie/es",cells:["-t","-et"]},{label:"wir",cells:["-en","-en"]},{label:"ihr",cells:["-t","-et"]},{label:"sie/Sie",cells:["-en","-en"]}],highlights:[{row:1,column:1},{row:2,column:1},{row:4,column:1}],note:"Додаткове e з'являється лише перед закінченнями -st і -t."}},{title:"Не додавайте зайве -s",detail:"В основах на -s, -ß або -z форма du має закінчення -t замість -st.",formula:"du heißt · du tanzt · du übersetzt"}]},cards:conjugationCards,stages:conjugationStages},
   "strong-verbs":{title:"Strong verbs",label:"Strong verbs",badge:"ä",tip:"Strong verbs can change their stem vowel in singular present-tense forms.",guide:{title:"Сильні дієслова в Präsens",intro:"Спочатку повторіть повну парадигму кожного дієслова, а потім утворюйте всі форми за картками з пропусками.",rules:[{title:"Зміна e на i",detail:"Sprechen, treffen, lesen і essen змінюють e на i у другій та третій особі однини.",formula:"du sprichst · er trifft · sie liest · du isst"},{title:"Зміна a на ä",detail:"Fahren і anfangen змінюють a на ä у другій та третій особі однини.",formula:"du fährst · er fährt · du fängst an"},{title:"Особлива форма wissen",detail:"Wissen має weiß у ich і er/sie/es, weißt у du та регулярну основу wiss- у множині.",formula:"ich weiß · du weißt · wir wissen"},{title:"Anfangen є відокремлюваним",detail:"Відмінювана частина fängt стоїть на другому місці, а префікс an — у кінці головного речення.",formula:"Der Kurs fängt um neun Uhr an.",visual:{structure:[mainClause("Der Kurs","fängt","um neun Uhr","an")]}},{title:"Зберігайте основу в множині",detail:"Зміна голосного не відбувається з wir, ihr або sie/Sie.",formula:"wir sprechen · ihr esst · sie wissen · wir fangen an",table:{columns:[{label:"ich"},{label:"du"},{label:"er/sie/es"},{label:"wir/ihr/sie"}],rows:[{label:"e → i",title:"sprechen, treffen, essen",cells:["e","i","i","e"]},{label:"e → ie",title:"lesen",cells:["e","ie","ie","e"]},{label:"a → ä",title:"fahren, anfangen",cells:["a","ä","ä","a"]},{label:"i → ei",title:"wissen",cells:["ei","ei","ei","i"]}],highlights:[[0,1],[0,2],[1,1],[1,2],[2,1],[2,2],[3,0],[3,1],[3,2]].map(([row,column])=>({row,column})),note:"Голосний основи в кожній особі. Виділено зміну: e → i — sprechen, treffen, essen; e → ie — lesen; a → ä — fahren, anfangen; i → ei — wissen."}}]},cards:strongVerbCards,stages:strongVerbStages},
   "past-verbs":{title:"Past verb forms · A1",label:"Past verb forms · A1",badge:"A1",tip:"Use Perfekt for everyday A1 past events; learn Präteritum only for sein and haben.",guide:pastVerbGuide("A1"),cards:pastVerbA1Cards,stages:pastVerbA1Stages},
+  "praeteritum-haben-sein":{
+    title:"Präteritum: haben und sein",label:"Präteritum · haben · sein",badge:"war",
+    tip:"Для минулого місця чи стану вживайте sein, для наявності речі або часу — haben. Форма залежить від підмета.",
+    guide:{
+      title:"Präteritum: haben і sein",
+      intro:"Ці дієслова часто вживаються в Präteritum навіть у розмові. Вони описують минулий стан, місце перебування або те, що хтось мав.",
+      rules:[
+        {title:"Коли вживають Präteritum",detail:"У повідомленнях, репортажах і письмових розповідях Präteritum поширений для багатьох дієслів. У розмові haben і sein часто стоять у Präteritum, навіть коли для інших дієслів уживають Perfekt."},
+        {title:"Порівняй форми за особами",detail:"Ich і er/sie/es мають однакові форми; wir і sie/Sie теж збігаються.",table:{columns:[{label:"haben"},{label:"sein"}],rows:[
+          {label:"ich",cells:["hatte","war"]},{label:"du",cells:["hattest","warst"]},{label:"er/sie/es",cells:["hatte","war"]},
+          {label:"wir",cells:["hatten","waren"]},{label:"ihr",cells:["hattet","wart"]},{label:"sie/Sie",cells:["hatten","waren"]}
+        ],highlights:[{row:0,column:0},{row:0,column:1},{row:2,column:0},{row:2,column:1},{row:3,column:0},{row:3,column:1},{row:5,column:0},{row:5,column:1}],note:"Для ich і er/sie/es форми збігаються; для wir і sie/Sie також."}},
+        {title:"Місце й стан",detail:"Sein описує місце перебування або ознаку з прикметником: Ich war in Berlin. Das Wetter war kalt."},
+        {title:"Речі, час і відчуття",detail:"Haben виражає наявність: Ich hatte ein Auto. Деякі вирази теж уживають haben: Hunger haben, Zeit haben, Glück haben, Spaß haben."},
+        {title:"Не плутай із допоміжним дієсловом Perfekt",detail:"Тут haben і sein самі називають наявність або стан. Правило вибору допоміжного дієслова для Perfekt — інше."},
+        {title:"Порівняй із Perfekt",detail:"Той самий минулий стан чи наявність можна передати й через Perfekt, але в розмові короткий Präteritum часто природніший.",formula:"Ich war zu Hause. · Ich bin zu Hause gewesen. · Ich hatte ein Auto. · Ich habe ein Auto gehabt."},
+        {title:"Порядок слів у реченні",detail:"Відмінювана форма стоїть на другому місці. Після обставини часу підмет іде за дієсловом.",formula:"Gestern war ich zu Hause.",visual:{structure:[mainClause("Gestern","war","ich zu Hause")]}}
+      ]
+    },
+    cards:praeteritumCards,stages:praeteritumStages
+  },
   "past-verbs-a2":{title:"Past verb forms · A2",label:"Past verb forms · A2",badge:"A2",tip:"Use Präteritum for modal verbs and common biography facts; retain Perfekt for everyday past events.",guide:pastVerbGuide("A2"),cards:pastVerbA2.cards,stages:pastVerbA2Stages},
   "past-verbs-b1":{title:"Past verb forms · B1",label:"Past verb forms · B1",badge:"B1",tip:"Use the broader Präteritum vocabulary in written narratives and contrast it with Perfekt.",guide:pastVerbGuide("B1"),cards:pastVerbB1.cards,stages:pastVerbB1Stages},
   perfekt:{title:"Perfekt: haben und sein",label:"Perfekt",badge:"P2",tip:"Спочатку визначте: це дія, переміщення чи зміна стану? Потім виберіть haben або sein і поставте Partizip II в кінці.",guide:{title:"Perfekt: коли haben, а коли sein?",intro:"Perfekt утворюється з відмінюваного haben або sein та Partizip II. Починайте з простого алгоритму: haben — для більшості дій; sein — переважно для переміщення і зміни стану.",rules:[{title:"1. Побудуйте рамку речення",detail:"Допоміжне дієслово стоїть на другому місці, а Partizip II — у кінці.",formula:"Ich habe die Hausaufgaben gemacht.",visual:{structure:[mainClause("Ich","habe","die Hausaufgaben","gemacht")]}},{title:"2. Оберіть haben для більшості дій",detail:"Haben уживається з діяльністю, станами, зворотними та більшістю перехідних дієслів.",formula:"Ich habe gearbeitet. · Wir haben uns getroffen.",visual:{auxiliary:{verb:"haben"}}},{title:"3. Оберіть sein для переміщення",detail:"Sein уживається, коли підмет сам переміщується або прибуває в інше місце.",formula:"Ich bin nach Hause gegangen. · Der Zug ist angekommen.",visual:{auxiliary:{verb:"sein"}}},{title:"4. Оберіть sein для зміни стану",detail:"Sein уживається, коли хтось або щось переходить у новий стан.",formula:"Das Kind ist eingeschlafen. · Er ist krank geworden."},{title:"5. Запам’ятайте особливі дієслова",detail:"Sein також уживається з sein, werden, bleiben, passieren, geschehen, begegnen та gelingen.",formula:"Sie ist zu Hause geblieben. · Was ist passiert?"},{title:"6. Перевірте прямий додаток",detail:"Якщо дієслово має прямий додаток в Akkusativ, зазвичай потрібне haben.",formula:"Ich habe ein Buch gelesen. · Sie hat die Tür geöffnet."},{title:"7. Утворіть Partizip II",detail:"Для правильних дієслів зазвичай додаємо ge-…-t; дієслова на -ieren та з невідокремлюваним префіксом не отримують ge-.",formula:"machen → gemacht · studieren → studiert · erzählen → erzählt"},{title:"8. Не плутайте стан і зміну стану",detail:"Звичайний стан часто вживається з haben, а початок нового стану — із sein.",formula:"Ich habe geschlafen. · Ich bin eingeschlafen."}]},cards:perfektCards,stages:perfektStages},
@@ -5344,10 +5551,11 @@ const deckDefinitions={
       rules:[
         {title:"du-форма: основа без -st",detail:"Беріть основу дієслова без закінчення -st. Голосний змінюється лише в тих дієсловах, де він змінюється у du-Präsens.",table:{columns:[{label:"du-Imperativ"}],rows:[{label:"kommen",cells:["Komm"]},{label:"warten",cells:["Warte"]},{label:"nehmen",cells:["Nimm"]},{label:"lesen",cells:["Lies"]},{label:"sehen",cells:["Sieh"]},{label:"fahren",cells:["Fahr"]}],highlights:[{row:2,column:0},{row:3,column:0},{row:4,column:0}],note:"Nimm, lies і sieh змінюють голосний. Fahren втрачає umlaut: Fahr, а не Fähr."}},
         {title:"-e після -t, -d, -ig і -ern",detail:"Якщо основа закінчується на -t, -d, -ig або -ern, для du додаємо -e, щоб було зручно вимовляти.",formula:"arbeiten → Arbeite · entschuldigen → Entschuldige · erklären → Erkläre"},
-        {title:"Sonderfälle sein, haben, werden",detail:"Ці дієслова мають коротші форми для du.",table:{columns:[{label:"du-Imperativ"}],rows:[{label:"sein",cells:["Sei"]},{label:"haben",cells:["Hab / Habe"]},{label:"werden",cells:["Werd / Werde"]}],note:"Sei, hab і werd — коротші розмовні форми; habe і werde теж правильні."}},
+        {title:"Sonderfälle sein, haben, werden",detail:"Ці дієслова мають коротші форми для du.",table:{columns:[{label:"du-Imperativ"}],rows:[{label:"sein",cells:["Sei"]},{label:"haben",cells:["Hab / Habe"]},{label:"werden",cells:["Werde / Werd"]}],note:"Hab і werd — коротші розмовні форми; habe і werde теж правильні. Sei має одну форму."}},
         {title:"ihr-форма: ihr-Präsens без ihr",detail:"Для ihr беріть форму ihr-Präsens і не ставте ihr перед нею. Голосний у nehmen не змінюється, на відміну від du.",formula:"ihr wartet → Wartet · ihr nehmt → Nehmt · ihr seid → Seid"},
         {title:"Звернення визначає форму",detail:"Одне й те саме дієслово має три форми залежно від того, до кого звертаються. Займенники du і ihr зазвичай не пишемо, бо форма дієслова вже показує адресата.",table:{columns:[{label:"du"},{label:"ihr"},{label:"Sie"}],rows:[{label:"warten",cells:["Warte","Wartet","Warten Sie"]},{label:"nehmen",cells:["Nimm","Nehmt","Nehmen Sie"]},{label:"sprechen",cells:["Sprich","Sprecht","Sprechen Sie"]}],highlights:[{row:1,column:0},{row:2,column:0}],note:"Nehmen і sprechen змінюють голосний у du: Nimm, Sprich."}},
-        {title:"Порядок слів",detail:"Як і в Sie, дієслово стоїть першим. Займенник у давальному відмінку стоїть перед іменником у знахідному. Doch і nicht працюють так само, як у Sie.",formula:"Gib mir das Buch. · Komm doch herein. · Lauf nicht so schnell.",visual:{structure:[verbFirstClause("Gib","mir","das Buch")]}}
+        {title:"Порядок слів",detail:"Як і в Sie, дієслово стоїть першим. Займенник у давальному відмінку стоїть перед іменником у знахідному. Doch і nicht працюють так само, як у Sie.",formula:"Gib mir das Buch. · Komm doch herein. · Lauf nicht so schnell.",visual:{structure:[verbFirstClause("Gib","mir","das Buch")]}},
+        {title:"Дієслово завжди на першому місці",detail:"У імперативі дієслово стоїть першим. Підмет du не пишемо, тому речення починається з дієслова, а займенник і доповнення йдуть після нього.",table:{columns:[{label:"du-Imperativ"}],rows:[{label:"machen",cells:["Mach"]},{label:"warten",cells:["Warte"]},{label:"telefonieren",cells:["Telefonier"]},{label:"geben",cells:["Gib"]},{label:"fahren",cells:["Fahr"]}],note:"Telefonieren має -ier: telefonier або telefoniere."}}
       ]
     },
     cards:imperativDuCards,stages:imperativDuStages
